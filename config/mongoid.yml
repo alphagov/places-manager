@@ -1,6 +1,7 @@
 development:
   host: localhost
   database: imminence_development
+  autocreate_indexes: true
 
 test:
   host: localhost
