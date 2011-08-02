@@ -9,7 +9,8 @@ class Place
   field :general_notes, :type => String
   field :url,           :type => String
   field :location,      :type => Array, :geo => true, :lat => :latitude, :lng => :longitude
-  
+
+  index [[ :location, Mongo::GEO2D ]], :min => -180, :max => 180
   before_save :geocode!
   
   def geocode!
