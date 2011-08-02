@@ -68,6 +68,10 @@ GEM
       multipart-post (~> 1.1.0)
       rack (< 2, >= 1.1.0)
     ffi (1.0.9)
+    formtastic (1.2.4)
+      actionpack (>= 2.3.7)
+      activesupport (>= 2.3.7)
+      i18n (~> 0.4)
     graticule (2.0.1)
       activesupport
       happymapper (>= 0.3.0)
@@ -155,6 +159,7 @@ DEPENDENCIES
   database_cleaner
   exception_notification (~> 2.4.1)
   fabrication
+  formtastic
   gds-sso!
   graticule
   mongoid (~> 2.0)

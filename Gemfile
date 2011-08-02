@@ -6,6 +6,7 @@ gem "mongoid", "~> 2.0"
 gem "bson_ext", "~> 1.3"
 
 gem 'exception_notification', '~> 2.4.1', :require => 'exception_notifier'
+gem 'formtastic'
 
 if ENV['BUNDLE_DEV']
   gem 'gds-sso', :path => '../gds-sso'
