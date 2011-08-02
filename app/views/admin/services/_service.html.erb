@@ -1,0 +1,14 @@
+<tr>
+  <td>
+    <%= service.name %>
+    <span class="version">
+    <%= pluralize(service.data_sets.count, 'data set', 'data sets') %> uploaded.
+    Currently serving version <%= service.active_data_set_version %> containing <%= pluralize(service.active_data_set.places.count, 'place', 'places') %>.
+    </span>
+  </td>
+  <td>
+    <%= link_to 'Review Active Set', [:admin, service], :class => 'button' %>
+    <%= link_to 'Upload New Set', admin_service_path(service, :anchor => 'upload'), :class => 'button' %>
+    
+  </td>
+</tr>

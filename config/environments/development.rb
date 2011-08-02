@@ -22,5 +22,7 @@ Imminence::Application.configure do
 
   # Only use best-standards-support built into browsers
   config.action_dispatch.best_standards_support = :builtin
+  
+  config.middleware.insert 0,  Slimmer::App, :template_host => "#{config.root}/public/templates"
 end
 

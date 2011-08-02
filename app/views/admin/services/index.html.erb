@@ -1,0 +1,20 @@
+
+<h2>Hello!</h2>
+
+<table class="formats" cellspacing="0">
+  <thead class="visuallyhidden">
+    <tr>
+      <th>Title</th>
+      <th>Tools</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= render :collection => @services, :partial => 'service', :locals => {:tab => :drafts} %>
+  </tbody>
+</table>
+
+<div class="format-controls">
+  <%= button_to 'Add new service', new_admin_service_path, :method=>:get, :class => 'guide' %>
+</div>
+
+<% content_for :page_title, "Services List" %>

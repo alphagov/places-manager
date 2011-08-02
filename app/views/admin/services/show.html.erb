@@ -1,0 +1,36 @@
+<div id="guide-nav" class="publication-nav">
+  <ul>
+    <li><a href="#current-data">Current Data</a></li>
+    <li><a href="#metadata">Metadata</a></li>
+    <li><a href="#history">History</a></li>
+  </ul>
+  <div id="current-data">
+    <p>Currently serving version <%= @service.active_data_set_version %> containing <%= pluralize(@service.active_data_set.places.count, 'place', 'places') %>.</p>
+    
+    <h3>Load New Data</h3>
+    <%= form_tag do %>
+      <%= file_field_tag 'value' %>
+      <%= submit_tag 'Upload' %>
+    <% end %>
+  </div>
+  <div id="metadata">
+    <%= render '/admin/services/edit' %>
+  </div>
+  <div id="history">
+    <ul>
+      <% @service.data_sets.each do |set| %>
+      <li>
+        Version <%= set.version %> uploaded at <%= set.created_at %>
+        <br /><%= set.version == @service.active_data_set_version ? 'Active' : 'Not active'  %>
+        <br />Button to activate?
+      </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+
+<% content_for :extra_javascript do %>
+<script type="text/javascript" charset="utf-8">
+  $(function () { $('.publication-nav').tabs(); })
+</script>
+<% end %>
