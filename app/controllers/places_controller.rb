@@ -2,11 +2,18 @@ class PlacesController < ApplicationController
   respond_to :json
   
   def show
-    location = [params[:lat].to_f, params[:lng].to_f]
-    args = params[:max_distance] ? { :max_distance => params[:max_distance].to_f } : {}
-    limit = params[:limit] ? params[:limit].to_f : 100
+    service = Service.where(slug: params[:id]).first
+    head 404 and return if service.nil? or service.active_data_set.nil?
     
-    @places = Place.limit(limit).geo_near(location, args)
+    if params[:max_distance]
+      args = { :max_distance => params[:max_distance].to_f }
+    elsif params[:limit]
+      args = { :limit => params[:limit] }
+    else
+      args = { :limit => 50 }
+    end
+
+    @places = service.active_data_set.places_near(params[:lat].to_f, params[:lng].to_f, args)
     respond_with(@places)
   end
 end
