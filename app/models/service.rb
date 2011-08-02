@@ -2,7 +2,7 @@ class Service
   include Mongoid::Document
   
   field :name,                    :type => String
-  field :slug,               :type => String
+  field :slug,                    :type => String
   field :active_data_set_version, :type => Integer, :default => 1
   
   embeds_many :data_sets
