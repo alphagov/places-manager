@@ -20,7 +20,7 @@ else
   gem 'slimmer', :git => 'git@github.com:alphagov/slimmer.git'
 end
 
-gem 'graticule'
+gem 'geogov', :git => 'https://github.com/alphagov/geogov.git'
 
 group :development, :test do
   # gem 'passenger'
