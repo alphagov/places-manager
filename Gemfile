@@ -21,6 +21,7 @@ else
 end
 
 gem 'geogov', :git => 'https://github.com/alphagov/geogov.git'
+gem 'inherited_resources'
 
 group :development, :test do
   # gem 'passenger'

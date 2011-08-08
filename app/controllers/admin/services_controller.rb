@@ -1,15 +1,4 @@
-class Admin::ServicesController < ApplicationController
+class Admin::ServicesController < InheritedResources::Base
   before_filter :authenticate_user!
-  
-  def index
-    @services = Service.all
-  end
-  
-  def new
-    @service = Service.new
-  end
-  
-  def show
-    @service = Service.find(params[:id])
-  end
+  defaults :route_prefix => 'admin'
 end

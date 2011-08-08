@@ -9,9 +9,11 @@
       <p>Currently serving version <%= @service.active_data_set_version %> containing <%= pluralize(@service.active_data_set.places.count, 'place', 'places') %>.</p>
     
       <h3>Load New Data</h3>
-      <%= form_tag do %>
-        <%= file_field_tag 'value' %>
-        <%= submit_tag 'Upload' %>
+      <%= semantic_form_for(@service.data_sets.build, :url => admin_service_data_sets_path(@service), :html => {:multipart => true}) do |f| %>
+        <%= f.inputs do %>
+          <%= f.input :data_file, :as => :file %>
+        <% end %>
+        <%= f.buttons %>
       <% end %>
     </div>
   </div>

@@ -1,5 +1,8 @@
-<%= semantic_form_for(@service, :url => admin_services_path) do |f| %>
-  <%= f.inputs :name, :slug %>
-  <p>To Do: Initial data upload</p>
+<%= semantic_form_for(@service, :url => admin_services_path, :html => {:multipart => true}) do |f| %>
+  <%= f.inputs do %>
+    <%= f.input :name %>
+    <%= f.input :slug %>
+    <%= f.input :data_file, :as => :file %>
+  <% end %>
   <%= f.buttons %>
 <% end %>

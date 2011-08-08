@@ -1,3 +1,5 @@
+require 'csv'
+
 class DataSet
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -7,6 +9,20 @@ class DataSet
   embeds_many :actions
   
   field :version, :type => Integer, :default => 1
+  
+  def data_file=(file)
+    CSV.parse(file.read, :headers => true) do |row|
+      places << Place.new(
+        :name => row['name'],
+        :address => row['address'],
+        :town => row['town'],
+        :postcode => row['postcode'],
+        :access_notes => row['access_notes'],
+        :general_notes => row['general_notes'],
+        :url => row['url']
+      )
+    end
+  end
   
   def activate!
     service.active_data_set_version = self.version

@@ -1,7 +1,9 @@
 <div class="inner">
-  <%= semantic_form_for(@service, :url => admin_services_path) do |f| %>
+  <%= semantic_form_for(@service, :url => admin_service_path(@service), :multipart => true) do |f| %>
     <%= f.inputs :name, :slug %>
-    <p>To Do: Initial data upload</p>
+    <%= f.inputs do %>
+      <%= f.input :new_data_file, :as => :file %>
+    <% end %>
     <%= f.buttons %>
   <% end %>
 </div>
