@@ -28,7 +28,7 @@ class Place
   end
   
   def full_address
-    [address, town, postcode, 'UK'].select { |i| i.present? }.join(', ')
+    [address, town, postcode, 'UK'].select { |i| i.present? }.map(&:strip).join(', ')
   end
 
   def distance_from(lat, lng)
