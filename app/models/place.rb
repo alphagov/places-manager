@@ -14,17 +14,21 @@ class Place
   field :location,      :type => Array, :geo => true, :lat => :latitude, :lng => :longitude
 
   index [[ :location, Mongo::GEO2D ]], :min => -180, :max => 180
-  before_save :geocode!
-  
+  before_save :geocode
   attr_accessor :distance
   
-  def geocode!
+  def geocode
     if location.nil? or location.empty?
       lookup = Geogov.lat_lon_from_postcode(self.postcode)
       self.location = lookup.values
     end
   rescue => e
     Rails.logger.warn "Error geocoding place #{self.postcode} : #{e.message}"
+  end
+  
+  def geocode!
+    geocode
+    save!
   end
   
   def full_address
@@ -39,5 +43,13 @@ class Place
   
   def to_s
     [name, full_address, url].select(&:present?).join(', ')
+  end
+  
+  def lat
+    location.nil? ? nil : location[0]
+  end
+  
+  def lng
+    location.nil? ? nil : location[1]
   end
 end
