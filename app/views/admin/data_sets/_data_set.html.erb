@@ -1,0 +1,12 @@
+<h4>Sample Data</h4>
+<ul>
+  <% data_set.places.limit(3).each do |place| %>
+    <li><%= place %></li>
+  <% end %>
+</ul>
+<p>
+  Export: 
+  <%= link_to 'JSON', place_path(@service.slug, :version => data_set, :format => :json) %> / 
+  <%= link_to 'KML', place_path(@service.slug, :version => data_set, :format => :kml) %> /
+  <%= link_to 'CSV', place_path(@service.slug, :version => data_set, :format => :csv) %>
+</p>

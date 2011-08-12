@@ -1,13 +1,53 @@
 <div id="guide-nav" class="publication-nav">
   <ul>
     <li><a href="#current-data">Current Data</a></li>
-    <li><a href="#metadata">Metadata</a></li>
+    <li><a href="#metadata">About the Service</a></li>
     <li><a href="#history">History</a></li>
+    <li><a href="#new-data">Load New Data Set</a></li>
   </ul>
   <div id="current-data">
     <div class="inner">
       <p>Currently serving version <%= @service.active_data_set_version %> containing <%= pluralize(@service.active_data_set.places.count, 'place', 'places') %>.</p>
-    
+      <%= render @service.active_data_set %>
+
+      <% if @service.data_sets.last.version > @service.active_data_set_version %>
+        <p>You have since uploaded version <%= @service.data_sets.last.version %> containing <%= pluralize(@service.data_sets.last.places.count, 'place', 'places') %>.</p>
+        <%= render @service.data_sets.last %>
+        <%= button_to 'Activate', activate_admin_service_data_set_path(@service, @service.data_sets.last) %>
+      <% end %>
+    </div>
+  </div>
+  <div id="metadata">
+    <div class="inner">
+      <%= render '/admin/services/edit' %>
+    </div>
+  </div>
+  <div id="history">
+    <div class="inner">
+    <ul>
+      <% @service.data_sets.each do |set| %>
+      <li>
+        <p>Version <%= set.version %> uploaded at <%= set.created_at %>
+        <br /><%= set.version == @service.active_data_set_version ? 'Active' : 'Not active'  %>
+        <br />Containing <%= pluralize(set.places.count, 'place', 'places') %>
+        <br />
+          Export: 
+          <%= link_to 'JSON', place_path(@service.slug, :version => set, :format => :json) %> / 
+          <%= link_to 'KML', place_path(@service.slug, :version => set, :format => :kml) %> /
+          <%= link_to 'CSV', place_path(@service.slug, :version => set, :format => :csv) %>
+        </p>
+        <% if set.active? %>
+          <%= button_to 'Deactivate' %>
+        <% else %>
+          <%= button_to 'Activate', activate_admin_service_data_set_path(@service, set) %>
+        <% end %>
+      </li>
+      <% end %>
+    </ul>
+    </div>
+  </div>
+  <div id="new-data">
+    <div class="inner">
       <h3>Load New Data</h3>
       <%= semantic_form_for(@service.data_sets.build, :url => admin_service_data_sets_path(@service), :html => {:multipart => true}) do |f| %>
         <%= f.inputs do %>
@@ -16,20 +56,6 @@
         <%= f.buttons %>
       <% end %>
     </div>
-  </div>
-  <div id="metadata">
-    <%= render '/admin/services/edit' %>
-  </div>
-  <div id="history">
-    <ul>
-      <% @service.data_sets.each do |set| %>
-      <li>
-        Version <%= set.version %> uploaded at <%= set.created_at %>
-        <br /><%= set.version == @service.active_data_set_version ? 'Active' : 'Not active'  %>
-        <br />Button to activate?
-      </li>
-      <% end %>
-    </ul>
   </div>
 </div>
 

@@ -36,4 +36,8 @@ class Place
     to = {'lat' => lat, 'lng' => lng}
     @distance ||= distance_between(from, to)
   end
+  
+  def to_s
+    [name, full_address, url].select(&:present?).join(', ')
+  end
 end
