@@ -7,13 +7,12 @@
   </ul>
   <div id="current-data">
     <div class="inner">
-      <p>Currently serving version <%= @service.active_data_set_version %> containing <%= pluralize(@service.active_data_set.places.count, 'place', 'places') %>.</p>
+      <h2>Currently serving version <%= @service.active_data_set_version %> containing <%= pluralize(@service.active_data_set.places.count, 'place', 'places') %>.</h2>
       <%= render @service.active_data_set %>
 
       <% if @service.data_sets.last.version > @service.active_data_set_version %>
-        <p>You have since uploaded version <%= @service.data_sets.last.version %> containing <%= pluralize(@service.data_sets.last.places.count, 'place', 'places') %>.</p>
+        <h3>You have since uploaded version <%= @service.data_sets.last.version %> containing <%= pluralize(@service.data_sets.last.places.count, 'place', 'places') %>.</h3>
         <%= render @service.data_sets.last %>
-        <%= button_to 'Activate', activate_admin_service_data_set_path(@service, @service.data_sets.last) %>
       <% end %>
     </div>
   </div>

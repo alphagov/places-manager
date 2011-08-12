@@ -1,12 +1,18 @@
-<h4>Sample Data</h4>
-<ul>
-  <% data_set.places.limit(3).each do |place| %>
-    <li><%= place %></li>
-  <% end %>
-</ul>
+<% unless data_set.active? %>
+	<%= button_to 'Activate', activate_admin_service_data_set_path(@service, data_set) %>
+<% end %>
+
 <p>
   Export: 
   <%= link_to 'JSON', place_path(@service.slug, :version => data_set, :format => :json) %> / 
   <%= link_to 'KML', place_path(@service.slug, :version => data_set, :format => :kml) %> /
   <%= link_to 'CSV', place_path(@service.slug, :version => data_set, :format => :csv) %>
 </p>
+<h4>Sample Data</h4>
+<div class="sample-data">
+	<ul>
+	  <% data_set.places.limit(3).each do |place| %>
+	    <li><code><%= place %></code></li>
+	  <% end %>
+	</ul>
+</div>
