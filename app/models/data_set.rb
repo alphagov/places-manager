@@ -9,6 +9,13 @@ class DataSet
   embeds_many :actions
   
   field :version, :type => Integer, :default => 1
+  before_save :set_version, :on => :create
+
+  def set_version
+    if self.version.blank? or self.version == 1
+      self.version = service.data_sets.count + 1
+    end
+  end
   
   def data_file=(file)
     CSV.parse(file.read, :headers => true) do |row|
@@ -22,6 +29,10 @@ class DataSet
         :url => row['url']
       )
     end
+  end
+  
+  def active?
+    self.version == service.active_data_set_version
   end
   
   def activate!
