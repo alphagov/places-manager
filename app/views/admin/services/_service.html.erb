@@ -1,13 +1,13 @@
 <tr>
   <td>
-    <%= link_to service.name, [:admin, service] %>
+    <h2><%= link_to service.name, [:admin, service] %></h2>
     <span class="version">
     <%= pluralize(service.data_sets.count, 'data set', 'data sets') %> uploaded.
     Currently serving version <%= service.active_data_set_version %> containing <%= pluralize(service.active_data_set.places.count, 'place', 'places') %>.
     </span>
   </td>
-  <td>
-    <%= link_to 'Review Active Set', [:admin, service], :class => 'button' %>
-    <%= link_to 'Upload New Set', admin_service_path(service, :anchor => 'new-data'), :class => 'button' %>
+  <td class="imminence-actions">
+    <p class="button"><%= link_to 'Review Active Set', [:admin, service] %></p>
+    <p class="button"><%= link_to 'Upload New Set', admin_service_path(service, :anchor => 'new-data') %></p>
   </td>
 </tr>
