@@ -54,4 +54,14 @@ class DataSet
       ordered_places.select { |p| p.distance <= opts[:max_distance].to_f }
     end
   end
+  
+  def to_csv
+    headers = ['name', 'address', 'town', 'postcode', 'access_notes', 'general_notes', 'url']
+    CSV.generate do |csv|
+      csv << headers
+      places.each do |place|
+        csv << headers.collect { |h| place.send(h.to_sym) }
+      end
+    end
+  end
 end

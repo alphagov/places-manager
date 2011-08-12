@@ -1,5 +1,18 @@
+ActionController::Renderers.add :csv do |detailed_report, options|
+  if detailed_report.first.is_a?(Place)
+    filename = "#{detailed_report.first.data_set.service.slug}.csv"
+  
+    headers['Cache-Control']             = 'must-revalidate, post-check=0, pre-check=0'
+    headers['Content-Disposition']       = "attachment; filename=#{filename}"
+    headers['Content-Type']              = 'text/csv'
+    headers['Content-Transfer-Encoding'] = 'binary'
+  
+    self.response_body = detailed_report.first.data_set.to_csv
+  end
+end
+
 class PlacesController < ApplicationController
-  respond_to :json, :kml
+  respond_to :json, :kml, :csv
   
   def show
     @service = Service.where(slug: params[:id]).first
