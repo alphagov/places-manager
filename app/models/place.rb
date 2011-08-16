@@ -11,6 +11,9 @@ class Place
   field :access_notes,  :type => String
   field :general_notes, :type => String
   field :url,           :type => String
+  field :phone,         :type => String
+  field :fax,           :type => String
+  field :text_phone,    :type => String
   field :location,      :type => Array, :geo => true, :lat => :latitude, :lng => :longitude
 
   index [[ :location, Mongo::GEO2D ]], :min => -180, :max => 180

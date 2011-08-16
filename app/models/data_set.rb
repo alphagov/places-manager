@@ -56,7 +56,7 @@ class DataSet
   end
   
   def to_csv
-    headers = ['name', 'address', 'town', 'postcode', 'access_notes', 'general_notes', 'url', 'lat', 'lng']
+    headers = ['name', 'address', 'town', 'postcode', 'access_notes', 'general_notes', 'url', 'lat', 'lng', 'phone', 'fax', 'text_phone']
     CSV.generate do |csv|
       csv << headers
       places.each do |place|
