@@ -4,17 +4,19 @@ class Place
 
   embedded_in :data_set
 
-  field :name,          :type => String
-  field :address,       :type => String
-  field :town,          :type => String
-  field :postcode,      :type => String
-  field :access_notes,  :type => String
-  field :general_notes, :type => String
-  field :url,           :type => String
-  field :phone,         :type => String
-  field :fax,           :type => String
-  field :text_phone,    :type => String
-  field :location,      :type => Array, :geo => true, :lat => :latitude, :lng => :longitude
+  field :name,           :type => String
+  field :source_address, :type => String
+  field :address1,        :type => String
+  field :address2,        :type => String
+  field :town,           :type => String
+  field :postcode,       :type => String
+  field :access_notes,   :type => String
+  field :general_notes,  :type => String
+  field :url,            :type => String
+  field :phone,          :type => String
+  field :fax,            :type => String
+  field :text_phone,     :type => String
+  field :location,       :type => Array, :geo => true, :lat => :latitude, :lng => :longitude
 
   index [[ :location, Mongo::GEO2D ]], :min => -180, :max => 180
   before_save :geocode
@@ -34,6 +36,10 @@ class Place
     save!
   end
   
+  def address
+    [address1, address2].select(&:present?).map(&:strip).join(', ')
+  end
+
   def full_address
     [address, town, postcode, 'UK'].select { |i| i.present? }.map(&:strip).join(', ')
   end

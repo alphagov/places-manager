@@ -21,12 +21,14 @@ class DataSet
     CSV.parse(file.read, :headers => true) do |row|
       places << Place.new(
         :name => row['name'],
-        :address => row['address'],
+        :address1 => row['address1'],
+        :address2 => row['address2'],
         :town => row['town'],
         :postcode => row['postcode'],
         :access_notes => row['access_notes'],
         :general_notes => row['general_notes'],
-        :url => row['url']
+        :url => row['url'],
+        :source_address => row['source_address']
       )
     end
   end
@@ -56,8 +58,16 @@ class DataSet
   end
   
   def to_csv
-    headers = ['name', 'address', 'town', 'postcode', 'access_notes', 'general_notes', 'url', 'lat', 'lng', 'phone', 'fax', 'text_phone']
     CSV.generate do |csv|
+      to_array_for_csv.each do |row|
+        csv << row
+      end
+    end
+  end
+  
+  def to_array_for_csv
+    [].tap do |csv|
+      headers = ['name', 'address1', 'address2', 'town', 'postcode', 'access_notes', 'general_notes', 'url', 'lat', 'lng', 'phone', 'fax', 'text_phone']
       csv << headers
       places.each do |place|
         csv << headers.collect { |h| place.send(h.to_sym) }
