@@ -9,14 +9,14 @@ GIT
 
 GIT
   remote: git@github.com:alphagov/slimmer.git
-  revision: f7c334968a05a5bf42c1fee4de0228d7549ae7ba
+  revision: 2fe052078ea6cd61da3d69dcd9040b0114f12392
   specs:
     slimmer (0.7.10)
-      nokogiri (~> 1.4.0)
+      nokogiri
 
 GIT
   remote: https://github.com/alphagov/geogov.git
-  revision: 83e2f1bc3c1dfdb0be5a5563847ac48d42795d97
+  revision: 6867aedacda13fa8c050f706c3a351864eff0752
   specs:
     geogov (0.0.1)
 
@@ -55,14 +55,14 @@ GEM
     bson (1.3.1)
     bson_ext (1.3.1)
     builder (2.1.2)
-    capybara (1.0.0)
+    capybara (1.0.1)
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
-      selenium-webdriver (~> 0.2.0)
+      selenium-webdriver (~> 2.0)
       xpath (~> 0.1.4)
-    childprocess (0.2.0)
+    childprocess (0.2.1)
       ffi (~> 1.0.6)
     database_cleaner (0.6.7)
     erubis (2.6.6)
@@ -92,14 +92,14 @@ GEM
     mime-types (1.16)
     mongo (1.3.1)
       bson (>= 1.3.1)
-    mongoid (2.1.5)
+    mongoid (2.1.8)
       activemodel (~> 3.0)
       mongo (~> 1.3)
       tzinfo (~> 0.3.22)
     multi_json (1.0.3)
     multi_xml (0.2.2)
     multipart-post (1.1.3)
-    nokogiri (1.4.7)
+    nokogiri (1.5.0)
     oa-core (0.2.6)
     oa-oauth (0.2.6)
       faraday (~> 0.6.1)
@@ -133,11 +133,11 @@ GEM
       rdoc (~> 3.4)
       thor (~> 0.14.4)
     rake (0.9.2)
-    rdoc (3.9.1)
+    rdoc (3.9.2)
     responders (0.6.4)
     rubyzip (0.9.4)
-    selenium-webdriver (0.2.2)
-      childprocess (>= 0.1.9)
+    selenium-webdriver (2.4.0)
+      childprocess (>= 0.2.1)
       ffi (>= 1.0.7)
       json_pure
       rubyzip
