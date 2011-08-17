@@ -5,8 +5,11 @@ class Admin::DataSetsController < InheritedResources::Base
  
   def create
     create! { admin_service_url(@service) }
+  rescue CSV::MalformedCSVError => e
+    flash[:alert] = "Could not process CSV file. Please check the format."
+    redirect_to :back
   end
-  
+
   def update
     update! { admin_service_url(@service) }
   end
