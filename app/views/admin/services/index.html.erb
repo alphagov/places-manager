@@ -1,8 +1,9 @@
-<table class="formats" cellspacing="0">
+<table class="imminence">
   <thead class="visuallyhidden">
     <tr>
-      <th>Title</th>
-      <th>Actions</th>
+      <th scope="col">Service Title</th>
+      <th scope="col">Review</th>
+      <th scope="col">Upload</th>
     </tr>
   </thead>
   <tbody>
@@ -11,7 +12,7 @@
 </table>
 
 <div class="format-controls">
-  <%= button_to 'Add new service', new_admin_service_path, :method=>:get, :class => 'guide' %>
+  <%= button_to 'Add new service', new_admin_service_path, :method=>:get, :class => 'service' %>
 </div>
 
 <% content_for :page_title, "Services List" %>

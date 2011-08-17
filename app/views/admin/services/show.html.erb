@@ -1,4 +1,4 @@
-<div id="guide-nav" class="publication-nav">
+<div id="xguide-nav" class="service-nav">
   <ul>
     <li><a href="#current-data">Current Data</a></li>
     <li><a href="#metadata">About the Service</a></li>
@@ -30,15 +30,15 @@
 	        <br /><%= set.version == @service.active_data_set_version ? 'Active' : 'Not active'  %>
 	        <br />Containing <%= pluralize(set.places.count, 'place', 'places') %>
 	        <br />
-	          Export: 
-	          <%= link_to 'JSON', place_path(@service.slug, :version => set, :format => :json) %> / 
+	          Export:
+	          <%= link_to 'JSON', place_path(@service.slug, :version => set, :format => :json) %> /
 	          <%= link_to 'KML', place_path(@service.slug, :version => set, :format => :kml) %> /
 	          <%= link_to 'CSV', place_path(@service.slug, :version => set, :format => :csv) %>
 	        </p>
 	        <% if set.active? %>
 	          <%= button_to 'Deactivate' %>
 	        <% else %>
-	          <%= button_to 'Activate', activate_admin_service_data_set_path(@service, set) %>
+	          <%= button_to 'Activate', activate_admin_service_data_set_path(@service, set), :class=> 'activate' %>
 	        <% end %>
 	      </li>
 	      <% end %>
@@ -60,6 +60,6 @@
 
 <% content_for :extra_javascript do %>
 <script type="text/javascript" charset="utf-8">
-  $(function () { $('.publication-nav').tabs(); })
+  $(function () { $('.service-nav').tabs(); })
 </script>
 <% end %>

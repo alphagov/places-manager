@@ -6,8 +6,10 @@
     Currently serving version <%= service.active_data_set_version %> containing <%= pluralize(service.active_data_set.places.count, 'place', 'places') %>.
     </span>
   </td>
-  <td class="imminence-actions">
-    <p class="button"><%= link_to 'Review Active Set', [:admin, service] %></p>
-    <p class="button"><%= link_to 'Upload New Set', admin_service_path(service, :anchor => 'new-data') %></p>
+  <td>
+    <p class="button"><%= link_to 'Review active set', [:admin, service] %></p>
+  </td>
+  <td>
+    <p class="button"><%= link_to 'Upload new set', admin_service_path(service, :anchor => 'new-data') %></p>
   </td>
 </tr>

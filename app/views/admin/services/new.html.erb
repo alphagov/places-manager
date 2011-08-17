@@ -1,8 +1,31 @@
-<%= semantic_form_for(@service, :url => admin_services_path, :html => {:multipart => true}) do |f| %>
-  <%= f.inputs do %>
-    <%= f.input :name %>
-    <%= f.input :slug %>
-    <%= f.input :data_file, :as => :file %>
+<div class="ui-widget-content new">
+  <div class="inner">
+
+    <h1>Create new service</h1>
+
+    <%= semantic_form_for(@service, :url => admin_services_path, :html => {:multipart => true}) do |f| %>
+      <%= f.inputs do %>
+      <%= f.input :name %>
+      <%= f.input :slug %>
+      <%= f.input :data_file, :as => :file %>
+    <% end %>
+    <%= f.buttons %>
   <% end %>
-  <%= f.buttons %>
-<% end %>
+
+  <% content_for :extra_javascript do %>
+  <script type="text/javascript" charset="utf-8">
+    $(function () {
+      $('#service_name').change(function () {
+        if ($('#service_slug').text() == '') {
+          var title = $('#service_name').val();
+          $('#service_slug').val(GovUKGuideUtils.convertToSlug(title));
+        }
+      });
+    });
+  </script>
+  <% end %>
+
+  </div>
+</div>
+
+<% content_for :page_title, "Create new service" %>
