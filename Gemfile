@@ -31,3 +31,7 @@ group :development, :test do
   gem 'selenium-webdriver'
   gem 'database_cleaner'
 end
+
+group :test do
+  gem 'mocha'
+end

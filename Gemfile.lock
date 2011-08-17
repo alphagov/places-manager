@@ -90,6 +90,7 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.16)
+    mocha (0.9.12)
     mongo (1.3.1)
       bson (>= 1.3.1)
     mongoid (2.1.8)
@@ -165,6 +166,7 @@ DEPENDENCIES
   gds-sso!
   geogov!
   inherited_resources
+  mocha
   mongoid (~> 2.0)
   rails (~> 3.0.9)
   selenium-webdriver
