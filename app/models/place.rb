@@ -16,9 +16,8 @@ class Place
   field :phone,          :type => String
   field :fax,            :type => String
   field :text_phone,     :type => String
-  field :location,       :type => Array, :geo => true, :lat => :latitude, :lng => :longitude
+  field :location,       :type => Array, :geo => true
 
-  index [[ :location, Mongo::GEO2D ]], :min => -180, :max => 180
   before_save :geocode
   attr_accessor :distance
   

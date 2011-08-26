@@ -4,14 +4,15 @@ class DataSet
   include Mongoid::Document
   include Mongoid::Timestamps
   
-  embedded_in :service
+  belongs_to :service
   embeds_many :places
   embeds_many :actions
   
   field :version, :type => Integer, :default => 1
   before_save :set_version, :on => :create
 
-  def set_version
+
+  def set_version 
     if self.version.blank? or self.version == 1
       self.version = service.data_sets.count + 1
     end
@@ -51,10 +52,11 @@ class DataSet
   def places_near(lat, lng, opts = {})
     ordered_places = places.select { |p| p.location }.sort_by { |p| p.distance_from(lat, lng) }
     if opts[:limit]
-      ordered_places.slice(0, opts[:limit].to_i)
+      ordered_places = ordered_places.slice(0, opts[:limit].to_i)
     elsif opts[:max_distance]
-      ordered_places.select { |p| p.distance <= opts[:max_distance].to_f }
+      ordered_places = ordered_places.select { |p| p.distance <= opts[:max_distance].to_f }
     end
+    ordered_places
   end
   
   def to_csv
