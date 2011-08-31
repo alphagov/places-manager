@@ -1,14 +1,24 @@
 #!/usr/bin/env ruby
 
-class String
-  def each(&block)
-    self.split($/).each(&block)
-  end
+lock_path = '/tmp/geocoding.lock'
+
+# PATCH - make Lockfile gem work in ruby 1.9
+
+require 'lockfile'
+class Lockfile
+    alias_method :old_load_lock_id, :load_lock_id
+    def load_lock_id buf
+      def buf.each(&block)
+        self.split($/).each(&block)
+      end
+      old_load_lock_id buf
+    end
 end
+
 
 require File.expand_path("../config/environment", File.dirname(__FILE__))
 Lockfile.debug = true
-Lockfile.new '/tmp/geocoding.lock', :retries => 0 do
+Lockfile.new lock_path, :retries => 0 do
   Service.all.each do |service|
     service.data_sets.each do |set|
       set.places.needs_geocoding.each do |place|
