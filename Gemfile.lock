@@ -84,6 +84,7 @@ GEM
       has_scope (~> 0.5.0)
       responders (~> 0.6.0)
     json_pure (1.5.3)
+    lockfile (1.4.3)
     mail (2.2.19)
       activesupport (>= 2.3.6)
       i18n (>= 0.4.0)
@@ -166,6 +167,7 @@ DEPENDENCIES
   gds-sso!
   geogov!
   inherited_resources
+  lockfile
   mocha
   mongoid (~> 2.0)
   rails (~> 3.0.9)

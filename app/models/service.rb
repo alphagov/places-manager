@@ -5,7 +5,7 @@ class Service
   field :slug,                    :type => String
   field :active_data_set_version, :type => Integer, :default => 1
   
-  has_many :data_sets
+  embeds_many :data_sets
   
   validates_presence_of :name  
   validates_presence_of :slug

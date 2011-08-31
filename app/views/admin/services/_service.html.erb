@@ -3,7 +3,9 @@
     <h2><%= link_to service.name, [:admin, service] %></h2>
     <span class="version">
     <%= pluralize(service.data_sets.count, 'data set', 'data sets') %> uploaded.
+    <% if service.active_data_set %>
     Currently serving version <%= service.active_data_set_version %> containing <%= pluralize(service.active_data_set.places.count, 'place', 'places') %>.
+    <% end %>
     </span>
   </td>
   <td>

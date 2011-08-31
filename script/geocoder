@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+class String
+  def each(&block)
+    self.split($/).each(&block)
+  end
+end
+
+require File.expand_path("../config/environment", File.dirname(__FILE__))
+Lockfile.debug = true
+Lockfile.new '/tmp/geocoding.lock', :retries => 0 do
+  Service.all.each do |service|
+    service.data_sets.each do |set|
+      set.places.needs_geocoding.each do |place|
+        place.geocode!
+        $stderr.puts place.geocode_error if place.geocode_error
+      end
+    end
+  end
+end

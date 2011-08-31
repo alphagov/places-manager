@@ -2,6 +2,9 @@ class Place
   include Mongoid::Document
   include GeoTools
 
+  scope :needs_geocoding, where(:location.size => 0, :geocode_error.exists => false)
+  scope :geocoded, where(:location.size => 2)
+
   embedded_in :data_set
 
   field :name,           :type => String
@@ -16,18 +19,24 @@ class Place
   field :phone,          :type => String
   field :fax,            :type => String
   field :text_phone,     :type => String
-  field :location,       :type => Array, :geo => true
+  field :location,       :type => Array, :geo => true, :default => []
+  field :geocode_error,  :type => String
 
-  before_save :geocode
   attr_accessor :distance
   
   def geocode
     if location.nil? or location.empty?
       lookup = Geogov.lat_lon_from_postcode(self.postcode)
-      self.location = lookup.values
+      if lookup
+        self.location = lookup.values
+      else
+        self.geocode_error = "#{self.postcode} not found for #{self.full_address}"
+      end
     end
   rescue => e
-    Rails.logger.warn "Error geocoding place #{self.postcode} : #{e.message}"
+    error = "Error geocoding place #{self.postcode} : #{e.message}"
+    Rails.logger.warn error
+    self.geocode_error = error
   end
   
   def geocode!

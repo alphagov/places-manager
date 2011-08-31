@@ -4,7 +4,7 @@ class DataSet
   include Mongoid::Document
   include Mongoid::Timestamps
   
-  belongs_to :service
+  embedded_in :service
   embeds_many :places
   embeds_many :actions
   
@@ -50,7 +50,7 @@ class DataSet
   end
   
   def places_near(lat, lng, opts = {})
-    ordered_places = places.select { |p| p.location }.sort_by { |p| p.distance_from(lat, lng) }
+    ordered_places = places.geocoded.sort_by { |p| p.distance_from(lat, lng) }
     if opts[:limit]
       ordered_places = ordered_places.slice(0, opts[:limit].to_i)
     elsif opts[:max_distance]
