@@ -23,6 +23,7 @@ end
 gem 'geogov', :git => 'https://github.com/alphagov/geogov.git'
 gem 'inherited_resources'
 gem 'lockfile'
+gem 'whenever'
 
 group :development, :test do
   # gem 'passenger'
