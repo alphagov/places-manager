@@ -32,6 +32,10 @@ group :development, :test do
   gem 'capybara', '~> 1.0.0'
   gem 'selenium-webdriver'
   gem 'database_cleaner'
+  gem 'simplecov'
+  gem 'simplecov-rcov'
+  gem 'ci_reporter'
+  gem 'test-unit'
 end
 
 group :test do

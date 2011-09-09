@@ -5,7 +5,7 @@ bundle exec rake db:setup
 bundle exec rake db:migrate
 export DISPLAY=:99
 /etc/init.d/xvfb start
-bundle exec rake test:units test:functionals test:integration 
+bundle exec rake ci:setup:testunit test:units test:functionals test:integration 
 RESULT=$?
 /etc/init.d/xvfb stop
 exit $RESULT
