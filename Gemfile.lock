@@ -185,7 +185,7 @@ DEPENDENCIES
   mongoid (~> 2.0)
   rails (~> 3.0.9)
   selenium-webdriver
-  simplecov
+  simplecov (= 0.4.2)
   simplecov-rcov
   slimmer!
   test-unit
