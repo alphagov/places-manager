@@ -37,6 +37,10 @@ class Place
     error = "Error geocoding place #{self.postcode} : #{e.message}"
     Rails.logger.warn error
     self.geocode_error = error
+  rescue Encoding::CompatibilityError
+    error = "Encoding error in place #{self.id}"
+    Rails.logger.warn error
+    self.geocode_error = error
   end
   
   def geocode!
