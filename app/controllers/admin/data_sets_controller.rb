@@ -1,17 +1,13 @@
 class Admin::DataSetsController < InheritedResources::Base
-  before_filter :authenticate_user!
   defaults :route_prefix => 'admin'
+  actions :all, :except => [:show, :index]
+  before_filter :authenticate_user!
   belongs_to :service
- 
-  def create
-    create! { admin_service_url(@service) }
-  rescue CSV::MalformedCSVError => e
+  rescue_from CSV::MalformedCSVError, :with => :bad_csv
+  
+  def bad_csv
     flash[:alert] = "Could not process CSV file. Please check the format."
     redirect_to :back
-  end
-
-  def update
-    update! { admin_service_url(@service) }
   end
   
   def activate
