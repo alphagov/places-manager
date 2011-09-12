@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
 
+require File.expand_path("../config/environment", File.dirname(__FILE__))
 lock_path = '/tmp/geocoding.lock'
 
 # PATCH - make Lockfile gem work in ruby 1.9
-
 require 'lockfile'
 class Lockfile
     alias_method :old_load_lock_id, :load_lock_id
@@ -15,8 +15,6 @@ class Lockfile
     end
 end
 
-
-require File.expand_path("../config/environment", File.dirname(__FILE__))
 Lockfile.debug = true
 Lockfile.new lock_path, :retries => 0 do
   Service.all.each do |service|
