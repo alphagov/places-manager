@@ -20,7 +20,9 @@ class ActiveSupport::TestCase
 
   def as_logged_in_user(&block)
     @controller.stubs(:authenticate_user!).returns(true)
+    @controller.stubs(:user_signed_in?).returns(true)
     yield
+    @controller.unstub(:user_signed_in?)
     @controller.unstub(:authenticate_user!)
   end
 end

@@ -15,4 +15,16 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
       assert_equal "Could not process CSV file. Please check the format.", flash[:alert]
     end
   end
+  
+  test "it's possible to activate a data set" do
+    as_logged_in_user do
+      service = setup_service
+      set = service.data_sets.create!
+      post :activate, :service_id => service.id, :id => set.id
+      assert_response :redirect
+      assert_equal "Data Set #{set.version} successfully activated", flash[:notice]
+      service.reload
+      assert_equal set, service.active_data_set
+    end
+  end
 end
