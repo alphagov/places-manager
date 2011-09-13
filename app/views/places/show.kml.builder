@@ -10,7 +10,7 @@ xml.kml("xmlns" => "http://www.opengis.net/kml/2.2", 'xmlns:atom' => "http://www
         xml.address place.full_address
         unless place.location.nil? or place.location.empty?
           xml.Point do
-            xml.coordinates "#{place.location[0]},#{place.location[1]},0"
+            xml.coordinates "#{place.location[1]},#{place.location[0]},0"
           end
         end
       end
