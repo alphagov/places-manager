@@ -27,7 +27,7 @@ class PlacesController < ApplicationController
     end
     
     if user_signed_in? and params[:version].present?
-      data_set = @service.data_sets.find(id: params[:version])
+      data_set = @service.data_sets.find(params[:version])
     else
       data_set = @service.active_data_set
     end
