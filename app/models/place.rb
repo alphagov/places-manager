@@ -26,7 +26,9 @@ class Place
   attr_accessor :distance
   
   def geocode
-    if location.nil? or location.empty?
+    if postcode.blank?
+      self.geocode_error = "Can't geocode without postcode"
+    elsif location.nil? or location.empty?
       lookup = Geogov.lat_lon_from_postcode(self.postcode)
       if lookup
         self.location = lookup.values
