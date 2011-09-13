@@ -3,6 +3,7 @@ class Place
   include GeoTools
 
   scope :needs_geocoding, where(:location.size => 0, :geocode_error.exists => false)
+  scope :with_geocoding_errors, where(:geocode_error.exists => true)
   scope :geocoded, where(:location.size => 2)
 
   embedded_in :data_set

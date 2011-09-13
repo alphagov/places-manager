@@ -8,7 +8,7 @@
   <%= link_to 'KML', place_path(@service.slug, :version => data_set, :format => :kml) %> /
   <%= link_to 'CSV', place_path(@service.slug, :version => data_set, :format => :csv) %>
 </p>
-<p><%= data_set.places.needs_geocoding.count %> places left to geocode.</p>
+<p><%= data_set.places.needs_geocoding.count %> places left to geocode. <%= data_set.places.with_geocoding_errors.count %> places with geocode errors.</p>
 <h4>Sample Data</h4>
 <div class="sample-data">
 	<ul>
