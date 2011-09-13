@@ -16,9 +16,14 @@ class Lockfile
 end
 
 Lockfile.debug = true
-Lockfile.new lock_path, :retries => 0 do
+Lockfile.new lock_path, :retries => 0 do  
   Service.all.each do |service|
+    
     service.data_sets.each do |set|
+      if env['RESET_ERRORS']
+        set.places.with_geocoding_errors.map { |p| p.geocode_error = nil } 
+        set.save
+      end
       set.places.needs_geocoding.each do |place|
         place.geocode!
         $stderr.puts place.geocode_error if place.geocode_error
