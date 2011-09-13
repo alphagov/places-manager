@@ -62,7 +62,7 @@ class Place
   def distance_from(lat, lng)
     from = {'lat' => location[0], 'lng' => location[1]}
     to = {'lat' => lat, 'lng' => lng}
-    @distance ||= distance_between(from, to)
+    distance_between(from, to)
   end
   
   def to_s
