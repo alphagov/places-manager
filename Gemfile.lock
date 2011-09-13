@@ -16,7 +16,7 @@ GIT
 
 GIT
   remote: https://github.com/alphagov/geogov.git
-  revision: 6867aedacda13fa8c050f706c3a351864eff0752
+  revision: c2acf57a158ef18a9820e40f03d0d1cccd9d6345
   specs:
     geogov (0.0.1)
 
