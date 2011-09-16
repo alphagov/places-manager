@@ -2,6 +2,8 @@
   <div class="inner">
 
     <h1>Create new service</h1>
+    
+    <%= render '/admin/data_sets/file_help' %>
 
     <%= semantic_form_for(@service, :url => admin_services_path, :html => {:multipart => true}) do |f| %>
       <%= f.inputs do %>
