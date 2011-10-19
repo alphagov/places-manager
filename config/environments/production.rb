@@ -47,9 +47,14 @@ Imminence::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
   
-  if Rails.env.production?
-    config.middleware.insert 0,  Slimmer::App, :template_host => "/data/vhost/static.alpha.gov.uk/current/public/templates"
-  else
-    config.middleware.insert 0,  Slimmer::App, :template_host => "/data/vhost/static.#{Rails.env}.alphagov.co.uk/current/public/templates"
+  config.middleware.delete Slimmer::App
+  config.middleware.use Slimmer::App, :template_host => "/data/vhost/static.alpha.gov.uk/current/public/templates"
+  
+  Geogov.configure do |g|
+    g.provider_for :centre_of_country,             Geogov::Geonames.new
+    g.provider_for :centre_of_district,            Geogov::Mapit.new("http://mapit.alpha.gov.uk")
+    g.provider_for :areas_for_stack_from_postcode, Geogov::Mapit.new("http://mapit.alpha.gov.uk")
+    g.provider_for :areas_for_stack_from_coords,   Geogov::Mapit.new("http://mapit.alpha.gov.uk")
+    g.provider_for :lat_lon_from_postcode,         Geogov::Mapit.new("http://mapit.alpha.gov.uk")
   end
 end
