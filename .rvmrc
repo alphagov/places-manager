@@ -1,1 +1,1 @@
-rvm --create ruby-1.9.2@ag-imminence
+rvm use ruby-1.9.2
