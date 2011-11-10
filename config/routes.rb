@@ -8,5 +8,6 @@ Imminence::Application.routes.draw do
     root :to => 'services#index'
   end
 
+  resources :data_sets, :only => :show
   resources :places, :only => :show
 end
