@@ -4,6 +4,8 @@ gem 'oauth2', '0.4.1'
 gem 'oa-core', '0.2.6'
 gem 'oa-oauth', '0.2.6'
 
+gem 'plek', '0.1.5'
+
 group :passenger_compatibility do
   gem 'rack', '1.3.5'
   gem 'rake', '0.9.2'
