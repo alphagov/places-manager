@@ -1,8 +1,8 @@
 class DataSetsController < ApplicationController
   def show
     respond_to do |format|
-      format.xml { data_set.to_xml }
-      format.json { data_set.to_json }
+      format.xml { render :xml => data_set }
+      format.json { render :json => data_set }
     end
   end
 
