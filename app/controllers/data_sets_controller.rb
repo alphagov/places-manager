@@ -31,10 +31,17 @@ class DataSetsController < ApplicationController
     { :id => "Privy council office" },
     { :id => "Scotland office" },
     { :id => "Wales office" },
-  ].freeze
+  ].sort_by { |body| body[:id] }.freeze
 
   WRITING_TEAMS = [
-  ].freeze
+    { :id => "GDS" },
+    { :id => "BIS - Employment" },
+    { :id => "BIS- Adult Education" },
+    { :id => "DCLG" },
+    { :id => "DWP - Pensions/Disabled & Carer" },
+    { :id => "DWP - Benefits" },
+    { :id => "MoJ" },
+  ].sort_by { |team| team[:id] }.freeze
 
   def data_set
     return PUBLIC_BODIES if params[:id] == "public_bodies"
