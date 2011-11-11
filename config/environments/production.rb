@@ -48,7 +48,7 @@ Imminence::Application.configure do
   config.active_support.deprecation = :notify
   
   config.middleware.delete Slimmer::App
-  config.middleware.use Slimmer::App, :asset_host => "http://static.production.alphagov.co.uk"
+  config.middleware.use Slimmer::App, :asset_host => "http://static.#{Plek.current.environment}.alphagov.co.uk"
   
   Geogov.configure do |g|
     g.provider_for :centre_of_country,             Geogov::Geonames.new
