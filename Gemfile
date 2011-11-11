@@ -4,7 +4,7 @@ gem 'oauth2', '0.4.1'
 gem 'oa-core', '0.2.6'
 gem 'oa-oauth', '0.2.6'
 
-gem 'plek', '0.1.5'
+gem 'plek', :git => 'git@github.com:alphagov/plek.git'
 
 group :passenger_compatibility do
   gem 'rack', '1.3.5'
