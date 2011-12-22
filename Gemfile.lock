@@ -63,6 +63,8 @@ GEM
     addressable (2.2.6)
     arel (2.2.1)
     bson (1.5.2)
+    bson_ext (1.5.2)
+      bson (= 1.5.2)
     builder (3.0.0)
     capybara (1.1.1)
       mime-types (>= 1.16)
@@ -191,6 +193,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bson_ext (= 1.5.2)
   capybara (~> 1.1.0)
   ci_reporter
   database_cleaner
@@ -202,6 +205,7 @@ DEPENDENCIES
   inherited_resources
   lockfile
   mocha
+  mongo (= 1.5.2)
   mongoid (~> 2.3)
   oa-core (= 0.2.6)
   oa-oauth (= 0.2.6)

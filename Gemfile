@@ -14,6 +14,8 @@ end
 gem 'rails', '~> 3.1.1'
 
 gem "mongoid", "~> 2.3"
+gem "mongo", "1.5.2"
+gem "bson_ext", "1.5.2"
 
 gem 'exception_notification', '~> 2.5.2', :require => 'exception_notifier'
 gem 'formtastic', '~> 2.0.2'
