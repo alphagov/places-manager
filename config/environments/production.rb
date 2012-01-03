@@ -49,7 +49,10 @@ Imminence::Application.configure do
   
   config.middleware.delete Slimmer::App
   config.middleware.use Slimmer::App, :asset_host => Plek.current.find('assets')
-  
+
+  config.action_mailer.default_url_options = { :host => Plek.current.find('imminence') }
+  config.action_mailer.delivery_method = :ses
+
   Geogov.configure do |g|
     g.provider_for :centre_of_country,             Geogov::Geonames.new
     g.provider_for :centre_of_district,            Geogov::Mapit.new("http://mapit.alpha.gov.uk")
