@@ -3,7 +3,7 @@ source 'http://rubygems.org'
 gem 'oauth2', '0.4.1'
 gem 'oa-core', '0.2.6'
 gem 'oa-oauth', '0.2.6'
-
+gem 'gelf'
 gem 'plek', '~> 0'
 
 group :passenger_compatibility do
