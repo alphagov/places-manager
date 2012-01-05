@@ -4,6 +4,12 @@ class Admin::DataSetsController < InheritedResources::Base
   before_filter :authenticate_user!
   belongs_to :service
   rescue_from CSV::MalformedCSVError, :with => :bad_csv
+  rescue_from BSON::InvalidStringEncoding, :with => :bad_encoding
+
+  def bad_encoding
+    flash[:alert] = "Could not process CSV file because of the file encoding. Please check the format."
+    redirect_to :back
+  end
 
   def bad_csv
     flash[:alert] = "Could not process CSV file. Please check the format."
