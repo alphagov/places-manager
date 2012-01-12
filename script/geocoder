@@ -20,7 +20,7 @@ Lockfile.new lock_path, :retries => 0 do
   Service.all.each do |service|
     
     service.data_sets.each do |set|
-      if env['RESET_ERRORS']
+      if ENV['RESET_ERRORS']
         set.places.with_geocoding_errors.map { |p| p.geocode_error = nil } 
         set.save
       end
