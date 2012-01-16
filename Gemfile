@@ -5,6 +5,7 @@ gem 'oa-core', '0.2.6'
 gem 'oa-oauth', '0.2.6'
 gem 'gelf'
 gem 'plek', '~> 0'
+gem 'gds-warmup-controller'
 
 group :passenger_compatibility do
   gem 'rack', '1.3.5'
