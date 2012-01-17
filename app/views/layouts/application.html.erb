@@ -12,6 +12,16 @@
 
   <div id="wrapper" class="wrapper">
 
+    <nav class="admin-nav group" role="navigation">
+      <ul>
+        <li class="publications-nav">
+          <ul>
+            <li><%= link_to 'Sign out', gds_sign_out_path %></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+
     <div class="content" role="main">
 
       <% [:notice, :alert].select { |k| flash[k].present? }.each do |k| %>
@@ -23,7 +33,6 @@
       <% unless current_page?(admin_root_path) %>
         <p class="return"><%= link_to 'Return to dashboard', admin_root_path %></p>
       <% end %>
-
 
       <%= yield %>
 
