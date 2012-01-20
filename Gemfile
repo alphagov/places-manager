@@ -31,7 +31,7 @@ end
 if ENV['SLIMMER_DEV']
   gem 'slimmer', :path => '../slimmer'
 else
-  gem 'slimmer', :git => 'git@github.com:alphagov/slimmer.git'
+  gem 'slimmer', '~> 1.1'
 end
 
 gem 'geogov', :git => 'https://github.com/alphagov/geogov.git'
