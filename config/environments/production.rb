@@ -47,9 +47,9 @@ Imminence::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
-  
-  config.middleware.delete Slimmer::App
-  config.middleware.use Slimmer::App, :asset_host => Plek.current.find('assets')
+
+  config.slimmer.cache_templates = true
+  config.slimmer.asset_host = Plek.current.find('assets')
 
   config.action_mailer.default_url_options = { :host => Plek.current.find('imminence') }
   config.action_mailer.delivery_method = :ses
