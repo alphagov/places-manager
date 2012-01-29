@@ -1,7 +1,7 @@
 class Admin::ServicesController < InheritedResources::Base
   before_filter :authenticate_user!
   defaults :route_prefix => 'admin'
-  
+
   def create
     create!
   rescue CSV::MalformedCSVError => e
