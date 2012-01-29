@@ -17,7 +17,7 @@ class User
   def self.find_by_uid(uid)
     first(conditions: {uid: uid})
   end
-  
+
   def activate_data_set(data_set)
     data_set.activate!
     record_action(data_set, 'activated')

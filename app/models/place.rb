@@ -24,7 +24,7 @@ class Place
   field :geocode_error,  :type => String
 
   attr_accessor :distance
-  
+
   def geocode
     if postcode.blank?
       self.geocode_error = "Can't geocode without postcode"
@@ -45,12 +45,12 @@ class Place
     Rails.logger.warn error
     self.geocode_error = error
   end
-  
+
   def geocode!
     geocode
     save!
   end
-  
+
   def address
     [address1, address2].select(&:present?).map(&:strip).join(', ')
   end
@@ -64,15 +64,15 @@ class Place
     to = {'lat' => lat, 'lng' => lng}
     distance_between(from, to)
   end
-  
+
   def to_s
     [name, full_address, url].select(&:present?).join(', ')
   end
-  
+
   def lat
     location.nil? ? nil : location[0]
   end
-  
+
   def lng
     location.nil? ? nil : location[1]
   end
