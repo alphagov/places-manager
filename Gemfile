@@ -34,7 +34,7 @@ else
   gem 'slimmer', '~> 1.1'
 end
 
-gem 'geogov', :git => 'https://github.com/alphagov/geogov.git'
+gem 'geogov', '0.0.8'
 gem 'inherited_resources'
 gem 'lockfile'
 gem 'whenever'
