@@ -11,7 +11,6 @@ class DataSet
   field :version, :type => Integer, :default => 1
   before_save :set_version, :on => :create
 
-
   def set_version
     if self.version.blank? or self.version == 1
       self.version = service.data_sets.count + 1
