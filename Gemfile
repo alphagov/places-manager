@@ -1,8 +1,5 @@
 source 'http://rubygems.org'
 
-gem 'oauth2', '0.4.1'
-gem 'oa-core', '0.2.6'
-gem 'oa-oauth', '0.2.6'
 gem 'gelf'
 gem 'plek', '~> 0'
 gem 'gds-warmup-controller'
@@ -25,7 +22,7 @@ gem 'formtastic', '~> 2.0.2'
 if ENV['BUNDLE_DEV']
   gem 'gds-sso', :path => '../gds-sso'
 else
-  gem 'gds-sso', '~> 0.4.1'
+  gem 'gds-sso', '~> 0.5.1'
 end
 
 if ENV['SLIMMER_DEV']
