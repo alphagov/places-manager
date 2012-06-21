@@ -8,6 +8,7 @@ class User
   field  :email, :type => String
   field  :version, :type => Integer
   field  :name, :type => String
+  field  :permissions, :type => Hash
 
   def record_action(data_set, type, comment=nil)
     action = data_set.new_action(self, type, comment)

@@ -11,7 +11,7 @@ end
 
 gem 'rails', '~> 3.1.1'
 
-gem "mongoid", "~> 2.3"
+gem "mongoid", "2.4.6"
 gem "mongo", "1.5.2"
 gem "bson_ext", "1.5.2"
 
@@ -22,7 +22,7 @@ gem 'formtastic', '~> 2.0.2'
 if ENV['BUNDLE_DEV']
   gem 'gds-sso', :path => '../gds-sso'
 else
-  gem 'gds-sso', '~> 0.5.1'
+  gem 'gds-sso', '~> 0.7.0'
 end
 
 if ENV['SLIMMER_DEV']
