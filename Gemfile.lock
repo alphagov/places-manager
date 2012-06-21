@@ -193,6 +193,7 @@ DEPENDENCIES
   database_cleaner
   exception_notification (~> 2.5.2)
   fabrication
+  faraday (= 0.8.1)
   formtastic (~> 2.0.2)
   gds-sso (~> 0.7.0)
   gds-warmup-controller

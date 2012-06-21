@@ -24,6 +24,7 @@ if ENV['BUNDLE_DEV']
 else
   gem 'gds-sso', '~> 0.7.0'
 end
+gem "faraday", "0.8.1" # Specifying to resolve Jenkins dependency resolution fail
 
 if ENV['SLIMMER_DEV']
   gem 'slimmer', :path => '../slimmer'
