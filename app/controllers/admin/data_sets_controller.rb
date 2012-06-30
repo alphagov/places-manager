@@ -1,7 +1,7 @@
 class Admin::DataSetsController < InheritedResources::Base
-  defaults :route_prefix => 'admin'
+  include Admin::AdminControllerMixin
+
   actions :all, :except => [:show, :index]
-  before_filter :authenticate_user!
   belongs_to :service
   rescue_from CSV::MalformedCSVError, :with => :bad_csv
   rescue_from BSON::InvalidStringEncoding, :with => :bad_encoding
