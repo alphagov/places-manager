@@ -11,8 +11,14 @@
     <div class="inner">
       <% if @service.data_sets.any? %>
         <% if @service.active_data_set %>
-        <h2>Currently serving version <%= @service.active_data_set_version %> containing <%= pluralize(@service.active_data_set.places.count, 'place', 'places') %>.</h2>
-        <%= render @service.active_data_set %>
+          <h2>Currently serving version <%= @service.active_data_set_version %> containing <%= pluralize(@service.active_data_set.places.count, 'place', 'places') %>.</h2>
+
+          <% if @service.source_of_data.present? %>
+            <h3>Source of data</h3>
+            <%= simple_format @service.source_of_data %>
+          <% end %>
+
+          <%= render @service.active_data_set %>
         <% end %>
 
         <% if @service.data_sets.last.version > @service.active_data_set_version %>
