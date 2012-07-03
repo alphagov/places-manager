@@ -1,4 +1,9 @@
 <%= semantic_form_for(@service, :url => admin_service_path(@service), :multipart => true) do |f| %>
-  <%= f.inputs :name, :slug %>
+  <%= f.inputs do %>
+    <%= f.input :name %>
+    <%= f.input :slug %>
+    <%= f.input :source_of_data, as: :text, hint: "Use to store relevant contact names, email addresses, etc." %>
+  <% end %>
+
   <%= f.buttons %>
 <% end %>
