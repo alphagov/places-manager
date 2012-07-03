@@ -4,6 +4,7 @@ class Service
   field :name,                    :type => String
   field :slug,                    :type => String
   field :active_data_set_version, :type => Integer, :default => 1
+  field :source_of_data,          :type => String
 
   embeds_many :data_sets
 
