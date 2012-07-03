@@ -27,10 +27,13 @@ else
 end
 gem "faraday", "0.8.1" # Specifying to resolve Jenkins dependency resolution fail
 
+# Required but not set as a dependency for slimmer
+gem 'gds-api-adapters'
+
 if ENV['SLIMMER_DEV']
   gem 'slimmer', :path => '../slimmer'
 else
-  gem 'slimmer', '~> 1.1'
+  gem 'slimmer', '~> 1.1.42'
 end
 
 gem 'geogov', '0.0.9'
