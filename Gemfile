@@ -23,7 +23,7 @@ gem 'formtastic', '~> 2.0.2'
 if ENV['BUNDLE_DEV']
   gem 'gds-sso', :path => '../gds-sso'
 else
-  gem 'gds-sso', '~> 0.7.7'
+  gem 'gds-sso', '~> 0.7.9'
 end
 gem "faraday", "0.8.1" # Specifying to resolve Jenkins dependency resolution fail
 
