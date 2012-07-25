@@ -10,4 +10,5 @@ Imminence::Application.routes.draw do
 
   resources :data_sets, :only => :show
   resources :places, :only => :show
+  root :to => redirect('/admin')
 end
