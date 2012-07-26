@@ -40,6 +40,7 @@ gem 'geogov', '0.0.9'
 gem 'inherited_resources'
 gem 'lockfile'
 gem 'whenever'
+gem 'lograge'
 
 group :development, :test do
   # gem 'passenger'

@@ -60,4 +60,6 @@ Imminence::Application.configure do
     g.provider_for :areas_for_stack_from_coords,   Geogov::Mapit.new("http://mapit.alpha.gov.uk")
     g.provider_for :lat_lon_from_postcode,         Geogov::Mapit.new("http://mapit.alpha.gov.uk")
   end
+
+  config.lograge.enabled = true
 end
