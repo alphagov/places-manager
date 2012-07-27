@@ -67,7 +67,7 @@ GEM
       lrucache (~> 0.1.1)
       null_logger
       plek
-    gds-sso (1.1.1)
+    gds-sso (1.2.0)
       omniauth-gds (= 0.0.3)
       rack-accept (~> 0.4.4)
       rails (>= 3.0.0)
@@ -212,7 +212,7 @@ DEPENDENCIES
   faraday (= 0.8.1)
   formtastic (~> 2.0.2)
   gds-api-adapters
-  gds-sso (= 1.1.1)
+  gds-sso (~> 1.2.0)
   gds-warmup-controller
   gelf
   geogov (= 0.0.9)
