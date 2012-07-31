@@ -43,7 +43,7 @@ gem 'whenever'
 gem 'lograge'
 
 group :development, :test do
-  # gem 'passenger'
+  gem 'cucumber-rails'
   gem 'fabrication'
   gem "timecop"
   gem 'capybara', '~> 1.1.0'
