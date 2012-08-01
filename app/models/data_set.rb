@@ -12,8 +12,10 @@ class DataSet
   before_save :set_version, :on => :create
 
   def set_version
-    if self.version.blank? or (self.version == 1 and service.data_sets.count > 1)
-      self.version = service.data_sets.count + 1
+    other_data_sets = service.data_sets.to_a - [self]
+
+    if self.version.blank? or (self.version == 1 and other_data_sets.length >= 1)
+      self.version = other_data_sets.length + 1
     end
   end
 

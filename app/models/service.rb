@@ -15,8 +15,7 @@ class Service
 
   def data_file=(file)
     ds_version = self.data_sets.any? ? self.data_sets.last.version + 1 : 1
-    d = DataSet.new(:version => ds_version, :data_file => file)
-    self.data_sets << d
+    self.data_sets.build(:version => ds_version, :data_file => file)
   end
 
   def active_data_set
