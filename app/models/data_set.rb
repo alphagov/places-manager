@@ -10,6 +10,11 @@ class DataSet
 
   field :version, :type => Integer, :default => 1
   before_save :set_version, :on => :create
+  before_save :reconcile_place_locations
+
+  def reconcile_place_locations
+    places.map(&:reconcile_location)
+  end
 
   def set_version
     other_data_sets = service.data_sets.to_a - [self]
@@ -21,7 +26,7 @@ class DataSet
 
   def data_file=(file)
     CSV.parse(file.read, :headers => true) do |row|
-      places << Place.new(
+      places.build(
         :name => row['name'],
         :address1 => row['address1'],
         :address2 => row['address2'],
@@ -30,7 +35,9 @@ class DataSet
         :access_notes => row['access_notes'],
         :general_notes => row['general_notes'],
         :url => row['url'],
-        :source_address => row['source_address']
+        :source_address => row['source_address'],
+        :lat => row['lat'],
+        :lng => row['lng']
       )
     end
   end

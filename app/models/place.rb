@@ -76,4 +76,18 @@ class Place
   def lng
     location.nil? ? nil : location[1]
   end
+
+  def lat=(value)
+    @temp_lat = value.to_f
+  end
+
+  def lng=(value)
+    @temp_lng = value.to_f
+  end
+
+  def reconcile_location
+    if location.empty? && @temp_lat && @temp_lng
+      self.location = [@temp_lat, @temp_lng]
+    end
+  end
 end

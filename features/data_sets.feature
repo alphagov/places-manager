@@ -14,6 +14,7 @@ Feature: Managing data sets
 
   Scenario: Adding another data set to a service
     Given I have previously created the "Register Offices" service
+
     When I go to the page for the "Register Offices" service
       And I upload a new data set
 
@@ -23,7 +24,9 @@ Feature: Managing data sets
   Scenario: Activating a new data set
     Given I have previously created the "Register Offices" service
       And I have uploaded a second data set
+
     When I go to the page for the "Register Offices" service
       And I click "Activate"
+
     Then I should see that the second data set is active
   

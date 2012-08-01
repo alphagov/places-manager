@@ -10,4 +10,12 @@ class PlaceTest < ActiveSupport::TestCase
     p = Place.new(:location => [0,0])
     assert_equal 3454.9999999999995, p.distance_from(50, 0)
   end
+
+  test "can import a longitude and latitude" do
+    p = Place.new(lat: '51.501009611553926', lng: '-0.141587067110009')
+    p.reconcile_location
+
+    assert_equal 51.501009611553926, p.lat
+    assert_equal -0.141587067110009, p.lng
+  end
 end

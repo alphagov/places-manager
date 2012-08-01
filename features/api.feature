@@ -4,7 +4,7 @@ Feature: Managing data sets
 
   Background:
     Given I have previously created the "Register Offices" service
-      And the data has been geocoded
+      #And the data has been geocoded
 
   Scenario: Exporting a data set in full
     When I request the JSON for "Register Offices" without any parameters

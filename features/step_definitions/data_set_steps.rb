@@ -6,21 +6,6 @@ Given /^I have uploaded a second data set$/ do
   upload_extra_data_set(@service)
 end
 
-Given /^the data has been geocoded$/ do
-  Service.all.each do |service|
-    service.data_sets.each do |set|
-      if ENV['RESET_ERRORS']
-        set.places.with_geocoding_errors.map { |p| p.geocode_error = nil }
-        set.save
-      end
-      set.places.needs_geocoding.each do |place|
-        place.geocode!
-        $stderr.puts place.geocode_error if place.geocode_error
-      end
-    end
-  end
-end
-
 When /^I go to the new service page$/ do
   visit new_admin_service_path
 end
