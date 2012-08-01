@@ -29,6 +29,8 @@ class Place
   validates_presence_of :source_address
   validates_presence_of :postcode
 
+  index [[:location, Mongo::GEO2D], [:service_slug, Mongo::ASCENDING], [:data_set_version, Mongo::ASCENDING]], background: true
+
   attr_accessor :distance
 
   def geocode

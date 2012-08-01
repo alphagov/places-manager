@@ -61,14 +61,4 @@ class DataSet
     self.actions << action
     action
   end
-
-  def places_near(lat, lng, opts = {})
-    ordered_places = places.geocoded.sort_by { |p| p.distance_from(lat, lng) }
-    if opts[:limit]
-      ordered_places = ordered_places.slice(0, opts[:limit].to_i)
-    elsif opts[:max_distance]
-      ordered_places = ordered_places.select { |p| p.distance <= opts[:max_distance].to_f }
-    end
-    ordered_places
-  end
 end
