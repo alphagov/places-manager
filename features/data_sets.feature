@@ -12,7 +12,6 @@ Feature: Managing data sets
     Then I should be on the page for the "Register Offices" service
       And I should see an indication that my data set contained 174 items
 
-  @wip
   Scenario: Adding another data set to a service
     Given I have previously created the "Register Offices" service
     When I go to the page for the "Register Offices" service
@@ -21,9 +20,10 @@ Feature: Managing data sets
     Then I should be on the page for the "Register Offices" service
       And I should see that there are now two data sets
 
-  @wip
   Scenario: Activating a new data set
     Given I have previously created the "Register Offices" service
       And I have uploaded a second data set
-
+    When I go to the page for the "Register Offices" service
+      And I click "Activate"
+    Then I should see that the second data set is active
   

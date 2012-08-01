@@ -8,6 +8,12 @@ module ServiceHelper
     File.expand_path('../../support/data/' + name.parameterize + '.csv', __FILE__)
   end
 
+  def upload_extra_data_set(service)
+    service.data_sets.create!(
+      data_file: File.open(csv_path_for_data(service.name))
+    )
+  end
+
   def create_service(name)
     s = Service.new(
       name: name,
@@ -16,6 +22,7 @@ module ServiceHelper
       data_file: File.open(csv_path_for_data(name))
     )
     s.save!
+    s
   end
 end
 
