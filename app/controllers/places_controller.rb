@@ -7,7 +7,7 @@ ActionController::Renderers.add :csv do |detailed_report, options|
     headers['Content-Type']              = 'text/csv'
     headers['Content-Transfer-Encoding'] = 'binary'
 
-    self.response_body = detailed_report.first.data_set.to_csv
+    self.response_body = DataSetCsvPresenter.new(detailed_report.first.data_set).to_csv
   end
 end
 
