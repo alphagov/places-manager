@@ -6,7 +6,8 @@ class Place
   scope :with_geocoding_errors, where(:geocode_error.exists => true)
   scope :geocoded, where(:location.size => 2)
 
-  embedded_in :data_set
+  field :service_slug,   :type => String
+  field :data_set_version, :type => Integer
 
   field :name,           :type => String
   field :source_address, :type => String
@@ -22,6 +23,11 @@ class Place
   field :text_phone,     :type => String
   field :location,       :type => Array, :geo => true, :default => []
   field :geocode_error,  :type => String
+
+  validates_presence_of :service_slug
+  validates_presence_of :data_set_version
+  validates_presence_of :source_address
+  validates_presence_of :postcode
 
   attr_accessor :distance
 

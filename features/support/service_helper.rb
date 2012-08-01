@@ -24,6 +24,14 @@ module ServiceHelper
     s.save!
     s
   end
+
+  def fill_in_form_with(name, csv_path)
+    fill_in 'Name', with: name
+    fill_in 'Slug', with: name.parameterize
+    fill_in 'Source of data', with: 'Testing'
+    attach_file 'Data file', csv_path
+    click_button 'Create Service'
+  end
 end
 
 World(ServiceHelper)

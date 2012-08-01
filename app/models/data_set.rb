@@ -3,15 +3,13 @@ class DataSet
   include Mongoid::Timestamps
 
   embedded_in :service
-  embeds_many :places
   embeds_many :actions
 
   field :version, :type => Integer, :default => 1
   before_save :set_version, :on => :create
-  before_save :reconcile_place_locations
 
-  def reconcile_place_locations
-    places.map(&:reconcile_location)
+  def places
+    Place.where(service_slug: service.slug, data_set_version: version)
   end
 
   def set_version
@@ -22,22 +20,31 @@ class DataSet
     end
   end
 
-  def data_file=(file)
-    CSV.parse(file.read, :headers => true) do |row|
-      places.build(
-        :name => row['name'],
-        :address1 => row['address1'],
-        :address2 => row['address2'],
-        :town => row['town'],
-        :postcode => row['postcode'],
-        :access_notes => row['access_notes'],
-        :general_notes => row['general_notes'],
-        :url => row['url'],
-        :source_address => row['source_address'],
-        :lat => row['lat'],
-        :lng => row['lng']
-      )
+  after_save :process_data_file
+  def process_data_file
+    if @data_file
+      CSV.parse(@data_file.read, :headers => true) do |row|
+        Place.create(
+          service_slug: service.slug,
+          data_set_version: self.version,
+          name: row['name'],
+          address1: row['address1'],
+          address2: row['address2'],
+          town: row['town'],
+          postcode: row['postcode'],
+          access_notes: row['access_notes'],
+          general_notes: row['general_notes'],
+          url: row['url'],
+          source_address: row['source_address'],
+          lat: row['lat'],
+          lng: row['lng']
+        )
+      end
     end
+  end
+
+  def data_file=(file)
+    @data_file = file
   end
 
   def active?
