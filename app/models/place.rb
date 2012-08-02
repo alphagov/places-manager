@@ -6,6 +6,12 @@ class Place
   scope :with_geocoding_errors, where(:geocode_error.exists => true)
   scope :geocoded, where(:location.size => 2)
 
+  scope :near_within_miles, proc { |lat, lng, distance|
+    # Distances are in the same units as the co-ordinates so we need
+    # to do some maths to convert our values.
+    where(:location => {"$near" => [lat, lng], "$maxDistance" => distance.fdiv(111.12)})
+  }
+
   field :service_slug,   :type => String
   field :data_set_version, :type => Integer
 

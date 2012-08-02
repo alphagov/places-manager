@@ -18,4 +18,45 @@ class PlaceTest < ActiveSupport::TestCase
     assert_equal 51.501009611553926, p.lat
     assert_equal -0.141587067110009, p.lng
   end
+
+  test "can be found near a point" do
+    s = Service.create(name: 'A key service', slug: 'a-key-service')
+    p = Place.create(
+      service_slug: 'a-key-service',
+      data_set_version: s.data_sets.last.version,
+      postcode: 'SW1A 1AA',
+      source_address: 'Westminster',
+      lat: '51.501009611553926', lng: '-0.141587067110009'
+    )
+    assert p.persisted?
+    places = s.data_sets.last.places.near(location: [p.lat, p.lng])
+    assert_equal p, places.first
+  end
+
+  test "can be found near a point in the right order" do
+    s = Service.create(name: 'A key service', slug: 'a-key-service')
+    p = Place.create(
+      service_slug: 'a-key-service',
+      data_set_version: s.data_sets.last.version,
+      postcode: 'SW1A 1AA',
+      source_address: 'Westminster',
+      lat: '51.501009611553926', lng: '-0.141587067110009'
+    )
+    p2 = Place.create(
+      service_slug: 'a-key-service',
+      data_set_version: s.data_sets.last.version,
+      postcode: 'EH99 1SP',
+      source_address: 'Edinburgh, City of Edinburgh EH99 1SP UK',
+      lat: '55.953152', lng: '-3.175499'
+    )
+    places = s.data_sets.last.places.near(location: [p.lat, p.lng])
+    assert_equal [p, p2], places.to_a
+  end
+
+  # test "points can be restrained to within a given distance in miles" do
+  #   assert false, "TBD"
+  # end
+
+  # test "results of distance searches can tell us their distance from origin in miles" do
+  # end
 end

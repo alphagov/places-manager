@@ -16,31 +16,35 @@ class PlacesController < ApplicationController
 
   def show
     @service = Service.where(slug: params[:id]).first
-    head 404 and return if @service.nil? or @service.active_data_set.nil?
+    head 404 and return if @service.nil?
 
-    if user_signed_in? and params[:version].present?
-      data_set = @service.data_sets.find(params[:version])
-    else
-      data_set = @service.active_data_set
-    end
-
+    data_set = select_data_set(@service, params[:version])
     head 404 and return if data_set.nil?
 
-    @places = Place.where(:service_slug => @service.slug, 
-      :data_set_version => data_set.version)
-
-    if params[:lat].present? && params[:lng].present?
-      place_params = {"$near" => [params[:lat].to_f, params[:lng].to_f]}
-
-      if params[:max_distance]
-        place_params['$maxDistance'] => params[:max_distance].fdiv(111.12)
-      end
-
-      @places = @places.where(:location => place_params)
-    end
-
-    @places = @places.limit(params[:limit] || 50)
+    @places = places_for(data_set, params[:lat], params[:lng], 
+      params[:max_distance], params[:limit])
 
     respond_with(@places)
+  end
+
+  protected
+  def select_data_set(service, version = nil)
+    if user_signed_in? and version.present?
+      service.data_sets.find(version)
+    else
+      service.active_data_set
+    end
+  end
+
+  def places_for(data_set, lat, lng, max_distance, limit = 50)
+    places = data_set.places
+
+    if lat.present? && lng.present? && max_distance.present?
+      places = places.near_within_miles(lat.to_f, lng.to_f, max_distance.to_f)
+    elsif lat.present? && lng.present?
+      places = places.near(location: [lat, lng])
+    end
+
+    places.limit(limit)
   end
 end
