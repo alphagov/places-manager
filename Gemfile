@@ -5,12 +5,7 @@ gem 'gelf'
 gem 'plek', '~> 0'
 gem 'gds-warmup-controller'
 
-group :passenger_compatibility do
-  gem 'rack', '1.3.5'
-  gem 'rake', '0.9.2'
-end
-
-gem 'rails', '~> 3.1.1'
+gem 'rails', '~> 3.2.7'
 
 gem "mongoid", "2.4.10"
 gem "mongo", "1.5.2"
@@ -35,12 +30,9 @@ gem 'lockfile'
 gem 'whenever'
 gem 'lograge'
 
-group :development, :test do
+group :test do
   gem 'cucumber-rails', require: false
-  gem 'fabrication'
-  gem "timecop"
   gem 'capybara', '~> 1.1.0'
-  gem 'selenium-webdriver'
   gem 'database_cleaner'
   gem 'simplecov', '0.6.4'
   gem 'simplecov-rcov', '0.2.3'
@@ -49,8 +41,5 @@ group :development, :test do
   gem 'ci_reporter'
   gem 'test-unit'
   gem 'launchy'
-end
-
-group :test do
-  gem 'mocha'
+  gem 'mocha', require: false
 end
