@@ -17,8 +17,8 @@ class Place
 
   field :name,           :type => String
   field :source_address, :type => String
-  field :address1,        :type => String
-  field :address2,        :type => String
+  field :address1,       :type => String
+  field :address2,       :type => String
   field :town,           :type => String
   field :postcode,       :type => String
   field :access_notes,   :type => String
@@ -36,8 +36,10 @@ class Place
   validates_presence_of :postcode
 
   index [[:location, Mongo::GEO2D], [:service_slug, Mongo::ASCENDING], [:data_set_version, Mongo::ASCENDING]], background: true
+  index [[:service_slug, Mongo::ASCENDING], [:data_set_version, Mongo::ASCENDING]]
 
   attr_accessor :distance
+  before_save :reconcile_location
 
   def geocode
     if postcode.blank?
