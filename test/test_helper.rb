@@ -4,6 +4,8 @@ require 'simplecov-rcov'
 SimpleCov.start 'rails'
 SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter
 
+require 'database_cleaner'
+
 ENV["RAILS_ENV"] = "test"
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
@@ -17,6 +19,12 @@ class ActiveSupport::TestCase
   # fixtures :all
 
   # Add more helper methods to be used by all tests here...
+
+  def clean_db
+    DatabaseCleaner.clean
+  end
+  set_callback :teardown, :before, :clean_db
+
 
   def as_logged_in_user(&block)
     @controller.stubs(:authenticate_user!).returns(true)
