@@ -1,8 +1,10 @@
-require 'simplecov'
-require 'simplecov-rcov'
+if ENV["COVERAGE"]
+  require 'simplecov'
+  require 'simplecov-rcov'
 
-SimpleCov.start 'rails'
-SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter
+  SimpleCov.start 'rails'
+  SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter
+end
 
 require 'database_cleaner'
 

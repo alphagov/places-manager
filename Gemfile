@@ -42,8 +42,8 @@ group :development, :test do
   gem 'capybara', '~> 1.1.0'
   gem 'selenium-webdriver'
   gem 'database_cleaner'
-  gem 'simplecov', '0.4.2'
-  gem 'simplecov-rcov'
+  gem 'simplecov', '0.6.4'
+  gem 'simplecov-rcov', '0.2.3'
   gem 'factory_girl', "3.3.0"
   gem 'factory_girl_rails'
   gem 'ci_reporter'
