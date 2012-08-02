@@ -23,22 +23,8 @@ class DataSet
   after_save :process_data_file
   def process_data_file
     if @data_file
-      CSV.parse(@data_file.read, :headers => true) do |row|
-        Place.create(
-          service_slug: service.slug,
-          data_set_version: self.version,
-          name: row['name'],
-          address1: row['address1'],
-          address2: row['address2'],
-          town: row['town'],
-          postcode: row['postcode'],
-          access_notes: row['access_notes'],
-          general_notes: row['general_notes'],
-          url: row['url'],
-          source_address: row['source_address'],
-          lat: row['lat'],
-          lng: row['lng']
-        )
+      CSV.parse(@data_file.read, headers: true) do |row|
+        Place.create_from_hash(self, row)
       end
     end
   end

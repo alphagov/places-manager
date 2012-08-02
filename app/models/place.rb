@@ -41,6 +41,24 @@ class Place
   attr_accessor :distance
   before_save :reconcile_location
 
+  def self.create_from_hash(data_set, row)
+    create(
+      service_slug: data_set.service.slug,
+      data_set_version: data_set.version,
+      name: row['name'],
+      address1: row['address1'],
+      address2: row['address2'],
+      town: row['town'],
+      postcode: row['postcode'],
+      access_notes: row['access_notes'],
+      general_notes: row['general_notes'],
+      url: row['url'],
+      source_address: row['source_address'] || "#{row['address1']} #{row['address2']} #{row['town']} #{row['postcode']}",
+      lat: row['lat'],
+      lng: row['lng']
+    )
+  end
+
   def geocode
     if postcode.blank?
       self.geocode_error = "Can't geocode without postcode"
