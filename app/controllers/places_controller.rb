@@ -21,7 +21,7 @@ class PlacesController < ApplicationController
     data_set = select_data_set(@service, params[:version])
     head 404 and return if data_set.nil?
 
-    @places = places_for(data_set, params[:lat], params[:lng], 
+    @places = data_set.places_for([params[:lat], params[:lng]], 
       params[:max_distance], params[:limit])
 
     respond_with(@places)

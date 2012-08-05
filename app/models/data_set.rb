@@ -12,6 +12,10 @@ class DataSet
     Place.where(service_slug: service.slug, data_set_version: version)
   end
 
+  def places_near(location, distance = nil, limit = nil)
+    Place.find_near(location, distance, limit, {service_slug: service.slug, data_set_version: version})
+  end
+
   def set_version
     other_data_sets = service.data_sets.to_a - [self]
 
