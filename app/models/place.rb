@@ -1,16 +1,11 @@
 class Place
   include Mongoid::Document
   include GeoTools
+  extend GeoTools
 
   scope :needs_geocoding, where(:location.size => 0, :geocode_error.exists => false)
   scope :with_geocoding_errors, where(:geocode_error.exists => true)
   scope :geocoded, where(:location.size => 2)
-
-  scope :near_within_miles, proc { |lat, lng, distance|
-    # Distances are in the same units as the co-ordinates so we need
-    # to do some maths to convert our values.
-    where(:location => {"$near" => [lat, lng], "$maxDistance" => distance.fdiv(111.12)})
-  }
 
   field :service_slug,   :type => String
   field :data_set_version, :type => Integer
@@ -27,7 +22,7 @@ class Place
   field :phone,          :type => String
   field :fax,            :type => String
   field :text_phone,     :type => String
-  field :location,       :type => Array, :geo => true, :default => []
+  field :location,       :type => Array, :default => []
   field :geocode_error,  :type => String
 
   validates_presence_of :service_slug
@@ -38,8 +33,44 @@ class Place
   index [[:location, Mongo::GEO2D], [:service_slug, Mongo::ASCENDING], [:data_set_version, Mongo::ASCENDING]], background: true
   index [[:service_slug, Mongo::ASCENDING], [:data_set_version, Mongo::ASCENDING]]
 
-  attr_accessor :distance
+  attr_accessor :dis
   before_save :reconcile_location
+
+  ##
+  # Find all the points near a given location
+  # 
+  # This returns Place objects with a 'dis' attribute representing the
+  # mongodb derived distance of that place from the origin of the search.
+  #
+  # That doesn't feel quite right and this API is subject to change, perhaps
+  # to return an array of arrays, eg. [[distance, Place], [distance2, Place2]]?
+  # 
+  # Arguments:
+  #   location - an array of latitude/longitude as floats
+  #   distance (optional) - an array of distance and units. eg. [10, :miles]
+  #       - only miles are currently supported
+  #   limit (optional) - a maximum number of results to return
+  #
+  # Returns:
+  #   an array of Place objects with a 'dis' attribute
+  def self.find_near(location, distance = nil, limit = nil, extra_query = {})
+    opts = {'geoNear' => "places", 'near' => location, 'query' => extra_query}
+
+    if distance
+      opts['maxDistance'] = miles_to_degrees(distance.first)
+    end
+
+    if limit
+      opts['num'] = limit.to_i
+    end
+
+    response = Mongoid.master.command(opts)
+    response['results'].collect do |result|
+      Mongoid::Factory.from_db(self, result['obj']).tap do |doc|
+        doc.dis = result['dis']
+      end
+    end
+  end
 
   def self.create_from_hash(data_set, row)
     create(
@@ -91,12 +122,6 @@ class Place
 
   def full_address
     [address, town, postcode, 'UK'].select { |i| i.present? }.map(&:strip).join(', ')
-  end
-
-  def distance_from(lat, lng)
-    from = {'lat' => location[0], 'lng' => location[1]}
-    to = {'lat' => lat, 'lng' => lng}
-    distance_between(from, to)
   end
 
   def to_s
