@@ -7,6 +7,11 @@ namespace :migrate do
           Place.create_from_hash(set, place.except('_id'))
         end
 
+        if set['places'].length != set.places.length
+          puts "Data hasn't transferred properly"
+          exit(1)
+        end
+
         set['places'] = nil
         set.save
       end
