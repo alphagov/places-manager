@@ -15,6 +15,13 @@ class PlacesController < ApplicationController
   respond_to :json, :kml, :csv
 
   def show
+    # Show a set of places in relation to a service
+    # Parameters:
+    #   id: the slug for the service
+    #   lat, lng: latitude/longitude in decimal degrees to limit the set of
+    #             places displayed
+    #   max_distance: maximum distance in miles from the lat/long given
+    #   limit: maximum number of places to show
     @service = Service.where(slug: params[:id]).first
     head 404 and return if @service.nil?
 
