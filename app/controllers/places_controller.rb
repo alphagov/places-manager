@@ -50,16 +50,4 @@ class PlacesController < ApplicationController
       service.active_data_set
     end
   end
-
-  def places_for(data_set, lat, lng, max_distance, limit = 50)
-    places = data_set.places
-
-    if lat.present? && lng.present? && max_distance.present?
-      places = places.near_within_miles(lat.to_f, lng.to_f, max_distance.to_f)
-    elsif lat.present? && lng.present?
-      places = places.near(location: [lat, lng])
-    end
-
-    places.limit(limit)
-  end
 end
