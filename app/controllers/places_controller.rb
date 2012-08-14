@@ -28,8 +28,16 @@ class PlacesController < ApplicationController
     data_set = select_data_set(@service, params[:version])
     head 404 and return if data_set.nil?
 
-    @places = data_set.places_for([params[:lat], params[:lng]], 
-      params[:max_distance], params[:limit])
+    if params[:lat].present? && params[:lng].present?
+      location = [params[:lat], params[:lng]]
+      @places = data_set.places_near(
+        location,
+        params[:max_distance],
+        params[:limit]
+      )
+    else
+      @places = data_set.places
+    end
 
     respond_with(@places)
   end
