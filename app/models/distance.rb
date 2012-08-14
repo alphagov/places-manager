@@ -48,6 +48,8 @@ class Distance
     # define a symmetric and transitive equality relation between distances of
     # different units
     magnitude == other.magnitude && unit == other.unit
+  rescue NoMethodError
+    false
   end
 
   def in(unit)

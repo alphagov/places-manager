@@ -22,4 +22,8 @@ class DistanceTest < ActiveSupport::TestCase
     assert_in_delta 0.12616099657094412, d.in(:radians), 1e-5
   end
 
+  test "distances are not equal to numbers" do
+    refute_equal 500, Distance.new(500, :miles)
+  end
+
 end
