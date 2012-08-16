@@ -72,22 +72,16 @@ class Place
     end
   end
 
-  def self.create_from_hash(data_set, row)
-    create(
-      service_slug: data_set.service.slug,
-      data_set_version: data_set.version,
-      name: row['name'],
-      address1: row['address1'],
-      address2: row['address2'],
-      town: row['town'],
-      postcode: row['postcode'],
-      access_notes: row['access_notes'],
-      general_notes: row['general_notes'],
-      url: row['url'],
-      source_address: row['source_address'] || "#{row['address1']} #{row['address2']} #{row['town']} #{row['postcode']}",
-      lat: row['lat'],
-      lng: row['lng']
-    )
+  def self.create_from_hash(data_set, row, options={})
+    place = new(parameters_from_hash(data_set, row))
+    place.save(options)
+    place
+  end
+
+  def self.create_from_hash!(data_set, row, options={})
+    place = new(parameters_from_hash(data_set, row))
+    place.save!(options)
+    place
   end
 
   def geocode
@@ -148,5 +142,25 @@ class Place
     if location.empty? && @temp_lat && @temp_lng
       self.location = [@temp_lat, @temp_lng]
     end
+  end
+
+  private
+  def self.parameters_from_hash(data_set, row)
+    # Create parameters suitable for passing to build, create, etc.
+    {
+      service_slug: data_set.service.slug,
+      data_set_version: data_set.version,
+      name: row['name'],
+      address1: row['address1'],
+      address2: row['address2'],
+      town: row['town'],
+      postcode: row['postcode'],
+      access_notes: row['access_notes'],
+      general_notes: row['general_notes'],
+      url: row['url'],
+      source_address: row['source_address'] || "#{row['address1']} #{row['address2']} #{row['town']} #{row['postcode']}",
+      lat: row['lat'],
+      lng: row['lng']
+    }
   end
 end
