@@ -3,6 +3,73 @@ class Place
   include GeoTools
   extend GeoTools
 
+  class Point
+
+    attr_reader :longitude, :latitude
+
+    def initialize(coordinates)
+      [:longitude, :latitude].each do |key|
+        # The Float method would fail with a TypeError, but this is more useful
+        raise ArgumentError, "Missing #{key}" unless coordinates.has_key? key
+      end
+
+      @longitude, @latitude = [:longitude, :latitude].map { |key|
+        Float(coordinates[key])
+      }
+      unless (-90..90).include? @latitude  # [-90, 90]
+        raise "Invalid latitude #{@latitude.inspect}"
+      end
+      unless (-180...180).include? @longitude  # [-180, 180)
+        raise "Invalid longitude #{@longitude.inspect}"
+      end
+    end
+
+    def ==(other)
+      longitude == other.longitude && latitude == other.latitude
+    rescue NoMethodError
+      false
+    end
+
+    class Field
+      # Declare a field of this type to have it deserialise to a Point
+
+      include Mongoid::Fields::Serializable
+
+      def deserialize(value)
+        return nil unless value
+
+        if value.is_a? Array
+          legacy_deserialize value
+        else
+          Point.new(longitude: value["longitude"], latitude: value["latitude"])
+        end
+      end
+
+      def serialize(point)
+        return nil unless point
+
+        {"longitude" => point.longitude, "latitude" => point.latitude}
+      end
+
+    private
+      def legacy_deserialize(value)
+          # Legacy [lat, lng] data format
+          # An empty array (or a single co-ordinate, which shouldn't happen) is
+          # an invalid value and deserializes to nil
+          case value.size
+          when 2
+            Point.new(latitude: value[0], longitude: value[1])
+          when 0
+            nil
+          else
+            Rails.logger.error "Invalid location #{value.inspect}"
+            nil
+          end
+      end
+    end
+  end
+
+
   scope :needs_geocoding, where(:location.size => 0, :geocode_error.exists => false)
   scope :with_geocoding_errors, where(:geocode_error.exists => true)
   scope :geocoded, where(:location.size => 2)
@@ -22,7 +89,7 @@ class Place
   field :phone,          :type => String
   field :fax,            :type => String
   field :text_phone,     :type => String
-  field :location,       :type => Array, :default => []
+  field :location,       :type => Point::Field
   field :geocode_error,  :type => String
 
   validates_presence_of :service_slug
@@ -90,7 +157,10 @@ class Place
     elsif location.nil? or location.empty?
       lookup = Geogov.lat_lon_from_postcode(self.postcode)
       if lookup
-        self.location = lookup.values
+        self.location = Point.new(
+          latitude: lookup.values[0],
+          longitude: lookup.values[1]
+        )
       else
         self.geocode_error = "#{self.postcode} not found for #{self.full_address}"
       end
@@ -123,31 +193,43 @@ class Place
   end
 
   def lat
-    location.nil? ? nil : location[0]
+    location.nil? ? nil : location.latitude
   end
 
   def lng
-    location.nil? ? nil : location[1]
+    location.nil? ? nil : location.longitude
   end
 
   def lat=(value)
-    @temp_lat = value.to_f
+    if location
+      location = Point.new(longitude: location.longitude, latitude: value)
+    else
+      @temp_lat = value
+    end
   end
 
   def lng=(value)
-    @temp_lng = value.to_f
+    if location
+      location = Point.new(longitude: value, latitude: location.latitude)
+    else
+      @temp_lng = value
+    end
   end
 
   def reconcile_location
-    if location.empty? && @temp_lat && @temp_lng
-      self.location = [@temp_lat, @temp_lng]
+    # This slight hack is needed to get around code setting latitude and
+    # longitude separately on a new object. Because we can't construct a Point
+    # field until we have both, we store them in temporary variables and build
+    # the point on save
+    if location.nil? && @temp_lat && @temp_lng
+      self.location = Point.new(longitude: @temp_lng, latitude: @temp_lat)
     end
   end
 
   private
   def self.parameters_from_hash(data_set, row)
     # Create parameters suitable for passing to build, create, etc.
-    {
+    base_parameters = {
       service_slug: data_set.service.slug,
       data_set_version: data_set.version,
       name: row['name'],
@@ -158,9 +240,13 @@ class Place
       access_notes: row['access_notes'],
       general_notes: row['general_notes'],
       url: row['url'],
-      source_address: row['source_address'] || "#{row['address1']} #{row['address2']} #{row['town']} #{row['postcode']}",
-      lat: row['lat'],
-      lng: row['lng']
+      source_address: row['source_address'] || "#{row['address1']} #{row['address2']} #{row['town']} #{row['postcode']}"
     }
+    location_parameters = if row['location']
+      {location: Point::Field.new.deserialize(row['location'])}
+    else
+      {location: Point.new(longitude: row['lng'], latitude: row['lat'])}
+    end
+    return base_parameters.merge(location_parameters)
   end
 end
