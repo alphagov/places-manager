@@ -8,9 +8,9 @@ xml.kml("xmlns" => "http://www.opengis.net/kml/2.2", 'xmlns:atom' => "http://www
         xml.name(place.name) if place.name.present?
         xml.description(place.general_notes) if place.general_notes.present?
         xml.address place.full_address
-        unless place.location.nil? or place.location.empty?
+        if place.location
           xml.Point do
-            xml.coordinates "#{place.location[1]},#{place.location[0]},0"
+            xml.coordinates "#{place.location.longitude},#{place.location.latitude},0"
           end
         end
       end
