@@ -220,9 +220,11 @@ class Place
       source_address: row['source_address'] || "#{row['address1']} #{row['address2']} #{row['town']} #{row['postcode']}"
     }
     location_parameters = if row['location']
-      {location: Point::Field.new.deserialize(row['location'])}
-    else
+      {location: PointField.new.deserialize(row['location'])}
+    elsif row['lng'] && row['lat']
       {location: Point.new(longitude: row['lng'], latitude: row['lat'])}
+    else
+      {}
     end
     return base_parameters.merge(location_parameters)
   end
