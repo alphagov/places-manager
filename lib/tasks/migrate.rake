@@ -22,7 +22,7 @@ namespace :migrate do
               # The same place, repeated. For some reason
               place['location'] = location[0,2]
             else
-              puts "Inconsistent location: #{location.inspect}"
+              puts "Inconsistent location: #{location.inspect}" if verbose
               place['location'] = []
             end
           end
