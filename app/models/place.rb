@@ -1,7 +1,5 @@
 class Place
   include Mongoid::Document
-  include GeoTools
-  extend GeoTools
 
   class PointField
     # Declare a field of this type to have it deserialise to a Point
