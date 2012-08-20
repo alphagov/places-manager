@@ -3,72 +3,43 @@ class Place
   include GeoTools
   extend GeoTools
 
-  class Point
+  class PointField
+    # Declare a field of this type to have it deserialise to a Point
 
-    attr_reader :longitude, :latitude
+    include Mongoid::Fields::Serializable
 
-    def initialize(coordinates)
-      [:longitude, :latitude].each do |key|
-        # The Float method would fail with a TypeError, but this is more useful
-        raise ArgumentError, "Missing #{key}" unless coordinates.has_key? key
-      end
+    def deserialize(value)
+      return nil unless value
 
-      @longitude, @latitude = [:longitude, :latitude].map { |key|
-        Float(coordinates[key])
-      }
-      unless (-90..90).include? @latitude  # [-90, 90]
-        raise "Invalid latitude #{@latitude.inspect}"
-      end
-      unless (-180...180).include? @longitude  # [-180, 180)
-        raise "Invalid longitude #{@longitude.inspect}"
+      if value.is_a? Array
+        legacy_deserialize value
+      else
+        Point.new(longitude: value["longitude"], latitude: value["latitude"])
       end
     end
 
-    def ==(other)
-      longitude == other.longitude && latitude == other.latitude
-    rescue NoMethodError
-      false
+    def serialize(point)
+      return nil unless point
+
+      {"longitude" => point.longitude, "latitude" => point.latitude}
     end
 
-    class Field
-      # Declare a field of this type to have it deserialise to a Point
-
-      include Mongoid::Fields::Serializable
-
-      def deserialize(value)
-        return nil unless value
-
-        if value.is_a? Array
-          legacy_deserialize value
+  private
+    def legacy_deserialize(value)
+        # Legacy [lat, lng] data format
+        # An empty array (or a single co-ordinate, which shouldn't happen) is
+        # an invalid value and deserializes to nil
+        case value.size
+        when 2
+          Point.new(latitude: value[0], longitude: value[1])
+        when 0
+          nil
         else
-          Point.new(longitude: value["longitude"], latitude: value["latitude"])
+          Rails.logger.error "Invalid location #{value.inspect}"
+          nil
         end
-      end
-
-      def serialize(point)
-        return nil unless point
-
-        {"longitude" => point.longitude, "latitude" => point.latitude}
-      end
-
-    private
-      def legacy_deserialize(value)
-          # Legacy [lat, lng] data format
-          # An empty array (or a single co-ordinate, which shouldn't happen) is
-          # an invalid value and deserializes to nil
-          case value.size
-          when 2
-            Point.new(latitude: value[0], longitude: value[1])
-          when 0
-            nil
-          else
-            Rails.logger.error "Invalid location #{value.inspect}"
-            nil
-          end
-      end
     end
   end
-
 
   scope :needs_geocoding, where(:location.size => 0, :geocode_error.exists => false)
   scope :with_geocoding_errors, where(:geocode_error.exists => true)
@@ -89,7 +60,7 @@ class Place
   field :phone,          :type => String
   field :fax,            :type => String
   field :text_phone,     :type => String
-  field :location,       :type => Point::Field
+  field :location,       :type => PointField
   field :geocode_error,  :type => String
 
   validates_presence_of :service_slug
