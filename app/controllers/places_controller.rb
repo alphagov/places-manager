@@ -28,13 +28,16 @@ class PlacesController < ApplicationController
     data_set = select_data_set(@service, params[:version])
     head 404 and return if data_set.nil?
 
+    if params[:max_distance].present?
+      max_distance = Distance.new(Float(params[:max_distance]), :miles)
+    else
+      max_distance = nil
+    end
+
     if params[:lat].present? && params[:lng].present?
-      location = [params[:lat], params[:lng]]
-      @places = data_set.places_near(
-        location,
-        params[:max_distance],
-        params[:limit]
-      )
+      # TODO: should we handle parsing errors here?
+      location = Point.new(latitude: params[:lat], longitude: params[:lng])
+      @places = data_set.places_near(location, max_distance, params[:limit])
     else
       @places = data_set.places
     end

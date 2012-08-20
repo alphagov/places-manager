@@ -76,36 +76,42 @@ class Place
 
   ##
   # Find all the points near a given location
-  # 
+  #
   # This returns Place objects with a 'dis' attribute representing the
   # mongodb derived distance of that place from the origin of the search.
   #
   # That doesn't feel quite right and this API is subject to change, perhaps
   # to return an array of arrays, eg. [[distance, Place], [distance2, Place2]]?
-  # 
+  #
   # Arguments:
-  #   location - an array of latitude/longitude as floats
-  #   distance (optional) - an array of distance and units. eg. [10, :miles]
+  #   location - a Point object representing the centre of the search area
+  #   distance (optional) - a Distance object representing the maximum distance
   #       - only miles are currently supported
   #   limit (optional) - a maximum number of results to return
   #
   # Returns:
   #   an array of Place objects with a 'dis' attribute
   def self.find_near(location, distance = nil, limit = nil, extra_query = {})
-    opts = {'geoNear' => "places", 'near' => location, 'query' => extra_query}
+
+    opts = {
+      "geoNear" => "places",
+      "near" => [location.longitude, location.latitude],
+      "spherical" => true,
+      "query" => extra_query
+    }
 
     if distance
-      opts['maxDistance'] = miles_to_degrees(distance.first)
+      opts["maxDistance"] = distance.in(:radians)
     end
 
     if limit
-      opts['num'] = limit.to_i
+      opts["num"] = limit.to_i
     end
 
     response = Mongoid.master.command(opts)
-    response['results'].collect do |result|
-      Mongoid::Factory.from_db(self, result['obj']).tap do |doc|
-        doc.dis = result['dis']
+    response["results"].collect do |result|
+      Mongoid::Factory.from_db(self, result["obj"]).tap do |doc|
+        doc.dis = Distance.new(result["dis"], :radians)
       end
     end
   end

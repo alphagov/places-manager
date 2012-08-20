@@ -33,32 +33,40 @@ class PlaceCalculationsTest < ActiveSupport::TestCase
   end
 
   test "can be found near a point in the right order" do
-    service, p1, p2 = setup_places
-    places = service.data_sets.last.places_near([p1.lat, p1.lng])
-    assert_equal [p1, p2], places.to_a
+    service, buckingham_palace, aviation_house, scottish_parliament = setup_places
+    places = service.data_sets.last.places_near buckingham_palace.location
+    expected_places = [buckingham_palace, aviation_house, scottish_parliament]
+    assert_equal expected_places, places.to_a
+
+    # Check that the distances are reported correctly
+    distances_in_miles = [0, 1.425, 331]
+    places.to_a.zip(distances_in_miles).each do |place, expected_distance|
+      assert_in_epsilon expected_distance, place.dis.in(:miles), 0.01
+    end
+
   end
 
   test "points can be restrained to within a given distance in miles close by" do
     # These points are 1.4252962055598721 miles apart
     service, buckingham_palace, aviation_house, scottish_parliament = setup_places
-    coords = {latitude: buckingham_palace.lat, longitude: buckingham_palace.lng}
+    centre = buckingham_palace.location
 
-    places = service.data_sets.last.places_near(coords, [1.42, :miles])
+    places = service.data_sets.last.places_near(centre, Distance.miles(1.42))
     assert_equal 1, places.length
 
-    places = service.data_sets.last.places_near(coords, [1.43, :miles])
+    places = service.data_sets.last.places_near(centre, Distance.miles(1.43))
     assert_equal 2, places.length
   end
 
   test "points can be restrained to within a given distance in miles over a long distance" do
     # Buckingham Palace and the Scottish Parliament are approximately 331 miles apart
     service, buckingham_palace, aviation_house, scottish_parliament = setup_places
-    coords = {latitude: buckingham_palace.lat, longitude: buckingham_palace.lng}
+    centre = buckingham_palace.location
 
-    places = service.data_sets.last.places_near(coords, [330, :miles])
+    places = service.data_sets.last.places_near(centre, Distance.miles(330))
     assert_equal 2, places.length
 
-    places = service.data_sets.last.places_near(coords, [335, :miles])
+    places = service.data_sets.last.places_near(centre, Distance.miles(335))
     assert_equal 3, places.length
   end
 end
