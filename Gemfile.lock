@@ -199,6 +199,13 @@ GEM
     simplecov-html (0.5.3)
     simplecov-rcov (0.2.3)
       simplecov (>= 0.4.1)
+    slimmer (1.1.42)
+      gds-api-adapters (>= 0.0.33, < 0.2.0)
+      json
+      nokogiri (~> 1.5.0)
+      null_logger
+      plek (>= 0.1.8)
+      rack (>= 1.3.5)
     sprockets (2.1.3)
       hike (~> 1.2)
       rack (~> 1.0)
@@ -234,6 +241,7 @@ DEPENDENCIES
   factory_girl_rails
   faraday (= 0.8.1)
   formtastic (~> 2.0.2)
+  gds-api-adapters
   gds-sso (~> 1.2.0)
   gds-warmup-controller
   gelf
@@ -251,4 +259,5 @@ DEPENDENCIES
   rails (~> 3.2.7)
   simplecov (= 0.6.4)
   simplecov-rcov (= 0.2.3)
+  slimmer (~> 1.1.42)
   whenever
