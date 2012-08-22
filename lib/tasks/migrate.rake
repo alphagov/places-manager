@@ -31,7 +31,7 @@ namespace :migrate do
         results = places.map { |place|
           # Bypass validation because we have old, crap data that we don't want
           # to have to deal with right now
-          Place.create_from_hash(set, place.except('_id'), validate: false)
+          Place.create_from_hash!(set, place.except('_id'), validate: false)
         }
 
         success_count = results.count(&:persisted?)
