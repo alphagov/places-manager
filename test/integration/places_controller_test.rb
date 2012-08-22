@@ -41,6 +41,34 @@ class PlacesControllerTest < ActionController::TestCase
     as_logged_in_user do
       get :show, id: @service.slug, format: :json
       assert_response :success
+      assert_equal 4, JSON.parse(response.body).size
+    end
+  end
+
+  test "can show a JSON representation of places" do
+    as_logged_in_user do
+      get :show, id: @service.slug, format: :json
+      assert_response :success
+      json_data = JSON.parse(response.body)
+
+      place = json_data.find { |p| p["source_address"] == "Aviation House" }
+      assert_equal "WC2B 6SE", place["postcode"]
+      location_hash = {
+        "latitude" => 51.516960431,
+        "longitude" => -0.120586400134
+      }
+      assert_equal location_hash, place["location"]
+    end
+  end
+
+  test "can show a JSON representation of a place with no coordinates" do
+    as_logged_in_user do
+      get :show, id: @service.slug, format: :json
+      assert_response :success
+      json_data = JSON.parse(response.body)
+
+      place = json_data.find { |p| p["source_address"] == "Nowhere" }
+      assert_nil place["location"]
     end
   end
 
