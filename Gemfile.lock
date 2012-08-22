@@ -232,17 +232,17 @@ PLATFORMS
 DEPENDENCIES
   aws-ses
   bson_ext (= 1.5.2)
-  capybara (~> 1.1.0)
+  capybara (= 1.1.2)
   ci_reporter
   cucumber-rails
   database_cleaner
-  exception_notification (~> 2.5.2)
+  exception_notification (= 2.5.2)
   factory_girl (= 3.3.0)
   factory_girl_rails
   faraday (= 0.8.1)
-  formtastic (~> 2.0.2)
+  formtastic (= 2.0.2)
   gds-api-adapters
-  gds-sso (~> 1.2.0)
+  gds-sso (= 1.2.0)
   gds-warmup-controller
   gelf
   geogov (= 0.0.9)
@@ -255,9 +255,9 @@ DEPENDENCIES
   mocha (= 0.12.3)
   mongo (= 1.5.2)
   mongoid (= 2.4.10)
-  plek (~> 0)
-  rails (~> 3.2.7)
+  plek (= 0.1.24)
+  rails (= 3.2.7)
   simplecov (= 0.6.4)
   simplecov-rcov (= 0.2.3)
-  slimmer (~> 1.1.42)
+  slimmer (= 1.1.42)
   whenever
