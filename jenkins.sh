@@ -2,5 +2,4 @@
 export RAILS_ENV=test
 bundle install --path "${HOME}/bundles/${JOB_NAME}" --deployment
 bundle exec rake db:drop
-bundle exec rake ci:setup:minitest
-bundle exec rake
+bundle exec rake ci:setup:minitest default
