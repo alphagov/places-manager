@@ -7,7 +7,7 @@ ActionController::Renderers.add :csv do |detailed_report, options|
     headers['Content-Type']              = 'text/csv'
     headers['Content-Transfer-Encoding'] = 'binary'
 
-    self.response_body = detailed_report.first.data_set.to_csv
+    self.response_body = DataSetCsvPresenter.new(detailed_report.first.data_set).to_csv
   end
 end
 
@@ -15,31 +15,42 @@ class PlacesController < ApplicationController
   respond_to :json, :kml, :csv
 
   def show
+    # Show a set of places in relation to a service
+    # Parameters:
+    #   id: the slug for the service
+    #   lat, lng: latitude/longitude in decimal degrees to limit the set of
+    #             places displayed
+    #   max_distance: maximum distance in miles from the lat/long given
+    #   limit: maximum number of places to show
     @service = Service.where(slug: params[:id]).first
-    head 404 and return if @service.nil? or @service.active_data_set.nil?
+    head 404 and return if @service.nil?
 
-    if params[:max_distance]
-      args = { :max_distance => params[:max_distance].to_f }
-    elsif params[:limit]
-      args = { :limit => params[:limit] }
-    else
-      args = { :limit => 50 }
-    end
-
-    if user_signed_in? and params[:version].present?
-      data_set = @service.data_sets.find(params[:version])
-    else
-      data_set = @service.active_data_set
-    end
-
+    data_set = select_data_set(@service, params[:version])
     head 404 and return if data_set.nil?
 
-    if params[:lat].present?
-      @places = data_set.places_near(params[:lat].to_f, params[:lng].to_f, args)
+    if params[:max_distance].present?
+      max_distance = Distance.new(Float(params[:max_distance]), :miles)
     else
-      @places = data_set.places.all
+      max_distance = nil
+    end
+
+    if params[:lat].present? && params[:lng].present?
+      # TODO: should we handle parsing errors here?
+      location = Point.new(latitude: params[:lat], longitude: params[:lng])
+      @places = data_set.places_near(location, max_distance, params[:limit])
+    else
+      @places = data_set.places
     end
 
     respond_with(@places)
+  end
+
+  protected
+  def select_data_set(service, version = nil)
+    if user_signed_in? and version.present?
+      service.data_sets.find(version)
+    else
+      service.active_data_set
+    end
   end
 end
