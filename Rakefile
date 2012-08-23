@@ -6,7 +6,7 @@ require 'rake'
 require 'iconv'
 require 'rake/tasklib'
 require 'open-uri'
-require 'ci/reporter/rake/test_unit' if Rails.env.development?
+require 'ci/reporter/rake/minitest' if Rails.env.development?
 
 class CachedUrlTask < Rake::TaskLib
   attr_accessor :url, :cache_file, :opts

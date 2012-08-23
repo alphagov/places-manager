@@ -47,7 +47,7 @@ group :test do
   gem 'simplecov-rcov', '0.2.3'
   gem 'factory_girl', "3.3.0"
   gem 'factory_girl_rails'
-  gem 'ci_reporter'
+  gem 'ci_reporter', '1.7.1'
   gem 'minitest', '3.3.0'
   gem 'launchy'
   gem 'mocha', '0.12.3', require: false

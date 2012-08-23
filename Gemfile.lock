@@ -51,7 +51,7 @@ GEM
     childprocess (0.3.0)
       ffi (~> 1.0.6)
     chronic (0.6.6)
-    ci_reporter (1.6.9)
+    ci_reporter (1.7.1)
       builder (>= 2.1.2)
     cucumber (1.2.1)
       builder (>= 2.1.2)
@@ -233,7 +233,7 @@ DEPENDENCIES
   aws-ses
   bson_ext (= 1.5.2)
   capybara (= 1.1.2)
-  ci_reporter
+  ci_reporter (= 1.7.1)
   cucumber-rails
   database_cleaner
   exception_notification (= 2.5.2)
