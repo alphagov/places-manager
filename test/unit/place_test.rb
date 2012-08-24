@@ -78,4 +78,15 @@ class PlaceTest < ActiveSupport::TestCase
     assert_nil Place::PointField.new.serialize(nil)
   end
 
+  test "script tags are not allowed" do
+    place = Place.new(
+      service_slug: "foo",
+      data_set_version: 1,
+      source_address: "bar",
+      postcode: "w1 1aa",
+      name: "<script>"
+    )
+    assert place.invalid?
+    assert_includes place.errors.keys, :name
+  end
 end
