@@ -27,8 +27,13 @@ class DataSet
   after_save :process_data_file
   def process_data_file
     if @data_file
-      CSV.parse(@data_file.read, headers: true) do |row|
-        Place.create_from_hash(self, row)
+      data = @data_file.read
+      if HtmlValidator.new(data).valid?
+        CSV.parse(data, headers: true) do |row|
+          Place.create_from_hash(self, row)
+        end
+      else
+        raise HtmlValidationError
       end
     end
   end
@@ -52,3 +57,5 @@ class DataSet
     action
   end
 end
+
+class HtmlValidationError < StandardError; end
