@@ -97,7 +97,7 @@ GEM
     govspeak (0.8.18)
       htmlentities (~> 4)
       kramdown (~> 0.13.3)
-    govuk_content_models (1.4.3)
+    govuk_content_models (1.6.3)
       bson_ext
       differ
       gds-api-adapters
@@ -255,7 +255,7 @@ DEPENDENCIES
   gds-warmup-controller
   gelf
   geogov (= 0.0.9)
-  govuk_content_models (= 1.4.3)
+  govuk_content_models (= 1.6.3)
   inherited_resources
   launchy
   lockfile

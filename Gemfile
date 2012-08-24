@@ -15,7 +15,7 @@ gem 'aws-ses', :require => 'aws/ses'
 gem 'exception_notification', '2.5.2', :require => 'exception_notifier'
 gem 'formtastic', '2.0.2'
 
-gem 'govuk_content_models', '1.4.3'
+gem 'govuk_content_models', '1.6.3'
 
 if ENV['BUNDLE_DEV']
   gem 'gds-sso', :path => '../gds-sso'
