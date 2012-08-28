@@ -22,7 +22,12 @@ class DataSet
     other_data_sets = service.data_sets.to_a - [self]
 
     if self.version.blank? or (self.version == 1 and other_data_sets.length >= 1)
-      self.version = other_data_sets.length + 1
+      highest_version = other_data_sets.map(&:version).max
+      if highest_version
+        self.version = highest_version + 1
+      else
+        self.version = 1
+      end
     end
   end
 
