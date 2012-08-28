@@ -91,5 +91,4 @@ class PlaceTest < ActiveSupport::TestCase
     )
     assert_equal s.data_sets[1], p.data_set
   end
-
 end
