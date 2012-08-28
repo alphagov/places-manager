@@ -2,8 +2,12 @@ require 'test_helper'
 
 class Admin::DataSetsControllerTest < ActionController::TestCase
 
+  setup do
+    clean_db
+  end
+
   def setup_service
-    Service.first || Service.create(:name => 'Important Government Service', :slug => 'important-government-service')
+    Service.create(:name => 'Important Government Service', :slug => 'important-government-service')
   end
 
   test "it handles invalid CSV files gracefully" do
@@ -13,6 +17,9 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
       post :create, :service_id => setup_service.id, :data_set => {:data_file => csv_file}
       assert_response :redirect
       assert_equal "Could not process CSV file. Please check the format.", flash[:alert]
+      # There is always an initial data set
+      assert_equal 1, Service.first.data_sets.count
+      assert_equal 0, Place.count
     end
   end
 
@@ -23,6 +30,9 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
       post :create, :service_id => setup_service.id, :data_set => {:data_file => csv_file}
       assert_response :redirect
       assert_equal "CSV file contains invalid HTML content. Please check the format.", flash[:alert]
+      # There is always an initial data set
+      assert_equal 1, Service.first.data_sets.count
+      assert_equal 0, Place.count
     end
   end
 
