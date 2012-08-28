@@ -1,3 +1,5 @@
+require "govuk_content_models/html_validator"
+
 class DataSet
   include Mongoid::Document
   include Mongoid::Timestamps

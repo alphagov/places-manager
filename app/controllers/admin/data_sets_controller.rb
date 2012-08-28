@@ -1,3 +1,5 @@
+require "csv"
+
 class Admin::DataSetsController < InheritedResources::Base
   include Admin::AdminControllerMixin
 
