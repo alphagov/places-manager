@@ -78,4 +78,18 @@ class PlaceTest < ActiveSupport::TestCase
     assert_nil Place::PointField.new.serialize(nil)
   end
 
+  test "can look up a data set from a place" do
+    s = Service.create! slug: "chickens", name: "Chickens!"
+    s.data_sets.create! version: 2
+
+    p = Place.create!(
+      name: "Hercules House",
+      source_address: "Blah",
+      postcode: "SE1 7DU",
+      service_slug: "chickens",
+      data_set_version: 2
+    )
+    assert_equal s.data_sets[1], p.data_set
+  end
+
 end

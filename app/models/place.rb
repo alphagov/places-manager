@@ -72,6 +72,13 @@ class Place
   attr_accessor :dis
   before_save :reconcile_location
 
+  def data_set
+    service = Service.where(slug: service_slug).first
+    if service
+      service.data_sets.where(version: data_set_version).first
+    end
+  end
+
   ##
   # Find all the points near a given location
   #
