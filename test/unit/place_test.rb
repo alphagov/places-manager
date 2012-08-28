@@ -77,5 +77,4 @@ class PlaceTest < ActiveSupport::TestCase
   test "points serialize nil correctly" do
     assert_nil Place::PointField.new.serialize(nil)
   end
-
 end

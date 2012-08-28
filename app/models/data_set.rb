@@ -1,3 +1,5 @@
+require "govuk_content_models/html_validator"
+
 class DataSet
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -24,11 +26,19 @@ class DataSet
     end
   end
 
-  after_save :process_data_file
+  # This will run after 'set_version' because it is defined later
+  # If these get swapped around, the places will be created without a data set
+  # version, and all kinds of horribleness will ensue
+  before_save :process_data_file
   def process_data_file
     if @data_file
-      CSV.parse(@data_file.read, headers: true) do |row|
-        Place.create_from_hash(self, row)
+      data = @data_file.read
+      if HtmlValidator.new(data).valid?
+        CSV.parse(data, headers: true) do |row|
+          Place.create_from_hash(self, row)
+        end
+      else
+        raise HtmlValidationError
       end
     end
   end
@@ -52,3 +62,5 @@ class DataSet
     action
   end
 end
+
+class HtmlValidationError < StandardError; end
