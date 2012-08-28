@@ -1,13 +1,13 @@
-ActionController::Renderers.add :csv do |detailed_report, options|
-  if detailed_report.first.is_a?(Place)
-    filename = "#{detailed_report.first.data_set.service.slug}.csv"
+ActionController::Renderers.add :csv do |places, options|
+  if places.first.is_a?(Place)
+    filename = "#{places.first.data_set.service.slug}.csv"
 
     headers['Cache-Control']             = 'must-revalidate, post-check=0, pre-check=0'
     headers['Content-Disposition']       = "attachment; filename=#{filename}"
     headers['Content-Type']              = 'text/csv'
     headers['Content-Transfer-Encoding'] = 'binary'
 
-    self.response_body = DataSetCsvPresenter.new(detailed_report.first.data_set).to_csv
+    self.response_body = DataSetCsvPresenter.new(places.first.data_set).to_csv
   end
 end
 
@@ -42,7 +42,11 @@ class PlacesController < ApplicationController
       @places = data_set.places
     end
 
-    respond_with(@places)
+    # For some reason, Rails isn't picking up that we want to use the CSV
+    # renderer to render CSV files.
+    respond_with(@places) do |format|
+      format.csv { render csv: @places }
+    end
   end
 
   protected
