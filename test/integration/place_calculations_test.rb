@@ -5,7 +5,7 @@ require 'test_helper'
 # unit.
 # They also don't feel right as Cucumber tests as they're not about
 # the outward interface, but about how the pieces join together.
-class PlaceCalculationsTest < ActiveSupport::TestCase
+class PlaceCalculationsTest < ActionDispatch::IntegrationTest
   def setup_places
     s = Service.create(name: 'A key service', slug: 'a-key-service')
     buckingham_palace = Place.create(
