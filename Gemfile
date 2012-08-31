@@ -6,6 +6,7 @@ gem 'plek', '0.1.24'
 gem 'gds-warmup-controller'
 
 gem 'rails', '3.2.7'
+gem 'unicorn', '4.3.1'
 
 gem "mongoid", "2.4.10"
 gem "mongo", "1.5.2"
