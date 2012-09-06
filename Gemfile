@@ -9,8 +9,8 @@ gem 'rails', '3.2.7'
 gem 'unicorn', '4.3.1'
 
 gem "mongoid", "2.4.10"
-gem "mongo", "1.5.2"
-gem "bson_ext", "1.5.2"
+gem "mongo", "1.6.2"
+gem "bson_ext", "1.6.2"
 
 gem 'aws-ses', :require => 'aws/ses'
 gem 'exception_notification', '2.5.2', :require => 'exception_notifier'
