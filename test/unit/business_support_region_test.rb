@@ -1,12 +1,26 @@
 require 'test_helper'
 
 class BusinessSupportRegionTest < ActiveSupport::TestCase
-  test "has and belongs to many BusinessSupportSchemes" do
-    assert_association(BusinessSupportRegion, :references_and_referenced_in_many, 
-      :business_support_schemes, :index => true)
+  setup do
+    @region = BusinessSupportRegion.create(name: "Ecclefechan")
   end
   
-  test "validates_uniqueness_of name" do
-    assert_validates_uniqueness_of BusinessSupportRegion, :name
+  test "should have and belong to many BusinessSupportSchemes" do
+    3.times do |i| 
+      @region.business_support_schemes << BusinessSupportScheme.new(
+        title: "Foo scheme #{i + 1}", 
+        business_support_identifier: "foo-scheme-#{i + 1}") 
+    end
+    assert_equal "Foo scheme 1", @region.business_support_schemes.first.title
+    assert_equal "Foo scheme 3", @region.business_support_schemes.last.title 
+  end
+  
+  test "should validates presence of name" do
+    refute BusinessSupportRegion.new.valid?
+  end
+  
+  test "should validate uniqueness of name" do
+    another_scheme = BusinessSupportRegion.new(name: "Ecclefechan")
+    refute another_scheme.valid?, "should validate uniqueness of name."
   end
 end

@@ -37,7 +37,7 @@ class BusinessSupportDataImporter
     scheme = BusinessSupportScheme.create(title: title, business_support_identifier: slug_for(title))
     
     if scheme
-      puts "Create scheme '#{scheme.title}'."
+      puts "Created scheme '#{scheme.title}'."
       make_associations(scheme, row, "region")
       make_associations(scheme, row, "sector")
       make_associations(scheme, row, "stage")

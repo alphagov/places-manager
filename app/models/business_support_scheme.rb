@@ -6,6 +6,7 @@ class BusinessSupportScheme
   has_and_belongs_to_many :business_support_stages, index: true
   has_and_belongs_to_many :business_support_types, index: true
   
+  validates_presence_of :title, :business_support_identifier
   validates_uniqueness_of :title
   validates_uniqueness_of :business_support_identifier
   
