@@ -1,10 +1,7 @@
 require 'csv'
-require 'gds_api/helpers'
 
 class BusinessSupportDataImporter
 
-  include GdsApi::Helpers
-  
   attr_reader :bsf_schemes, :imported, :failed
   
   DATA_FILENAMES = ["bsf_schemes", "bsf_regions", "bsf_sectors",
