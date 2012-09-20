@@ -14,7 +14,7 @@ class BusinessSupportDataImporter
   def initialize(data_dir)
     @imported = []
     @failed = []
-    data_filenames.each do |name|
+    DATA_FILENAMES.each do |name|
       instance_variable_set("@#{name}", csv_data(data_dir, name))
     end
   end
@@ -26,10 +26,6 @@ class BusinessSupportDataImporter
       end
     ensure
       puts importer.formatted_result
-  end
-  
-  def data_filenames
-    DATA_FILENAMES
   end
     
   def import row
