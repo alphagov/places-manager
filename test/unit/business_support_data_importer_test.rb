@@ -12,17 +12,30 @@ class BusinessSupportDataImporterTest < ActiveSupport::TestCase
         {'id' => 999, 'title' => "Hedge funds for dummies"}
       ])
     BusinessSupportDataImporter.any_instance.stubs(:csv_data).with(
-      "data", "bsf_regions").returns([
+      "data", "bsf_business_types").returns([
+        {'id' => 321, 'name' => "Private company"},
+        {'id' => 654, 'name' => "Charity"},
+        {'id' => 987, 'name' => "Sole trader"}
+      ])
+    BusinessSupportDataImporter.any_instance.stubs(:csv_data).with(
+      "data", "bsf_schemes_business_types").returns([
+        {'bsf_business_type_id' => 321, 'bsf_scheme_id' => 1},
+        {'bsf_business_type_id' => 321, 'bsf_scheme_id' => 999},
+        {'bsf_business_type_id' => 987, 'bsf_scheme_id' => 999},
+        {'bsf_business_type_id' => 654, 'bsf_scheme_id' => 99}
+      ])      
+    BusinessSupportDataImporter.any_instance.stubs(:csv_data).with(
+      "data", "bsf_nations").returns([
         {'id' => 1, 'name' => "London"},
         {'id' => 2, 'name' => "Auchtermuchty"},
         {'id' => 3, 'name' => "Ecclefechan"}
       ])
     BusinessSupportDataImporter.any_instance.stubs(:csv_data).with(
-      "data", "bsf_schemes_regions").returns([
-        {'bsf_region_id' => 1, 'bsf_scheme_id' => 99},
-        {'bsf_region_id' => 2, 'bsf_scheme_id' => 99},
-        {'bsf_region_id' => 2, 'bsf_scheme_id' => 999},
-        {'bsf_region_id' => 3, 'bsf_scheme_id' => 1}
+      "data", "bsf_schemes_nations").returns([
+        {'bsf_nation_id' => 1, 'bsf_scheme_id' => 99},
+        {'bsf_nation_id' => 2, 'bsf_scheme_id' => 99},
+        {'bsf_nation_id' => 2, 'bsf_scheme_id' => 999},
+        {'bsf_nation_id' => 3, 'bsf_scheme_id' => 1}
       ])
     BusinessSupportDataImporter.any_instance.stubs(:csv_data).with(
       "data", "bsf_stages").returns([
@@ -51,9 +64,9 @@ class BusinessSupportDataImporterTest < ActiveSupport::TestCase
       ])
     BusinessSupportDataImporter.any_instance.stubs(:csv_data).with(
       "data", "bsf_types").returns([
-        {'id' => 321, 'name' => "Private company"},
-        {'id' => 654, 'name' => "Charity"},
-        {'id' => 987, 'name' => "Sole trader"}
+        {'id' => 321, 'name' => "Award"},
+        {'id' => 654, 'name' => "Grant"},
+        {'id' => 987, 'name' => "Loan"}
       ])
     BusinessSupportDataImporter.any_instance.stubs(:csv_data).with(
       "data", "bsf_schemes_types").returns([
@@ -76,16 +89,26 @@ class BusinessSupportDataImporterTest < ActiveSupport::TestCase
     assert_equal "hedge-funds-for-dummies", @schemes.last.business_support_identifier
     
   end
-  
-  test "BusinessSupportSchemes have and belong to many BusinessSupportRegions" do
-    ecclefechan_region = BusinessSupportRegion.where(name: "Ecclefechan").first
+
+  test "BusinessSupportSchemes have and belong to many BusinessSupportBusinessTypes" do
+    charity = BusinessSupportBusinessType.where(name: "Charity").first
     
-    assert_equal "Get rich quick", ecclefechan_region.business_support_schemes.first.title
-    assert_equal 1, @schemes.first.business_support_regions.size
-    assert_equal "Ecclefechan", @schemes.first.business_support_regions.first.name
-    assert_equal 2, @schemes.second.business_support_regions.size
-    assert_equal "London", @schemes.second.business_support_regions.first.name
-    assert_equal "Auchtermuchty", @schemes.second.business_support_regions.last.name
+    assert_equal @schemes.second, charity.business_support_schemes.first
+    assert_equal "Private company", @schemes.first.business_support_business_types.first.name
+    assert_equal "Private company", @schemes.last.business_support_business_types.first.name
+    assert_equal "Sole trader", @schemes.last.business_support_business_types.second.name
+  end
+
+  
+  test "BusinessSupportSchemes have and belong to many BusinessSupportNations" do
+    ecclefechan = BusinessSupportNation.where(name: "Ecclefechan").first
+    
+    assert_equal "Get rich quick", ecclefechan.business_support_schemes.first.title
+    assert_equal 1, @schemes.first.business_support_nations.size
+    assert_equal "Ecclefechan", @schemes.first.business_support_nations.first.name
+    assert_equal 2, @schemes.second.business_support_nations.size
+    assert_equal "London", @schemes.second.business_support_nations.first.name
+    assert_equal "Auchtermuchty", @schemes.second.business_support_nations.last.name
   end
   
   test "BusinessSupportSchemes have and belong to many BusinessSupportSectors" do
@@ -108,12 +131,12 @@ class BusinessSupportDataImporterTest < ActiveSupport::TestCase
   end
   
   test "BusinessSupportSchemes have and belong to many BusinessSupportTypes" do
-    charity = BusinessSupportType.where(name: "Charity").first
+    award = BusinessSupportType.where(name: "Award").first
     
-    assert_equal @schemes.second, charity.business_support_schemes.first
-    assert_equal "Private company", @schemes.first.business_support_types.first.name
-    assert_equal "Private company", @schemes.last.business_support_types.first.name
-    assert_equal "Sole trader", @schemes.last.business_support_types.second.name
+    assert_equal @schemes.first, award.business_support_schemes.first
+    assert_equal "Award", @schemes.first.business_support_types.first.name
+    assert_equal "Award", @schemes.last.business_support_types.first.name
+    assert_equal "Loan", @schemes.last.business_support_types.second.name
   end
   
 end

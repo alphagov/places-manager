@@ -4,8 +4,9 @@ class BusinessSupportDataImporter
 
   attr_reader :bsf_schemes, :imported, :failed
   
-  DATA_FILENAMES = ["bsf_schemes", "bsf_regions", "bsf_sectors",
-    "bsf_stages", "bsf_types", "bsf_schemes_regions", "bsf_schemes_sectors", 
+  DATA_FILENAMES = ["bsf_schemes", "bsf_nations", "bsf_sectors",
+    "bsf_stages", "bsf_business_types", "bsf_schemes_business_types", 
+    "bsf_types", "bsf_schemes_nations", "bsf_schemes_sectors", 
     "bsf_schemes_stages", "bsf_schemes_types"]
   
   def initialize(data_dir)
@@ -31,7 +32,8 @@ class BusinessSupportDataImporter
     
     if scheme
       puts "Created scheme '#{scheme.title}'."
-      make_associations(scheme, row, "region")
+      make_associations(scheme, row, "business_type")
+      make_associations(scheme, row, "nation")
       make_associations(scheme, row, "sector")
       make_associations(scheme, row, "stage")
       make_associations(scheme, row, "type")
@@ -44,7 +46,7 @@ class BusinessSupportDataImporter
  
   def make_associations(scheme, row, key)
     scheme_collection = scheme.send("business_support_#{key}s")
-    associate_class = Kernel.const_get("BusinessSupport#{key.capitalize}")
+    associate_class = Kernel.const_get("BusinessSupport#{key.camelize}")
     associate_collection = instance_variable_get("@bsf_#{key}s")
     join_collection = instance_variable_get("@bsf_schemes_#{key}s")
     associations = join_collection.find_all { |join_row| row['id'] == join_row['bsf_scheme_id'] }

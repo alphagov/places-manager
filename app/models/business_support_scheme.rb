@@ -1,7 +1,8 @@
 class BusinessSupportScheme
   include Mongoid::Document
   
-  has_and_belongs_to_many :business_support_regions, index: true
+  has_and_belongs_to_many :business_support_business_types, index: true
+  has_and_belongs_to_many :business_support_nations, index: true
   has_and_belongs_to_many :business_support_sectors, index: true
   has_and_belongs_to_many :business_support_stages, index: true
   has_and_belongs_to_many :business_support_types, index: true

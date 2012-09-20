@@ -34,13 +34,20 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
       business_support_identifier: "tourism-support-grant-west-dunbartonshire")
     refute another_scheme.valid?, "should validate uniqueness of business_support_identifier."
   end
-  
-  test "should have and belong to many BusinessSupportRegions" do
-    @scheme.business_support_regions << BusinessSupportRegion.new(name: "Auchtermuchty")
-    @scheme.business_support_regions << BusinessSupportRegion.new(name: "Ecclefechan")
-    @scheme.business_support_regions << BusinessSupportRegion.new(name: "London")
-    assert_equal "Auchtermuchty", @scheme.business_support_regions.first.name
-    assert_equal "London", @scheme.business_support_regions.last.name 
+
+  test "should have and belong to many BusinessSupportBusinessTypes" do
+    @scheme.business_support_business_types << BusinessSupportBusinessType.new(name: "Charity")
+    @scheme.business_support_business_types << BusinessSupportBusinessType.new(name: "Private company")
+    assert_equal "Charity", @scheme.business_support_business_types.first.name
+    assert_equal "Private company", @scheme.business_support_business_types.last.name 
+  end
+ 
+  test "should have and belong to many BusinessSupportNations" do
+    @scheme.business_support_nations << BusinessSupportNation.new(name: "Auchtermuchty")
+    @scheme.business_support_nations << BusinessSupportNation.new(name: "Ecclefechan")
+    @scheme.business_support_nations << BusinessSupportNation.new(name: "London")
+    assert_equal "Auchtermuchty", @scheme.business_support_nations.first.name
+    assert_equal "London", @scheme.business_support_nations.last.name 
   end
   
   test "should have and belong to many BusinessSupportSectors" do
@@ -59,10 +66,10 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
   end
   
   test "should have and belong to many BusinessSupportTypes" do
-    @scheme.business_support_types << BusinessSupportType.new(name: "Private company")
-    @scheme.business_support_types << BusinessSupportType.new(name: "Charity")
-    assert_equal "Private company", @scheme.business_support_types.first.name
-    assert_equal "Charity", @scheme.business_support_types.last.name 
+    @scheme.business_support_types << BusinessSupportType.new(name: "Award")
+    @scheme.business_support_types << BusinessSupportType.new(name: "Loan")
+    assert_equal "Award", @scheme.business_support_types.first.name
+    assert_equal "Loan", @scheme.business_support_types.last.name 
   end
     
 end
