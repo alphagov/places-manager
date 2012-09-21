@@ -38,4 +38,5 @@ class ActiveSupport::TestCase
     @controller.unstub(:user_signed_in?)
     @controller.unstub(:authenticate_user!)
   end
+  
 end
