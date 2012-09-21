@@ -8,6 +8,8 @@ Imminence::Application.routes.draw do
     root :to => 'services#index'
   end
 
+  resources :business_support_scheme, :only => :index
+  resources :business_support_data, :only => :show
   resources :data_sets, :only => :show
   resources :places, :only => :show
   root :to => redirect('/admin')
