@@ -5,7 +5,7 @@ class BusinessSupportSchemesController < ApplicationController
     if args.empty?
       schemes = BusinessSupportScheme.asc(:title)
     else
-      schemes = BusinessSupportScheme.any_in(args).order_by(:title.asc)
+      schemes = BusinessSupportScheme.any_in(args).asc(:title)
     end 
     @count = schemes.size
     @schemes_json = schemes.to_json(only: [:business_support_identifier, :title]) 
