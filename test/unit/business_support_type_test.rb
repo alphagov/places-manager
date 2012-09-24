@@ -32,5 +32,4 @@ class BusinessSupportTypeTest < ActiveSupport::TestCase
     another_scheme = BusinessSupportType.new(name: "Loan", slug: "loan")
     refute another_scheme.valid?, "should validate uniqueness of name."
   end
-
 end

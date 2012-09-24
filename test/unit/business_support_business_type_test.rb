@@ -32,5 +32,4 @@ class BusinessSupportBusinessTypeTest < ActiveSupport::TestCase
     another_type = BusinessSupportBusinessType.new(name: "Charity", slug: "charity")
     refute another_type.valid?, "should validate uniqueness of slug."
   end
-
 end
