@@ -1,4 +1,4 @@
-class BusinessSupportSchemeController < ApplicationController
+class BusinessSupportSchemesController < ApplicationController
   def index 
     respond_to do |format|
       format.json { render :json => data_set }

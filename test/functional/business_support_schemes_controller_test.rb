@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class BusinessSupportSchemeControllerTest < ActionController::TestCase
+class BusinessSupportSchemesControllerTest < ActionController::TestCase
   setup do
     @agriculture = BusinessSupportSector.create(name: "Agriculture", slug: "agriculture")
     @manufacturing = BusinessSupportSector.create(name: "Manufacturing", slug: "manufacturing")
