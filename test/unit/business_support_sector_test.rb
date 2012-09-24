@@ -2,7 +2,7 @@ require 'test_helper'
 
 class BusinessSupportSectorTest < ActiveSupport::TestCase
   setup do
-    @sector = BusinessSupportSector.create(name: "Finance")
+    @sector = FactoryGirl.create(:business_support_sector, name: "Finance")
   end
   
   test "should have and belong to many BusinessSupportSchemes" do

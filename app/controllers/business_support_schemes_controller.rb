@@ -1,29 +1,24 @@
 class BusinessSupportSchemesController < ApplicationController
-  def index 
+
+  def index
+    args = any_in_args
+    if args.empty?
+      schemes = BusinessSupportScheme.asc(:title)
+    else
+      schemes = BusinessSupportScheme.any_in(args).order_by(:title.asc)
+    end 
+    @count = schemes.size
+    @schemes_json = schemes.to_json(only: [:business_support_identifier, :title]) 
     respond_to do |format|
-      format.json { render :json => data_set }
+      format.json
     end
   end
 
   private
 
-  def data_set
-    args = all_in_args
-    if args.empty?
-      schemes = BusinessSupportScheme.all
-    elsif params[:sectors].nil?
-      schemes = BusinessSupportScheme.all_in(all_in_args)
-    else
-      schemes = BusinessSupportScheme.any_in(
-        business_support_sector_ids: ids_for_slugs(:sectors)
-      ).all_in(all_in_args)
-    end
-    schemes.to_json(only: [:title, :business_support_identifier])
-  end
-
-  def all_in_args
+  def any_in_args
     args = {}
-    [:business_types, :stages, :nations, :types].each do |sym|
+    [:business_types, :sectors, :stages, :nations, :types].each do |sym|
       unless params[sym].nil?
         args["business_support_#{sym.to_s.singularize}_ids".to_sym] = ids_for_slugs(sym)
       end
@@ -33,6 +28,6 @@ class BusinessSupportSchemesController < ApplicationController
   
   def ids_for_slugs(sym)
     klass = Kernel.const_get("BusinessSupport#{sym.to_s.singularize.camelize}")
-    klass.any_in(slug: params[sym]).map {|i| i.id.to_s}   
+    klass.any_in(slug: params[sym].split(',')).map(&:id)  
   end
 end

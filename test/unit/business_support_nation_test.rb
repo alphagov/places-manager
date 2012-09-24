@@ -2,7 +2,7 @@ require 'test_helper'
 
 class BusinessSupportNationTest < ActiveSupport::TestCase
   setup do
-    @region = BusinessSupportNation.create(name: "Ecclefechan")
+    @region = FactoryGirl.create(:business_support_nation, name: "Ecclefechan")
   end
   
   test "should have and belong to many BusinessSupportSchemes" do

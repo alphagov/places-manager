@@ -2,7 +2,7 @@ require 'test_helper'
 
 class BusinessSupportBusinessTypeTest < ActiveSupport::TestCase
   setup do
-    @charity = BusinessSupportBusinessType.create(name: "Charity", slug: "charity")
+    @charity = FactoryGirl.create(:business_support_business_type, name: "Charity", slug: "charity")
   end
   
   test "should have and belong to many BusinessSupportSchemes" do

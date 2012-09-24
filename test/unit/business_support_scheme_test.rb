@@ -3,7 +3,7 @@ require 'test_helper'
 class BusinessSupportSchemeTest < ActiveSupport::TestCase
 
   setup do
-    @scheme = BusinessSupportScheme.create( 
+    @scheme = FactoryGirl.create(:business_support_scheme, 
       title: "Tourism support grant. West Dunbartonshire", 
       business_support_identifier: "tourism-support-grant-west-dunbartonshire")
   end
