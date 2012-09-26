@@ -2,7 +2,7 @@ require 'test_helper'
 
 class BusinessSupportStageTest < ActiveSupport::TestCase
   setup do
-    @stage = BusinessSupportStage.create(name: "Finance")
+    @stage = FactoryGirl.create(:business_support_stage, name: "Finance")
   end
   
   test "should have and belong to many BusinessSupportSchemes" do

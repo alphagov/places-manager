@@ -53,7 +53,7 @@ class BusinessSupportDataImporter
     associations.each do |association|
       associated = associate_collection.find { |assoc| assoc['id'] == association["bsf_#{key}_id"] } 
       unless associated.nil?
-        scheme_collection << associate_class.find_or_create_by(name: to_utf8(associated['name']))
+        scheme_collection << associate_class.find_or_create_by(name: to_utf8(associated['name']), slug: slug_for(associated['name']))
         puts "Associated #{key} #{associated['name']} with scheme '#{scheme.title}'."
       end
     end

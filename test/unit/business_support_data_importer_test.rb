@@ -83,11 +83,10 @@ class BusinessSupportDataImporterTest < ActiveSupport::TestCase
   end
       
   test "Business support schemes are created" do
-    assert_equal 1, BusinessSupportScheme.where(:title => 'Get rich quick').size
+    assert_equal 1, BusinessSupportScheme.where(title: 'Get rich quick').size
     assert_equal "get-rich-quick", @schemes.first.business_support_identifier
     assert_equal "Enable the enterprise", @schemes.second.title
     assert_equal "hedge-funds-for-dummies", @schemes.last.business_support_identifier
-    
   end
 
   test "BusinessSupportSchemes have and belong to many BusinessSupportBusinessTypes" do
@@ -99,7 +98,6 @@ class BusinessSupportDataImporterTest < ActiveSupport::TestCase
     assert_equal "Sole trader", @schemes.last.business_support_business_types.second.name
   end
 
-  
   test "BusinessSupportSchemes have and belong to many BusinessSupportNations" do
     ecclefechan = BusinessSupportNation.where(name: "Ecclefechan").first
     
@@ -138,5 +136,4 @@ class BusinessSupportDataImporterTest < ActiveSupport::TestCase
     assert_equal "Award", @schemes.last.business_support_types.first.name
     assert_equal "Loan", @schemes.last.business_support_types.second.name
   end
-  
 end

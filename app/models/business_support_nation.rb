@@ -5,7 +5,10 @@ class BusinessSupportNation
   
   validates_presence_of :name
   validates_uniqueness_of :name
-  
-  field :name, type: String
+  validates_presence_of :slug
+  validates_uniqueness_of :slug
 
+  field :name, type: String 
+  field :slug, type: String
+  index :slug
 end
