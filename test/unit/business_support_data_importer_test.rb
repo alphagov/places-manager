@@ -25,17 +25,17 @@ class BusinessSupportDataImporterTest < ActiveSupport::TestCase
         {'bsf_business_type_id' => 654, 'bsf_scheme_id' => 99}
       ])      
     BusinessSupportDataImporter.any_instance.stubs(:csv_data).with(
-      "data", "bsf_nations").returns([
+      "data", "bsf_locations").returns([
         {'id' => 1, 'name' => "London"},
         {'id' => 2, 'name' => "Auchtermuchty"},
         {'id' => 3, 'name' => "Ecclefechan"}
       ])
     BusinessSupportDataImporter.any_instance.stubs(:csv_data).with(
-      "data", "bsf_schemes_nations").returns([
-        {'bsf_nation_id' => 1, 'bsf_scheme_id' => 99},
-        {'bsf_nation_id' => 2, 'bsf_scheme_id' => 99},
-        {'bsf_nation_id' => 2, 'bsf_scheme_id' => 999},
-        {'bsf_nation_id' => 3, 'bsf_scheme_id' => 1}
+      "data", "bsf_schemes_locations").returns([
+        {'bsf_location_id' => 1, 'bsf_scheme_id' => 99},
+        {'bsf_location_id' => 2, 'bsf_scheme_id' => 99},
+        {'bsf_location_id' => 2, 'bsf_scheme_id' => 999},
+        {'bsf_location_id' => 3, 'bsf_scheme_id' => 1}
       ])
     BusinessSupportDataImporter.any_instance.stubs(:csv_data).with(
       "data", "bsf_stages").returns([
@@ -98,15 +98,15 @@ class BusinessSupportDataImporterTest < ActiveSupport::TestCase
     assert_equal "Sole trader", @schemes.last.business_support_business_types.second.name
   end
 
-  test "BusinessSupportSchemes have and belong to many BusinessSupportNations" do
-    ecclefechan = BusinessSupportNation.where(name: "Ecclefechan").first
+  test "BusinessSupportSchemes have and belong to many BusinessSupportLocations" do
+    ecclefechan = BusinessSupportLocation.where(name: "Ecclefechan").first
     
     assert_equal "Get rich quick", ecclefechan.business_support_schemes.first.title
-    assert_equal 1, @schemes.first.business_support_nations.size
-    assert_equal "Ecclefechan", @schemes.first.business_support_nations.first.name
-    assert_equal 2, @schemes.second.business_support_nations.size
-    assert_equal "London", @schemes.second.business_support_nations.first.name
-    assert_equal "Auchtermuchty", @schemes.second.business_support_nations.last.name
+    assert_equal 1, @schemes.first.business_support_locations.size
+    assert_equal "Ecclefechan", @schemes.first.business_support_locations.first.name
+    assert_equal 2, @schemes.second.business_support_locations.size
+    assert_equal "London", @schemes.second.business_support_locations.first.name
+    assert_equal "Auchtermuchty", @schemes.second.business_support_locations.last.name
   end
   
   test "BusinessSupportSchemes have and belong to many BusinessSupportSectors" do

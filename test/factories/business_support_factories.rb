@@ -3,7 +3,7 @@ FactoryGirl.define do
     name "Charity"
     slug "charity"
   end
-  factory :business_support_nation do
+  factory :business_support_location do
     name "England"
     slug "england"
   end
