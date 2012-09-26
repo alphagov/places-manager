@@ -7,8 +7,8 @@ class BusinessSupportSchemesControllerTest < ActionController::TestCase
     
     loan = FactoryGirl.create(:business_support_type, name: "Loan", slug: "loan")
     award = FactoryGirl.create(:business_support_type, name: "Award", slug: "award")
-    scotland = FactoryGirl.create(:business_support_nation, name: "Scotland", slug: "scotland")
-    wales = FactoryGirl.create(:business_support_nation, name: "Wales", slug: "wales")
+    scotland = FactoryGirl.create(:business_support_location, name: "Scotland", slug: "scotland")
+    wales = FactoryGirl.create(:business_support_location, name: "Wales", slug: "wales")
     private_company = FactoryGirl.create(:business_support_business_type, name: "Private Company", slug: "private-company")
     charity = FactoryGirl.create(:business_support_business_type, name: "Charity", slug: "charity")
     eu_culture_programme = FactoryGirl.create(:business_support_scheme, title: "EU Culture Programme",
@@ -23,20 +23,20 @@ class BusinessSupportSchemesControllerTest < ActionController::TestCase
     urban_dev_grant.business_support_sectors << agriculture
     urban_dev_grant.business_support_sectors << manufacturing
     urban_dev_grant.business_support_business_types << private_company
-    urban_dev_grant.business_support_nations << wales
+    urban_dev_grant.business_support_locations << wales
     urban_dev_grant.business_support_types << loan
     urban_dev_grant.business_support_stages << start_up
     
     eu_culture_programme.business_support_sectors << agriculture
     eu_culture_programme.business_support_business_types << charity
-    eu_culture_programme.business_support_nations << scotland
+    eu_culture_programme.business_support_locations << scotland
     eu_culture_programme.business_support_types << award
     eu_culture_programme.business_support_stages << grow_sustain
     
     business_mentoring.business_support_business_types << charity
     business_mentoring.business_support_business_types << private_company
-    business_mentoring.business_support_nations << scotland
-    business_mentoring.business_support_nations << wales
+    business_mentoring.business_support_locations << scotland
+    business_mentoring.business_support_locations << wales
     business_mentoring.business_support_types << award
     business_mentoring.business_support_types << loan
     business_mentoring.business_support_stages << grow_sustain
@@ -61,13 +61,13 @@ class BusinessSupportSchemesControllerTest < ActionController::TestCase
  
   test "GET to index with multiple sectors" do
     get :index, format: :json, sectors: 'agriculture,manufacturing',
-      business_types: 'private-company', stages: 'start-up', nations: 'wales',
+      business_types: 'private-company', stages: 'start-up', locations: 'wales',
       types: 'loan'
     results = JSON.parse(response.body)['results']
     assert_equal "Urban Development Grant", results.first['title']
 
     get :index, format: :json, sectors: 'agriculture',
-      business_types: 'charity', stages: 'grow-and-sustain', nations: 'scotland',
+      business_types: 'charity', stages: 'grow-and-sustain', locations: 'scotland',
       types: 'award'
     results = JSON.parse(response.body)['results']
     assert_equal "EU Culture Programme", results.first['title']
@@ -75,16 +75,16 @@ class BusinessSupportSchemesControllerTest < ActionController::TestCase
   
   test "GET to index with no sectors param" do
     get :index, format: :json, business_types: 'charity', 
-      stages: 'grow-and-sustain', nations: 'scotland',
+      stages: 'grow-and-sustain', locations: 'scotland',
       types: 'award'
     results = JSON.parse(response.body)['results']
     assert_equal "Business Mentoring", results.first['title']
     assert_equal "EU Culture Programme", results.last['title']
   end
   
-  test "GET to index with multiple params for nation and business type" do
+  test "GET to index with multiple params for location and business type" do
     get :index, format: :json, business_types: 'charity,private-company',
-      nations: 'scotland,wales', types: 'award,loan'
+      locations: 'scotland,wales', types: 'award,loan'
     json = JSON.parse(response.body)
     results = json['results']
     assert_equal 3, json['total'].to_i
