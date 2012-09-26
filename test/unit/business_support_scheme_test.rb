@@ -43,11 +43,11 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
   end
  
   test "should have and belong to many BusinessSupportNations" do
-    @scheme.business_support_nations << BusinessSupportNation.new(name: "Auchtermuchty")
-    @scheme.business_support_nations << BusinessSupportNation.new(name: "Ecclefechan")
-    @scheme.business_support_nations << BusinessSupportNation.new(name: "London")
-    assert_equal "Auchtermuchty", @scheme.business_support_nations.first.name
-    assert_equal "London", @scheme.business_support_nations.last.name 
+    @scheme.business_support_locations << BusinessSupportLocation.new(name: "Auchtermuchty")
+    @scheme.business_support_locations << BusinessSupportLocation.new(name: "Ecclefechan")
+    @scheme.business_support_locations << BusinessSupportLocation.new(name: "London")
+    assert_equal "Auchtermuchty", @scheme.business_support_locations.first.name
+    assert_equal "London", @scheme.business_support_locations.last.name 
   end
   
   test "should have and belong to many BusinessSupportSectors" do

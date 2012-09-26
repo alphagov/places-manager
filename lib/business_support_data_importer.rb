@@ -4,9 +4,9 @@ class BusinessSupportDataImporter
 
   attr_reader :bsf_schemes, :imported, :failed
   
-  DATA_FILENAMES = ["bsf_schemes", "bsf_nations", "bsf_sectors",
+  DATA_FILENAMES = ["bsf_schemes", "bsf_locations", "bsf_sectors",
     "bsf_stages", "bsf_business_types", "bsf_schemes_business_types", 
-    "bsf_types", "bsf_schemes_nations", "bsf_schemes_sectors", 
+    "bsf_types", "bsf_schemes_locations", "bsf_schemes_sectors", 
     "bsf_schemes_stages", "bsf_schemes_types"]
   
   def initialize(data_dir)
@@ -33,7 +33,7 @@ class BusinessSupportDataImporter
     if scheme
       puts "Created scheme '#{scheme.title}'."
       make_associations(scheme, row, "business_type")
-      make_associations(scheme, row, "nation")
+      make_associations(scheme, row, "location")
       make_associations(scheme, row, "sector")
       make_associations(scheme, row, "stage")
       make_associations(scheme, row, "type")

@@ -18,7 +18,7 @@ class BusinessSupportSchemesController < ApplicationController
 
   def any_in_args
     args = {}
-    [:business_types, :sectors, :stages, :nations, :types].each do |sym|
+    [:business_types, :sectors, :stages, :locations, :types].each do |sym|
       unless params[sym].nil?
         args["business_support_#{sym.to_s.singularize}_ids".to_sym] = ids_for_slugs(sym)
       end
