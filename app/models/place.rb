@@ -55,6 +55,7 @@ class Place
   field :access_notes,   :type => String
   field :general_notes,  :type => String
   field :url,            :type => String
+  field :email,          :type => String
   field :phone,          :type => String
   field :fax,            :type => String
   field :text_phone,     :type => String
@@ -222,6 +223,7 @@ class Place
       access_notes: row['access_notes'],
       general_notes: row['general_notes'],
       url: row['url'],
+      email: row['email'],
       source_address: row['source_address'] || "#{row['address1']} #{row['address2']} #{row['town']} #{row['postcode']}"
     }
     location_parameters = if row['location']
