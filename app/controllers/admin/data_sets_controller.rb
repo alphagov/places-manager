@@ -9,6 +9,11 @@ class Admin::DataSetsController < InheritedResources::Base
   rescue_from BSON::InvalidStringEncoding, :with => :bad_encoding
   rescue_from HtmlValidationError, :with => :bad_html
 
+  def create
+    prohibit_non_csv_uploads
+    create!
+  end
+
   def bad_encoding
     flash[:alert] = "Could not process CSV file because of the file encoding. Please check the format."
     redirect_to :back
@@ -27,5 +32,15 @@ class Admin::DataSetsController < InheritedResources::Base
   def activate
     msg = resource.activate! ? "Data Set #{resource.version} successfully activated" : "Couldn't activate data set"
     redirect_to admin_service_url(@service), :notice => msg
+  end
+
+  protected
+  def prohibit_non_csv_uploads
+    if params[:data_set][:data_file]
+      fv = Imminence::FileVerifier.new(params[:data_set][:data_file].tempfile)
+      unless fv.is_mime_type?('text/csv') || fv.is_mime_type?('text/plain')
+        raise CSV::MalformedCSVError
+      end
+    end
   end
 end

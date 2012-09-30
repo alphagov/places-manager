@@ -70,7 +70,7 @@
           
       <%= semantic_form_for(@service.data_sets.build, :url => admin_service_data_sets_path(@service), :html => {:multipart => true}) do |f| %>
         <%= f.inputs do %>
-          <%= f.input :data_file, :as => :file %>
+          <%= f.input :data_file, :as => :file, :accept => 'text/csv' %>
         <% end %>
         <%= f.buttons %>
       <% end %>
