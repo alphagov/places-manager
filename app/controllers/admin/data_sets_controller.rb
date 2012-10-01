@@ -37,8 +37,10 @@ class Admin::DataSetsController < InheritedResources::Base
   protected
   def prohibit_non_csv_uploads
     if params[:data_set][:data_file]
-      fv = Imminence::FileVerifier.new(params[:data_set][:data_file].tempfile)
-      unless fv.is_mime_type?('text/csv') || fv.is_mime_type?('text/plain')
+      file = get_file_from_param(params[:data_set][:data_file])
+      fv = Imminence::FileVerifier.new(file)
+      unless fv.type == 'text'
+        Rails.logger.info "Rejecting file with content type: #{fv.mime_type}"
         raise CSV::MalformedCSVError
       end
     end
