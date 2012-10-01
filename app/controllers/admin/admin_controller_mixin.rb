@@ -6,4 +6,12 @@ module Admin::AdminControllerMixin
     base.before_filter :require_signin_permission!
     base.send :defaults, :route_prefix => 'admin'
   end
+
+  def get_file_from_param(param)
+    if param.respond_to?(:tempfile)
+      param.tempfile
+    else
+      param
+    end
+  end
 end
