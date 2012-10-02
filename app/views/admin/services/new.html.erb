@@ -9,7 +9,7 @@
       <%= f.inputs do %>
       <%= f.input :name %>
       <%= f.input :slug %>
-      <%= f.input :data_file, :as => :file %>
+      <%= f.input :data_file, :as => :file, :accept => 'text/csv' %>
       <%= f.input :source_of_data, as: :text, hint: "Use to store relevant contact names, email addresses, etc." %>
     <% end %>
     <%= f.buttons %>

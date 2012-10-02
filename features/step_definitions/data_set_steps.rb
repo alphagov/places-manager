@@ -21,12 +21,31 @@ When /^I upload a new data set$/ do
   end
 end
 
+When /^I upload a new data set with a PNG claiming to be a CSV$/ do
+  within "#new-data" do
+    attach_file "Data file", Rails.root.join('features/support/data/rails.csv')
+    click_button "Create Data set"
+  end
+end
+
 When /^I click "Activate"$/ do
   click_button 'Activate'
 end
 
 When /^I fill in the form to create the "(.*?)" service with a bad CSV$/ do |name|
   fill_in_form_with(name, Rails.root.join('features/support/data/bad.csv'))
+end
+
+When /^I fill in the form to create the "(.*?)" service with a PNG claiming to be a CSV$/ do |name|
+  fill_in_form_with(name, Rails.root.join('features/support/data/rails.csv'))
+end
+
+When /^I fill in the form to create the "(.*?)" service with a PNG$/ do |name|
+  fill_in_form_with(name, Rails.root.join('features/support/data/rails.png'))
+end
+
+Then /^I should see an indication that my file wasn't accepted$/ do
+  assert page.has_content?("Could not process CSV file. Please check the format.")
 end
 
 Then /^I should see an indication that my data set import failed$/ do
@@ -56,4 +75,12 @@ end
 
 Then /^I should see that the second data set is active$/ do
   assert page.has_content?("Currently serving version 2")
+end
+
+Then /^there should still just be one data set$/ do
+  assert_equal 1, Service.first.data_sets.count
+end
+
+Then /^there shouldn't be a "(.*?)" service$/ do |name|
+  assert_equal 0, Service.where(name: name).count
 end
