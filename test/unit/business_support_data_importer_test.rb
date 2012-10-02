@@ -84,9 +84,9 @@ class BusinessSupportDataImporterTest < ActiveSupport::TestCase
       
   test "Business support schemes are created" do
     assert_equal 1, BusinessSupportScheme.where(title: 'Get rich quick').size
-    assert_equal "get-rich-quick", @schemes.first.business_support_identifier
+    assert_equal "1", @schemes.first.business_support_identifier
     assert_equal "Enable the enterprise", @schemes.second.title
-    assert_equal "hedge-funds-for-dummies", @schemes.last.business_support_identifier
+    assert_equal "999", @schemes.last.business_support_identifier
   end
 
   test "BusinessSupportSchemes have and belong to many BusinessSupportBusinessTypes" do

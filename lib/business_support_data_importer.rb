@@ -28,7 +28,7 @@ class BusinessSupportDataImporter
     
   def import row
     title = to_utf8(row['title'])
-    scheme = BusinessSupportScheme.create(title: title, business_support_identifier: slug_for(title))
+    scheme = BusinessSupportScheme.create(title: title, business_support_identifier: row['id'])
     
     if scheme
       puts "Created scheme '#{scheme.title}'."
