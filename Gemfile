@@ -17,6 +17,7 @@ gem 'exception_notification', '2.5.2', :require => 'exception_notifier'
 
 gem 'formtastic', git: 'https://github.com/justinfrench/formtastic.git', branch: '2.1-stable'
 gem 'formtastic-bootstrap', git: 'https://github.com/cgunther/formtastic-bootstrap.git', branch: 'bootstrap-2'
+gem 'jquery-rails'
 gem 'less-rails-bootstrap'
 
 gem 'govuk_content_models', '1.6.3'

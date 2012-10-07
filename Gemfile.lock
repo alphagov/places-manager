@@ -136,6 +136,9 @@ GEM
       has_scope (~> 0.5.0)
       responders (~> 0.6.0)
     journey (1.0.4)
+    jquery-rails (2.1.1)
+      railties (>= 3.1.0, < 5.0)
+      thor (~> 0.14)
     json (1.7.4)
     jwt (0.1.5)
       multi_json (>= 1.0)
@@ -287,6 +290,7 @@ DEPENDENCIES
   geogov (= 0.0.9)
   govuk_content_models (= 1.6.3)
   inherited_resources
+  jquery-rails
   launchy
   less-rails-bootstrap
   lockfile
