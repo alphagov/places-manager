@@ -14,7 +14,10 @@ gem "bson_ext", "1.6.2"
 
 gem 'aws-ses', :require => 'aws/ses'
 gem 'exception_notification', '2.5.2', :require => 'exception_notifier'
-gem 'formtastic', '2.0.2'
+
+gem 'formtastic', git: 'https://github.com/justinfrench/formtastic.git', branch: '2.1-stable'
+gem 'formtastic-bootstrap', git: 'https://github.com/cgunther/formtastic-bootstrap.git', branch: 'bootstrap-2'
+gem 'less-rails-bootstrap'
 
 gem 'govuk_content_models', '1.6.3'
 
@@ -30,6 +33,11 @@ gem 'inherited_resources'
 gem 'lockfile'
 gem 'whenever'
 gem 'lograge'
+
+group :assets do
+  gem "therubyracer", "~> 0.9.4"
+  gem 'uglifier'
+end
 
 group :test do
   gem 'cucumber-rails', require: false
