@@ -1,0 +1,20 @@
+<ul>
+  <% @service.data_sets.each do |set| %>
+  <li>
+    <p>Version <%= set.version %> uploaded at <%= set.created_at %>
+    <br /><%= set.version == @service.active_data_set_version ? 'Active' : 'Not active'  %>
+    <br />Containing <%= pluralize(set.places.count, 'place', 'places') %>
+    <br />
+      Export:
+      <%= link_to 'JSON', place_path(@service.slug, :version => set, :format => :json) %> /
+      <%= link_to 'KML', place_path(@service.slug, :version => set, :format => :kml) %> /
+      <%= link_to 'CSV', place_path(@service.slug, :version => set, :format => :csv) %>
+    </p>
+    <% if set.active? %>
+      <%= button_to 'Deactivate' %>
+    <% else %>
+      <%= button_to 'Activate', activate_admin_service_data_set_path(@service, set), :class=> 'activate' %>
+    <% end %>
+  </li>
+  <% end %>
+</ul>

@@ -1,0 +1,16 @@
+<h3>Load New Data</h3>
+
+<div class="row-fluid">
+  <div class="well">
+    <%= render '/admin/data_sets/file_help' %>
+  </div>
+</div>
+
+<div class="row-fluid">
+  <%= semantic_form_for(@service.data_sets.build, :url => admin_service_data_sets_path(@service), :html => {:multipart => true}) do |f| %>
+    <%= f.inputs do %>
+      <%= f.input :data_file, :as => :file, :accept => 'text/csv' %>
+    <% end %>
+    <%= f.buttons %>
+  <% end %>
+</div>
