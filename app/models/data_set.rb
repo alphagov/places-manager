@@ -37,7 +37,7 @@ class DataSet
   before_save :process_data_file
   def process_data_file
     if @data_file
-      data = @data_file.read
+      data = @data_file.read.force_encoding('UTF-8')
       if HtmlValidator.new(data).valid?
         CSV.parse(data, headers: true) do |row|
           Place.create_from_hash(self, row)
