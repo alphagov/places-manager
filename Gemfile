@@ -14,7 +14,11 @@ gem "bson_ext", "1.6.2"
 
 gem 'aws-ses', :require => 'aws/ses'
 gem 'exception_notification', '2.5.2', :require => 'exception_notifier'
-gem 'formtastic', '2.0.2'
+
+gem 'formtastic', git: 'https://github.com/justinfrench/formtastic.git', branch: '2.1-stable'
+gem 'formtastic-bootstrap', git: 'https://github.com/cgunther/formtastic-bootstrap.git', branch: 'bootstrap-2'
+gem 'jquery-rails'
+gem 'less-rails-bootstrap'
 
 gem 'govuk_content_models', '1.6.3'
 
@@ -25,20 +29,16 @@ else
 end
 gem "faraday", "0.8.1" # Specifying to resolve Jenkins dependency resolution fail
 
-# Required but not set as a dependency for slimmer
-gem 'gds-api-adapters'
-
-if ENV['SLIMMER_DEV']
-  gem 'slimmer', :path => '../slimmer'
-else
-  gem 'slimmer', '1.1.42'
-end
-
 gem 'geogov', '0.0.9'
 gem 'inherited_resources'
 gem 'lockfile'
 gem 'whenever'
 gem 'lograge'
+
+group :assets do
+  gem "therubyracer", "~> 0.9.4"
+  gem 'uglifier'
+end
 
 group :test do
   gem 'cucumber-rails', require: false

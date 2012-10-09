@@ -24,4 +24,8 @@ class User
     data_set.activate!
     record_action(data_set, 'activated')
   end
+
+  def to_s
+    name
+  end
 end
