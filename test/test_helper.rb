@@ -34,6 +34,7 @@ class ActiveSupport::TestCase
     @controller.stubs(:authenticate_user!).returns(true)
     @controller.stubs(:require_signin_permission!).returns(true)
     @controller.stubs(:user_signed_in?).returns(true)
+    @controller.stubs(:current_user).returns(User.new)
     yield
     @controller.unstub(:user_signed_in?)
     @controller.unstub(:authenticate_user!)
