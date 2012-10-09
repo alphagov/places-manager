@@ -4,79 +4,36 @@
 <p class="alert">There are no places associated with your last data set. This may well mean the imported data was in the wrong format.</p>
 <% end %>
 
-<div id="xguide-nav" class="service-nav">
-  <ul>
-    <li><a href="#current-data">Current Data</a></li>
-    <li><a href="#metadata">About the Service</a></li>
-    <li><a href="#history">History</a></li>
-    <li><a href="#new-data">Load New Data Set</a></li>
+
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#current-data" data-toggle="tab">Current Data</a></li>
+    <li><a href="#metadata" data-toggle="tab">About the Service</a></li>
+    <li><a href="#history" data-toggle="tab">History</a></li>
+    <li><a href="#new-data" data-toggle="tab">Load New Data Set</a></li>
   </ul>
-  <div id="current-data">
-    <div class="inner">
-      <% if @service.data_sets.any? %>
-        <% if @service.active_data_set %>
-          <h2>Currently serving version <%= @service.active_data_set_version %> containing <%= pluralize(@service.active_data_set.places.count, 'place', 'places') %>.</h2>
 
-          <% if @service.source_of_data.present? %>
-            <h3>Source of data</h3>
-            <%= simple_format @service.source_of_data %>
-          <% end %>
-
-          <%= render @service.active_data_set %>
-        <% end %>
-
-        <% if @service.data_sets.last.version > @service.active_data_set_version %>
-          <h3>Latest uploaded version: <%= @service.data_sets.last.version %> containing <%= pluralize(@service.data_sets.last.places.count, 'place', 'places') %>.</h3>
-          <%= render @service.data_sets.last %>
-        <% end %>
-      <% else %>
-        <p>No data sets have been uploaded yet. <a href="#new-data">Add one now.</a></p>
-      <% end %>
+  <div class="tab-content">
+    <div class="tab-pane active" id="current-data">
+      <div class="well">
+        <%= render '/admin/services/current' %>
+      </div>
+    </div>
+    <div class="tab-pane" id="metadata">
+      <div class="well">
+        <%= render '/admin/services/edit' %>
+      </div>
+    </div>
+    <div class="tab-pane" id="history">
+      <div class="well">
+  	    <%= render '/admin/services/history' %>
+      </div>
+    </div>
+    <div class="tab-pane" id="new-data">
+      <div class="well">
+        <%= render '/admin/services/new_data' %>
+      </div>
     </div>
   </div>
-  <div id="metadata">
-    <div class="inner">
-      <%= render '/admin/services/edit' %>
-    </div>
-  </div>
-  <div id="history">
-    <div class="inner">
-	    <ul>
-	      <% @service.data_sets.each do |set| %>
-	      <li>
-	        <p>Version <%= set.version %> uploaded at <%= set.created_at %>
-	        <br /><%= set.version == @service.active_data_set_version ? 'Active' : 'Not active'  %>
-	        <br />Containing <%= pluralize(set.places.count, 'place', 'places') %>
-	        <br />
-	          Export:
-	          <%= link_to 'JSON', place_path(@service.slug, :version => set, :format => :json) %> /
-	          <%= link_to 'KML', place_path(@service.slug, :version => set, :format => :kml) %> /
-	          <%= link_to 'CSV', place_path(@service.slug, :version => set, :format => :csv) %>
-	        </p>
-	        <% if set.active? %>
-	          <%= button_to 'Deactivate' %>
-	        <% else %>
-	          <%= button_to 'Activate', activate_admin_service_data_set_path(@service, set), :class=> 'activate' %>
-	        <% end %>
-	      </li>
-	      <% end %>
-	    </ul>
-    </div>
-  </div>
-  <div id="new-data">
-    <div class="inner">
-      <h3>Load New Data</h3>
-      <%= render '/admin/data_sets/file_help' %>
-          
-      <%= semantic_form_for(@service.data_sets.build, :url => admin_service_data_sets_path(@service), :html => {:multipart => true}) do |f| %>
-        <%= f.inputs do %>
-          <%= f.input :data_file, :as => :file, :accept => 'text/csv' %>
-        <% end %>
-        <%= f.buttons %>
-      <% end %>
-    </div>
-  </div>
-</div>
 
 <% content_for :extra_javascript do %>
 <script type="text/javascript" charset="utf-8">

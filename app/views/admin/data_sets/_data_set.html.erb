@@ -1,5 +1,5 @@
 <% unless data_set.active? %>
-	<%= button_to 'Activate', activate_admin_service_data_set_path(@service, data_set) %>
+	<%= button_to 'Activate', activate_admin_service_data_set_path(@service, data_set), :class=> 'btn btn-primary activate' %>
 <% end %>
 
 <p>
