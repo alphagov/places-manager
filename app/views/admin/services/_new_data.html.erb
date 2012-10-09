@@ -11,6 +11,8 @@
     <%= f.inputs do %>
       <%= f.input :data_file, :as => :file, :accept => 'text/csv' %>
     <% end %>
-    <%= f.buttons %>
+    <%= f.buttons do %>
+      <%= f.commit_button "Create Data set", :button_html => {:class => 'btn btn-primary'} %>
+    <% end %>
   <% end %>
 </div>
