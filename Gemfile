@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 source 'https://gems.gemfury.com/vo6ZrmjBQu5szyywDszE/'
 
 gem 'gelf'
-gem 'plek', '0.1.24'
+gem 'plek', '0.3.0'
 
 gem 'rails', '3.2.8'
 gem 'unicorn', '4.3.1'
@@ -19,7 +19,7 @@ gem 'formtastic-bootstrap', git: 'https://github.com/cgunther/formtastic-bootstr
 gem 'jquery-rails'
 gem 'less-rails-bootstrap'
 
-gem 'govuk_content_models', '1.6.3'
+gem 'govuk_content_models', '1.15.1'
 
 if ENV['BUNDLE_DEV']
   gem 'gds-sso', :path => '../gds-sso'
