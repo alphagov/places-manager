@@ -3,7 +3,6 @@ source 'https://gems.gemfury.com/vo6ZrmjBQu5szyywDszE/'
 
 gem 'gelf'
 gem 'plek', '0.1.24'
-gem 'gds-warmup-controller'
 
 gem 'rails', '3.2.8'
 gem 'unicorn', '4.3.1'
