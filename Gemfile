@@ -1,7 +1,6 @@
 source 'http://rubygems.org'
 source 'https://gems.gemfury.com/vo6ZrmjBQu5szyywDszE/'
 
-gem 'gelf'
 gem 'plek', '0.3.0'
 
 gem 'rails', '3.2.8'
