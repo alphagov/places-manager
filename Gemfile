@@ -23,7 +23,7 @@ gem 'govuk_content_models', '1.15.1'
 if ENV['BUNDLE_DEV']
   gem 'gds-sso', :path => '../gds-sso'
 else
-  gem 'gds-sso', '1.2.0'
+  gem 'gds-sso', '2.1.0'
 end
 gem "faraday", "0.8.1" # Specifying to resolve Jenkins dependency resolution fail
 

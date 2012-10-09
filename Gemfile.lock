@@ -100,7 +100,7 @@ GEM
       lrucache (~> 0.1.1)
       null_logger
       plek
-    gds-sso (1.2.0)
+    gds-sso (2.1.0)
       omniauth-gds (= 0.0.3)
       rack-accept (~> 0.4.4)
       rails (>= 3.0.0)
@@ -280,7 +280,7 @@ DEPENDENCIES
   faraday (= 0.8.1)
   formtastic!
   formtastic-bootstrap!
-  gds-sso (= 1.2.0)
+  gds-sso (= 2.1.0)
   geogov (= 0.0.9)
   govuk_content_models (= 1.15.1)
   inherited_resources
