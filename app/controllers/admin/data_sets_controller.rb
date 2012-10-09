@@ -36,7 +36,7 @@ class Admin::DataSetsController < InheritedResources::Base
 
   protected
   def prohibit_non_csv_uploads
-    if params[:data_set][:data_file]
+    if params[:data_set] && params[:data_set][:data_file]
       file = get_file_from_param(params[:data_set][:data_file])
       fv = Imminence::FileVerifier.new(file)
       unless fv.type == 'text'
