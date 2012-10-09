@@ -13,7 +13,7 @@
     <% if set.active? %>
       <%= button_to 'Deactivate' %>
     <% else %>
-      <%= button_to 'Activate', activate_admin_service_data_set_path(@service, set), :class=> 'activate' %>
+      <%= button_to 'Activate', activate_admin_service_data_set_path(@service, set), :class=> 'btn btn-primary activate' %>
     <% end %>
   </li>
   <% end %>
