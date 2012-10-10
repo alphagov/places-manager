@@ -5,12 +5,14 @@ class StatsD
     end
   end
 
-  def self.timing(time)
-    statsd.timing("response_time", time)
+  def self.timing(time, controller, action)
+    statsd.timing("response_time.#{controller}.#{action}", time)
   end
 end
 
 ActiveSupport::Notifications.subscribe /process_action.action_controller/ do |*args|
   event = ActiveSupport::Notifications::Event.new(*args)
-  StatsD.timing(event.duration)
+  StatsD.timing(
+    event.duration, event.payload[:controller].underscore, event.payload[:action]
+  )
 end
