@@ -21,6 +21,7 @@ gem 'jquery-rails'
 gem 'less-rails-bootstrap'
 
 gem 'govuk_content_models', '1.6.3'
+gem 'statsd-ruby', '1.0.0', :require => 'statsd'
 
 if ENV['BUNDLE_DEV']
   gem 'gds-sso', :path => '../gds-sso'
