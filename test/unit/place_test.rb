@@ -1,6 +1,22 @@
 require 'test_helper'
 
 class PlaceTest < ActiveSupport::TestCase
+  test "a new place is flagged as needing geocoding" do
+    s = Service.create! slug: "chickens", name: "Chickens!"
+    data_set = s.data_sets.create! version: 2
+    p = Place.create!(
+      service_slug: "chickens",
+      data_set_version: 2,
+      name: 'Hercules House',
+      address1: '1 Hercules Road',
+      town: 'London',
+      postcode: 'SE1 7DU',
+      source_address: "Bah"
+    )
+
+    assert Place.needs_geocoding.to_a.include?(p), "Not flagged as needing geocoding"
+  end
+
   test "responds to full_address with a compiled address" do
     p = Place.new(:name => 'Hercules House', :address1 => '1 Hercules Road', :town => 'London', :postcode => 'SE1 7DU')
     assert_equal '1 Hercules Road, London, SE1 7DU, UK', p.full_address
