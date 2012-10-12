@@ -27,7 +27,7 @@ Lockfile.new lock_path, :retries => 0 do
         begin
           place.geocode!
           $stderr.puts place.geocode_error if place.geocode_error
-        rescue Mongoid::Errors::Validations => e
+        rescue => e
           $stderr.puts e.message
           place.update_attribute(:geocode_error, e.message)
         end
