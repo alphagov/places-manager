@@ -24,8 +24,13 @@ Lockfile.new lock_path, :retries => 0 do
         set.save
       end
       set.places.needs_geocoding.each do |place|
-        place.geocode!
-        $stderr.puts place.geocode_error if place.geocode_error
+        begin
+          place.geocode!
+          $stderr.puts place.geocode_error if place.geocode_error
+        rescue Mongoid::Errors::Validations => e
+          $stderr.puts e.message
+          place.update_attribute(:geocode_error, e.message)
+        end
       end
     end
   end
