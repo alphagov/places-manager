@@ -27,6 +27,11 @@ Lockfile.new lock_path, :retries => 0 do
         begin
           place.geocode!
           $stderr.puts place.geocode_error if place.geocode_error
+        # Rescuing all exceptions like this is a bad idea, but
+        # doing otherwise involves delving into the network code
+        # lying behind place.geocode!
+        # We should revisit that and error reporting from this script
+        # in general.
         rescue => e
           $stderr.puts e.message
           place.update_attribute(:geocode_error, e.message)
