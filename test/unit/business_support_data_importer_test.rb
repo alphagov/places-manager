@@ -4,12 +4,23 @@ require 'business_support_data_importer'
 class BusinessSupportDataImporterTest < ActiveSupport::TestCase
  
   setup do
+    @existing_scheme = FactoryGirl.create(:business_support_scheme, 
+      title: 'Monetise, synergise', 
+      business_support_identifier: '9999')
+
+    @old_business_type = FactoryGirl.create(:business_support_business_type, 
+                                            name: 'Superglobalconglomerate', slug: 'superglobalconglomerate')
+
+    @existing_scheme.business_support_business_types << @old_business_type
+    @existing_scheme.save!
+    
     BusinessSupportDataImporter.any_instance.stubs(:csv_data).with(
       "data", "bsf_schemes").returns([
         {'id' => 1, 'title' => "Get rich quick"},
         {'id' => 2, 'title' => "Get rich quick"},
         {'id' => 99, 'title' => "Enable the enterprise"},
-        {'id' => 999, 'title' => "Hedge funds for dummies"}
+        {'id' => 999, 'title' => "Hedge funds for dummies"},
+        {'id' => 9999, 'title' => 'Monetise, synergise'}
       ])
     BusinessSupportDataImporter.any_instance.stubs(:csv_data).with(
       "data", "bsf_business_types").returns([
@@ -22,7 +33,8 @@ class BusinessSupportDataImporterTest < ActiveSupport::TestCase
         {'bsf_business_type_id' => 321, 'bsf_scheme_id' => 1},
         {'bsf_business_type_id' => 321, 'bsf_scheme_id' => 999},
         {'bsf_business_type_id' => 987, 'bsf_scheme_id' => 999},
-        {'bsf_business_type_id' => 654, 'bsf_scheme_id' => 99}
+        {'bsf_business_type_id' => 654, 'bsf_scheme_id' => 99},
+        {'bsf_business_type_id' => 987, 'bsf_scheme_id' => 9999}
       ])      
     BusinessSupportDataImporter.any_instance.stubs(:csv_data).with(
       "data", "bsf_locations").returns([
@@ -79,14 +91,20 @@ class BusinessSupportDataImporterTest < ActiveSupport::TestCase
     silence_stream(STDOUT) do
       BusinessSupportDataImporter.run("data")
     end
-    @schemes = BusinessSupportScheme.all
+    @schemes = BusinessSupportScheme.all.asc(:business_support_identifier)
+
+    @existing_scheme.reload
   end
       
   test "Business support schemes are created" do
     assert_equal 1, BusinessSupportScheme.where(title: 'Get rich quick').size
     assert_equal "1", @schemes.first.business_support_identifier
     assert_equal "Enable the enterprise", @schemes.second.title
-    assert_equal "999", @schemes.last.business_support_identifier
+    assert_equal "999", @schemes.third.business_support_identifier
+  end
+
+  test "Existing scheme associations are rewritten" do
+    assert_equal "Sole trader", @existing_scheme.business_support_business_types.first.name
   end
 
   test "BusinessSupportSchemes have and belong to many BusinessSupportBusinessTypes" do
@@ -94,8 +112,8 @@ class BusinessSupportDataImporterTest < ActiveSupport::TestCase
     
     assert_equal @schemes.second, charity.business_support_schemes.first
     assert_equal "Private company", @schemes.first.business_support_business_types.first.name
-    assert_equal "Private company", @schemes.last.business_support_business_types.first.name
-    assert_equal "Sole trader", @schemes.last.business_support_business_types.second.name
+    assert_equal "Private company", @schemes.third.business_support_business_types.first.name
+    assert_equal "Sole trader", @schemes.third.business_support_business_types.second.name
   end
 
   test "BusinessSupportSchemes have and belong to many BusinessSupportLocations" do
@@ -112,11 +130,11 @@ class BusinessSupportDataImporterTest < ActiveSupport::TestCase
   test "BusinessSupportSchemes have and belong to many BusinessSupportSectors" do
     media_sector = BusinessSupportSector.where(name: "Media").first
     
-    assert_equal @schemes.last, media_sector.business_support_schemes.first
+    assert_equal @schemes.third, media_sector.business_support_schemes.first
     assert @schemes.second.business_support_sectors.empty?, "No associations should exist"
     assert_equal "Finance", @schemes.first.business_support_sectors.first.name
-    assert_equal "Media", @schemes.last.business_support_sectors.first.name
-    assert_equal "Law", @schemes.last.business_support_sectors.last.name
+    assert_equal "Media", @schemes.third.business_support_sectors.first.name
+    assert_equal "Law", @schemes.third.business_support_sectors.last.name
   end
   
   test "BusinessSupportSchemes have and belong to many BusinessSupportStages" do
@@ -125,7 +143,7 @@ class BusinessSupportDataImporterTest < ActiveSupport::TestCase
     assert_equal @schemes.second, crash_and_burn.business_support_schemes.first  
     assert_equal "Start-up", @schemes.first.business_support_stages.first.name
     assert_equal "Crash and burn", @schemes.second.business_support_stages.first.name
-    assert_equal "Grow and sustain", @schemes.last.business_support_stages.last.name
+    assert_equal "Grow and sustain", @schemes.third.business_support_stages.last.name
   end
   
   test "BusinessSupportSchemes have and belong to many BusinessSupportTypes" do
@@ -133,7 +151,7 @@ class BusinessSupportDataImporterTest < ActiveSupport::TestCase
     
     assert_equal @schemes.first, award.business_support_schemes.first
     assert_equal "Award", @schemes.first.business_support_types.first.name
-    assert_equal "Award", @schemes.last.business_support_types.first.name
-    assert_equal "Loan", @schemes.last.business_support_types.second.name
+    assert_equal "Award", @schemes.third.business_support_types.first.name
+    assert_equal "Loan", @schemes.third.business_support_types.second.name
   end
 end

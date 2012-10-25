@@ -28,7 +28,7 @@ class BusinessSupportDataImporter
     
   def import row
     title = to_utf8(row['title'])
-    scheme = BusinessSupportScheme.create(title: title, business_support_identifier: row['id'])
+    scheme = BusinessSupportScheme.find_or_create_by(title: title, business_support_identifier: row['id'])
     
     if scheme
       puts "Created scheme '#{scheme.title}'."
@@ -41,7 +41,7 @@ class BusinessSupportDataImporter
       @failed << "Failed to create scheme '#{title}', slug: '#{slug}'."
     end
     
-    @imported << "#{scheme.business_support_identifier}" if scheme.save
+    @imported << "#{scheme.title}" if scheme.save
   end
  
   def make_associations(scheme, row, key)
@@ -50,6 +50,8 @@ class BusinessSupportDataImporter
     associate_collection = instance_variable_get("@bsf_#{key}s")
     join_collection = instance_variable_get("@bsf_schemes_#{key}s")
     associations = join_collection.find_all { |join_row| row['id'] == join_row['bsf_scheme_id'] }
+
+    scheme_collection.clear
     associations.each do |association|
       associated = associate_collection.find { |assoc| assoc['id'] == association["bsf_#{key}_id"] } 
       unless associated.nil?
