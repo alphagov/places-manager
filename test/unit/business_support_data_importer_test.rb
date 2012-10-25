@@ -20,7 +20,7 @@ class BusinessSupportDataImporterTest < ActiveSupport::TestCase
         {'id' => 2, 'title' => "Get rich quick"},
         {'id' => 99, 'title' => "Enable the enterprise"},
         {'id' => 999, 'title' => "Hedge funds for dummies"},
-        {'id' => 9999, 'title' => 'Monetise, synergise'}
+        {'id' => 9999, 'title' => 'Monetize! Synergize!'}
       ])
     BusinessSupportDataImporter.any_instance.stubs(:csv_data).with(
       "data", "bsf_business_types").returns([
@@ -104,7 +104,12 @@ class BusinessSupportDataImporterTest < ActiveSupport::TestCase
   end
 
   test "Existing scheme associations are rewritten" do
+    assert_equal 1, @existing_scheme.business_support_business_types.size
     assert_equal "Sole trader", @existing_scheme.business_support_business_types.first.name
+  end
+
+  test "Existing scheme titles can be updated" do
+    assert_equal "Monetize! Synergize!", @existing_scheme.title
   end
 
   test "BusinessSupportSchemes have and belong to many BusinessSupportBusinessTypes" do
