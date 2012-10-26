@@ -14,7 +14,7 @@ class BusinessSupportScheme
   validates_uniqueness_of :title
   validates_uniqueness_of :business_support_identifier
 
-  scope :for_relations, ->(relations) {
+  scope :for_relations, lambda { |relations|
     where({ "$and" => schemes_criteria(relations) }).asc(:title)
   }
 
