@@ -71,5 +71,15 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
     assert_equal "Award", @scheme.business_support_types.first.name
     assert_equal "Loan", @scheme.business_support_types.last.name 
   end
-    
+   
+  test "should be scoped by relations" do
+    @scheme.business_support_stages << FactoryGirl.create(:business_support_stage, name: "Burn out", slug: "burn-out")
+    @scheme.save!
+    assert_equal @scheme, BusinessSupportScheme.for_relations(stages: "burn-out").first
+    assert_equal @scheme, BusinessSupportScheme.for_relations(stages: "burn-out", sectors: "manufacturing").first
+    @scheme.business_support_sectors << FactoryGirl.create(:business_support_sector, name: "Manufacturing", slug: "manufacturing")
+    @scheme.save!
+    assert_equal 0, BusinessSupportScheme.for_relations(stages: "burn-out", sectors: "Agriculture").count
+    assert_equal @scheme, BusinessSupportScheme.for_relations(stages: "burn-out", sectors: "agriculture,manufacturing").first
+  end
 end
