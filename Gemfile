@@ -1,11 +1,9 @@
 source 'http://rubygems.org'
 source 'https://gems.gemfury.com/vo6ZrmjBQu5szyywDszE/'
 
-gem 'gelf'
 gem 'plek', '0.1.24'
-gem 'gds-warmup-controller'
 
-gem 'rails', '3.2.7'
+gem 'rails', '3.2.8'
 gem 'unicorn', '4.3.1'
 
 gem "mongoid", "2.4.10"
@@ -26,7 +24,7 @@ gem 'statsd-ruby', '1.0.0', :require => 'statsd'
 if ENV['BUNDLE_DEV']
   gem 'gds-sso', :path => '../gds-sso'
 else
-  gem 'gds-sso', '1.2.0'
+  gem 'gds-sso', '2.1.0'
 end
 gem "faraday", "0.8.1" # Specifying to resolve Jenkins dependency resolution fail
 
