@@ -224,6 +224,9 @@ class Place
       general_notes: row['general_notes'],
       url: row['url'],
       email: row['email'],
+      phone: row['phone'],
+      fax: row['fax'],
+      text_phone: row['text_phone'],
       source_address: row['source_address'] || "#{row['address1']} #{row['address2']} #{row['town']} #{row['postcode']}"
     }
     location_parameters = if row['location']
