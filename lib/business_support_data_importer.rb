@@ -39,7 +39,7 @@ class BusinessSupportDataImporter
       make_associations(scheme, row, "stage")
       make_associations(scheme, row, "type")
     else
-      @failed << "Failed to create scheme '#{title}', slug: '#{slug}'."
+      @failed << "Failed to create scheme '#{title}'."
     end
     
     @imported << "#{scheme.title}" if scheme.save
