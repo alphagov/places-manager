@@ -1,4 +1,5 @@
 require 'imminence/file_verifier'
+require 'csv'
 
 class Admin::ServicesController < InheritedResources::Base
   include Admin::AdminControllerMixin
