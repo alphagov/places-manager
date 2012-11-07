@@ -2,41 +2,56 @@ require 'test_helper'
 
 class Admin::BusinessSupportSchemesControllerTest < ActionController::TestCase
   setup do
-    10.times do |i| 
-      count = i + 1
+    @titles = ["Super finance triple bonus", "Young business starter award",
+               "Brilliant start-up award", "Wunderbiz"]
+
+    @sectors = ["Agriculture", "Healthcare", "Manufacturing"]
+    @stages = ["Pre-startup", "Startup", "Grow and sustain"]
+    
+    @sectors.each do |name|
+      FactoryGirl.create(:business_support_sector, name: name, slug: name.parameterize)
+    end
+    
+    @stages.each do |name|
+      FactoryGirl.create(:business_support_stage, name: name, slug: name.parameterize)
+    end
+    
+    @titles.each_with_index do |title, index|
       FactoryGirl.create(:business_support_scheme, 
-                         title: "Business support scheme #{count}", 
-                         business_support_identifier: count)
+                         title: title, 
+                         business_support_identifier: index + 1)
     end
   end
+
   test "GET to index" do
     as_logged_in_user do
       get :index
       schemes = assigns(:schemes)
       assert_equal BusinessSupportScheme.count, schemes.size 
-      assert_match "Business support scheme 1", response.body
-      assert_match "Business support scheme 10", response.body
+      assert_match "Wunderbiz", response.body
+      assert_match "Young business starter award", response.body
+      assert_equal BusinessSupportScheme.asc(:title), schemes
     end
   end
+  
   test "GET to edit" do
     as_logged_in_user do
-      get :edit, id: BusinessSupportScheme.first._id
-      assert_equal "Business support scheme 1", assigns(:scheme).title
-
+      scheme = BusinessSupportScheme.first
+      get :edit, id: scheme._id
+      assert_equal scheme, assigns(:scheme)
+      assert_equal 3, assigns(:sectors).size
+      assert_equal 3, assigns(:stages).size
     end
   end
-#  test "PUT to update" do
-    #manufacturing = FactoryGirl.create(:business_support_sector, 
-                                       #name: 'Manufacturing', 
-                                       #slug: 'manufacturing')
-    #healthcare = FactoryGirl.create(:business_support_sector, 
-                                       #name: 'Healthcare', 
-                                       #slug: 'healthcare')
 
-    #scheme = BusinessSupportScheme.last
+  test "PUT to update" do
 
-    #as_logged_in_user do
+    scheme = BusinessSupportScheme.last
+    scheme.business_support_sectors << BusinessSupportSector.where(slug: 'manufacturing').first 
+    scheme.save!
+
+    as_logged_in_user do
       #put :update, 
-    #end
-  #end
+    end
+  end
 end
