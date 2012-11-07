@@ -25,7 +25,7 @@
         <tbody>
         <% @schemes.each do |scheme| -%>
           <tr>
-            <td><%= scheme %></td>
+            <td><%= scheme.business_support_identifier %></td>
             <td><%= scheme.title %></td>
             <td></td>
             <td><p class="button"><%= link_to "Edit", edit_admin_business_support_scheme_path(scheme) %></p></td>
