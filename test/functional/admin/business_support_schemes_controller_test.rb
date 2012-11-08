@@ -5,9 +5,14 @@ class Admin::BusinessSupportSchemesControllerTest < ActionController::TestCase
     @titles = ["Super finance triple bonus", "Young business starter award",
                "Brilliant start-up award", "Wunderbiz"]
 
+    @locations = ["England", "Scotland", "Wales", "Northern Ireland"]
     @sectors = ["Agriculture", "Healthcare", "Manufacturing"]
     @stages = ["Pre-startup", "Startup", "Grow and sustain"]
     
+    @locations.each do |name|
+      FactoryGirl.create(:business_support_location, name: name, slug: name.parameterize)
+    end
+
     @sectors.each do |name|
       FactoryGirl.create(:business_support_sector, name: name, slug: name.parameterize)
     end
@@ -39,19 +44,43 @@ class Admin::BusinessSupportSchemesControllerTest < ActionController::TestCase
       scheme = BusinessSupportScheme.first
       get :edit, id: scheme._id
       assert_equal scheme, assigns(:scheme)
+      assert_equal 4, assigns(:locations).size
+      assert_equal "Wales", assigns(:locations).last.name
       assert_equal 3, assigns(:sectors).size
       assert_equal 3, assigns(:stages).size
     end
   end
 
   test "PUT to update" do
-
     scheme = BusinessSupportScheme.last
-    scheme.business_support_sectors << BusinessSupportSector.where(slug: 'manufacturing').first 
+    
+    scotland = BusinessSupportLocation.where(slug: 'scotland').first
+    england = BusinessSupportLocation.where(slug: 'england').first
+    manufacturing = BusinessSupportSector.where(slug: 'manufacturing').first
+    
+    scheme.business_support_sectors << manufacturing 
+    scheme.business_support_locations << england
     scheme.save!
 
     as_logged_in_user do
-      #put :update, 
+      put :update, id: scheme._id, business_support_scheme: { title: scheme.title,
+        business_support_identifier: scheme.business_support_identifier,
+        business_support_location_ids: [england._id, scotland._id],
+        business_support_sector_ids: [manufacturing._id]
+      }
+      scheme.reload
+      assert_equal 2, scheme.business_support_locations.size
+      assert_equal 302, response.status
+    end
+  end
+
+  test "PUT to update with bad params" do
+    scheme = BusinessSupportScheme.last
+    other_scheme = BusinessSupportScheme.first
+    as_logged_in_user do
+      put :update, id: scheme._id, business_support_scheme: { title: other_scheme.title }
+      scheme.reload
+      refute_equal scheme.title, other_scheme.title
     end
   end
 end

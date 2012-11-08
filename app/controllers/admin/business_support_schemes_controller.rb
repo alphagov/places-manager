@@ -15,10 +15,15 @@ class Admin::BusinessSupportSchemesController < InheritedResources::Base
 
   def update
     @scheme = BusinessSupportScheme.find(params[:id])
-    
+    if @scheme.update_attributes(params[:business_support_scheme])
+      redirect_to 'index'
+    else
+      render 'edit'
+    end
   end
 
   def find_all_facets
+    @locations = BusinessSupportLocation.asc(:name)
     @sectors = BusinessSupportSector.asc(:name)
     @stages = BusinessSupportStage.asc(:name)
   end

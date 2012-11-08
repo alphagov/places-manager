@@ -2,6 +2,18 @@
   <%= f.inputs do %>
     <%= f.input :title %>
     <%= f.input :business_support_identifier %>
+    <% @locations.each do |location| -%>
+      <label for="business_support_scheme[business_support_location_ids][]">
+        <%= f.check_box "business_support_location_ids", { :multiple => true }, location._id, nil %>
+        <%= location.name %>
+      </label>
+    <% end %>
+    <% @sectors.each do |sector| -%>
+      <label for="business_support_scheme[business_support_sector_ids][]">
+        <%= f.check_box "business_support_sector_ids", { :multiple => true }, sector._id, nil %>
+        <%= sector.name %>
+      </label>
+    <% end %>
   <% end %>
 
   <%= f.buttons do %>
