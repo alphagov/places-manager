@@ -1,30 +1,19 @@
-require 'test_helper'
+require 'business_support_test_helper'
 
 class Admin::BusinessSupportSchemesControllerTest < ActionController::TestCase
   setup do
-    @titles = ["Super finance triple bonus", "Young business starter award",
-               "Brilliant start-up award", "Wunderbiz"]
 
-    @locations = ["England", "Scotland", "Wales", "Northern Ireland"]
-    @sectors = ["Agriculture", "Healthcare", "Manufacturing"]
-    @stages = ["Pre-startup", "Startup", "Grow and sustain"]
+    make_facets(:business_support_business_type, ["Pre-startup", "Startup", "Private company", "Charity"])
+    make_facets(:business_support_location, ["England", "Scotland", "Wales", "Northern Ireland"])
+    make_facets(:business_support_sector, ["Agriculture", "Healthcare", "Manufacturing"])
+    make_facets(:business_support_stage, ["Pre-startup", "Startup", "Grow and sustain"])
+    make_facets(:business_support_type, ["Award", "Loan", "Grant"])
     
-    @locations.each do |name|
-      FactoryGirl.create(:business_support_location, name: name, slug: name.parameterize)
-    end
-
-    @sectors.each do |name|
-      FactoryGirl.create(:business_support_sector, name: name, slug: name.parameterize)
-    end
-    
-    @stages.each do |name|
-      FactoryGirl.create(:business_support_stage, name: name, slug: name.parameterize)
-    end
-    
-    @titles.each_with_index do |title, index|
-      FactoryGirl.create(:business_support_scheme, 
-                         title: title, 
-                         business_support_identifier: index + 1)
+    ["Super finance triple bonus", "Young business starter award", "Brilliant start-up award", "Wunderbiz"
+      ].each_with_index do |title, index|
+        FactoryGirl.create(:business_support_scheme, 
+                          title: title, 
+                          business_support_identifier: index + 1)
     end
   end
 
@@ -54,19 +43,15 @@ class Admin::BusinessSupportSchemesControllerTest < ActionController::TestCase
   test "PUT to update" do
     scheme = BusinessSupportScheme.last
     
-    scotland = BusinessSupportLocation.where(slug: 'scotland').first
-    england = BusinessSupportLocation.where(slug: 'england').first
-    manufacturing = BusinessSupportSector.where(slug: 'manufacturing').first
-    
-    scheme.business_support_sectors << manufacturing 
-    scheme.business_support_locations << england
+    scheme.business_support_sectors << @manufacturing 
+    scheme.business_support_locations << @england
     scheme.save!
 
     as_logged_in_user do
       put :update, id: scheme._id, business_support_scheme: { title: scheme.title,
         business_support_identifier: scheme.business_support_identifier,
-        business_support_location_ids: [england._id, scotland._id],
-        business_support_sector_ids: [manufacturing._id]
+        business_support_location_ids: [@england._id, @scotland._id],
+        business_support_sector_ids: [@manufacturing._id]
       }
       scheme.reload
       assert_equal 2, scheme.business_support_locations.size

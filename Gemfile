@@ -51,4 +51,5 @@ group :test do
   gem 'minitest', '3.3.0'
   gem 'launchy'
   gem 'mocha', '0.12.3', require: false
+  gem 'debugger'
 end

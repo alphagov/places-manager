@@ -1,17 +1,41 @@
+<h2>Editing <%= @scheme.title %></h2>
 <%= semantic_form_for(@scheme, :url => admin_business_support_scheme_path(@scheme)) do |f| %>
   <%= f.inputs do %>
     <%= f.input :title %>
     <%= f.input :business_support_identifier %>
+    <h3>Business types</h3>
+    <% @business_types.each do |business_type| -%>
+      <label for="business_support_scheme[business_support_business_type_ids][]" class="checkbox inline">
+        <%= f.check_box "business_support_business_type_ids", { :multiple => true }, business_type._id, nil %>
+        <%= business_type.name %>
+      </label>
+    <% end %>
+    <h3>Locations</h3>
     <% @locations.each do |location| -%>
-      <label for="business_support_scheme[business_support_location_ids][]">
+      <label for="business_support_scheme[business_support_location_ids][]" class="checkbox inline">
         <%= f.check_box "business_support_location_ids", { :multiple => true }, location._id, nil %>
         <%= location.name %>
       </label>
     <% end %>
+    <h3>Sectors</h3>
     <% @sectors.each do |sector| -%>
-      <label for="business_support_scheme[business_support_sector_ids][]">
+      <label for="business_support_scheme[business_support_sector_ids][]" class="checkbox inline">
         <%= f.check_box "business_support_sector_ids", { :multiple => true }, sector._id, nil %>
         <%= sector.name %>
+      </label>
+    <% end %>
+    <h3>Stages</h3>
+    <% @stages.each do |stage| -%>
+      <label for="business_support_scheme[business_support_stage_ids][]" class="checkbox inline">
+        <%= f.check_box "business_support_stage_ids", { :multiple => true }, stage._id, nil %>
+        <%= stage.name %>
+      </label>
+    <% end %>
+    <h3>Support types</h3>
+    <% @types.each do |support_type| -%>
+      <label for="business_support_scheme[business_support_type_ids][]" class="checkbox inline">
+        <%= f.check_box "business_support_type_ids", { :multiple => true }, support_type._id, nil %>
+        <%= support_type.name %>
       </label>
     <% end %>
   <% end %>

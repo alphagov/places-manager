@@ -18,14 +18,17 @@ class Admin::BusinessSupportSchemesController < InheritedResources::Base
     if @scheme.update_attributes(params[:business_support_scheme])
       redirect_to 'index'
     else
+      find_all_facets
       render 'edit'
     end
   end
 
   def find_all_facets
+    @business_types = BusinessSupportBusinessType.asc(:name)
     @locations = BusinessSupportLocation.asc(:name)
     @sectors = BusinessSupportSector.asc(:name)
     @stages = BusinessSupportStage.asc(:name)
+    @types = BusinessSupportType.asc(:name)
   end
 
 end
