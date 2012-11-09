@@ -1,0 +1,9 @@
+<div class="control-group">
+  <h3><%= title %></h3>
+  <% collection.each do |facet| -%>
+    <label for="business_support_scheme[<%= model_collection %>][]" class="checkbox inline">
+    <%= f.check_box model_collection, { :multiple => true }, facet._id, nil %>
+    <%= facet.name %>
+  </label>
+  <% end %>
+</div>

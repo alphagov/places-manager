@@ -5,41 +5,30 @@
     <%= f.input :business_support_identifier %>
     <label for="business_support_scheme[priority]">Priority</label>
     <%= f.select :priority, [["Low",0],["Normal",1],["High",2]] %>
-    <h3>Business types</h3>
-    <% @business_types.each do |business_type| -%>
-      <label for="business_support_scheme[business_support_business_type_ids][]" class="checkbox inline">
-        <%= f.check_box "business_support_business_type_ids", { :multiple => true }, business_type._id, nil %>
-        <%= business_type.name %>
-      </label>
-    <% end %>
-    <h3>Locations</h3>
-    <% @locations.each do |location| -%>
-      <label for="business_support_scheme[business_support_location_ids][]" class="checkbox inline">
-        <%= f.check_box "business_support_location_ids", { :multiple => true }, location._id, nil %>
-        <%= location.name %>
-      </label>
-    <% end %>
-    <h3>Sectors</h3>
-    <% @sectors.each do |sector| -%>
-      <label for="business_support_scheme[business_support_sector_ids][]" class="checkbox inline">
-        <%= f.check_box "business_support_sector_ids", { :multiple => true }, sector._id, nil %>
-        <%= sector.name %>
-      </label>
-    <% end %>
-    <h3>Stages</h3>
-    <% @stages.each do |stage| -%>
-      <label for="business_support_scheme[business_support_stage_ids][]" class="checkbox inline">
-        <%= f.check_box "business_support_stage_ids", { :multiple => true }, stage._id, nil %>
-        <%= stage.name %>
-      </label>
-    <% end %>
-    <h3>Support types</h3>
-    <% @types.each do |support_type| -%>
-      <label for="business_support_scheme[business_support_type_ids][]" class="checkbox inline">
-        <%= f.check_box "business_support_type_ids", { :multiple => true }, support_type._id, nil %>
-        <%= support_type.name %>
-      </label>
-    <% end %>
+    <%= render partial: "facets", locals: { f: f,
+                                            title: "Business types", 
+                                            collection: @business_types, 
+                                            model_collection: "business_support_business_type_ids" } %>
+  
+    <%= render partial: "facets", locals: { f: f,
+                                            title: "Locations", 
+                                            collection: @locations, 
+                                            model_collection: "business_support_location_ids" } %>
+
+    <%= render partial: "facets", locals: { f: f,
+                                            title: "Sectors", 
+                                            collection: @sectors, 
+                                            model_collection: "business_support_sector_ids" } %>
+                                            
+    <%= render partial: "facets", locals: { f: f,
+                                            title: "Stages", 
+                                            collection: @stages, 
+                                            model_collection: "business_support_stage_ids" } %>
+
+    <%= render partial: "facets", locals: { f: f,
+                                            title: "Support types", 
+                                            collection: @types, 
+                                            model_collection: "business_support_type_ids" } %>
   <% end %>
 
   <%= f.buttons do %>
