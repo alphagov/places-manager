@@ -8,11 +8,14 @@ class BusinessSupportScheme
   has_and_belongs_to_many :business_support_types, index: true
    
   field :title, type: String
-  field :business_support_identifier, type: String 
+  field :business_support_identifier, type: String
+  field :priority, type: Integer, default: 1
 
   validates_presence_of :title, :business_support_identifier
   validates_uniqueness_of :title
   validates_uniqueness_of :business_support_identifier
+  validates_presence_of :priority
+  validates_inclusion_of :priority, in: [0,1,2]
 
   scope :for_relations, lambda { |relations|
     where({ "$and" => schemes_criteria(relations) }).asc(:title)

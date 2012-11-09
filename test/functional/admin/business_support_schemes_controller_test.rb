@@ -8,7 +8,7 @@ class Admin::BusinessSupportSchemesControllerTest < ActionController::TestCase
     make_facets(:business_support_sector, ["Agriculture", "Healthcare", "Manufacturing"])
     make_facets(:business_support_stage, ["Pre-startup", "Startup", "Grow and sustain"])
     make_facets(:business_support_type, ["Award", "Loan", "Grant"])
-    
+
     ["Super finance triple bonus", "Young business starter award", "Brilliant start-up award", "Wunderbiz"
       ].each_with_index do |title, index|
         FactoryGirl.create(:business_support_scheme, 
@@ -51,10 +51,12 @@ class Admin::BusinessSupportSchemesControllerTest < ActionController::TestCase
       put :update, id: scheme._id, business_support_scheme: { title: scheme.title,
         business_support_identifier: scheme.business_support_identifier,
         business_support_location_ids: [@england._id, @scotland._id],
-        business_support_sector_ids: [@manufacturing._id]
+        business_support_sector_ids: [@manufacturing._id],
+        priority: 2
       }
       scheme.reload
-      assert_equal 2, scheme.business_support_locations.size
+      assert_equal [@england, @scotland], scheme.business_support_locations
+      assert_equal 2, scheme.priority
       assert_equal 302, response.status
     end
   end

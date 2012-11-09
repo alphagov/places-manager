@@ -16,7 +16,7 @@ class Admin::BusinessSupportSchemesController < InheritedResources::Base
   def update
     @scheme = BusinessSupportScheme.find(params[:id])
     if @scheme.update_attributes(params[:business_support_scheme])
-      redirect_to 'index'
+      redirect_to :admin_business_support_schemes 
     else
       find_all_facets
       render 'edit'

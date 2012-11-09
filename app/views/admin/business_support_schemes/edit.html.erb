@@ -3,6 +3,8 @@
   <%= f.inputs do %>
     <%= f.input :title %>
     <%= f.input :business_support_identifier %>
+    <label for="business_support_scheme[priority]">Priority</label>
+    <%= f.select :priority, [["Low",0],["Normal",1],["High",2]] %>
     <h3>Business types</h3>
     <% @business_types.each do |business_type| -%>
       <label for="business_support_scheme[business_support_business_type_ids][]" class="checkbox inline">

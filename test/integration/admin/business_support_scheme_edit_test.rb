@@ -21,6 +21,8 @@ class BusinessSupportSchemeEditTest < ActionDispatch::IntegrationTest
     check "Wales"
     uncheck "Scotland"
     check "Agriculture"
+
+    select "High", :from => "business_support_scheme[priority]"
     
     click_on "Update Business Support"
 
@@ -28,5 +30,6 @@ class BusinessSupportSchemeEditTest < ActionDispatch::IntegrationTest
 
     assert_equal [@england, @wales], @bs.business_support_locations
     assert_equal [@agriculture, @manufacturing], @bs.business_support_sectors
+    assert_equal 2, @bs.priority
   end
 end

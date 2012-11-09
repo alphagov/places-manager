@@ -10,6 +10,7 @@ FactoryGirl.define do
   factory :business_support_scheme do
     title "EU Culture Programme"
     business_support_identifier "eu-culture-programme"
+    priority 1
   end
   factory :business_support_sector do
     name "Tourism and travel"

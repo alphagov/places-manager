@@ -5,7 +5,8 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
   setup do
     @scheme = FactoryGirl.create(:business_support_scheme, 
       title: "Tourism support grant. West Dunbartonshire", 
-      business_support_identifier: "tourism-support-grant-west-dunbartonshire")
+      business_support_identifier: "tourism-support-grant-west-dunbartonshire",
+      priority: 1)
   end
 
   test "should validate presence of title" do
@@ -33,6 +34,15 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
     another_scheme = BusinessSupportScheme.new(title: "Foo", 
       business_support_identifier: "tourism-support-grant-west-dunbartonshire")
     refute another_scheme.valid?, "should validate uniqueness of business_support_identifier."
+  end
+
+  test "should validate the priority value" do
+    scheme = BusinessSupportScheme.new(title: "Foo scheme", business_support_identifier: "1001", priority: nil)
+    refute scheme.valid?, "Priority should not be nil"
+    scheme.priority = 3
+    refute scheme.valid?, "Priority should be 0, 1 or 2"
+    scheme.priority = 2
+    assert scheme.valid?
   end
 
   test "should have and belong to many BusinessSupportBusinessTypes" do
