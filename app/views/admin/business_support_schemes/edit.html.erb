@@ -5,6 +5,7 @@
     <%= f.input :business_support_identifier %>
     <label for="business_support_scheme[priority]">Priority</label>
     <%= f.select :priority, [["Low",0],["Normal",1],["High",2]] %>
+
     <%= render partial: "facets", locals: { f: f,
                                             title: "Business types", 
                                             collection: @business_types, 
