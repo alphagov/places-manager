@@ -1,4 +1,4 @@
-require "govuk_content_models/html_validator"
+require "govspeak/html_validator"
 
 class DataSet
   include Mongoid::Document
@@ -38,7 +38,7 @@ class DataSet
   def process_data_file
     if @data_file
       data = @data_file.read.force_encoding('UTF-8')
-      if HtmlValidator.new(data).valid?
+      if Govspeak::HtmlValidator.new(data).valid?
         CSV.parse(data, headers: true) do |row|
           Place.create_from_hash(self, row)
         end

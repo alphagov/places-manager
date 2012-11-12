@@ -18,7 +18,6 @@ gem 'formtastic-bootstrap', git: 'https://github.com/cgunther/formtastic-bootstr
 gem 'jquery-rails'
 gem 'less-rails-bootstrap'
 
-gem 'govuk_content_models', '1.6.3'
 gem 'statsd-ruby', '1.0.0', :require => 'statsd'
 
 if ENV['BUNDLE_DEV']
@@ -26,6 +25,12 @@ if ENV['BUNDLE_DEV']
 else
   gem 'gds-sso', '2.1.0'
 end
+if ENV['GOVSPEAK_DEV']
+  gem 'govspeak', path: '../govspeak'
+else
+  gem 'govspeak', '1.2.0'
+end
+
 gem "faraday", "0.8.1" # Specifying to resolve Jenkins dependency resolution fail
 
 gem 'geogov', '0.0.9'
