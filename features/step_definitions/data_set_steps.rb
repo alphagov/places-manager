@@ -66,7 +66,7 @@ Then /^I should be on the page for the "(.*?)" service$/ do |name|
 end
 
 Then /^I should see an indication that my data set contained (\d+) items$/ do |count|
-  assert page.has_content?("containing #{count} places")
+  assert page.has_content?("#{count} places")
 end
 
 Then /^I should see that there are now two data sets$/ do
@@ -74,7 +74,7 @@ Then /^I should see that there are now two data sets$/ do
 end
 
 Then /^I should see that the second data set is active$/ do
-  assert page.has_content?("Currently serving version 2")
+  assert page.has_content?("Version 2 active")
 end
 
 Then /^there should still just be one data set$/ do

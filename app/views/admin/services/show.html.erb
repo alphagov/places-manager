@@ -4,6 +4,9 @@
 <p class="alert">There are no places associated with your last data set. This may well mean the imported data was in the wrong format.</p>
 <% end %>
 
+<% if @service.active_data_set %>
+  <h3>Version <%= @service.active_data_set_version %> active: <%= pluralize(@service.active_data_set.places.count, 'place', 'places') %>.</h3>
+<% end %>
 
   <ul class="nav nav-tabs">
     <li class="active"><a href="#current-data" data-toggle="tab">Current Data</a></li>
@@ -14,9 +17,7 @@
 
   <div class="tab-content">
     <div class="tab-pane active" id="current-data">
-      <div class="well">
-        <%= render '/admin/services/current' %>
-      </div>
+      <%= render '/admin/services/current' %>
     </div>
     <div class="tab-pane" id="metadata">
       <div class="well">
