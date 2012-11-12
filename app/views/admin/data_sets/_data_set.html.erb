@@ -16,13 +16,6 @@
 </div>
 
 <h4>Explore this data set</h4>
-<!-- <div class="sample-data">
-	<ul>
-	  <% data_set.places.limit(3).each do |place| %>
-	    <li><code><%= place %></code></li>
-	  <% end %>
-	</ul>
-</div> -->
 
 <% places = data_set.places.page(params[:page]).per(100) %>
 <%= paginate places %>
