@@ -40,4 +40,11 @@ class BusinessSupportScheme
     klass.any_in(slug: slugs.split(',')).map(&:id)  
   end
 
+  # TODO: This field originally stored a String identifier.
+  # This was later changed to a numerical one, it would benefit from Integer field conversion.
+  def self.next_identifier
+    schemes = self.all.sort{|a,b| a.business_support_identifier.to_i <=> b.business_support_identifier.to_i}
+    schemes.empty? ? 1 : schemes.last.business_support_identifier.to_i + 1
+  end
+
 end
