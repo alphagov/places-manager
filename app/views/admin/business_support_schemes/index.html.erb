@@ -8,6 +8,7 @@
       </h1>
 
       <div class="format-controls">
+        <%= link_to "New Business Support", new_admin_business_support_scheme_path, :class => 'btn btn-primary' %>
       </div>
     </div>
 
@@ -28,11 +29,13 @@
             <td><%= scheme.business_support_identifier %></td>
             <td><%= scheme.title %></td>
             <td><%= priority_label(scheme.priority) %></td>
-            <td><%= link_to 'Edit', edit_admin_business_support_scheme_path(scheme), :class => 'btn' %></p></td>
+            <td><%= link_to 'Edit', edit_admin_business_support_scheme_path(scheme), :class => 'btn btn-success' %></p></td>
           </tr> 
         <% end -%>  
         </tbody>
       </table>
+
+      <%= link_to "New Business Support", new_admin_business_support_scheme_path, :class => 'btn btn-primary' %>
 
     </div>
   </div>

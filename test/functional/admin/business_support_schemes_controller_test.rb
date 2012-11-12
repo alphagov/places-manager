@@ -22,9 +22,46 @@ class Admin::BusinessSupportSchemesControllerTest < ActionController::TestCase
       get :index
       schemes = assigns(:schemes)
       assert_equal BusinessSupportScheme.count, schemes.size 
-      assert_match "Wunderbiz", response.body
-      assert_match "Young business starter award", response.body
       assert_equal BusinessSupportScheme.asc(:title), schemes
+    end
+  end
+
+  test "GET to new" do
+    as_logged_in_user do
+      FactoryGirl.create(:business_support_scheme,
+                        title: "Superfoo award",
+                        business_support_identifier: "333",
+                        priority: 1)
+      get :new
+      refute_nil assigns(:scheme), "scheme should be initialized"
+      assert_equal "334", assigns(:scheme).business_support_identifier
+    end
+  end
+
+  test "POST to create" do
+    as_logged_in_user do
+      post :create, business_support_scheme: {
+        title: "Strategic advice for ice cream vendors",
+        business_support_identifier: "334",
+        priority: 2
+      }
+      bs = BusinessSupportScheme.last
+      assert_equal "Strategic advice for ice cream vendors", bs.title
+      assert_equal "334", bs.business_support_identifier
+      assert_equal 2, bs.priority
+      assert_equal 302, response.status
+    end
+  end
+
+  test "POST to create with bad parameters" do
+     as_logged_in_user do
+      post :create, business_support_scheme: {
+        title: "Wunderbiz",
+        business_support_identifier: "2",
+        priority: 3
+      }
+      refute assigns(:scheme).valid?, "this scheme should be invalid"
+      refute_equal BusinessSupportScheme.last, assigns(:scheme)
     end
   end
   

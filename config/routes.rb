@@ -5,7 +5,7 @@ Imminence::Application.routes.draw do
         post :activate, :on => :member
       end
     end
-    resources :business_support_schemes, :only => [:index, :edit, :update]
+    resources :business_support_schemes, :only => [:index, :new, :create, :edit, :update]
     root :to => 'services#index'
   end
 
