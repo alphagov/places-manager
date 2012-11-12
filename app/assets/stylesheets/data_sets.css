@@ -1,0 +1,15 @@
+li.data_set {
+  list-style: none;
+  // background: #fff;
+  // border: 1px solid #aaa;
+  // padding: 1em 2em;
+  min-height: 20em;
+  // margin-bottom: 1em;
+  // margin-left: 20px;
+}
+li.data_set .activate { float: right; margin-top: -2.5em; }
+
+form.formtastic .controls textarea {
+  color: #333;
+  width: auto;
+}

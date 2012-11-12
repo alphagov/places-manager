@@ -7,7 +7,9 @@ class DataSet
   embedded_in :service
   embeds_many :actions
 
-  field :version, :type => Integer, :default => 1
+  field :version,       type: Integer, :default => 1
+  field :change_notes,  type: String
+
   before_save :set_version, :on => :create
 
   def places
