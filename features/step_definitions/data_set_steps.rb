@@ -70,7 +70,7 @@ Then /^I should see an indication that my data set contained (\d+) items$/ do |c
 end
 
 Then /^I should see that there are now two data sets$/ do
-  assert page.has_content?("Version 2 uploaded at")
+  assert page.has_content?("Version 2")
 end
 
 Then /^I should see that the second data set is active$/ do
