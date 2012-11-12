@@ -20,5 +20,11 @@ class BusinessSupportSchemeIndexTest < ActionDispatch::IntegrationTest
     assert page.has_content?("Super finance triple bonus")
     assert page.has_content?("Young business starter award")
     assert page.has_content?("Wunderbiz")
+
+    assert page.has_content?("New Business Support")
+
+    click_on "New Business Support"
+
+    assert page.has_field?("Business support identifier", :with => "5")
   end
 end
