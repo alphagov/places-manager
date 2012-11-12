@@ -5,7 +5,7 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
   setup do
     @scheme = FactoryGirl.create(:business_support_scheme, 
       title: "Tourism support grant. West Dunbartonshire", 
-      business_support_identifier: "tourism-support-grant-west-dunbartonshire",
+      business_support_identifier: "99",
       priority: 1)
   end
 
@@ -32,7 +32,7 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
   
   test "should validate uniqueness of business_support_identifier" do
     another_scheme = BusinessSupportScheme.new(title: "Foo", 
-      business_support_identifier: "tourism-support-grant-west-dunbartonshire")
+      business_support_identifier: "99")
     refute another_scheme.valid?, "should validate uniqueness of business_support_identifier."
   end
 
@@ -91,5 +91,9 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
     @scheme.save!
     assert_equal 0, BusinessSupportScheme.for_relations(stages: "burn-out", sectors: "Agriculture").count
     assert_equal @scheme, BusinessSupportScheme.for_relations(stages: "burn-out", sectors: "agriculture,manufacturing").first
+  end
+
+  test "class method next_identifier" do
+    assert_equal 100, BusinessSupportScheme.next_identifier
   end
 end
