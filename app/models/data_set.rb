@@ -23,6 +23,17 @@ class DataSet
     Place.find_near(location, distance, limit, {service_slug: service.slug, data_set_version: version})
   end
 
+  def duplicate
+    duplicated_data_set = self.service.data_sets.create(:change_notes => "Created from Version #{self.version}")
+    self.places.each do |place|
+      duplicated_place = place.dup
+      duplicated_place.data_set_version = duplicated_data_set.version
+      duplicated_place.save
+    end
+
+    duplicated_data_set
+  end
+
   def set_version
     other_data_sets = service.data_sets.to_a - [self]
 

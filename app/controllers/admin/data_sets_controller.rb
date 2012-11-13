@@ -14,6 +14,12 @@ class Admin::DataSetsController < InheritedResources::Base
     create!
   end
 
+  def duplicate
+    duplicated_data_set = resource.duplicate
+    flash[:notice] = "Version #{duplicated_data_set.version} has been created."
+    redirect_to admin_service_data_set_path(@service, duplicated_data_set)
+  end
+
   def bad_encoding
     flash[:alert] = "Could not process CSV file because of the file encoding. Please check the format."
     redirect_to :back
