@@ -3,7 +3,7 @@ require "csv"
 class Admin::DataSetsController < InheritedResources::Base
   include Admin::AdminControllerMixin
 
-  actions :all, :except => [:show, :index]
+  actions :all, :except => :index
   belongs_to :service
   rescue_from CSV::MalformedCSVError, :with => :bad_csv
   rescue_from BSON::InvalidStringEncoding, :with => :bad_encoding
@@ -12,6 +12,12 @@ class Admin::DataSetsController < InheritedResources::Base
   def create
     prohibit_non_csv_uploads
     create!
+  end
+
+  def duplicate
+    duplicated_data_set = resource.duplicate
+    flash[:notice] = "Version #{duplicated_data_set.version} has been created."
+    redirect_to admin_service_data_set_path(@service, duplicated_data_set)
   end
 
   def bad_encoding

@@ -31,6 +31,10 @@ class Service
     @active_data_set ||= data_sets.detect { |ds| ds.version == self.active_data_set_version }
   end
 
+  def latest_data_set
+    data_sets.order(version: "desc").first
+  end
+
   def create_first_data_set
     unless self.persisted? or self.data_sets.any?
       self.data_sets << DataSet.new

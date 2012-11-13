@@ -1,0 +1,24 @@
+<h2>Viewing &ldquo;<%= @service.name %>&rdquo;
+  <% if @service.active_data_set %>
+    (Version <%= @service.active_data_set_version %> active: <%= pluralize(@service.active_data_set.places.count, 'place', 'places') %>)
+  <% end %>
+</h2>
+
+<ul class="breadcrumb">
+  <li><%= link_to "Services", admin_services_path %> <span class="divider">/</span></li>
+  <% if @place %>
+    <li><%= link_to @service.name, admin_service_path(@service) %> <span class="divider">/</span></li>
+    <li><%= link_to "Version #{@data_set.version}", admin_service_data_set_path(@service, @data_set) %> <span class="divider">/</span></li>
+    <li class="active">Edit</li>
+  <% elsif @data_set %>
+    <li><%= link_to @service.name, admin_service_path(@service) %> <span class="divider">/</span></li>
+    <li class="active">Version <%= @data_set.version %></li>
+  <% elsif @service %>
+    <li><%= @service.name %></li>
+  <% end %>
+</ul>
+
+<% if @service.data_sets.any? && @service.data_sets.last.places.empty? %>
+<p class="alert">There are no places associated with your last data set. This may well mean the imported data was in the wrong format.</p>
+<% end %>
+
