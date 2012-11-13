@@ -3,7 +3,7 @@ require "csv"
 class Admin::DataSetsController < InheritedResources::Base
   include Admin::AdminControllerMixin
 
-  actions :all, :except => [:show, :index]
+  actions :all, :except => :index
   belongs_to :service
   rescue_from CSV::MalformedCSVError, :with => :bad_csv
   rescue_from BSON::InvalidStringEncoding, :with => :bad_encoding

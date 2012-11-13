@@ -10,6 +10,9 @@ class DataSet
   field :version,       type: Integer, :default => 1
   field :change_notes,  type: String
 
+  validates_presence_of :version
+
+  default_scope order_by([:version, :asc])
   before_save :set_version, :on => :create
 
   def places
@@ -56,6 +59,10 @@ class DataSet
 
   def active?
     self.version == service.active_data_set_version
+  end
+
+  def latest_data_set?
+    self.id.to_s == service.latest_data_set.id.to_s
   end
 
   def activate!

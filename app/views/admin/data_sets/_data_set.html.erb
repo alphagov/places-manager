@@ -20,19 +20,29 @@
 <% places = data_set.places.page(params[:page]).per(100) %>
 <%= paginate places %>
 
-<table class="table table-striped table-condensed">
+<table class="table table-striped table-condensed table-places">
   <thead>
     <tr>
       <th>Name</th>
       <th>Address</th>
       <th>URL</th>
+      <th>Location</th
+      <% if data_set.latest_data_set? and !data_set.active? %>
+        <th></th>
+      <% end %>
     </tr>
   </thead>
   <% places.each do |place| %>
     <tr>
-      <td><%= place.name %></td>
-      <td><%= place.full_address %></td>
-      <td><%= place.url || "<em>&mdash;</em>".html_safe %></td>
+      <td><%= truncate(place.name, :length => 30) || "<em>&mdash;</em>".html_safe %></td>
+      <td><%= truncate(place.full_address, :length => 30) || "<em>&mdash;</em>".html_safe %></td>
+      <td><%= truncate(place.url, :length => 40) || "<em>&mdash;</em>".html_safe %></td>
+      <td><% if place.lat and place.lng %>
+        <%= [ place.lat, place.lng ].map {|a| a.round(4) }.join(', ') %>
+        <% else %><em>&mdash;</em><% end %></td>
+      <% if data_set.latest_data_set? and !data_set.active? %>
+        <td><%= link_to "edit", edit_admin_service_data_set_place_path(@service, data_set, place) %></td>
+      <% end %>
     </tr>
   <% end %>
 </table>
