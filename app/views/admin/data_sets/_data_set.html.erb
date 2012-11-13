@@ -1,6 +1,6 @@
 <div class="well">
-  <h3>Version <%= data_set.version %>
-    <% if data_set.active? %><span class="label label-success">Active</span><% else %><span class="label">Inactive</span><% end %></h3>
+  <h4>Version <%= data_set.version %>
+    <% if data_set.active? %><span class="label label-success">Active</span><% else %><span class="label">Inactive</span><% end %></h4>
 
   <% unless data_set.active? %>
   	<%= button_to 'Activate', activate_admin_service_data_set_path(@service, data_set), :class=> 'btn btn-primary activate' %>

@@ -2,7 +2,14 @@ li.data_set {
   list-style: none;
   min-height: 20em;
 }
-li.data_set .activate { float: right; margin-top: -2.5em; }
+li.data_set .actions {
+  float: right;
+  margin-top: -2.5em;
+  text-align: right;
+}
+li.data_set .actions form { margin-bottom: 5px; }
+
+table.table-places td em { color: #aaa; }
 
 form.formtastic .controls textarea {
   color: #333;
