@@ -15,7 +15,7 @@ class Service
   after_save :process_data_file
 
   def process_data_file
-    data_sets.last.process_data_file
+    latest_data_set.process_data_file
   end
 
   def reconcile_place_locations

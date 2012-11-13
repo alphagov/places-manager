@@ -1,7 +1,7 @@
 class CannotEditPlaceDetailsUnlessNewestInactiveDataset < ActiveModel::Validator
   def validate(record)
     # unless record.changes.keys =~ ["location", "geocode_error"] or record.changes.keys =~ ["location"]
-      unless record.data_set.latest_data_set? and !record.data_set.active?
+      unless !record.data_set or (record.data_set.latest_data_set? and !record.data_set.active?)
         record.errors[:base] << ("Can only edit the most recent inactive dataset.")
       end
     # end
@@ -77,7 +77,7 @@ class Place
   validates_presence_of :data_set_version
   validates_presence_of :source_address
   validates_presence_of :postcode
-  validates_with CannotEditPlaceDetailsUnlessNewestInactiveDataset
+  validates_with CannotEditPlaceDetailsUnlessNewestInactiveDataset, :on => :update
 
   index [[:location, Mongo::GEO2D], [:service_slug, Mongo::ASCENDING], [:data_set_version, Mongo::ASCENDING]], background: true
   index [[:service_slug, Mongo::ASCENDING], [:data_set_version, Mongo::ASCENDING]]
@@ -213,7 +213,11 @@ class Place
   end
 
   def build_source_address
-    self.source_address = [address1, address2, town, postcode].compact.join(', ')
+    new_source_address = [address1, address2, town, postcode].compact.join(', ')
+
+    if self.new_record? and self.source_address.blank?
+      self.source_address = new_source_address
+    end
   end
 
   def reconcile_location
