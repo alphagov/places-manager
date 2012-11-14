@@ -1,10 +1,15 @@
+<% if @service.data_sets.any? %>
 <div class="well well-small">
   <h4>Create new version</h4>
 
-  <p>Duplicates the latest data set so that the data can be edited. When changes are complete, activate the new version and it will be updated.</p>
+  <p>Creates a new version of the data set from an existing version, so that places can be edited.</p>
 
-  <%= link_to "Create new version", duplicate_admin_service_data_set_path(@service, @service.active_data_set), :method => "POST", :class => 'btn btn-primary' %>
+  <%= link_to "Duplicate most recent data set (Version #{@service.latest_data_set.version})", duplicate_admin_service_data_set_path(@service, @service.latest_data_set), :method => "POST", :class => 'btn btn-primary' %>
+  <% if @service.active_data_set and @service.active_data_set != @service.latest_data_set %>
+    <%= link_to "Duplicate currently active data set (Version #{@service.active_data_set.version})", duplicate_admin_service_data_set_path(@service, @service.active_data_set), :method => "POST", :class => 'btn' %>
+  <% end %>
 </div>
+<% end %>
 
 <div class="well well-small">
   <h4>Upload a new data set</h4>
