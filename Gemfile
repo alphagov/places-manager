@@ -54,5 +54,6 @@ group :test do
   gem 'ci_reporter', '1.7.1'
   gem 'minitest', '3.3.0'
   gem 'launchy'
+  gem 'shoulda'
   gem 'mocha', '0.12.3', require: false
 end
