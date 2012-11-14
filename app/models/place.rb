@@ -1,10 +1,10 @@
 class CannotEditPlaceDetailsUnlessNewestInactiveDataset < ActiveModel::Validator
   def validate(record)
-    # unless record.changes.keys =~ ["location", "geocode_error"] or record.changes.keys =~ ["location"]
+    if record.changes.except("location", "geocode_error").any?
       unless !record.data_set or (record.data_set.latest_data_set? and !record.data_set.active?)
         record.errors[:base] << ("Can only edit the most recent inactive dataset.")
       end
-    # end
+    end
   end
 end
 
