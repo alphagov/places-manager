@@ -34,7 +34,6 @@ class Admin::BusinessSupportSchemesControllerTest < ActionController::TestCase
                         priority: 1)
       get :new
       refute_nil assigns(:scheme), "scheme should be initialized"
-      assert_equal "334", assigns(:scheme).business_support_identifier
     end
   end
 
