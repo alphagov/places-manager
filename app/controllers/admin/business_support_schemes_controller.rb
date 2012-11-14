@@ -10,8 +10,7 @@ class Admin::BusinessSupportSchemesController < InheritedResources::Base
   end
 
   def new
-    @scheme = BusinessSupportScheme.new(
-      business_support_identifier: BusinessSupportScheme.next_identifier)
+    @scheme = BusinessSupportScheme.new
   end
 
   def create
