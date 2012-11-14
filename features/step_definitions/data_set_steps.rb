@@ -2,7 +2,7 @@ Given /^I have previously created the "(.*?)" service$/ do |name|
   @service = create_service(name)
 end
 
-Given /^I have uploaded a second data set$/ do
+Given /^I have uploaded a (second|third) data set$/ do |ordinal|
   upload_extra_data_set(@service)
 end
 
@@ -54,6 +54,14 @@ end
 
 When /^I go to the page for the latest data set for the "(.*?)" service$/ do |name|
   visit path_for_latest_data_set_for_service(name)
+end
+
+When /^I go to the page for the active data set for the "(.*?)" service$/ do |name|
+  visit path_for_active_data_set_for_service(name)
+end
+
+When /^I go to the page for the second data set for the "(.*?)" service$/ do |name|
+  visit path_for_data_set_version_for_service(name, 2)
 end
 
 When /^I click "Edit" on a record$/ do
@@ -119,5 +127,11 @@ end
 Then /^there should be a place named "(.*?)"$/ do |name|
   within "table.table-places" do
     assert page.has_content?(name)
+  end
+end
+
+Then /^I should not see an "edit" action for a record$/ do
+  within "table.table-places" do
+    assert ! page.has_link?("edit")
   end
 end

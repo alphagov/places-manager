@@ -10,6 +10,18 @@ module ServiceHelper
     admin_service_data_set_path(service, data_set)
   end
 
+  def path_for_active_data_set_for_service(name)
+    service = Service.where(name: name).first
+    data_set = service.active_data_set
+    admin_service_data_set_path(service, data_set)
+  end
+
+  def path_for_data_set_version_for_service(name, version)
+    service = Service.where(name: name).first
+    data_set = service.data_sets(version: version).first
+    admin_service_data_set_path(service, data_set)
+  end
+
   def csv_path_for_data(name)
     File.expand_path('../../support/data/' + name.parameterize + '.csv', __FILE__)
   end

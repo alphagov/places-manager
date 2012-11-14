@@ -62,6 +62,22 @@ Feature: Managing data sets
     Then I should be on the page for the latest data set for the "Register Offices" service
       And there should be a place named "Aviation House"
 
+  Scenario: Attempting to edit an active data set
+    Given I have previously created the "Register Offices" service
+
+    When I go to the page for the active data set for the "Register Offices" service
+
+    Then I should not see an "edit" action for a record
+
+  Scenario: Attempting to edit an inactive data set which is not the latest version
+    Given I have previously created the "Register Offices" service
+      And I have uploaded a second data set
+      And I have uploaded a third data set
+
+    When I go to the page for the second data set for the "Register Offices" service
+
+    Then I should not see an "edit" action for a record
+
   Scenario: Creating a new service where the data doesn't import
     When I go to the new service page
       And I fill in the form to create the "Register Offices" service with a bad CSV
