@@ -18,7 +18,7 @@ class BusinessSupportScheme
   validates_inclusion_of :priority, in: [0,1,2]
 
   scope :for_relations, lambda { |relations|
-    where({ "$and" => schemes_criteria(relations) }).asc(:title)
+    where({ "$and" => schemes_criteria(relations) }).order_by([:priority, :desc], [:title, :asc])
   }
 
   def self.schemes_criteria(relations)

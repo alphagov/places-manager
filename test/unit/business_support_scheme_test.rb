@@ -82,15 +82,26 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
     assert_equal "Loan", @scheme.business_support_types.last.name 
   end
    
-  test "should be scoped by relations" do
-    @scheme.business_support_stages << FactoryGirl.create(:business_support_stage, name: "Burn out", slug: "burn-out")
+  test "should be scoped by relations and ordered by priority then title" do
+    @another_scheme = FactoryGirl.create(:business_support_scheme, title: "Wunderscheme", 
+                                         business_support_identifier: "123",
+                                         priority: 2)
+    @start_up = FactoryGirl.create(:business_support_stage, name: "Start up", slug: "start-up")
+    @scheme.business_support_stages << @start_up
     @scheme.save!
-    assert_equal @scheme, BusinessSupportScheme.for_relations(stages: "burn-out").first
-    assert_equal @scheme, BusinessSupportScheme.for_relations(stages: "burn-out", sectors: "manufacturing").first
-    @scheme.business_support_sectors << FactoryGirl.create(:business_support_sector, name: "Manufacturing", slug: "manufacturing")
+    @another_scheme.business_support_stages << @start_up
+    @another_scheme.save!
+    assert_equal @another_scheme, BusinessSupportScheme.for_relations(stages: "start-up").first
+    assert_equal @scheme, BusinessSupportScheme.for_relations(stages: "start-up").second
+    assert_equal @another_scheme, BusinessSupportScheme.for_relations(stages: "start-up", sectors: "manufacturing").first
+    @manufacturing = FactoryGirl.create(:business_support_sector, name: "Manufacturing", slug: "manufacturing")
+    @scheme.business_support_sectors << @manufacturing
+    @another_scheme.business_support_sectors << @manufacturing
     @scheme.save!
-    assert_equal 0, BusinessSupportScheme.for_relations(stages: "burn-out", sectors: "Agriculture").count
-    assert_equal @scheme, BusinessSupportScheme.for_relations(stages: "burn-out", sectors: "agriculture,manufacturing").first
+    @another_scheme.save!
+    assert_equal 0, BusinessSupportScheme.for_relations(stages: "start-up", sectors: "Agriculture").count
+    assert_equal @another_scheme, BusinessSupportScheme.for_relations(stages: "start-up", sectors: "agriculture,manufacturing").first
+    assert_equal @scheme, BusinessSupportScheme.for_relations(stages: "start-up", sectors: "agriculture,manufacturing").second
   end
 
   test "class method next_identifier" do
