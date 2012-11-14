@@ -17,6 +17,8 @@ class BusinessSupportScheme
   validates_presence_of :priority
   validates_inclusion_of :priority, in: [0,1,2]
 
+  before_validation :populate_business_support_identifier, :on => :create 
+
   scope :for_relations, lambda { |relations|
     where({ "$and" => schemes_criteria(relations) }).order_by([:priority, :desc], [:title, :asc])
   }
@@ -40,10 +42,16 @@ class BusinessSupportScheme
     klass.any_in(slug: slugs.split(',')).map(&:id)  
   end
 
+  def populate_business_support_identifier
+    self.business_support_identifier ||= self.class.next_identifier
+  end
+
   # TODO: This field originally stored a String identifier.
   # This was later changed to a numerical one, it would benefit from Integer field conversion.
   def self.next_identifier
-    schemes = self.all.sort{|a,b| a.business_support_identifier.to_i <=> b.business_support_identifier.to_i}
+    schemes = BusinessSupportScheme.all.sort do |a,b| 
+      a.business_support_identifier.to_i <=> b.business_support_identifier.to_i
+    end
     schemes.empty? ? 1 : schemes.last.business_support_identifier.to_i + 1
   end
 

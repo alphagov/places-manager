@@ -16,13 +16,6 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
     assert scheme.valid?, "should validate presence of title."
   end
   
-  test "should validate presence of business_support_identifier" do
-    scheme = BusinessSupportScheme.new(title: "Foo scheme")
-    refute scheme.valid?, "should validate presence of business_support_identifier."
-    scheme.business_support_identifier = "foo-scheme"
-    assert scheme.valid?, "should validate presence of business_support_identifier."
-  end
-  
   test "should validate uniqueness of title" do
     another_scheme = BusinessSupportScheme.new(
       title: "Tourism support grant. West Dunbartonshire", 
@@ -104,7 +97,19 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
     assert_equal @scheme, BusinessSupportScheme.for_relations(stages: "start-up", sectors: "agriculture,manufacturing").second
   end
 
-  test "class method next_identifier" do
+  test "before validation on create callback" do
+    bs = BusinessSupportScheme.new(title: "Brand new scheme")
+    bs.save
+    assert_equal "100", bs.business_support_identifier
+  end
+
+  test "before validation on create callback when business_support_identifier exists" do
+    bs = BusinessSupportScheme.new(title: "Brand new scheme", business_support_identifier: "111")
+    bs.save
+    assert_equal "111", bs.business_support_identifier
+  end
+  
+  test "next_identifier" do
     assert_equal 100, BusinessSupportScheme.next_identifier
   end
 end
