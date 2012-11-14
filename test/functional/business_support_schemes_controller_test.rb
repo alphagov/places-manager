@@ -12,13 +12,13 @@ class BusinessSupportSchemesControllerTest < ActionController::TestCase
     private_company = FactoryGirl.create(:business_support_business_type, name: "Private Company", slug: "private-company")
     charity = FactoryGirl.create(:business_support_business_type, name: "Charity", slug: "charity")
     eu_culture_programme = FactoryGirl.create(:business_support_scheme, title: "EU Culture Programme",
-      business_support_identifier: "eu-culture-programme")
+      business_support_identifier: "eu-culture-programme", priority: 0)
     urban_dev_grant = FactoryGirl.create(:business_support_scheme, title: "Urban Development Grant",
-      business_support_identifier: "urban-development-grant")
+      business_support_identifier: "urban-development-grant", priority: 2)
     business_mentoring = FactoryGirl.create(:business_support_scheme, title: "Business Mentoring",
-      business_support_identifier: "business-mentoring")
+      business_support_identifier: "business-mentoring", priority: 1)
     sectorless_scheme = FactoryGirl.create(:business_support_scheme, title: "I have no sectors",
-      business_support_identifier: "i-have-no-sectors")
+      business_support_identifier: "i-have-no-sectors", priority: 1)
     start_up = FactoryGirl.create(:business_support_stage, name: "Start-up", slug: "start-up")
     grow_sustain = FactoryGirl.create(:business_support_stage, name: "Grow and sustain", slug: "grow-and-sustain")
     
@@ -75,6 +75,7 @@ class BusinessSupportSchemesControllerTest < ActionController::TestCase
       types: 'loan'
     results = JSON.parse(response.body)['results']
     assert_equal "Urban Development Grant", results.first['title']
+    assert_equal 2, results.first['priority']
 
     get :index, format: :json, sectors: 'agriculture',
       business_types: 'charity', stages: 'grow-and-sustain', locations: 'scotland',
@@ -90,7 +91,9 @@ class BusinessSupportSchemesControllerTest < ActionController::TestCase
       types: 'award'
     results = JSON.parse(response.body)['results']
     assert_equal "Business Mentoring", results.first['title']
+    assert_equal 1, results.first['priority']
     assert_equal "EU Culture Programme", results.second['title']
+    assert_equal 0, results.second['priority']
   end
   
   test "GET to index with multiple params for location and business type" do
@@ -99,9 +102,9 @@ class BusinessSupportSchemesControllerTest < ActionController::TestCase
     json = JSON.parse(response.body)
     results = json['results']
     assert_equal 4, json['total'].to_i
-    assert_equal "Business Mentoring", results.first['title']
-    assert_equal "EU Culture Programme", results.second['title']
+    assert_equal "Urban Development Grant", results.first['title']
+    assert_equal "Business Mentoring", results.second['title']
     assert_equal "I have no sectors", results.third['title']
-    assert_equal "Urban Development Grant", results.fourth['title']
+    assert_equal "EU Culture Programme", results.fourth['title']
   end
 end

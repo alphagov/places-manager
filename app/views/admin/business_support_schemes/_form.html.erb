@@ -1,0 +1,33 @@
+  <%= f.inputs do %>
+    <%= f.input :title %>
+    <% if params[:action] == 'edit' %>
+      <%= f.input :business_support_identifier %>
+    <% end %>
+    <label for="business_support_scheme[priority]">Priority</label>
+    <%= f.select :priority, [["Low",0],["Normal",1],["High",2]] %>
+
+    <%= render partial: "facets", locals: { f: f,
+                                            title: "Business types", 
+                                            collection: @business_types, 
+                                            model_collection: "business_support_business_type_ids" } %>
+  
+    <%= render partial: "facets", locals: { f: f,
+                                            title: "Locations", 
+                                            collection: @locations, 
+                                            model_collection: "business_support_location_ids" } %>
+
+    <%= render partial: "facets", locals: { f: f,
+                                            title: "Sectors", 
+                                            collection: @sectors, 
+                                            model_collection: "business_support_sector_ids" } %>
+                                            
+    <%= render partial: "facets", locals: { f: f,
+                                            title: "Stages", 
+                                            collection: @stages, 
+                                            model_collection: "business_support_stage_ids" } %>
+
+    <%= render partial: "facets", locals: { f: f,
+                                            title: "Support types", 
+                                            collection: @types, 
+                                            model_collection: "business_support_type_ids" } %>
+  <% end %>

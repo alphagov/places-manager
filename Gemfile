@@ -18,7 +18,7 @@ gem 'formtastic-bootstrap', git: 'https://github.com/cgunther/formtastic-bootstr
 gem 'jquery-rails'
 gem 'less-rails-bootstrap'
 
-gem 'govuk_content_models', '1.6.3'
+gem 'govuk_content_models', '2.3.0'
 gem 'statsd-ruby', '1.0.0', :require => 'statsd'
 
 if ENV['BUNDLE_DEV']
@@ -29,6 +29,8 @@ end
 gem "faraday", "0.8.1" # Specifying to resolve Jenkins dependency resolution fail
 
 gem 'geogov', '0.0.9'
+gem 'govspeak', '~> 1.2'
+
 gem 'inherited_resources'
 gem 'lockfile'
 gem 'whenever'
@@ -51,4 +53,5 @@ group :test do
   gem 'minitest', '3.3.0'
   gem 'launchy'
   gem 'mocha', '0.12.3', require: false
+  gem 'debugger'
 end

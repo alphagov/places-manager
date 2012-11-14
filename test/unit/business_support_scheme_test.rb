@@ -5,7 +5,8 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
   setup do
     @scheme = FactoryGirl.create(:business_support_scheme, 
       title: "Tourism support grant. West Dunbartonshire", 
-      business_support_identifier: "tourism-support-grant-west-dunbartonshire")
+      business_support_identifier: "99",
+      priority: 1)
   end
 
   test "should validate presence of title" do
@@ -13,13 +14,6 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
     refute scheme.valid?, "should validate presence of title."
     scheme.title = "Foo scheme"
     assert scheme.valid?, "should validate presence of title."
-  end
-  
-  test "should validate presence of business_support_identifier" do
-    scheme = BusinessSupportScheme.new(title: "Foo scheme")
-    refute scheme.valid?, "should validate presence of business_support_identifier."
-    scheme.business_support_identifier = "foo-scheme"
-    assert scheme.valid?, "should validate presence of business_support_identifier."
   end
   
   test "should validate uniqueness of title" do
@@ -31,8 +25,17 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
   
   test "should validate uniqueness of business_support_identifier" do
     another_scheme = BusinessSupportScheme.new(title: "Foo", 
-      business_support_identifier: "tourism-support-grant-west-dunbartonshire")
+      business_support_identifier: "99")
     refute another_scheme.valid?, "should validate uniqueness of business_support_identifier."
+  end
+
+  test "should validate the priority value" do
+    scheme = BusinessSupportScheme.new(title: "Foo scheme", business_support_identifier: "1001", priority: nil)
+    refute scheme.valid?, "Priority should not be nil"
+    scheme.priority = 3
+    refute scheme.valid?, "Priority should be 0, 1 or 2"
+    scheme.priority = 2
+    assert scheme.valid?
   end
 
   test "should have and belong to many BusinessSupportBusinessTypes" do
@@ -72,14 +75,41 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
     assert_equal "Loan", @scheme.business_support_types.last.name 
   end
    
-  test "should be scoped by relations" do
-    @scheme.business_support_stages << FactoryGirl.create(:business_support_stage, name: "Burn out", slug: "burn-out")
+  test "should be scoped by relations and ordered by priority then title" do
+    @another_scheme = FactoryGirl.create(:business_support_scheme, title: "Wunderscheme", 
+                                         business_support_identifier: "123",
+                                         priority: 2)
+    @start_up = FactoryGirl.create(:business_support_stage, name: "Start up", slug: "start-up")
+    @scheme.business_support_stages << @start_up
     @scheme.save!
-    assert_equal @scheme, BusinessSupportScheme.for_relations(stages: "burn-out").first
-    assert_equal @scheme, BusinessSupportScheme.for_relations(stages: "burn-out", sectors: "manufacturing").first
-    @scheme.business_support_sectors << FactoryGirl.create(:business_support_sector, name: "Manufacturing", slug: "manufacturing")
+    @another_scheme.business_support_stages << @start_up
+    @another_scheme.save!
+    assert_equal @another_scheme, BusinessSupportScheme.for_relations(stages: "start-up").first
+    assert_equal @scheme, BusinessSupportScheme.for_relations(stages: "start-up").second
+    assert_equal @another_scheme, BusinessSupportScheme.for_relations(stages: "start-up", sectors: "manufacturing").first
+    @manufacturing = FactoryGirl.create(:business_support_sector, name: "Manufacturing", slug: "manufacturing")
+    @scheme.business_support_sectors << @manufacturing
+    @another_scheme.business_support_sectors << @manufacturing
     @scheme.save!
-    assert_equal 0, BusinessSupportScheme.for_relations(stages: "burn-out", sectors: "Agriculture").count
-    assert_equal @scheme, BusinessSupportScheme.for_relations(stages: "burn-out", sectors: "agriculture,manufacturing").first
+    @another_scheme.save!
+    assert_equal 0, BusinessSupportScheme.for_relations(stages: "start-up", sectors: "Agriculture").count
+    assert_equal @another_scheme, BusinessSupportScheme.for_relations(stages: "start-up", sectors: "agriculture,manufacturing").first
+    assert_equal @scheme, BusinessSupportScheme.for_relations(stages: "start-up", sectors: "agriculture,manufacturing").second
+  end
+
+  test "before validation on create callback" do
+    bs = BusinessSupportScheme.new(title: "Brand new scheme")
+    bs.save
+    assert_equal "100", bs.business_support_identifier
+  end
+
+  test "before validation on create callback when business_support_identifier exists" do
+    bs = BusinessSupportScheme.new(title: "Brand new scheme", business_support_identifier: "111")
+    bs.save
+    assert_equal "111", bs.business_support_identifier
+  end
+  
+  test "next_identifier" do
+    assert_equal 100, BusinessSupportScheme.next_identifier
   end
 end
