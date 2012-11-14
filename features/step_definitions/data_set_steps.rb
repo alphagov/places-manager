@@ -29,7 +29,7 @@ When /^I upload a new data set with a PNG claiming to be a CSV$/ do
 end
 
 When /^I visit the history tab$/ do
-  click_link 'History'
+  click_link 'Version history'
 end
 
 When /^I click "Activate"$/ do
