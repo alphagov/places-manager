@@ -1,0 +1,34 @@
+<%= render :partial => 'admin/services/overview' %>
+
+<%= semantic_form_for [:admin, @service, @data_set, @place] do |f| %>
+
+  <%= f.semantic_errors :source_address, :class => "alert alert-error" %>
+
+  <%= f.input :name, :input_html => { :size => 60, :class => 'input-xxlarge' } %>
+
+  <%= f.inputs "Address" do %>
+    <%= f.input :address1, :label => "Address 1" %>
+    <%= f.input :address2, :label => "Address 2" %>
+    <%= f.input :town %>
+    <%= f.input :postcode %>
+  <% end %>
+
+  <%= f.inputs "Contact Details" do %>
+    <%= f.input :url, :label => "Website", :input_html => { :class => 'input-xxlarge' } %>
+    <%= f.input :email, :input_html => { :class => 'input-xxlarge' } %>
+    <%= f.input :phone %>
+    <%= f.input :fax %>
+    <%= f.input :text_phone %>
+  <% end %>
+
+  <%= f.inputs "Access Notes" do %>
+    <%= f.input :access_notes, :as => :text, :input_html => { :rows => 3 } %>
+    <%= f.input :general_notes, :as => :text, :input_html => { :rows => 3 } %>
+  <% end %>
+
+  <%= f.actions do %>
+    <%= f.action :submit, :as => :button, :input_html => { :class => "btn btn-primary" } %>
+    <%= f.action :cancel %>
+  <% end %>
+
+<% end %>

@@ -9,7 +9,7 @@
   <% if @place %>
     <li><%= link_to @service.name, admin_service_path(@service) %> <span class="divider">/</span></li>
     <li><%= link_to "Version #{@data_set.version}", admin_service_data_set_path(@service, @data_set) %> <span class="divider">/</span></li>
-    <li class="active">Edit</li>
+    <li class="active"><% if @place.new_record? %>New<% else %>Edit<% end %></li>
   <% elsif @data_set %>
     <li><%= link_to @service.name, admin_service_path(@service) %> <span class="divider">/</span></li>
     <li class="active">Version <%= @data_set.version %></li>
