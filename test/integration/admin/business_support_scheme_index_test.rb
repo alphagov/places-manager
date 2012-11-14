@@ -25,6 +25,7 @@ class BusinessSupportSchemeIndexTest < ActionDispatch::IntegrationTest
 
     click_on "New Business Support"
 
-    assert page.has_field?("Business support identifier", :with => "5")
+    assert page.has_field?("Title")
+    assert !page.has_field?("Business support identifier")
   end
 end

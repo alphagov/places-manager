@@ -1,6 +1,8 @@
   <%= f.inputs do %>
     <%= f.input :title %>
-    <%= f.input :business_support_identifier %>
+    <% if params[:action] == 'edit' %>
+      <%= f.input :business_support_identifier %>
+    <% end %>
     <label for="business_support_scheme[priority]">Priority</label>
     <%= f.select :priority, [["Low",0],["Normal",1],["High",2]] %>
 

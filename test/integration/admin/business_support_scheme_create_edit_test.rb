@@ -18,9 +18,8 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
   end
 
   test "create a business support scheme" do
+    
     visit "/admin/business_support_schemes/new"
-
-    assert page.has_field?("Business support identifier", :with => "334")
 
     fill_in "Title", :with => "Wunderbiz 2012 superfunding"
 
@@ -52,8 +51,11 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
   end
 
   test "associating facets with a scheme" do
+    
     visit "/admin/business_support_schemes/#{@bs._id.to_s}/edit"
 
+    assert page.has_field?("Business support identifier", :with => "333")
+    
     check "England"
     check "Wales"
     uncheck "Scotland"
