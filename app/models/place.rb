@@ -1,3 +1,13 @@
+class CannotEditPlaceDetailsUnlessNewestInactiveDataset < ActiveModel::Validator
+  def validate(record)
+    if record.changes.except("location", "geocode_error").any?
+      unless !record.data_set or record.can_edit?
+        record.errors[:base] << ("Can only edit the most recent inactive dataset.")
+      end
+    end
+  end
+end
+
 class Place
   include Mongoid::Document
 
@@ -42,6 +52,7 @@ class Place
   scope :needs_geocoding, where(:location => nil, :geocode_error.exists => false)
   scope :with_geocoding_errors, where(:geocode_error.exists => true)
   scope :geocoded, where(:location.size => 2)
+  default_scope order_by([:name,:asc])
 
   field :service_slug,   :type => String
   field :data_set_version, :type => Integer
@@ -66,11 +77,13 @@ class Place
   validates_presence_of :data_set_version
   validates_presence_of :source_address
   validates_presence_of :postcode
+  validates_with CannotEditPlaceDetailsUnlessNewestInactiveDataset, :on => :update
 
   index [[:location, Mongo::GEO2D], [:service_slug, Mongo::ASCENDING], [:data_set_version, Mongo::ASCENDING]], background: true
   index [[:service_slug, Mongo::ASCENDING], [:data_set_version, Mongo::ASCENDING]]
 
   attr_accessor :dis
+  before_validation :build_source_address
   before_save :reconcile_location
 
   def data_set
@@ -196,6 +209,18 @@ class Place
       location = Point.new(longitude: value, latitude: location.latitude)
     else
       @temp_lng = value
+    end
+  end
+
+  def can_edit?
+    data_set.latest_data_set? and !data_set.active?
+  end
+
+  def build_source_address
+    new_source_address = [address1, address2, town, postcode].compact.join(', ')
+
+    if self.new_record? and self.source_address.blank?
+      self.source_address = new_source_address
     end
   end
 

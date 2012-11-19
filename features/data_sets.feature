@@ -18,7 +18,7 @@ Feature: Managing data sets
     When I go to the page for the "Register Offices" service
       And I upload a new data set
 
-    Then I should be on the page for the "Register Offices" service
+    Then I should be on the page for the latest data set for the "Register Offices" service
       And I should see that there are now two data sets
 
   Scenario: Uploading a new data set with a mis-labelled file
@@ -35,9 +35,48 @@ Feature: Managing data sets
       And I have uploaded a second data set
 
     When I go to the page for the "Register Offices" service
+      And I visit the history tab
       And I click "Activate"
 
     Then I should see that the second data set is active
+
+  Scenario: Duplicating an existing data set
+    Given I have previously created the "Register Offices" service
+      And I have uploaded a second data set
+
+    When I go to the page for the "Register Offices" service
+      And I visit the history tab
+      And I click "Duplicate"
+
+    Then I should be on the page for the latest data set for the "Register Offices" service
+      And I should see that there are now three data sets
+
+  Scenario: Editing an inactive data set
+    Given I have previously created the "Register Offices" service
+      And I have uploaded a second data set
+
+    When I go to the page for the latest data set for the "Register Offices" service
+      And I click "Edit" on a record
+      And I update the name to be "Aviation House"
+
+    Then I should be on the page for the latest data set for the "Register Offices" service
+      And there should be a place named "Aviation House"
+
+  Scenario: Attempting to edit an active data set
+    Given I have previously created the "Register Offices" service
+
+    When I go to the page for the active data set for the "Register Offices" service
+
+    Then I should not see an "edit" action for a record
+
+  Scenario: Attempting to edit an inactive data set which is not the latest version
+    Given I have previously created the "Register Offices" service
+      And I have uploaded a second data set
+      And I have uploaded a third data set
+
+    When I go to the page for the second data set for the "Register Offices" service
+
+    Then I should not see an "edit" action for a record
 
   Scenario: Creating a new service where the data doesn't import
     When I go to the new service page

@@ -1,22 +1,15 @@
-<h2>Viewing &ldquo;<%= @service.name %>&rdquo;</h2>
-
-<% if @service.data_sets.any? && @service.data_sets.last.places.empty? %>
-<p class="alert">There are no places associated with your last data set. This may well mean the imported data was in the wrong format.</p>
-<% end %>
-
+<%= render :partial => 'overview' %>
 
   <ul class="nav nav-tabs">
-    <li class="active"><a href="#current-data" data-toggle="tab">Current Data</a></li>
-    <li><a href="#metadata" data-toggle="tab">About the Service</a></li>
-    <li><a href="#history" data-toggle="tab">History</a></li>
-    <li><a href="#new-data" data-toggle="tab">Load New Data Set</a></li>
+    <li class="active"><a href="#current-data" data-toggle="tab">Active data set</a></li>
+    <li><a href="#metadata" data-toggle="tab">Service details</a></li>
+    <li><a href="#history" data-toggle="tab">Version history</a></li>
+    <li><a href="#new-data" data-toggle="tab">Load new data set</a></li>
   </ul>
 
   <div class="tab-content">
     <div class="tab-pane active" id="current-data">
-      <div class="well">
-        <%= render '/admin/services/current' %>
-      </div>
+      <%= render '/admin/services/current' %>
     </div>
     <div class="tab-pane" id="metadata">
       <div class="well">
@@ -24,14 +17,10 @@
       </div>
     </div>
     <div class="tab-pane" id="history">
-      <div class="well">
-  	    <%= render '/admin/services/history' %>
-      </div>
+	    <%= render '/admin/services/history' %>
     </div>
     <div class="tab-pane" id="new-data">
-      <div class="well">
-        <%= render '/admin/services/new_data' %>
-      </div>
+      <%= render '/admin/services/new_data' %>
     </div>
   </div>
 

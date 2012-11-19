@@ -1,4 +1,4 @@
-require "govuk_content_models/html_validator"
+require "govspeak/html_validator"
 
 class DataSet
   include Mongoid::Document
@@ -7,7 +7,12 @@ class DataSet
   embedded_in :service
   embeds_many :actions
 
-  field :version, :type => Integer, :default => 1
+  field :version,       type: Integer, :default => 1
+  field :change_notes,  type: String
+
+  validates_presence_of :version
+
+  default_scope order_by([:version, :asc])
   before_save :set_version, :on => :create
 
   def places
@@ -16,6 +21,17 @@ class DataSet
 
   def places_near(location, distance = nil, limit = nil)
     Place.find_near(location, distance, limit, {service_slug: service.slug, data_set_version: version})
+  end
+
+  def duplicate
+    duplicated_data_set = self.service.data_sets.create(:change_notes => "Created from Version #{self.version}")
+    self.places.each do |place|
+      duplicated_place = place.dup
+      duplicated_place.data_set_version = duplicated_data_set.version
+      duplicated_place.save
+    end
+
+    duplicated_data_set
   end
 
   def set_version
@@ -38,7 +54,7 @@ class DataSet
   def process_data_file
     if @data_file
       data = @data_file.read.force_encoding('UTF-8')
-      if HtmlValidator.new(data).valid?
+      if Govspeak::HtmlValidator.new(data).valid?
         CSV.parse(data, headers: true) do |row|
           Place.create_from_hash(self, row)
         end
@@ -54,6 +70,10 @@ class DataSet
 
   def active?
     self.version == service.active_data_set_version
+  end
+
+  def latest_data_set?
+    self.id.to_s == service.latest_data_set.id.to_s
   end
 
   def activate!
