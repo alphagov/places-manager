@@ -36,7 +36,7 @@ gem 'lockfile'
 gem 'whenever'
 gem 'lograge'
 gem 'kaminari', '0.14.1'
-gem 'kaminari-bootstrap'
+gem 'kaminari-bootstrap', '0.1.3'
 
 group :assets do
   gem "therubyracer", "~> 0.9.4"
@@ -54,6 +54,6 @@ group :test do
   gem 'ci_reporter', '1.7.1'
   gem 'minitest', '3.3.0'
   gem 'launchy'
-  gem 'shoulda'
+  gem 'shoulda', '3.3.1'
   gem 'mocha', '0.12.3', require: false
 end
