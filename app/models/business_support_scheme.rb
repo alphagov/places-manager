@@ -1,15 +1,22 @@
 class BusinessSupportScheme
   include Mongoid::Document
   
+   
+  field :title, type: String
+  field :business_support_identifier, type: String
+  field :priority, type: Integer, default: 1
+
   has_and_belongs_to_many :business_support_business_types, index: true
   has_and_belongs_to_many :business_support_locations, index: true
   has_and_belongs_to_many :business_support_sectors, index: true
   has_and_belongs_to_many :business_support_stages, index: true
   has_and_belongs_to_many :business_support_types, index: true
-   
-  field :title, type: String
-  field :business_support_identifier, type: String
-  field :priority, type: Integer, default: 1
+
+  field :business_types, type: Array, index: true
+  field :locations, type: Array, index: true
+  field :sectors, type: Array, index: true
+  field :stages, type: Array, index: true
+  field :support_types, type: Array, index: true
 
   validates_presence_of :title, :business_support_identifier
   validates_uniqueness_of :title
@@ -26,20 +33,15 @@ class BusinessSupportScheme
   def self.schemes_criteria(relations)
     criteria = []
     relations.each do |k, v|
-      collection = "business_support_#{k.to_s.singularize}_ids".to_sym
-      collection_ids = ids_for_slugs(k, v)
+      collection = "#{k.to_s.singularize}s".to_sym
       selector = { collection => [] }
-      unless collection_ids.empty?
-        selector = { "$or" => [{ collection => { "$in" => collection_ids } }, selector] }
+      slugs = v.split(",")
+      unless slugs.empty?
+        selector = { "$or" => [{ collection => { "$in" => slugs } }, selector] }
       end
       criteria << selector
     end
     criteria 
-  end
-
-  def self.ids_for_slugs(key, slugs)
-    klass = Kernel.const_get("BusinessSupport#{key.to_s.singularize.camelize}")
-    klass.any_in(slug: slugs.split(',')).map(&:id)  
   end
 
   def populate_business_support_identifier

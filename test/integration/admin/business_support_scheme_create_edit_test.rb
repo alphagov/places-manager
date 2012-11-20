@@ -12,8 +12,8 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
 
     @bs = FactoryGirl.create(:business_support_scheme,
                             title: "Wunderbiz Pro", business_support_identifier: "333",
-                            business_support_location_ids: [@scotland._id],
-                            business_support_sector_ids: [@manufacturing._id])
+                            business_types: [], locations: [@scotland.slug],
+                            sectors: [@manufacturing.slug], stages: [], support_types: [])
 
   end
 
@@ -41,10 +41,10 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
     assert_equal "Wunderbiz 2012 superfunding", bs.title
     assert_equal 0, bs.priority
     assert_equal "334", bs.business_support_identifier
-    assert_equal [@global_megacorp, @charity], bs.business_support_business_types
-    assert_equal [@england, @wales], bs.business_support_locations
-    assert_equal [@agriculture, @healthcare, @manufacturing], bs.business_support_sectors
-    assert_equal [@grant], bs.business_support_types
+    assert_equal [@charity.slug, @global_megacorp.slug], bs.business_types
+    assert_equal [@england.slug, @wales.slug], bs.locations
+    assert_equal [@agriculture.slug, @healthcare.slug, @manufacturing.slug], bs.sectors
+    assert_equal [@grant.slug], bs.support_types
 
     assert page.has_content? "Wunderbiz 2012 superfunding successfully created"
 
@@ -69,8 +69,8 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
 
     assert page.has_content? "Wunderbiz Pro successfully updated"
 
-    assert_equal [@england, @wales], @bs.business_support_locations
-    assert_equal [@agriculture, @manufacturing], @bs.business_support_sectors
+    assert_equal [@england.slug, @wales.slug], @bs.locations
+    assert_equal [@agriculture.slug, @manufacturing.slug], @bs.sectors
     assert_equal 2, @bs.priority
   end
 end

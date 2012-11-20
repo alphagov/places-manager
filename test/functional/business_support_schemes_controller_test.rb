@@ -7,45 +7,53 @@ class BusinessSupportSchemesControllerTest < ActionController::TestCase
     
     loan = FactoryGirl.create(:business_support_type, name: "Loan", slug: "loan")
     award = FactoryGirl.create(:business_support_type, name: "Award", slug: "award")
+    
     scotland = FactoryGirl.create(:business_support_location, name: "Scotland", slug: "scotland")
     wales = FactoryGirl.create(:business_support_location, name: "Wales", slug: "wales")
+    
     private_company = FactoryGirl.create(:business_support_business_type, name: "Private Company", slug: "private-company")
     charity = FactoryGirl.create(:business_support_business_type, name: "Charity", slug: "charity")
-    eu_culture_programme = FactoryGirl.create(:business_support_scheme, title: "EU Culture Programme",
-      business_support_identifier: "eu-culture-programme", priority: 0)
-    urban_dev_grant = FactoryGirl.create(:business_support_scheme, title: "Urban Development Grant",
-      business_support_identifier: "urban-development-grant", priority: 2)
-    business_mentoring = FactoryGirl.create(:business_support_scheme, title: "Business Mentoring",
-      business_support_identifier: "business-mentoring", priority: 1)
-    sectorless_scheme = FactoryGirl.create(:business_support_scheme, title: "I have no sectors",
-      business_support_identifier: "i-have-no-sectors", priority: 1)
+    
     start_up = FactoryGirl.create(:business_support_stage, name: "Start-up", slug: "start-up")
     grow_sustain = FactoryGirl.create(:business_support_stage, name: "Grow and sustain", slug: "grow-and-sustain")
     
-    urban_dev_grant.business_support_sectors << agriculture
-    urban_dev_grant.business_support_sectors << manufacturing
-    urban_dev_grant.business_support_business_types << private_company
-    urban_dev_grant.business_support_locations << wales
-    urban_dev_grant.business_support_types << loan
-    urban_dev_grant.business_support_stages << start_up
+    eu_culture_programme = FactoryGirl.create(:business_support_scheme, title: "EU Culture Programme",
+      business_support_identifier: "eu-culture-programme", priority: 0,
+      business_types: [], locations: [], sectors: [], stages: [], support_types: [])
+    urban_dev_grant = FactoryGirl.create(:business_support_scheme, title: "Urban Development Grant",
+      business_support_identifier: "urban-development-grant", priority: 2,
+      business_types: [], locations: [], sectors: [], stages: [], support_types: [])
+    business_mentoring = FactoryGirl.create(:business_support_scheme, title: "Business Mentoring",
+      business_support_identifier: "business-mentoring", priority: 1,
+      business_types: [], locations: [], sectors: [], stages: [], support_types: [])
+    sectorless_scheme = FactoryGirl.create(:business_support_scheme, title: "I have no sectors",
+      business_support_identifier: "i-have-no-sectors", priority: 1,
+      business_types: [], locations: [], sectors: [], stages: [], support_types: [])
     
-    eu_culture_programme.business_support_sectors << agriculture
-    eu_culture_programme.business_support_business_types << charity
-    eu_culture_programme.business_support_locations << scotland
-    eu_culture_programme.business_support_types << award
-    eu_culture_programme.business_support_stages << grow_sustain
+    urban_dev_grant.sectors << agriculture.slug
+    urban_dev_grant.sectors << manufacturing.slug
+    urban_dev_grant.business_types << private_company.slug
+    urban_dev_grant.locations << wales.slug
+    urban_dev_grant.support_types << loan.slug
+    urban_dev_grant.stages << start_up.slug
     
-    business_mentoring.business_support_business_types << charity
-    business_mentoring.business_support_business_types << private_company
-    business_mentoring.business_support_locations << scotland
-    business_mentoring.business_support_locations << wales
-    business_mentoring.business_support_types << award
-    business_mentoring.business_support_types << loan
-    business_mentoring.business_support_stages << grow_sustain
+    eu_culture_programme.sectors << agriculture.slug
+    eu_culture_programme.business_types << charity.slug
+    eu_culture_programme.locations << scotland.slug
+    eu_culture_programme.support_types << award.slug
+    eu_culture_programme.stages << grow_sustain.slug
     
-    sectorless_scheme.business_support_business_types << charity
-    sectorless_scheme.business_support_locations << scotland
-    sectorless_scheme.business_support_stages << start_up
+    business_mentoring.business_types << charity.slug
+    business_mentoring.business_types << private_company.slug
+    business_mentoring.locations << scotland.slug
+    business_mentoring.locations << wales.slug
+    business_mentoring.support_types << award.slug
+    business_mentoring.support_types << loan.slug
+    business_mentoring.stages << grow_sustain.slug
+    
+    sectorless_scheme.business_types << charity.slug
+    sectorless_scheme.locations << scotland.slug
+    sectorless_scheme.stages << start_up.slug
 
     eu_culture_programme.save!
     urban_dev_grant.save!
@@ -90,6 +98,7 @@ class BusinessSupportSchemesControllerTest < ActionController::TestCase
       stages: 'grow-and-sustain', locations: 'scotland',
       types: 'award'
     results = JSON.parse(response.body)['results']
+    
     assert_equal "Business Mentoring", results.first['title']
     assert_equal 1, results.first['priority']
     assert_equal "EU Culture Programme", results.second['title']
