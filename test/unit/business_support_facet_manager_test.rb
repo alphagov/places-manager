@@ -91,5 +91,19 @@ class BusinessSupportFacetManagerTest < ActiveSupport::TestCase
     assert_equal [@startup.slug], @ultrabiz.stages
     assert_equal [@award.slug, @grant.slug], @ultrabiz.support_types
   end
+
+  test "clear facet relations" do
+    @superbiz.business_support_sectors << @agriculture
+    @superbiz.save
+
+    silence_stream(STDOUT) do
+      BusinessSupportFacetManager.clear_facet_relations
+    end
+
+    @agriculture.reload
+
+    assert @agriculture.business_support_scheme_ids.empty?
+
+  end
   
 end

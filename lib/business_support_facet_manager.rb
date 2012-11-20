@@ -98,6 +98,19 @@ class BusinessSupportFacetManager
         puts scheme.inspect
       end
     end
+    clear_facet_relations
+  end
+
+  def self.clear_facet_relations
+    [BusinessSupportBusinessType.all, BusinessSupportLocation.all, BusinessSupportSector.all,
+      BusinessSupportStage.all, BusinessSupportType.all].flatten.each do |facet|
+      
+        if facet.business_support_scheme_ids.present?
+          facet.business_support_scheme_ids = nil
+          facet.save!
+        end
+
+      end
   end
 
   def self.has_empty_relations?(scheme)
