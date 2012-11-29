@@ -18,7 +18,7 @@ gem 'formtastic-bootstrap', git: 'https://github.com/cgunther/formtastic-bootstr
 gem 'jquery-rails'
 gem 'less-rails-bootstrap'
 
-gem 'govuk_content_models', '2.3.0'
+gem 'govuk_content_models', '2.5.0'
 gem 'statsd-ruby', '1.0.0', :require => 'statsd'
 
 if ENV['BUNDLE_DEV']
