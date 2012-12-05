@@ -7,7 +7,7 @@ class BusinessSupportFacetManagerTest < ActiveSupport::TestCase
   
   setup do
     make_facets(:business_support_business_type, ["Global megacorp", "Private company", "Charity"])
-    make_facets(:business_support_location, ["England", "Scotland", "Wales", "Northern Ireland"])
+    make_facets(:business_support_location, ["England", "Scotland", "Wales", "Northern Ireland", "London", "North West", "Yorkshire and the Humber"])
     make_facets(:business_support_sector, ["Agriculture", "Healthcare", "Manufacturing"])
     make_facets(:business_support_stage, ["Pre-startup", "Startup", "Grow and sustain"])
     make_facets(:business_support_type, ["Award", "Loan", "Grant"])
@@ -44,8 +44,10 @@ class BusinessSupportFacetManagerTest < ActiveSupport::TestCase
     assert_equal [@global_megacorp, @private_company, @charity], @megabiz.business_support_business_types
 
     assert_equal [@england, @wales], @superbiz.business_support_locations
-    assert_equal [@england, @scotland, @wales, @northern_ireland], @wunderbiz.business_support_locations
-    assert_equal [@england, @scotland, @wales, @northern_ireland], @megabiz.business_support_locations
+    assert_equal [@england, @scotland, @wales, @northern_ireland, @london, @north_west, @yorkshire_and_the_humber], 
+      @wunderbiz.business_support_locations
+    assert_equal [@england, @scotland, @wales, @northern_ireland, @london, @north_west, @yorkshire_and_the_humber], 
+      @megabiz.business_support_locations
 
     assert_equal [@agriculture, @healthcare], @wunderbiz.business_support_sectors
     assert_equal [@agriculture, @healthcare, @manufacturing], @superbiz.business_support_sectors
@@ -57,6 +59,17 @@ class BusinessSupportFacetManagerTest < ActiveSupport::TestCase
     assert_equal [@award, @loan, @grant], @superbiz.business_support_types
     assert_equal [@award, @loan], @wunderbiz.business_support_types
     assert_equal [@award, @loan, @grant], @megabiz.business_support_types
+  end
+
+  test "associate_english_regions" do
+    silence_stream(STDOUT) do
+      BusinessSupportFacetManager.associate_all_english_regions
+    end
+
+    @superbiz.reload
+
+    assert_equal [@england, @wales, @london, @north_west, @yorkshire_and_the_humber], @superbiz.business_support_locations
+
   end
 
 end
