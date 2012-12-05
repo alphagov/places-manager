@@ -22,7 +22,7 @@ $(document).ready(function() {
     var $el = $(e.target);
     $.each($el.parent().parent().find(":checkbox"), function(sidx, chkbx) {
       var labelText = $(chkbx).parent().text().trim();
-      if (labelText == country || (!labelText.match(countryRE) && labelText != "All")) {
+      if (labelText === country || (!labelText.match(countryRE) && labelText !== "All")) {
         $(chkbx).attr("checked", ($el.attr("checked")?true:false));
       }
     });
