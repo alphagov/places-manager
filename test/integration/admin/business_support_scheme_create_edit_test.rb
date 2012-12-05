@@ -4,8 +4,9 @@ require_relative '../../business_support_test_helper'
 class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
 
   setup do
+    
     make_facets(:business_support_business_type, ["Global megacorp", "Private limited company", "Charity"])
-    make_facets(:business_support_location, ["England", "Scotland", "Wales", "Northern Ireland"])
+    make_facets(:business_support_location, ["England", "Scotland", "Wales", "Northern Ireland", "London", "Yorkshire and the Humber"])
     make_facets(:business_support_sector, ["Agriculture", "Healthcare", "Manufacturing"])
     make_facets(:business_support_stage, ["Pre-startup", "Startup", "Grow and sustain"])
     make_facets(:business_support_type, ["Award", "Loan", "Grant"])
@@ -42,7 +43,7 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
     assert_equal 0, bs.priority
     assert_equal "334", bs.business_support_identifier
     assert_equal [@global_megacorp, @charity], bs.business_support_business_types
-    assert_equal [@england, @wales], bs.business_support_locations
+    assert_equal [@england, @wales, @london, @yorkshire_and_the_humber], bs.business_support_locations
     assert_equal [@agriculture, @healthcare, @manufacturing], bs.business_support_sectors
     assert_equal [@grant], bs.business_support_types
 
@@ -56,10 +57,10 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
 
     assert page.has_field?("Business support identifier", :with => "333")
     
-    check "England"
     check "Wales"
     uncheck "Scotland"
     check "Agriculture"
+    check "England"
 
     select "High", :from => "business_support_scheme[priority]"
     
@@ -68,8 +69,8 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
     @bs.reload
 
     assert page.has_content? "Wunderbiz Pro successfully updated"
-
-    assert_equal [@england, @wales], @bs.business_support_locations
+    
+    assert_equal [@england, @wales, @london, @yorkshire_and_the_humber], @bs.business_support_locations
     assert_equal [@agriculture, @manufacturing], @bs.business_support_sectors
     assert_equal 2, @bs.priority
   end
