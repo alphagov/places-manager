@@ -13,6 +13,9 @@ $(document).ready(function() {
     });
   });
 
+  /*
+   * Checks all child regions when a country is checked.
+   */
   var countryRE = /^England|Northern Ireland|Scotland|Wales$/
   var country = $('label').filter(function () { return $(this).text().trim().match(countryRE); });
   country.children(":checkbox").click(function(e) {
