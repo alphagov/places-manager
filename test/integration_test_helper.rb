@@ -9,6 +9,7 @@ class ActionDispatch::IntegrationTest
 
   setup do
     DatabaseCleaner.clean
+    Capybara.current_driver = Capybara.javascript_driver 
   end
 
   teardown do
@@ -18,3 +19,5 @@ class ActionDispatch::IntegrationTest
 
 end
 
+require 'capybara/poltergeist'
+Capybara.javascript_driver = :poltergeist
