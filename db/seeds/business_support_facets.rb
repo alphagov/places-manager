@@ -1,7 +1,8 @@
 def find_or_initialize_facets(klass, facet_names)
   facet_names.each do |slug, name|
-    facet = klass.find_or_initialize_by(:slug => slug, :name => name)
-    facet.save
+    facet = klass.find_or_initialize_by(:slug => slug)
+    facet.name = name
+    facet.save!
   end
 end
 
@@ -53,8 +54,11 @@ find_or_initialize_facets(BusinessSupportSector,
 find_or_initialize_facets(BusinessSupportStage, {
                           "pre-startup" => "Pre-startup",
                           "start-up" => "Start-up",
-                          "grow-and-sustain" => "Grow and sustain",
-                          "exiting-a-business" => "Exiting a business"})
+                          "grow-and-sustain" => "Grow and sustain"})
+# Clean up deprecated stage. This can be deleted once it's run on production
+if stage = BusinessSupportStage.where(:slug => "exiting-a-business").first
+  stage.destroy
+end
 
 # BusinessSupportType
 find_or_initialize_facets(BusinessSupportType, {
