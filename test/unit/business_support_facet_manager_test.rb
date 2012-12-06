@@ -88,10 +88,12 @@ class BusinessSupportFacetManagerTest < ActiveSupport::TestCase
     scheme1.reload
     scheme2.reload
     scheme3.reload
+    @superbiz.reload
 
     assert_equal [@london, @south_east], scheme1.business_support_locations
     assert_equal [@yorkshire_and_the_humber], scheme2.business_support_locations
-    assert_equal [@england], scheme3.business_support_locations
+    assert_equal [@england, @london, @south_east, @yorkshire_and_the_humber], scheme3.business_support_locations
+    assert_equal [@england, @wales, @london, @south_east, @yorkshire_and_the_humber], @superbiz.business_support_locations
 
   end
 

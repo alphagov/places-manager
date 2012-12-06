@@ -45,6 +45,8 @@ class BusinessSupportFacetManager
     not_found = []
     england = BusinessSupportLocation.where(slug: "england").first
 
+    # Update schemes from legacy data with the relevant regions.
+    #
     english_regional_data.each do |row|
       scheme = BusinessSupportScheme.where(business_support_identifier: row["id"]).first
       if scheme
@@ -60,7 +62,23 @@ class BusinessSupportFacetManager
         not_found << row["id"]
       end
     end
+
+    # Update all schemes associated to England with all english regions.
+    #
+    english_regions = BusinessSupportLocation.where(
+      slug: /london|north-east|north-west|east-midlands|west-midlands|yorkshire-and-the-humber|south-west|east-of-england|south-east/)
+
+    england.reload
+
+    england.business_support_schemes.each do |scheme|
+      scheme.business_support_locations << english_regions
+      scheme.save ? updated << scheme : failed << scheme
+    end
     
+    updated.uniq!
+    not_found.uniq!
+    failed.uniq!
+
     puts "Successfully updated #{updated.size} schemes"
     if not_found.size > 0
       puts "#{not_found.size} schemes could not be found:"
