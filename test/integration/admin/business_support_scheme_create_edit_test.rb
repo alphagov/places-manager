@@ -5,6 +5,8 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
 
   setup do
     
+    Capybara.current_driver = Capybara.javascript_driver 
+    
     make_facets(:business_support_business_type, ["Global megacorp", "Private limited company", "Charity"])
     make_facets(:business_support_location, ["England", "Scotland", "Wales", "Northern Ireland", "London", "Yorkshire and the Humber"])
     make_facets(:business_support_sector, ["Agriculture", "Healthcare", "Manufacturing"])

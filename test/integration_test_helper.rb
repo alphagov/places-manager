@@ -9,7 +9,6 @@ class ActionDispatch::IntegrationTest
 
   setup do
     DatabaseCleaner.clean
-    Capybara.current_driver = Capybara.javascript_driver 
   end
 
   teardown do
