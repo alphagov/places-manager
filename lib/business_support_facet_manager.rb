@@ -113,6 +113,63 @@ class BusinessSupportFacetManager
       end
   end
 
+  def self.associate_english_regions
+    updated = []
+    failed = []
+    not_found = []
+    england = BusinessSupportLocation.where(slug: "england").first
+
+    # Update schemes from legacy data with the relevant regions.
+    #
+    english_regional_data.each do |row|
+      scheme = BusinessSupportScheme.where(business_support_identifier: row["id"]).first
+      if scheme
+        location = BusinessSupportLocation.where(name: row["region"]).first
+    
+        if scheme.locations == [england.slug]
+          scheme.locations = []
+        end
+      
+        scheme.locations << location.slug
+        scheme.save ? updated << scheme : failed << scheme
+      else
+        not_found << row["id"]
+      end
+    end
+
+    # Update all schemes associated to England with all english regions.
+    #
+    english_regions = BusinessSupportLocation.where(
+      slug: /london|north-east|north-west|east-midlands|west-midlands|yorkshire-and-the-humber|south-west|east-of-england|south-east/)
+
+    english_schemes = BusinessSupportScheme.where({:locations => {"$in" => ["england"]}})
+
+    english_schemes.each do |scheme|
+      puts "scheme: #{scheme.title}, english_regions: #{english_regions.map(&:slug)}"
+      scheme.locations << english_regions.map(&:slug)
+      scheme.locations.flatten!
+      scheme.save ? updated << scheme : failed << scheme
+    end
+    
+    updated.uniq!
+    not_found.uniq!
+    failed.uniq!
+
+    puts "Successfully updated #{updated.size} schemes"
+    if not_found.size > 0
+      puts "#{not_found.size} schemes could not be found:"
+      puts not_found.join(", ")
+    end
+    if failed.size > 0
+      puts "#{failed.size} schemes failed to update:"
+      puts failed.map(&:title)
+    end
+  end
+
+  def self.english_regional_data
+    CSV.read(File.join(Rails.root, "data", "business-support-schemes-england-regional.csv"), headers: true)
+  end
+
   def self.has_empty_relations?(scheme)
     scheme.locations.empty? or
     scheme.business_types.empty? or

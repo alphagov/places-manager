@@ -107,4 +107,64 @@ class PlaceTest < ActiveSupport::TestCase
     )
     assert_equal s.data_sets[1], p.data_set
   end
+
+  test "cannot be edited if the data set is active" do
+    service = Service.create! slug: "chickens", name: "Chickens!"
+    data_set = service.data_sets.create! version: 2
+
+    place = Place.create!(
+      name: "Hercules House",
+      source_address: "Blah",
+      postcode: "SE1 7DU",
+      service_slug: "chickens",
+      data_set_version: 2
+    )
+
+    data_set.activate!
+
+    place.name = "Aviation House"
+
+    assert !place.valid?
+    assert place.errors.keys.include?(:base)
+  end
+
+  test "cannot be edited if the data set is inactive and not the latest version" do
+    service = Service.create! slug: "chickens", name: "Chickens!"
+    first_data_set = service.data_sets.create! version: 2
+
+    place = Place.create!(
+      name: "Hercules House",
+      source_address: "Blah",
+      postcode: "SE1 7DU",
+      service_slug: "chickens",
+      data_set_version: 2
+    )
+
+    second_data_set = service.data_sets.create! version: 3
+    place.name = "Aviation House"
+
+    assert !place.valid?
+    assert place.errors.keys.include?(:base)
+  end
+
+  test "can be edited if the data set is active but the only changed fields are 'location' or 'geocode_error'" do
+    service = Service.create! slug: "chickens", name: "Chickens!"
+    first_data_set = service.data_sets.create! version: 2
+
+    place = Place.create!(
+      name: "Hercules House",
+      source_address: "Blah",
+      postcode: "SE1 7DU",
+      service_slug: "chickens",
+      data_set_version: 2
+    )
+
+    second_data_set = service.data_sets.create! version: 3
+    place.lat = 51.517356
+    place.lng = -0.120742
+    place.geocode_error = "Error message"
+
+    assert place.valid?
+    assert place.save
+  end
 end

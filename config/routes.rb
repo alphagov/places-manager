@@ -3,6 +3,8 @@ Imminence::Application.routes.draw do
     resources :services do
       resources :data_sets do
         post :activate, :on => :member
+        post :duplicate, :on => :member
+        resources :places
       end
     end
     resources :business_support_schemes, :only => [:index, :new, :create, :edit, :update]

@@ -1,7 +1,8 @@
 def find_or_initialize_facets(klass, facet_names)
   facet_names.each do |slug, name|
-    facet = klass.find_or_initialize_by(:slug => slug, :name => name)
-    facet.save
+    facet = klass.find_or_initialize_by(:slug => slug)
+    facet.name = name
+    facet.save!
   end
 end
 
@@ -16,10 +17,19 @@ find_or_initialize_facets(BusinessSupportBusinessType,
 
 # BusinessSupportLocation
 find_or_initialize_facets(BusinessSupportLocation,
-                          {"northern-ireland" => "Northern Ireland", 
-                           "england"          => "England", 
-                           "wales"            => "Wales", 
-                           "scotland"         => "Scotland"})
+                          { "northern-ireland" => "Northern Ireland", 
+                            "england"          => "England",
+                            "london" => "London",
+                            "north-east" => "North East (England)",
+                            "north-west" => "North West (England)",
+                            "east-midlands" => "East Midlands (England)",
+                            "west-midlands" => "West Midlands (England)",
+                            "yorkshire-and-the-humber" => "Yorkshire and the Humber",
+                            "south-west" => "South West (England)",
+                            "east-of-england" => "East of England",
+                            "south-east" => "South East (England)",
+                            "wales"            => "Wales", 
+                            "scotland"         => "Scotland"})
 
 # BusinessSupportSector
 find_or_initialize_facets(BusinessSupportSector,
@@ -44,8 +54,11 @@ find_or_initialize_facets(BusinessSupportSector,
 find_or_initialize_facets(BusinessSupportStage, {
                           "pre-startup" => "Pre-startup",
                           "start-up" => "Start-up",
-                          "grow-and-sustain" => "Grow and sustain",
-                          "exiting-a-business" => "Exiting a business"})
+                          "grow-and-sustain" => "Grow and sustain"})
+# Clean up deprecated stage. This can be deleted once it's run on production
+if stage = BusinessSupportStage.where(:slug => "exiting-a-business").first
+  stage.destroy
+end
 
 # BusinessSupportType
 find_or_initialize_facets(BusinessSupportType, {

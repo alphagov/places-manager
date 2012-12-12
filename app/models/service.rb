@@ -15,7 +15,7 @@ class Service
   after_save :process_data_file
 
   def process_data_file
-    data_sets.last.process_data_file
+    latest_data_set.process_data_file
   end
 
   def reconcile_place_locations
@@ -29,6 +29,10 @@ class Service
 
   def active_data_set
     @active_data_set ||= data_sets.detect { |ds| ds.version == self.active_data_set_version }
+  end
+
+  def latest_data_set
+    data_sets.order(version: "desc").first
   end
 
   def create_first_data_set

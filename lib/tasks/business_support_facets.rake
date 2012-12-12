@@ -9,4 +9,8 @@ namespace :business_support_facets do
   task :populate_empty_collections => :environment do
     BusinessSupportFacetManager.populate_empty_collections
   end
+  desc "Associated all English regions to a scheme with England as a location"
+  task :associate_english_regions => :environment do
+    BusinessSupportFacetManager.associate_english_regions
+  end
 end

@@ -1,20 +1,31 @@
-<ul>
-  <% @service.data_sets.each do |set| %>
-  <li>
-    <p>Version <%= set.version %> uploaded at <%= set.created_at %>
-    <br /><%= set.version == @service.active_data_set_version ? 'Active' : 'Not active'  %>
-    <br />Containing <%= pluralize(set.places.count, 'place', 'places') %>
-    <br />
-      Export:
-      <%= link_to 'JSON', place_path(@service.slug, :version => set, :format => :json) %> /
-      <%= link_to 'KML', place_path(@service.slug, :version => set, :format => :kml) %> /
-      <%= link_to 'CSV', place_path(@service.slug, :version => set, :format => :csv) %>
-    </p>
-    <% if set.active? %>
-      <%= button_to 'Deactivate' %>
-    <% else %>
-      <%= button_to 'Activate', activate_admin_service_data_set_path(@service, set), :class=> 'btn btn-primary activate' %>
-    <% end %>
-  </li>
+<ul class="row">
+  <% @service.data_sets.reverse.each do |set| %>
+    <li class="well data_set span4">
+      <div>
+        <h4><%= link_to "Version #{set.version}", admin_service_data_set_path(@service,set) %> <% if set.active? %><span class="label label-success">Active</span><% else %><span class="label">Inactive</span><% end %></h4>
+        <div class="actions">
+          <% unless set.active? %>
+            <p><%= button_to "Activate", activate_admin_service_data_set_path(@service, set), :method => "POST", :class => 'btn btn-primary activate' %></p>
+          <% end %>
+          <%= button_to "Duplicate", duplicate_admin_service_data_set_path(@service, set), :method => "POST", :class => 'btn duplicate', :title => "Use the data from Version #{set.version} as a basis for a new version" %>
+        </div>
+
+        <dl>
+          <dt>Uploaded at</dt>
+          <dd><%= set.created_at ? set.created_at.strftime("%d %b %Y") : "the beginning of time" %></dd>
+          <dt>Change notes</dt>
+          <dd><%= set.change_notes.blank? ? "None" : set.change_notes %></dd>
+          <dt>Places</dt>
+          <dd><%= set.places.count %></dd>
+        </dl>
+
+        <p>
+          Export:
+          <%= link_to 'JSON', place_path(@service.slug, :version => set, :format => :json) %> /
+          <%= link_to 'KML', place_path(@service.slug, :version => set, :format => :kml) %> /
+          <%= link_to 'CSV', place_path(@service.slug, :version => set, :format => :csv) %>
+        </p>
+      </div>
+    </li>
   <% end %>
 </ul>
