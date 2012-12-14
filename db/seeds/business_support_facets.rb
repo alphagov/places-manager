@@ -68,3 +68,19 @@ find_or_initialize_facets(BusinessSupportType, {
                           "expertise-and-advice" => "Expertise and Advice",
                           "recognition-award" => "Recognition Award",
                           "equity" => "Equity"})
+
+# BusinessSupportPurpose
+find_or_initialize_facets(BusinessSupportPurpose, {
+  "business-growth-and-expansion" => "Business growth and expansion",
+  "developing-new-product-or-service-ideas" => "Developing new product or service ideas",
+  "energy-efficiency-and-the-environment" => "Energy efficiency and the environment",
+  "exchanging-ideas-and-sharing-expertise" => "Exchanging ideas and sharing expertise",
+  "exporting-or-finding-overseas-partners" => "Exporting or finding overseas partners",
+  "finding-new-customers-and-markets" => "Finding new customers and markets",
+  "investing-in-plant-machinery-or-property" => "Investing in plant, machinery or property",
+  "making-the-most-of-the-internet" => "Making the most of the Internet",
+  "performance-improvement-and-best-practice" => "Performance improvement and best practice",
+  "setting-up-your-business" => "Setting up your business",
+  "taking-new-products-or-services-to-market" => "Taking new products or services to market",
+  "taking-on-staff-and-developing-people" => "Taking on staff and developing people"
+})
