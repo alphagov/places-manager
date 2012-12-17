@@ -97,4 +97,47 @@ class BusinessSupportFacetManagerTest < ActiveSupport::TestCase
 
   end
 
+  test "associate_purpose_facets" do
+    scheme1 = FactoryGirl.create(:business_support_scheme, title: "scheme1",
+                                  business_support_identifier: "345", priority: 1)
+    scheme2 = FactoryGirl.create(:business_support_scheme, title: "scheme2",
+                                  business_support_identifier: "123", priority: 1)
+    scheme3 = FactoryGirl.create(:business_support_scheme, title: "scheme3",
+                                  business_support_identifier: "432", priority: 1)
+    
+    make_facets(:business_support_purpose, ["Making the most of the Internet", "Exporting or finding overseas partners", 
+                "Finding new customers and markets", "Energy efficiency and the environment"])
+
+
+    BusinessSupportFacetManager.stubs(:purpose_facet_data).returns([
+      { "id" => "14", "name" => "Making the most of the Internet" }, 
+      { "id" => "5",  "name" => "Exporting or finding overseas partners" },
+      { "id" => "18", "name" => "Finding new customers and markets" },
+      { "id" => "12", "name" => "Energy efficiency and the environment" }
+    ])
+
+    BusinessSupportFacetManager.stubs(:purposes_join_data).returns([
+      { "bsf_scheme_id" => "345", "bsf_support_purpose_id" => "14" },
+      { "bsf_scheme_id" => "345", "bsf_support_purpose_id" => "5" },
+      { "bsf_scheme_id" => "123", "bsf_support_purpose_id" => "5" },
+      { "bsf_scheme_id" => "123", "bsf_support_purpose_id" => "18" },
+      { "bsf_scheme_id" => "123", "bsf_support_purpose_id" => "12" }
+    ])
+
+    silence_stream(STDOUT) do
+      BusinessSupportFacetManager.associate_purpose_facets
+    end
+
+    scheme1.reload
+    scheme2.reload
+    scheme3.reload
+
+    assert_equal [@making_the_most_of_the_internet, @exporting_or_finding_overseas_partners], scheme1.business_support_purposes
+    assert_equal [@exporting_or_finding_overseas_partners, @finding_new_customers_and_markets,
+                  @energy_efficiency_and_the_environment], scheme2.business_support_purposes
+    assert_equal [@making_the_most_of_the_internet, @exporting_or_finding_overseas_partners, 
+                  @finding_new_customers_and_markets, @energy_efficiency_and_the_environment], scheme3.business_support_purposes
+
+  end
+
 end

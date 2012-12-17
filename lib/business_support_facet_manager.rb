@@ -90,8 +90,54 @@ class BusinessSupportFacetManager
     end
   end
 
+  def self.associate_purpose_facets
+    updated = []
+    failed = []
+    not_found = []
+    
+    purpose_data = {}
+    
+    purpose_facet_data.each { |r| purpose_data[r['id']] = r['name'].parameterize }
+    purposes_join_data.each do |row|
+      scheme = BusinessSupportScheme.where(business_support_identifier: row["bsf_scheme_id"].to_i).first
+      purpose = BusinessSupportPurpose.where(slug: purpose_data[row['bsf_support_purpose_id']]).first
+      if scheme and purpose
+        scheme.business_support_purposes << purpose
+        scheme.save ? updated << scheme : failed << scheme
+      else
+        not_found << row["bsf_scheme_id"]
+      end
+    end
+    BusinessSupportScheme.where(business_support_purpose_ids: []).each do |scheme|
+      scheme.business_support_purposes = BusinessSupportPurpose.all
+      scheme.save ? updated << scheme : failed << scheme
+    end
+    
+    updated.uniq!
+    not_found.uniq!
+    failed.uniq!
+
+    puts "Successfully updated #{updated.size} schemes"
+    if not_found.size > 0
+      puts "#{not_found.size} schemes could not be found:"
+      puts not_found.join(", ")
+    end
+    if failed.size > 0
+      puts "#{failed.size} schemes failed to update:"
+      puts failed.map(&:title)
+    end
+  end
+
   def self.english_regional_data
     CSV.read(File.join(Rails.root, "data", "business-support-schemes-england-regional.csv"), headers: true)
+  end
+
+  def self.purpose_facet_data
+    CSV.read(File.join(Rails.root, "data", "bsf_purposes.csv"), headers: true)
+  end
+
+  def self.purposes_join_data
+    CSV.read(File.join(Rails.root, "data", "bsf_schemes_purposes.csv"), headers: true)
   end
 
   def self.has_empty_relations?(scheme)
