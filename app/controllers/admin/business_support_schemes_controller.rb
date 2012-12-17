@@ -42,6 +42,7 @@ class Admin::BusinessSupportSchemesController < InheritedResources::Base
   def find_all_facets
     @business_types = BusinessSupportBusinessType.asc(:name)
     @locations = BusinessSupportLocation.asc(:name)
+    @purposes = BusinessSupportPurpose.asc(:name)
     @sectors = BusinessSupportSector.asc(:name)
     @stages = BusinessSupportStage.asc(:name)
     @types = BusinessSupportType.asc(:name)

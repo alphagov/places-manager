@@ -3,6 +3,7 @@ class BusinessSupportScheme
   
   has_and_belongs_to_many :business_support_business_types, index: true
   has_and_belongs_to_many :business_support_locations, index: true
+  has_and_belongs_to_many :business_support_purposes, index: true
   has_and_belongs_to_many :business_support_sectors, index: true
   has_and_belongs_to_many :business_support_stages, index: true
   has_and_belongs_to_many :business_support_types, index: true
