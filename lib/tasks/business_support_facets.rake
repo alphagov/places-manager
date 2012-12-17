@@ -9,4 +9,8 @@ namespace :business_support_facets do
   task :associate_english_regions => :environment do
     BusinessSupportFacetManager.associate_english_regions
   end
+  desc "Associate all 'purpose' facets with schemes using legacy data"
+  task :associate_purpose_facets => :environment do
+    BusinessSupportFacetManager.associate_purpose_facets
+  end
 end
