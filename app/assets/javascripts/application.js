@@ -4,7 +4,7 @@
 //= require_tree .
 
 $(document).ready(function() {
-  $.each(["business_type", "location", "sector", "stage", "support_type"], function(idx, facet) {
+  $.each(["business_type", "location", "purpose", "sector", "stage", "support_type"], function(idx, facet) {
     $("#business_support_" + facet + "_check_all").click(function(e) {
       var $el = $(e.target);
       $.each($el.parent().parent().find(":checkbox"), function(sidx, chkbx) {

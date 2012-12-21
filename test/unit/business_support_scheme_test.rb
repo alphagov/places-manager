@@ -75,7 +75,14 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
     assert_equal "award", @scheme.support_types.first
     assert_equal "loan", @scheme.support_types.last 
   end
-   
+ 
+  test "should have and belong to many BusinessSupportPurposes" do
+    @scheme.business_support_purposes << BusinessSupportPurpose.new(name: "Business growth and expansion")
+    @scheme.business_support_purposes << BusinessSupportPurpose.new(name: "Setting up your business")
+    assert_equal "Business growth and expansion", @scheme.business_support_purposes.first.name
+    assert_equal "Setting up your business", @scheme.business_support_purposes.last.name 
+  end 
+
   test "should be scoped by relations and ordered by priority then title" do
     @another_scheme = FactoryGirl.create(:business_support_scheme, title: "Wunderscheme", 
                                          business_support_identifier: "123",

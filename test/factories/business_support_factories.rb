@@ -7,6 +7,10 @@ FactoryGirl.define do
     name "England"
     slug "england"
   end
+  factory :business_support_purpose do
+    name "Setting up your business"
+    slug "setting-up-your-business"
+  end
   factory :business_support_scheme do
     title "EU Culture Programme"
     business_support_identifier "eu-culture-programme"

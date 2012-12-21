@@ -4,6 +4,7 @@ class BusinessSupportFacetManager
 
     business_types = BusinessSupportBusinessType.all.asc(:name)
     locations = BusinessSupportLocation.all.asc(:name)
+    purposes = BusinessSupportPurpose.all.asc(:name)
     sectors = BusinessSupportSector.all.asc(:name)
     stages = BusinessSupportStage.all.asc(:name)
     types = BusinessSupportType.all.asc(:name)
@@ -15,6 +16,10 @@ class BusinessSupportFacetManager
         if scheme.locations.empty?
           scheme.locations = locations.map(&:slug)
           puts "Added all locations to #{scheme.title}"
+        end
+        if scheme.purposes.empty?
+          scheme.purposes = purposes.map(&:slug)
+          puts "Added all purposes to #{scheme.title}"
         end
         if scheme.business_types.empty?
           scheme.business_types = business_types.map(&:slug)
@@ -64,6 +69,16 @@ class BusinessSupportFacetManager
           end
           scheme.business_support_location_ids = nil
         end
+        if scheme.business_support_purpose_ids.present?
+          scheme.purposes = []
+          scheme.business_support_purpose_ids.each do |id|
+            purpose = BusinessSupportPurpose.find(id)
+            if purpose
+              scheme.purposes << purpose.slug
+            end
+          end
+          scheme.business_support_purpose_ids = nil
+        end
         if scheme.business_support_sector_ids.present?
           scheme.sectors = []
           scheme.business_support_sector_ids.each do |id|
@@ -102,8 +117,10 @@ class BusinessSupportFacetManager
   end
 
   def self.clear_facet_relations
-    [BusinessSupportBusinessType.all, BusinessSupportLocation.all, BusinessSupportSector.all,
-      BusinessSupportStage.all, BusinessSupportType.all].flatten.each do |facet|
+    [
+      BusinessSupportBusinessType.all, BusinessSupportLocation.all, BusinessSupportPurpose.all,
+      BusinessSupportSector.all, BusinessSupportStage.all, BusinessSupportType.all
+    ].flatten.each do |facet|
       
         if facet.business_support_scheme_ids.present?
           facet.business_support_scheme_ids = nil
@@ -166,13 +183,61 @@ class BusinessSupportFacetManager
     end
   end
 
+  def self.associate_purpose_facets
+    updated = []
+    failed = []
+    not_found = []
+    
+    purpose_data = {}
+    
+    purpose_facet_data.each { |r| purpose_data[r['id']] = r['name'].parameterize }
+    purposes_join_data.each do |row|
+      scheme = BusinessSupportScheme.where(business_support_identifier: row["bsf_scheme_id"].to_i).first
+      purpose = BusinessSupportPurpose.where(slug: purpose_data[row['bsf_support_purpose_id']]).first
+      if scheme and purpose
+        scheme.purposes = [] if scheme.purposes.nil?
+        scheme.purposes << purpose.slug
+        scheme.save ? updated << scheme : failed << scheme
+      else
+        not_found << row["bsf_scheme_id"]
+      end
+    end
+    BusinessSupportScheme.where(purposes: []).each do |scheme|
+      scheme.purposes = BusinessSupportPurpose.all.map(&:slug)
+      scheme.save ? updated << scheme : failed << scheme
+    end
+    
+    updated.uniq!
+    not_found.uniq!
+    failed.uniq!
+
+    puts "Successfully updated #{updated.size} schemes"
+    if not_found.size > 0
+      puts "#{not_found.size} schemes could not be found:"
+      puts not_found.join(", ")
+    end
+    if failed.size > 0
+      puts "#{failed.size} schemes failed to update:"
+      puts failed.map(&:title)
+    end
+  end
+
   def self.english_regional_data
     CSV.read(File.join(Rails.root, "data", "business-support-schemes-england-regional.csv"), headers: true)
+  end
+
+  def self.purpose_facet_data
+    CSV.read(File.join(Rails.root, "data", "bsf_purposes.csv"), headers: true)
+  end
+
+  def self.purposes_join_data
+    CSV.read(File.join(Rails.root, "data", "bsf_schemes_purposes.csv"), headers: true)
   end
 
   def self.has_empty_relations?(scheme)
     scheme.locations.empty? or
     scheme.business_types.empty? or
+    scheme.purposes.empty? or
     scheme.sectors.empty? or
     scheme.stages.empty? or
     scheme.support_types.empty?
@@ -181,6 +246,7 @@ class BusinessSupportFacetManager
   def self.has_facet_ids?(scheme)
     scheme.business_support_business_type_ids.present? or
     scheme.business_support_location_ids.present? or
+    scheme.business_support_purpose_ids.present? or
     scheme.business_support_sector_ids.present? or
     scheme.business_support_stage_ids.present? or
     scheme.business_support_type_ids.present?

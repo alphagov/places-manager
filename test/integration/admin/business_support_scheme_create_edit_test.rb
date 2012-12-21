@@ -9,13 +9,16 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
     
     make_facets(:business_support_business_type, ["Global megacorp", "Private limited company", "Charity"])
     make_facets(:business_support_location, ["England", "Scotland", "Wales", "Northern Ireland", "London", "Yorkshire and the Humber"])
+    make_facets(:business_support_purpose, ["Making the most of the Internet", "Exporting or finding overseas partners", 
+                "Finding new customers and markets", "Energy efficiency and the environment"])
     make_facets(:business_support_sector, ["Agriculture", "Healthcare", "Manufacturing"])
     make_facets(:business_support_stage, ["Pre-startup", "Startup", "Grow and sustain"])
     make_facets(:business_support_type, ["Award", "Loan", "Grant"])
 
     @bs = FactoryGirl.create(:business_support_scheme,
                             title: "Wunderbiz Pro", business_support_identifier: "333",
-                            business_types: [], locations: [@scotland.slug],
+                            business_types: [], locations: [@scotland.slug], 
+                            purposes: [@energy_efficiency_and_the_environment.slug],
                             sectors: [@manufacturing.slug], stages: [], support_types: [])
 
   end
@@ -36,6 +39,8 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
     check "Healthcare"
     check "Agriculture"
     check "Grant"
+    check "Making the most of the Internet"
+    check "Energy efficiency and the environment"
 
     click_on "Create Business Support"
 
@@ -49,6 +54,7 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
     assert_equal [@england.slug, @london.slug, @wales.slug, @yorkshire_and_the_humber.slug], bs.locations
     assert_equal [@agriculture.slug, @healthcare.slug, @manufacturing.slug], bs.sectors
     assert_equal [@grant.slug], bs.support_types
+    assert_equal [@energy_efficiency_and_the_environment.slug, @making_the_most_of_the_internet.slug], bs.purposes
 
     assert page.has_content? "Wunderbiz 2012 superfunding successfully created"
 
@@ -64,6 +70,8 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
     uncheck "Scotland"
     check "Agriculture"
     check "England"
+    uncheck "Energy efficiency and the environment"
+    check "Finding new customers and markets"
 
     select "High", :from => "business_support_scheme[priority]"
     
@@ -75,6 +83,7 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
 
     assert_equal [@england.slug, @london.slug, @wales.slug, @yorkshire_and_the_humber.slug], @bs.locations
     assert_equal [@agriculture.slug, @manufacturing.slug], @bs.sectors
+    assert_equal [@finding_new_customers_and_markets.slug], @bs.purposes
     assert_equal 2, @bs.priority
   end
 end

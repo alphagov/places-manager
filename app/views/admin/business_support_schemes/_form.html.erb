@@ -17,6 +17,11 @@
                                             model_collection: "locations" } %>
 
     <%= render partial: "facets", locals: { f: f,
+                                            title: "Purposes", 
+                                            collection: @purposes, 
+                                            model_collection: "purposes" } %>
+
+    <%= render partial: "facets", locals: { f: f,
                                             title: "Sectors", 
                                             collection: @sectors, 
                                             model_collection: "sectors" } %>
