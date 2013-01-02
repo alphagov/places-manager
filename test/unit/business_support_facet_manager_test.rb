@@ -181,8 +181,8 @@ class BusinessSupportFacetManagerTest < ActiveSupport::TestCase
     assert_equal [@making_the_most_of_the_internet.slug, @exporting_or_finding_overseas_partners.slug], scheme1.purposes
     assert_equal [@exporting_or_finding_overseas_partners.slug, @finding_new_customers_and_markets.slug,
                   @energy_efficiency_and_the_environment.slug], scheme2.purposes
-    assert_equal [@making_the_most_of_the_internet.slug, @exporting_or_finding_overseas_partners.slug, 
-                  @finding_new_customers_and_markets.slug, @energy_efficiency_and_the_environment.slug], scheme3.purposes
+    assert_equal [@energy_efficiency_and_the_environment.slug, @exporting_or_finding_overseas_partners.slug, 
+                  @finding_new_customers_and_markets.slug, @making_the_most_of_the_internet.slug], scheme3.purposes.sort
 
   end
 

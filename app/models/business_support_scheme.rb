@@ -13,12 +13,21 @@ class BusinessSupportScheme
   has_and_belongs_to_many :business_support_stages, index: true
   has_and_belongs_to_many :business_support_types, index: true
 
-  field :business_types,  type: Array, index: true, default: []
-  field :locations,       type: Array, index: true, default: []
-  field :purposes,        type: Array, index: true, default: []
-  field :sectors,         type: Array, index: true, default: []
-  field :stages,          type: Array, index: true, default: []
-  field :support_types,   type: Array, index: true, default: []
+  field :business_types,  type: Array, default: []
+  field :locations,       type: Array, default: []
+  field :purposes,        type: Array, default: []
+  field :sectors,         type: Array, default: []
+  field :stages,          type: Array, default: []
+  field :support_types,   type: Array, default: []
+
+  index :title, unique: true
+  index :business_support_identifier, unique: true
+  index :business_types
+  index :locations
+  index :purposes
+  index :sectors
+  index :stages
+  index :support_types
 
   validates_presence_of :title, :business_support_identifier
   validates_uniqueness_of :title
