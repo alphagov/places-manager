@@ -17,9 +17,9 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
 
     @bs = FactoryGirl.create(:business_support_scheme,
                             title: "Wunderbiz Pro", business_support_identifier: "333",
-                            business_types: [], locations: [@scotland.slug], 
+                            locations: [@scotland.slug], 
                             purposes: [@energy_efficiency_and_the_environment.slug],
-                            sectors: [@manufacturing.slug], stages: [], support_types: [])
+                            sectors: [@manufacturing.slug])
 
   end
 

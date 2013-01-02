@@ -77,17 +77,16 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
   end
  
   test "should have and belong to many BusinessSupportPurposes" do
-    @scheme.business_support_purposes << BusinessSupportPurpose.new(name: "Business growth and expansion")
-    @scheme.business_support_purposes << BusinessSupportPurpose.new(name: "Setting up your business")
-    assert_equal "Business growth and expansion", @scheme.business_support_purposes.first.name
-    assert_equal "Setting up your business", @scheme.business_support_purposes.last.name 
+    @scheme.purposes << BusinessSupportPurpose.new(name: "Business growth and expansion")
+    @scheme.purposes << BusinessSupportPurpose.new(name: "Setting up your business")
+    assert_equal "Business growth and expansion", @scheme.purposes.first.name
+    assert_equal "Setting up your business", @scheme.purposes.last.name 
   end 
 
   test "should be scoped by relations and ordered by priority then title" do
     @another_scheme = FactoryGirl.create(:business_support_scheme, title: "Wunderscheme", 
                                          business_support_identifier: "123",
-                                         priority: 2,
-                                         business_types: [], locations: [], sectors: [], stages: [], support_types: [])
+                                         priority: 2)
     @start_up = FactoryGirl.create(:business_support_stage, name: "Start up", slug: "start-up")
     @scheme.stages << @start_up.slug
     @scheme.save!
@@ -95,7 +94,6 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
     @another_scheme.save!
     assert_equal @another_scheme, BusinessSupportScheme.for_relations(stages: "start-up").first
     assert_equal @scheme, BusinessSupportScheme.for_relations(stages: "start-up").second
-    assert_equal @another_scheme, BusinessSupportScheme.for_relations(stages: "start-up", sectors: "manufacturing").first
     @manufacturing = FactoryGirl.create(:business_support_sector, name: "Manufacturing", slug: "manufacturing")
     @scheme.sectors << @manufacturing.slug
     @another_scheme.sectors << @manufacturing.slug

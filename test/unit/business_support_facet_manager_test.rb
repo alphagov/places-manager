@@ -7,20 +7,18 @@ class BusinessSupportFacetManagerTest < ActiveSupport::TestCase
   
   setup do
     make_facets(:business_support_business_type, ["Global megacorp", "Private company", "Charity"])
-    make_facets(:business_support_location, ["England", "Scotland", "Wales", "Northern Ireland", "London", "South East", "Yorkshire and the Humber"])
+    make_facets(:business_support_location, ["England", "Scotland", "Wales", "Northern Ireland", "London",
+                "South East", "Yorkshire and the Humber"])
     make_facets(:business_support_sector, ["Agriculture", "Healthcare", "Manufacturing"])
     make_facets(:business_support_stage, ["Pre-startup", "Startup", "Grow and sustain"])
     make_facets(:business_support_type, ["Award", "Loan", "Grant"])
 
     @superbiz = FactoryGirl.create(:business_support_scheme, title: "Super biz support",
-                                   business_support_identifier: "111", priority: 1,
-                                   business_types: [], locations: [], purposes: [], sectors: [], stages: [], support_types: [])
+                                   business_support_identifier: "111", priority: 1)
     @wunderbiz = FactoryGirl.create(:business_support_scheme, title: "Wunder biz support",
-                                   business_support_identifier: "112", priority: 1,
-                                   business_types: [], locations: [], purposes: [], sectors: [], stages: [], support_types: [])
+                                   business_support_identifier: "112", priority: 1)
     @megabiz = FactoryGirl.create(:business_support_scheme, title: "Mega biz support",
-                                   business_support_identifier: "113", priority: 1,
-                                   business_types: [], locations: [], purposes: [], sectors: [], stages: [], support_types: [])
+                                   business_support_identifier: "113", priority: 1)
 
     @superbiz.business_types = [@global_megacorp.slug, @private_company.slug]
     @superbiz.locations = [@england.slug, @wales.slug]
@@ -70,7 +68,6 @@ class BusinessSupportFacetManagerTest < ActiveSupport::TestCase
 
     @ultrabiz = FactoryGirl.create(:business_support_scheme, title: "Ultra biz support",
                                    business_support_identifier: "10101", priority: 2,
-                                   #business_types: [], locations: [], sectors: [], stages: [], support_types: [],
                                    business_support_business_type_ids: [@private_company._id],
                                    business_support_location_ids: [@england._id, @scotland._id],
                                    business_support_sector_ids: [@agriculture._id, @healthcare._id],
@@ -112,14 +109,11 @@ class BusinessSupportFacetManagerTest < ActiveSupport::TestCase
   
   test "associate_english_regions" do
     scheme1 = FactoryGirl.create(:business_support_scheme, title: "scheme1",
-                                  business_support_identifier: "345", priority: 1,
-                                  business_types: [], locations: [], purposes: [], sectors: [], stages: [], support_types: [])
+                                  business_support_identifier: "345", priority: 1)
     scheme2 = FactoryGirl.create(:business_support_scheme, title: "scheme2",
-                                  business_support_identifier: "123", priority: 1,
-                                  business_types: [], locations: [], purposes: [], sectors: [], stages: [], support_types: [])
+                                  business_support_identifier: "123", priority: 1)
     scheme3 = FactoryGirl.create(:business_support_scheme, title: "scheme3",
-                                  business_support_identifier: "432", priority: 1,
-                                  business_types: [], locations: [], purposes: [], sectors: [], stages: [], support_types: [])
+                                  business_support_identifier: "432", priority: 1)
 
     [scheme1, scheme2, scheme3].each do |scheme|
       scheme.locations = [@england.slug]
@@ -151,11 +145,11 @@ class BusinessSupportFacetManagerTest < ActiveSupport::TestCase
 
   test "associate_purpose_facets" do
     scheme1 = FactoryGirl.create(:business_support_scheme, title: "scheme1",
-                                  business_support_identifier: "345", purposes: [] ,priority: 1)
+                                  business_support_identifier: "345" ,priority: 1)
     scheme2 = FactoryGirl.create(:business_support_scheme, title: "scheme2",
-                                  business_support_identifier: "123", purposes: [], priority: 1)
+                                  business_support_identifier: "123", priority: 1)
     scheme3 = FactoryGirl.create(:business_support_scheme, title: "scheme3",
-                                  business_support_identifier: "432", purposes: [], priority: 1)
+                                  business_support_identifier: "432", priority: 1)
     
     make_facets(:business_support_purpose, ["Making the most of the Internet", "Exporting or finding overseas partners", 
                 "Finding new customers and markets", "Energy efficiency and the environment"])

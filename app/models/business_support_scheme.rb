@@ -13,12 +13,12 @@ class BusinessSupportScheme
   has_and_belongs_to_many :business_support_stages, index: true
   has_and_belongs_to_many :business_support_types, index: true
 
-  field :business_types, type: Array, index: true
-  field :locations, type: Array, index: true
-  field :purposes, type: Array, index: true
-  field :sectors, type: Array, index: true
-  field :stages, type: Array, index: true
-  field :support_types, type: Array, index: true
+  field :business_types,  type: Array, index: true, default: []
+  field :locations,       type: Array, index: true, default: []
+  field :purposes,        type: Array, index: true, default: []
+  field :sectors,         type: Array, index: true, default: []
+  field :stages,          type: Array, index: true, default: []
+  field :support_types,   type: Array, index: true, default: []
 
   validates_presence_of :title, :business_support_identifier
   validates_uniqueness_of :title
@@ -36,12 +36,8 @@ class BusinessSupportScheme
     criteria = []
     relations.each do |k, v|
       collection = "#{k.to_s.singularize}s".to_sym
-      selector = { collection => [] }
       slugs = v.split(",")
-      unless slugs.empty?
-        selector = { "$or" => [{ collection => { "$in" => slugs } }, selector] }
-      end
-      criteria << selector
+      criteria << { collection => { "$in" => slugs } } unless slugs.empty?
     end
     criteria 
   end

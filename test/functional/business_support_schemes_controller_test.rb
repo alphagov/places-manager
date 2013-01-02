@@ -18,17 +18,13 @@ class BusinessSupportSchemesControllerTest < ActionController::TestCase
     grow_sustain = FactoryGirl.create(:business_support_stage, name: "Grow and sustain", slug: "grow-and-sustain")
     
     eu_culture_programme = FactoryGirl.create(:business_support_scheme, title: "EU Culture Programme",
-      business_support_identifier: "eu-culture-programme", priority: 0,
-      business_types: [], locations: [], sectors: [], stages: [], support_types: [])
+      business_support_identifier: "eu-culture-programme", priority: 0)
     urban_dev_grant = FactoryGirl.create(:business_support_scheme, title: "Urban Development Grant",
-      business_support_identifier: "urban-development-grant", priority: 2,
-      business_types: [], locations: [], sectors: [], stages: [], support_types: [])
+      business_support_identifier: "urban-development-grant", priority: 2)
     business_mentoring = FactoryGirl.create(:business_support_scheme, title: "Business Mentoring",
-      business_support_identifier: "business-mentoring", priority: 1,
-      business_types: [], locations: [], sectors: [], stages: [], support_types: [])
+      business_support_identifier: "business-mentoring", priority: 1)
     sectorless_scheme = FactoryGirl.create(:business_support_scheme, title: "I have no sectors",
-      business_support_identifier: "i-have-no-sectors", priority: 1,
-      business_types: [], locations: [], sectors: [], stages: [], support_types: [])
+      business_support_identifier: "i-have-no-sectors", priority: 1)
     
     urban_dev_grant.sectors << agriculture.slug
     urban_dev_grant.sectors << manufacturing.slug
@@ -72,9 +68,7 @@ class BusinessSupportSchemesControllerTest < ActionController::TestCase
     get :index, format: :json, sectors: 'foo,bar'
     result = JSON.parse(response.body)
     assert_equal 'ok', result['_response_info']['status']
-    assert_equal 2, result['total']
-    assert_equal "Business Mentoring", result['results'].first['title']
-    assert_equal "I have no sectors", result['results'].last['title']
+    assert_equal 0, result['total']
   end
  
   test "GET to index with multiple sectors" do
@@ -84,13 +78,6 @@ class BusinessSupportSchemesControllerTest < ActionController::TestCase
     results = JSON.parse(response.body)['results']
     assert_equal "Urban Development Grant", results.first['title']
     assert_equal 2, results.first['priority']
-
-    get :index, format: :json, sectors: 'agriculture',
-      business_types: 'charity', stages: 'grow-and-sustain', locations: 'scotland',
-      types: 'award'
-    results = JSON.parse(response.body)['results']
-    assert_equal "Business Mentoring", results.first['title']
-    assert_equal "EU Culture Programme", results.second['title']
   end
   
   test "GET to index with no sectors param" do
