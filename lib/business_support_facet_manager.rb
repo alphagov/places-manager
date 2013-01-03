@@ -4,7 +4,6 @@ class BusinessSupportFacetManager
     BusinessSupportScheme.all.each do |scheme|
       puts "Checking #{scheme.title} for facet ids"
       if has_facet_ids?(scheme)
-        puts scheme.inspect
         if scheme.business_support_business_type_ids.present?
           scheme.business_types = []
           scheme.business_support_business_type_ids.each do |id|
@@ -66,7 +65,6 @@ class BusinessSupportFacetManager
           scheme.business_support_type_ids = nil
         end
         scheme.save!
-        puts scheme.inspect
       end
     end
     clear_facet_relations
