@@ -6,8 +6,7 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
     @scheme = FactoryGirl.create(:business_support_scheme, 
       title: "Tourism support grant. West Dunbartonshire", 
       business_support_identifier: "99",
-      priority: 1, 
-      business_types: [], locations: [], sectors: [], stages: [], support_types: [])
+      priority: 1)
   end
 
   test "should validate presence of title" do
@@ -21,12 +20,12 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
     another_scheme = BusinessSupportScheme.new(
       title: "Tourism support grant. West Dunbartonshire", 
       business_support_identifier: "foo")
+      debugger
     refute another_scheme.valid?, "should validate uniqueness of title."
   end
   
   test "should validate uniqueness of business_support_identifier" do
-    another_scheme = BusinessSupportScheme.new(title: "Foo", 
-      business_support_identifier: "99")
+    another_scheme = BusinessSupportScheme.new(title: "Foo", business_support_identifier: "99")
     refute another_scheme.valid?, "should validate uniqueness of business_support_identifier."
   end
 

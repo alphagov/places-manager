@@ -1,24 +1,30 @@
 class BusinessSupportScheme
   include Mongoid::Document
   
-   
   field :title, type: String
   field :business_support_identifier, type: String
   field :priority, type: Integer, default: 1
 
-  has_and_belongs_to_many :business_support_business_types, index: true
-  has_and_belongs_to_many :business_support_locations, index: true
-  has_and_belongs_to_many :business_support_purposes, index: true
-  has_and_belongs_to_many :business_support_sectors, index: true
-  has_and_belongs_to_many :business_support_stages, index: true
-  has_and_belongs_to_many :business_support_types, index: true
+  # These relations are required for data migration from facet ids to slugs
+  # and can be removed once this task is complete.
+  #
+  has_and_belongs_to_many :business_support_business_types
+  has_and_belongs_to_many :business_support_locations
+  has_and_belongs_to_many :business_support_purposes
+  has_and_belongs_to_many :business_support_sectors
+  has_and_belongs_to_many :business_support_stages
+  has_and_belongs_to_many :business_support_types
 
-  field :business_types,  type: Array, index: true, default: []
-  field :locations,       type: Array, index: true, default: []
-  field :purposes,        type: Array, index: true, default: []
-  field :sectors,         type: Array, index: true, default: []
-  field :stages,          type: Array, index: true, default: []
-  field :support_types,   type: Array, index: true, default: []
+  field :business_types,  type: Array, default: []
+  field :locations,       type: Array, default: []
+  field :purposes,        type: Array, default: []
+  field :sectors,         type: Array, default: []
+  field :stages,          type: Array, default: []
+  field :support_types,   type: Array, default: []
+
+  index :title, unique: true
+  index :business_support_identifier, unique: true
+  index :locations
 
   validates_presence_of :title, :business_support_identifier
   validates_uniqueness_of :title
