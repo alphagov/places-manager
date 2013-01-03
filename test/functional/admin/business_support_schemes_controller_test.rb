@@ -13,7 +13,8 @@ class Admin::BusinessSupportSchemesControllerTest < ActionController::TestCase
       ].each_with_index do |title, index|
         FactoryGirl.create(:business_support_scheme, 
                           title: title, 
-                          business_support_identifier: index + 1)
+                          business_support_identifier: index + 1,
+                          business_types: [], locations: [], sectors: [], stages: [], support_types: [])
     end
   end
 
@@ -79,19 +80,19 @@ class Admin::BusinessSupportSchemesControllerTest < ActionController::TestCase
   test "PUT to update" do
     scheme = BusinessSupportScheme.last
     
-    scheme.business_support_sectors << @manufacturing 
-    scheme.business_support_locations << @england
+    scheme.sectors << @manufacturing.slug 
+    scheme.locations << @england.slug
     scheme.save!
 
     as_logged_in_user do
       put :update, id: scheme._id, business_support_scheme: { title: scheme.title,
         business_support_identifier: scheme.business_support_identifier,
-        business_support_location_ids: [@england._id, @scotland._id],
-        business_support_sector_ids: [@manufacturing._id],
+        locations: [@england.slug, @scotland.slug],
+        sectors: [@manufacturing.slug],
         priority: 2
       }
       scheme.reload
-      assert_equal [@england, @scotland], scheme.business_support_locations
+      assert_equal [@england.slug, @scotland.slug], scheme.locations
       assert_equal 2, scheme.priority
       assert_equal 302, response.status
     end

@@ -5,16 +5,6 @@ class BusinessSupportStageTest < ActiveSupport::TestCase
     @stage = FactoryGirl.create(:business_support_stage, name: "Finance")
   end
   
-  test "should have and belong to many BusinessSupportSchemes" do
-    3.times do |i| 
-      @stage.business_support_schemes << BusinessSupportScheme.new(
-        title: "Foo scheme #{i + 1}", 
-        business_support_identifier: "foo-scheme-#{i + 1}") 
-    end
-    assert_equal "Foo scheme 1", @stage.business_support_schemes.first.title
-    assert_equal "Foo scheme 3", @stage.business_support_schemes.last.title 
-  end
-  
   test "should validates presence of name" do
     refute BusinessSupportStage.new.valid?
   end

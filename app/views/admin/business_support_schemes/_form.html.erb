@@ -9,30 +9,30 @@
     <%= render partial: "facets", locals: { f: f,
                                             title: "Business types", 
                                             collection: @business_types, 
-                                            model_collection: "business_support_business_type_ids" } %>
+                                            model_collection: "business_types" } %>
   
     <%= render partial: "facets", locals: { f: f,
                                             title: "Locations", 
                                             collection: @locations, 
-                                            model_collection: "business_support_location_ids" } %>
+                                            model_collection: "locations" } %>
 
     <%= render partial: "facets", locals: { f: f,
                                             title: "Purposes", 
                                             collection: @purposes, 
-                                            model_collection: "business_support_purpose_ids" } %>
+                                            model_collection: "purposes" } %>
 
     <%= render partial: "facets", locals: { f: f,
                                             title: "Sectors", 
                                             collection: @sectors, 
-                                            model_collection: "business_support_sector_ids" } %>
+                                            model_collection: "sectors" } %>
                                             
     <%= render partial: "facets", locals: { f: f,
                                             title: "Stages", 
                                             collection: @stages, 
-                                            model_collection: "business_support_stage_ids" } %>
+                                            model_collection: "stages" } %>
 
     <%= render partial: "facets", locals: { f: f,
                                             title: "Support types", 
                                             collection: @types, 
-                                            model_collection: "business_support_type_ids" } %>
+                                            model_collection: "support_types" } %>
   <% end %>
