@@ -1,16 +1,30 @@
 class BusinessSupportScheme
   include Mongoid::Document
   
-  has_and_belongs_to_many :business_support_business_types, index: true
-  has_and_belongs_to_many :business_support_locations, index: true
-  has_and_belongs_to_many :business_support_purposes, index: true
-  has_and_belongs_to_many :business_support_sectors, index: true
-  has_and_belongs_to_many :business_support_stages, index: true
-  has_and_belongs_to_many :business_support_types, index: true
-   
   field :title, type: String
   field :business_support_identifier, type: String
   field :priority, type: Integer, default: 1
+
+  # These relations are required for data migration from facet ids to slugs
+  # and can be removed once this task is complete.
+  #
+  has_and_belongs_to_many :business_support_business_types
+  has_and_belongs_to_many :business_support_locations
+  has_and_belongs_to_many :business_support_purposes
+  has_and_belongs_to_many :business_support_sectors
+  has_and_belongs_to_many :business_support_stages
+  has_and_belongs_to_many :business_support_types
+
+  field :business_types,  type: Array, default: []
+  field :locations,       type: Array, default: []
+  field :purposes,        type: Array, default: []
+  field :sectors,         type: Array, default: []
+  field :stages,          type: Array, default: []
+  field :support_types,   type: Array, default: []
+
+  index :title, unique: true
+  index :business_support_identifier, unique: true
+  index :locations
 
   validates_presence_of :title, :business_support_identifier
   validates_uniqueness_of :title
@@ -27,20 +41,11 @@ class BusinessSupportScheme
   def self.schemes_criteria(relations)
     criteria = []
     relations.each do |k, v|
-      collection = "business_support_#{k.to_s.singularize}_ids".to_sym
-      collection_ids = ids_for_slugs(k, v)
-      selector = { collection => [] }
-      unless collection_ids.empty?
-        selector = { "$or" => [{ collection => { "$in" => collection_ids } }, selector] }
-      end
-      criteria << selector
+      collection = "#{k.to_s.singularize}s".to_sym
+      slugs = v.split(",")
+      criteria << { collection => { "$in" => slugs } } unless slugs.empty?
     end
     criteria 
-  end
-
-  def self.ids_for_slugs(key, slugs)
-    klass = Kernel.const_get("BusinessSupport#{key.to_s.singularize.camelize}")
-    klass.any_in(slug: slugs.split(',')).map(&:id)  
   end
 
   def populate_business_support_identifier

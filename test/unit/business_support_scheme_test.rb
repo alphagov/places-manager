@@ -20,12 +20,12 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
     another_scheme = BusinessSupportScheme.new(
       title: "Tourism support grant. West Dunbartonshire", 
       business_support_identifier: "foo")
+      debugger
     refute another_scheme.valid?, "should validate uniqueness of title."
   end
   
   test "should validate uniqueness of business_support_identifier" do
-    another_scheme = BusinessSupportScheme.new(title: "Foo", 
-      business_support_identifier: "99")
+    another_scheme = BusinessSupportScheme.new(title: "Foo", business_support_identifier: "99")
     refute another_scheme.valid?, "should validate uniqueness of business_support_identifier."
   end
 
@@ -39,47 +39,47 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
   end
 
   test "should have and belong to many BusinessSupportBusinessTypes" do
-    @scheme.business_support_business_types << BusinessSupportBusinessType.new(name: "Charity")
-    @scheme.business_support_business_types << BusinessSupportBusinessType.new(name: "Private company")
-    assert_equal "Charity", @scheme.business_support_business_types.first.name
-    assert_equal "Private company", @scheme.business_support_business_types.last.name 
+    @scheme.business_types << "charity"
+    @scheme.business_types << "private-company"
+    assert_equal "charity", @scheme.business_types.first
+    assert_equal "private-company", @scheme.business_types.last
   end
  
   test "should have and belong to many BusinessSupportNations" do
-    @scheme.business_support_locations << BusinessSupportLocation.new(name: "Auchtermuchty")
-    @scheme.business_support_locations << BusinessSupportLocation.new(name: "Ecclefechan")
-    @scheme.business_support_locations << BusinessSupportLocation.new(name: "London")
-    assert_equal "Auchtermuchty", @scheme.business_support_locations.first.name
-    assert_equal "London", @scheme.business_support_locations.last.name 
+    @scheme.locations << "auchtermuchty"
+    @scheme.locations << "ecclefechan"
+    @scheme.locations << "london"
+    assert_equal "auchtermuchty", @scheme.locations.first
+    assert_equal "london", @scheme.locations.last 
   end
   
   test "should have and belong to many BusinessSupportSectors" do
-    @scheme.business_support_sectors << BusinessSupportSector.new(name: "Finance")
-    @scheme.business_support_sectors << BusinessSupportSector.new(name: "Law")
-    @scheme.business_support_sectors << BusinessSupportSector.new(name: "Media")
-    assert_equal "Finance", @scheme.business_support_sectors.first.name
-    assert_equal "Media", @scheme.business_support_sectors.last.name 
+    @scheme.sectors << "finance"
+    @scheme.sectors << "law"
+    @scheme.sectors << "media"
+    assert_equal "finance", @scheme.sectors.first
+    assert_equal "media", @scheme.sectors.last
   end
   
   test "should have and belong to many BusinessSupportStages" do
-    @scheme.business_support_stages << BusinessSupportStage.new(name: "Start-up")
-    @scheme.business_support_stages << BusinessSupportStage.new(name: "Grow and sustain")
-    assert_equal "Start-up", @scheme.business_support_stages.first.name
-    assert_equal "Grow and sustain", @scheme.business_support_stages.last.name 
+    @scheme.stages << "start-up"
+    @scheme.stages << "grow-and-sustain"
+    assert_equal "start-up", @scheme.stages.first
+    assert_equal "grow-and-sustain", @scheme.stages.last 
   end
   
   test "should have and belong to many BusinessSupportTypes" do
-    @scheme.business_support_types << BusinessSupportType.new(name: "Award")
-    @scheme.business_support_types << BusinessSupportType.new(name: "Loan")
-    assert_equal "Award", @scheme.business_support_types.first.name
-    assert_equal "Loan", @scheme.business_support_types.last.name 
+    @scheme.support_types << "award"
+    @scheme.support_types << "loan"
+    assert_equal "award", @scheme.support_types.first
+    assert_equal "loan", @scheme.support_types.last 
   end
  
   test "should have and belong to many BusinessSupportPurposes" do
-    @scheme.business_support_purposes << BusinessSupportPurpose.new(name: "Business growth and expansion")
-    @scheme.business_support_purposes << BusinessSupportPurpose.new(name: "Setting up your business")
-    assert_equal "Business growth and expansion", @scheme.business_support_purposes.first.name
-    assert_equal "Setting up your business", @scheme.business_support_purposes.last.name 
+    @scheme.purposes << BusinessSupportPurpose.new(name: "Business growth and expansion")
+    @scheme.purposes << BusinessSupportPurpose.new(name: "Setting up your business")
+    assert_equal "Business growth and expansion", @scheme.purposes.first.name
+    assert_equal "Setting up your business", @scheme.purposes.last.name 
   end 
 
   test "should be scoped by relations and ordered by priority then title" do
@@ -87,16 +87,15 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
                                          business_support_identifier: "123",
                                          priority: 2)
     @start_up = FactoryGirl.create(:business_support_stage, name: "Start up", slug: "start-up")
-    @scheme.business_support_stages << @start_up
+    @scheme.stages << @start_up.slug
     @scheme.save!
-    @another_scheme.business_support_stages << @start_up
+    @another_scheme.stages << @start_up.slug
     @another_scheme.save!
     assert_equal @another_scheme, BusinessSupportScheme.for_relations(stages: "start-up").first
     assert_equal @scheme, BusinessSupportScheme.for_relations(stages: "start-up").second
-    assert_equal @another_scheme, BusinessSupportScheme.for_relations(stages: "start-up", sectors: "manufacturing").first
     @manufacturing = FactoryGirl.create(:business_support_sector, name: "Manufacturing", slug: "manufacturing")
-    @scheme.business_support_sectors << @manufacturing
-    @another_scheme.business_support_sectors << @manufacturing
+    @scheme.sectors << @manufacturing.slug
+    @another_scheme.sectors << @manufacturing.slug
     @scheme.save!
     @another_scheme.save!
     assert_equal 0, BusinessSupportScheme.for_relations(stages: "start-up", sectors: "Agriculture").count

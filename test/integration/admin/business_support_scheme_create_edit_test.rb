@@ -17,9 +17,9 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
 
     @bs = FactoryGirl.create(:business_support_scheme,
                             title: "Wunderbiz Pro", business_support_identifier: "333",
-                            business_support_location_ids: [@scotland._id],
-                            business_support_sector_ids: [@manufacturing._id],
-                            business_support_purpose_ids: [@energy_efficiency_and_the_environment._id])
+                            locations: [@scotland.slug], 
+                            purposes: [@energy_efficiency_and_the_environment.slug],
+                            sectors: [@manufacturing.slug])
 
   end
 
@@ -49,11 +49,12 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
     assert_equal "Wunderbiz 2012 superfunding", bs.title
     assert_equal 0, bs.priority
     assert_equal "334", bs.business_support_identifier
-    assert_equal [@global_megacorp, @charity], bs.business_support_business_types
-    assert_equal [@england, @wales, @london, @yorkshire_and_the_humber], bs.business_support_locations
-    assert_equal [@agriculture, @healthcare, @manufacturing], bs.business_support_sectors
-    assert_equal [@grant], bs.business_support_types
-    assert_equal [@making_the_most_of_the_internet, @energy_efficiency_and_the_environment], bs.business_support_purposes
+    
+    assert_equal [@charity.slug, @global_megacorp.slug], bs.business_types
+    assert_equal [@england.slug, @london.slug, @wales.slug, @yorkshire_and_the_humber.slug], bs.locations
+    assert_equal [@agriculture.slug, @healthcare.slug, @manufacturing.slug], bs.sectors
+    assert_equal [@grant.slug], bs.support_types
+    assert_equal [@energy_efficiency_and_the_environment.slug, @making_the_most_of_the_internet.slug], bs.purposes
 
     assert page.has_content? "Wunderbiz 2012 superfunding successfully created"
 
@@ -79,10 +80,10 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
     @bs.reload
 
     assert page.has_content? "Wunderbiz Pro successfully updated"
-    
-    assert_equal [@england, @wales, @london, @yorkshire_and_the_humber], @bs.business_support_locations
-    assert_equal [@agriculture, @manufacturing], @bs.business_support_sectors
-    assert_equal [@finding_new_customers_and_markets], @bs.business_support_purposes
+
+    assert_equal [@england.slug, @london.slug, @wales.slug, @yorkshire_and_the_humber.slug], @bs.locations
+    assert_equal [@agriculture.slug, @manufacturing.slug], @bs.sectors
+    assert_equal [@finding_new_customers_and_markets.slug], @bs.purposes
     assert_equal 2, @bs.priority
   end
 end
