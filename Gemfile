@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 source 'https://gems.gemfury.com/vo6ZrmjBQu5szyywDszE/'
 
-gem 'plek', '0.1.24'
+gem 'plek', '1.0.0'
 
 gem 'rails', '3.2.8'
 gem 'unicorn', '4.3.1'
@@ -19,7 +19,7 @@ gem 'jquery-rails'
 gem 'less-rails-bootstrap'
 
 gem 'gds-api-adapters', '4.1.3'
-gem 'govuk_content_models', '2.5.0'
+gem 'govuk_content_models', '2.5.1'
 gem 'statsd-ruby', '1.0.0', :require => 'statsd'
 
 if ENV['BUNDLE_DEV']
