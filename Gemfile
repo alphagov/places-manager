@@ -3,7 +3,7 @@ source 'https://gems.gemfury.com/vo6ZrmjBQu5szyywDszE/'
 
 gem 'plek', '0.1.24'
 
-gem 'rails', '3.2.8'
+gem 'rails', '3.2.11'
 gem 'unicorn', '4.3.1'
 
 gem "mongoid", "2.4.10"
