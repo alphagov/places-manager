@@ -8,7 +8,7 @@ class User
   field  :email, :type => String
   field  :version, :type => Integer
   field  :name, :type => String
-  field  :permissions, :type => Hash
+  field  :permissions, :type => Array
   field  :remotely_signed_out, type: Boolean, default: false
 
   def record_action(data_set, type, comment=nil)
