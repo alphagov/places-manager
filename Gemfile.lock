@@ -161,7 +161,7 @@ GEM
       less-rails (~> 2.2.0)
     libv8 (3.3.10.4)
     lockfile (2.1.0)
-    lograge (0.0.6)
+    lograge (0.1.2)
       actionpack
       activesupport
     lrucache (0.1.4)
@@ -316,7 +316,7 @@ DEPENDENCIES
   launchy
   less-rails-bootstrap
   lockfile
-  lograge
+  lograge (~> 0.1.0)
   minitest (= 3.3.0)
   mocha (= 0.12.3)
   mongo (= 1.6.2)

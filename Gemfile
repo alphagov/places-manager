@@ -35,7 +35,7 @@ gem 'govspeak', '~> 1.2'
 gem 'inherited_resources'
 gem 'lockfile'
 gem 'whenever'
-gem 'lograge'
+gem 'lograge', '~> 0.1.0'
 gem 'kaminari', '0.14.1'
 gem 'kaminari-bootstrap', '0.1.3'
 
