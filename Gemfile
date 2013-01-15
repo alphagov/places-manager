@@ -7,6 +7,7 @@ gem 'rails', '3.2.11'
 gem 'unicorn', '4.3.1'
 
 gem "mongoid", "2.4.10"
+gem "mongoid_rails_migrations", "1.0.0"
 gem "mongo", "1.6.2"
 gem "bson_ext", "1.6.2"
 
@@ -19,13 +20,13 @@ gem 'jquery-rails'
 gem 'less-rails-bootstrap'
 
 gem 'gds-api-adapters', '4.1.3'
-gem 'govuk_content_models', '2.5.0'
+gem 'govuk_content_models', '4.0.0'
 gem 'statsd-ruby', '1.0.0', :require => 'statsd'
 
 if ENV['BUNDLE_DEV']
   gem 'gds-sso', :path => '../gds-sso'
 else
-  gem 'gds-sso', '2.1.0'
+  gem 'gds-sso', '3.0.0'
 end
 gem "faraday", "0.8.1" # Specifying to resolve Jenkins dependency resolution fail
 
