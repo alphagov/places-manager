@@ -214,7 +214,7 @@ GEM
       http_parser.rb (~> 0.5.3)
       multi_json (~> 1.0)
     polyglot (0.3.3)
-    rack (1.4.3)
+    rack (1.4.4)
     rack-accept (0.4.5)
       rack (>= 0.4)
     rack-cache (1.2)
