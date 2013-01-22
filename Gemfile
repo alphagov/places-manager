@@ -3,7 +3,7 @@ source 'https://gems.gemfury.com/vo6ZrmjBQu5szyywDszE/'
 
 gem 'plek', '1.0.0'
 
-gem 'rails', '3.2.8'
+gem 'rails', '3.2.11'
 gem 'unicorn', '4.3.1'
 
 gem "mongoid", "2.4.10"
@@ -35,7 +35,7 @@ gem 'govspeak', '~> 1.2'
 gem 'inherited_resources'
 gem 'lockfile'
 gem 'whenever'
-gem 'lograge'
+gem 'lograge', '~> 0.1.0'
 gem 'kaminari', '0.14.1'
 gem 'kaminari-bootstrap', '0.1.3'
 
