@@ -31,3 +31,4 @@ class CachedUrlTask < Rake::TaskLib
 end
 
 Imminence::Application.load_tasks
+task :default => [:test, :check_for_bad_time_handling]
