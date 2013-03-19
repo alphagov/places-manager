@@ -2,11 +2,13 @@ development:
   host: localhost
   database: imminence_development
   autocreate_indexes: true
+  use_activesupport_time_zone: true
 
 test:
   host: localhost
   database: imminence_test
   autocreate_indexes: true
+  use_activesupport_time_zone: true
 
 # set these environment variables on your prod server
 production:
@@ -15,6 +17,7 @@ production:
   username: <%= ENV['MONGOID_USERNAME'] %>
   password: <%= ENV['MONGOID_PASSWORD'] %>
   database: <%= ENV['MONGOID_DATABASE'] %>
+  use_activesupport_time_zone: true
   # slaves:
   #   - host: slave1.local
   #     port: 27018
