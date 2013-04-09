@@ -15,7 +15,6 @@ class Lockfile
     end
 end
 
-Lockfile.debug = true
 Lockfile.new lock_path, :retries => 0 do
   Service.all.each do |service|
     service.data_sets.each do |set|
