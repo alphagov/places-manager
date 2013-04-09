@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 source 'https://BnrJb6FZyzspBboNJzYZ@gem.fury.io/govuk/'
 
-gem 'plek', '1.0.0'
+gem 'plek', '1.3.1'
 
 gem 'rails', '3.2.13'
 gem 'unicorn', '4.3.1'
