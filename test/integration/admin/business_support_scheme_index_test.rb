@@ -22,6 +22,7 @@ class BusinessSupportSchemeIndexTest < ActionDispatch::IntegrationTest
     assert page.has_content?("Wunderbiz")
 
     assert page.has_content?("New Business Support")
+    assert page.has_link?("Export as CSV", :href => "/admin/business_support_schemes.csv")
 
     click_on "New Business Support"
 
