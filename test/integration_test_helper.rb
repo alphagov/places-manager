@@ -6,6 +6,7 @@ DatabaseCleaner.strategy = :truncation
 
 class ActionDispatch::IntegrationTest
   include Capybara::DSL
+  include Rack::Test::Methods
 
   setup do
     DatabaseCleaner.clean

@@ -7,6 +7,12 @@ class Admin::BusinessSupportSchemesController < InheritedResources::Base
 
   def index
     @schemes = BusinessSupportScheme.asc(:title)
+    respond_to do |format|
+      format.csv do
+        send_data BusinessSupportCSVPresenter.new(@schemes).to_csv, :filename => 'business_support_schemes.csv'
+      end
+      format.all
+    end
   end
 
   def new
@@ -39,6 +45,8 @@ class Admin::BusinessSupportSchemesController < InheritedResources::Base
     end
   end
 
+protected
+
   def find_all_facets
     @business_types = BusinessSupportBusinessType.asc(:name)
     @locations = BusinessSupportLocation.asc(:name)
@@ -47,5 +55,4 @@ class Admin::BusinessSupportSchemesController < InheritedResources::Base
     @stages = BusinessSupportStage.asc(:name)
     @types = BusinessSupportType.asc(:name)
   end
-
 end
