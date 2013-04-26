@@ -5,16 +5,6 @@ class BusinessSupportScheme
   field :business_support_identifier, type: String
   field :priority, type: Integer, default: 1
 
-  # These relations are required for data migration from facet ids to slugs
-  # and can be removed once this task is complete.
-  #
-  has_and_belongs_to_many :business_support_business_types
-  has_and_belongs_to_many :business_support_locations
-  has_and_belongs_to_many :business_support_purposes
-  has_and_belongs_to_many :business_support_sectors
-  has_and_belongs_to_many :business_support_stages
-  has_and_belongs_to_many :business_support_types
-
   field :business_types,  type: Array, default: []
   field :locations,       type: Array, default: []
   field :purposes,        type: Array, default: []
