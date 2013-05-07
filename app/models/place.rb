@@ -236,7 +236,10 @@ class Place
   end
 
   def handle_postcode_change
-    self.location = nil if postcode_changed?
+    if postcode_changed?
+      self.location = nil
+      geocode
+    end
   end
 
   private

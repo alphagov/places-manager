@@ -168,10 +168,15 @@ class PlaceTest < ActiveSupport::TestCase
     assert place.save
   end
 
-  test "postcode updates nillify location ready for geocoding" do
+  test "updating postcode performs geocoding" do
     service = Service.create! slug: "chickens", name: "Chickens!"
     data_set = service.data_sets.create! version: 2, active: false
-
+    
+    Geogov.stubs(:lat_lon_from_postcode).with("SE1 7DU")
+      .returns(latitude: 51.498241853641055, longitude: -0.11354773400359928)
+    Geogov.stubs(:lat_lon_from_postcode).with("SW1H 9NB")
+      .returns(latitude: 51.4999569844724, longitude: -0.13193340292244346)
+    
     place = Place.create!(
       name: "Hercules House",
       source_address: "Blah",
@@ -181,16 +186,15 @@ class PlaceTest < ActiveSupport::TestCase
     )
 
     place.geocode
-
+    
     assert_equal 51.498241853641055, place.location.latitude
+    assert_equal -0.11354773400359928, place.location.longitude
 
     place.postcode = "SW1H 9NB"
 
     assert place.save
-    assert_nil place.location
-
-    place.geocode
 
     assert_equal 51.4999569844724, place.location.latitude
+    assert_equal -0.13193340292244346, place.location.longitude
   end
 end
