@@ -167,4 +167,30 @@ class PlaceTest < ActiveSupport::TestCase
     assert place.valid?
     assert place.save
   end
+
+  test "postcode updates nillify location ready for geocoding" do
+    service = Service.create! slug: "chickens", name: "Chickens!"
+    data_set = service.data_sets.create! version: 2, active: false
+
+    place = Place.create!(
+      name: "Hercules House",
+      source_address: "Blah",
+      postcode: "SE1 7DU",
+      service_slug: "chickens",
+      data_set_version: 2
+    )
+
+    place.geocode
+
+    assert_equal 51.498241853641055, place.location.latitude
+
+    place.postcode = "SW1H 9NB"
+
+    assert place.save
+    assert_nil place.location
+
+    place.geocode
+
+    assert_equal 51.4999569844724, place.location.latitude
+  end
 end
