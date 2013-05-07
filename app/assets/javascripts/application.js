@@ -24,10 +24,17 @@ $(document).ready(function() {
   countries.each (function (index, country) {
     $(country).children(":checkbox").on("click", function () {
       var countryLabel = $(country).text().trim();
+      var countryMatch = countryLabel;
+
+      if(countryLabel == "England") {
+        countryMatch = /England|London|Yorkshire/;
+      }
+
       var matches = allLabels.filter(function() {
         var matchText = $(this).text().trim();
-        return matchText.indexOf(countryLabel) > -1 && matchText != countryLabel;
+        return matchText.match(countryMatch) && matchText != countryLabel;
       });
+
       matches.each (function (index, match) {
         var checkbox = $(match).children(":checkbox");
         checkbox.attr("checked", !checkbox.attr("checked"));
