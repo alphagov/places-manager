@@ -24,11 +24,7 @@ $(document).ready(function() {
   countries.each (function (index, country) {
     $(country).children(":checkbox").on("click", function () {
       var countryLabel = $(country).text().trim();
-      var countryMatch = countryLabel;
-
-      if(countryLabel == "England") {
-        countryMatch = /England|London|Yorkshire/;
-      }
+      var countryMatch = (countryLabel == "England" ? /England|London|Yorkshire/ : countryLabel);
 
       var matches = allLabels.filter(function() {
         var matchText = $(this).text().trim();
