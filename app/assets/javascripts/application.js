@@ -31,9 +31,10 @@ $(document).ready(function() {
         return matchText.match(countryMatch) && matchText != countryLabel;
       });
 
+      var value = $(this).prop("checked");
       matches.each (function (index, match) {
         var checkbox = $(match).children(":checkbox");
-        checkbox.attr("checked", !checkbox.attr("checked"));
+        checkbox.attr("checked", value);
       });
     });
   });
