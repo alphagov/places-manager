@@ -85,6 +85,7 @@ class Place
   attr_accessor :dis
   before_validation :build_source_address
   before_save :reconcile_location
+  before_update :handle_postcode_change
 
   def data_set
     service = Service.where(slug: service_slug).first
@@ -231,6 +232,13 @@ class Place
     # the point on save
     if location.nil? && @temp_lat && @temp_lng
       self.location = Point.new(longitude: @temp_lng, latitude: @temp_lat)
+    end
+  end
+
+  def handle_postcode_change
+    if postcode_changed?
+      self.location = nil
+      geocode
     end
   end
 

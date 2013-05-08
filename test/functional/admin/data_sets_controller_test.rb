@@ -19,7 +19,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
 
       assert_equal 1, Service.first.data_sets.count
       assert_equal 1, Place.count
-
+      
       place = Place.first
       assert_equal "1 Stop Instruction", place.name
       assert_equal "Power League", place.address1
@@ -33,6 +33,10 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
       assert_equal "0800 848 8418", place.phone
       assert_equal "0800 848 8419", place.fax
       assert_equal "0800 848 8420", place.text_phone
+      # Assert that no geocoding has taken place yet to ensure that
+      # Place#handle_postcode_change is not called when loading a new DataSet.
+      assert_nil place.location
+      assert_nil place.geocode_error
     end
   end
 
