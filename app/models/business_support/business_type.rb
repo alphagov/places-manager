@@ -1,8 +1,8 @@
-class BusinessSupportStage
+class BusinessSupport::BusinessType
   include Mongoid::Document
   
-  field :name, type: String
-  field :slug, type: String  
+  field :name, type: String 
+  field :slug, type: String
   index :slug 
 
   validates_presence_of :name

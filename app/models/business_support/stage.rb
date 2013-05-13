@@ -1,12 +1,12 @@
-class BusinessSupportPurpose
+class BusinessSupport::Stage
   include Mongoid::Document
   
   field :name, type: String
-  field :slug, type: String
-  index :slug
+  field :slug, type: String  
+  index :slug 
 
   validates_presence_of :name
   validates_uniqueness_of :name
   validates_presence_of :slug
-  validates_uniqueness_of :slug  
+  validates_uniqueness_of :slug
 end
