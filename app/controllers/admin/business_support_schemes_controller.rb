@@ -48,11 +48,11 @@ class Admin::BusinessSupportSchemesController < InheritedResources::Base
 protected
 
   def find_all_facets
-    @business_types = BusinessSupportBusinessType.asc(:name)
-    @locations = BusinessSupportLocation.asc(:name)
-    @purposes = BusinessSupportPurpose.asc(:name)
-    @sectors = BusinessSupportSector.asc(:name)
-    @stages = BusinessSupportStage.asc(:name)
-    @types = BusinessSupportType.asc(:name)
+    @business_types = BusinessSupport::BusinessType.asc(:name)
+    @locations = BusinessSupport::Location.asc(:name)
+    @purposes = BusinessSupport::Purpose.asc(:name)
+    @sectors = BusinessSupport::Sector.asc(:name)
+    @stages = BusinessSupport::Stage.asc(:name)
+    @types = BusinessSupport::SupportType.asc(:name)
   end
 end

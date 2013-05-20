@@ -1,4 +1,4 @@
-class BusinessSupportSector
+class BusinessSupport::Purpose
   include Mongoid::Document
   
   field :name, type: String

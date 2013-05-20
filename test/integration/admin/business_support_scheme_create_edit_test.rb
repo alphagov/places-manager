@@ -85,5 +85,14 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
     assert_equal [@agriculture.slug, @manufacturing.slug], @bs.sectors
     assert_equal [@finding_new_customers_and_markets.slug], @bs.purposes
     assert_equal 2, @bs.priority
+
+    visit "/admin/business_support_schemes/#{@bs._id.to_s}/edit"
+
+    assert page.has_checked_field?("Wales")
+    assert page.has_checked_field?("England")
+    assert page.has_checked_field?("Agriculture")
+    assert page.has_checked_field?("Finding new customers and markets")
+    refute page.has_checked_field?("Scotland")
+    refute page.has_checked_field?("Energy efficiency and the environment")
   end
 end
