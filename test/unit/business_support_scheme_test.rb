@@ -76,8 +76,8 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
   end
  
   test "should have and belong to many BusinessSupportPurposes" do
-    @scheme.purposes << BusinessSupportPurpose.new(name: "Business growth and expansion")
-    @scheme.purposes << BusinessSupportPurpose.new(name: "Setting up your business")
+    @scheme.purposes << BusinessSupport::Purpose.new(name: "Business growth and expansion")
+    @scheme.purposes << BusinessSupport::Purpose.new(name: "Setting up your business")
     assert_equal "Business growth and expansion", @scheme.purposes.first.name
     assert_equal "Setting up your business", @scheme.purposes.last.name 
   end 
