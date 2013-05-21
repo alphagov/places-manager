@@ -107,4 +107,23 @@ class Admin::BusinessSupportSchemesControllerTest < ActionController::TestCase
       refute_equal scheme.title, other_scheme.title
     end
   end
+
+  test "DELETE to destroy" do
+    scheme = BusinessSupportScheme.last
+    as_logged_in_user do
+      put :destroy, id: scheme._id
+      refute_equal scheme.title, BusinessSupportScheme.last.title
+      assert_redirected_to admin_business_support_schemes_path
+    end
+  end
+
+  test "DELETE to destroy a previously deleted scheme" do
+    scheme = BusinessSupportScheme.last
+    scheme.destroy
+    as_logged_in_user do
+      put :destroy, id: scheme._id 
+      assert_redirected_to admin_business_support_schemes_path
+    end
+  end
+
 end
