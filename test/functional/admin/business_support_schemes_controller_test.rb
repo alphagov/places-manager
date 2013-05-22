@@ -107,4 +107,36 @@ class Admin::BusinessSupportSchemesControllerTest < ActionController::TestCase
       refute_equal scheme.title, other_scheme.title
     end
   end
+
+  test "DELETE to destroy" do
+    scheme = BusinessSupportScheme.last
+    as_logged_in_user do
+      put :destroy, id: scheme._id
+      refute_equal scheme.title, BusinessSupportScheme.last.title
+      assert_equal "#{scheme.title} successfully deleted", flash[:notice]
+      assert_redirected_to admin_business_support_schemes_path
+    end
+  end
+
+  test "DELETE to destroy a previously deleted scheme" do
+    scheme = BusinessSupportScheme.last
+    scheme.destroy
+    as_logged_in_user do
+      put :destroy, id: scheme._id
+      assert_equal "Document #{scheme._id} not found", flash[:alert]
+      assert_redirected_to admin_business_support_schemes_path
+    end
+  end
+
+  test "DELETE to destroy when destroy fails" do
+    scheme = BusinessSupportScheme.last
+    BusinessSupportScheme.any_instance.stubs(:destroy).returns(false)
+    as_logged_in_user do
+      put :destroy, id: scheme._id
+      assert_equal "Failed to delete #{scheme.title}", flash[:alert]
+      assert_redirected_to admin_business_support_schemes_path
+    end
+ 
+  end
+
 end
