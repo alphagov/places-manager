@@ -46,15 +46,18 @@ class Admin::BusinessSupportSchemesController < InheritedResources::Base
   end
 
   def destroy
+    begin
       scheme = BusinessSupportScheme.find(params[:id])
+      if scheme.destroy
+        flash_msg = { :notice => "#{scheme.title} successfully deleted" }
+      else
+        flash_msg = { :alert => "Failed to delete #{scheme.title}" }
+      end
 
-      raise "Failed to delete #{scheme.title}" unless scheme.destroy
-
-      redirect_to admin_business_support_schemes_path,
-        :notice => "#{scheme.title} successfully deleted"
-    
     rescue Mongoid::Errors::DocumentNotFound
-      redirect_to admin_business_support_schemes_path
+      flash_msg = { :alert => "Document #{params[:id]} not found" }
+    end
+    redirect_to admin_business_support_schemes_path, flash_msg
   end
 
 protected
