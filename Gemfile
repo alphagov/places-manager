@@ -59,4 +59,5 @@ group :test do
   gem 'shoulda', '3.3.1'
   gem 'mocha', '0.13.3', require: false
   gem 'poltergeist', '0.7.0'
+  gem 'timecop'
 end

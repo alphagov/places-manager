@@ -11,6 +11,9 @@ class BusinessSupportScheme
   field :sectors,         type: Array, default: []
   field :stages,          type: Array, default: []
   field :support_types,   type: Array, default: []
+  field :start_date,      type: DateTime
+  field :end_date,        type: DateTime
+
 
   index :title, unique: true
   index :business_support_identifier, unique: true
@@ -49,6 +52,18 @@ class BusinessSupportScheme
       a.business_support_identifier.to_i <=> b.business_support_identifier.to_i
     end
     schemes.empty? ? 1 : schemes.last.business_support_identifier.to_i + 1
+  end
+
+  def active?
+    current_time = DateTime.now
+    begin
+      self.start_date.nil? && self.end_date.nil? ||
+      self.end_date.nil? && current_time >= self.start_date ||
+      self.start_date.nil? && current_time <= self.end_date ||
+      current_time >= self.start_date && current_time <= self.end_date
+    rescue
+      false
+    end
   end
 
 end
