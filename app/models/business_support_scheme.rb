@@ -1,5 +1,6 @@
 class BusinessSupportScheme
   include Mongoid::Document
+  include Mongoid::MultiParameterAttributes
   
   field :title, type: String
   field :business_support_identifier, type: String
@@ -11,8 +12,8 @@ class BusinessSupportScheme
   field :sectors,         type: Array, default: []
   field :stages,          type: Array, default: []
   field :support_types,   type: Array, default: []
-  field :start_date,      type: DateTime
-  field :end_date,        type: DateTime
+  field :start_date,      type: Date
+  field :end_date,        type: Date
 
 
   index :title, unique: true
