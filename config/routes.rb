@@ -7,7 +7,7 @@ Imminence::Application.routes.draw do
         resources :places
       end
     end
-    resources :business_support_schemes, :only => [:index, :new, :create, :edit, :update]
+    resources :business_support_schemes, :only => [:index, :new, :create, :edit, :update, :destroy]
     root :to => 'services#index'
   end
 

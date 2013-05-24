@@ -45,6 +45,21 @@ class Admin::BusinessSupportSchemesController < InheritedResources::Base
     end
   end
 
+  def destroy
+    begin
+      scheme = BusinessSupportScheme.find(params[:id])
+      if scheme.destroy
+        flash_msg = { :notice => "#{scheme.title} successfully deleted" }
+      else
+        flash_msg = { :alert => "Failed to delete #{scheme.title}" }
+      end
+
+    rescue Mongoid::Errors::DocumentNotFound
+      flash_msg = { :alert => "Document #{params[:id]} not found" }
+    end
+    redirect_to admin_business_support_schemes_path, flash_msg
+  end
+
 protected
 
   def find_all_facets
