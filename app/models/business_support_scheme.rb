@@ -56,15 +56,14 @@ class BusinessSupportScheme
   end
 
   def active?
-    current_time = DateTime.now
-    begin
-      self.start_date.nil? && self.end_date.nil? ||
-      self.end_date.nil? && current_time >= self.start_date ||
-      self.start_date.nil? && current_time <= self.end_date ||
-      current_time >= self.start_date && current_time <= self.end_date
-    rescue
-      false
-    end
+    current_date = Date.today.to_time.to_i
+    start_date = self.start_date.nil? ? 0 : self.start_date.to_time.to_i
+    end_date = self.end_date.nil? ? 0 : self.end_date.to_time.to_i
+
+    start_date == 0 && end_date == 0 ||
+    end_date == 0 && start_date <= current_date ||
+    start_date == 0 && end_date >= current_date ||
+    current_date >= start_date && current_date <= end_date
   end
 
 end
