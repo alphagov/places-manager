@@ -118,4 +118,51 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
   test "next_identifier" do
     assert_equal 100, BusinessSupportScheme.next_identifier
   end
+
+  test "should be active if current time is between start and end day" do
+    scheme = FactoryGirl.create(:business_support_scheme, title: "Wunderscheme",
+                                      start_date: Date.parse("2012-01-01"),
+                                      end_date: Date.parse("2012-02-01"))
+    Timecop.travel("2012-01-10") do 
+      assert scheme.active?
+    end
+
+    Timecop.travel("2012-02-03") do
+      refute scheme.active?
+    end
+
+    Timecop.travel("2011-12-31") do
+      refute scheme.active?
+    end
+  end
+
+  test "should always be active if both start and end date is nil" do
+    scheme = FactoryGirl.create(:business_support_scheme, title: "Wunderscheme")
+    assert scheme.active?
+  end
+
+  test "is not active if end date is in past" do
+    scheme = FactoryGirl.create(:business_support_scheme, title: "Wunderscheme",
+                                end_date: Date.parse("2012-02-01"))
+    Timecop.travel("2012-03-02") do
+      refute scheme.active?
+    end
+
+    Timecop.travel("2012-01-25") do
+      assert scheme.active?
+    end
+  end
+
+  test "is not active if start date hasn't occured" do
+    scheme = FactoryGirl.create(:business_support_scheme, title: "Wunderscheme",
+                                start_date: Date.parse("2012-02-01"))
+    Timecop.travel("2011-01-01") do
+      refute scheme.active?
+    end
+
+    Timecop.travel("2012-02-25") do
+      assert scheme.active?
+    end
+  end
+
 end

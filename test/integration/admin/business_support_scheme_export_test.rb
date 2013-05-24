@@ -6,7 +6,7 @@ class BusinessSupportSchemeExportTest < ActionDispatch::IntegrationTest
   setup do
     make_facets(:business_support_business_type, ["Global megacorp", "Private limited company", "Charity"])
     make_facets(:business_support_location, ["England", "Scotland", "Wales", "Northern Ireland", "London", "Yorkshire and the Humber"])
-    make_facets(:business_support_purpose, ["Making the most of the Internet", "Exporting or finding overseas partners", 
+    make_facets(:business_support_purpose, ["Making the most of the Internet", "Exporting or finding overseas partners",
                 "Finding new customers and markets", "Energy efficiency and the environment"])
     make_facets(:business_support_sector, ["Agriculture", "Healthcare", "Manufacturing"])
     make_facets(:business_support_stage, ["Pre-startup", "Startup", "Grow and sustain"])
@@ -14,7 +14,9 @@ class BusinessSupportSchemeExportTest < ActionDispatch::IntegrationTest
 
     FactoryGirl.create(:business_support_scheme, :title => "Super finance triple bonus", :business_support_identifier => 1,
                       :business_types => ['private-limited-company', 'charity'], :locations => ['england'],
-                      :sectors => ['healthcare'], :stages => ['startup', 'grow-and-sustain'])
+                      :sectors => ['healthcare'], :stages => ['startup', 'grow-and-sustain'],
+                      :start_date => Date.parse("2013-02-03"),
+                      :end_date => Date.parse("2013-03-01"))
     FactoryGirl.create(:business_support_scheme, :title => "Young business starter award", :business_support_identifier => 2)
     FactoryGirl.create(:business_support_scheme, :title => "Brilliant start-up award", :business_support_identifier => 3)
   end
@@ -29,11 +31,18 @@ class BusinessSupportSchemeExportTest < ActionDispatch::IntegrationTest
     data = CSV.parse(last_response.body, :headers => true)
     assert_equal ["Brilliant start-up award", "Super finance triple bonus", "Young business starter award"], data.map {|r| r["title"] }
 
-    assert_equal "private-limited-company,charity", data[1]["business types"]
-    assert_equal "england", data[1]["locations"]
-    assert_equal "", data[1]["purposes"]
-    assert_equal "healthcare", data[1]["sectors"]
-    assert_equal "startup,grow-and-sustain", data[1]["stages"]
-    assert_equal "", data[1]["support types"]
+    expected_data = {
+      "business types" => "private-limited-company,charity",
+      "end date" => "01/03/2013",
+      "locations" => "england",
+      "purposes" => "",
+      "sectors" => "healthcare",
+      "stages" => "startup,grow-and-sustain",
+      "start date" => "03/02/2013",
+      "support types" => ""
+    }
+
+    assert_equal expected_data, data[1].to_hash.slice(*expected_data.keys)
+    assert_equal "", data[2]["start date"]
   end
 end
