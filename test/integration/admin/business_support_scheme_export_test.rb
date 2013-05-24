@@ -31,14 +31,18 @@ class BusinessSupportSchemeExportTest < ActionDispatch::IntegrationTest
     data = CSV.parse(last_response.body, :headers => true)
     assert_equal ["Brilliant start-up award", "Super finance triple bonus", "Young business starter award"], data.map {|r| r["title"] }
 
-    assert_equal "03/02/2013", data[1]["start date"]
-    assert_equal "01/03/2013", data[1]["end date"]
+    expected_data = {
+      "business types" => "private-limited-company,charity",
+      "end date" => "01/03/2013",
+      "locations" => "england",
+      "purposes" => "",
+      "sectors" => "healthcare",
+      "stages" => "startup,grow-and-sustain",
+      "start date" => "03/02/2013",
+      "support types" => ""
+    }
+
+    assert_equal expected_data, data[1].to_hash.slice(*expected_data.keys)
     assert_equal "", data[2]["start date"]
-    assert_equal "private-limited-company,charity", data[1]["business types"]
-    assert_equal "england", data[1]["locations"]
-    assert_equal "", data[1]["purposes"]
-    assert_equal "healthcare", data[1]["sectors"]
-    assert_equal "startup,grow-and-sustain", data[1]["stages"]
-    assert_equal "", data[1]["support types"]
   end
 end
