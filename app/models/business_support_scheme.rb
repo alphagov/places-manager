@@ -1,5 +1,6 @@
 class BusinessSupportScheme
   include Mongoid::Document
+  include Mongoid::MultiParameterAttributes
   
   field :title, type: String
   field :business_support_identifier, type: String
@@ -11,6 +12,9 @@ class BusinessSupportScheme
   field :sectors,         type: Array, default: []
   field :stages,          type: Array, default: []
   field :support_types,   type: Array, default: []
+  field :start_date,      type: Date
+  field :end_date,        type: Date
+
 
   index :title, unique: true
   index :business_support_identifier, unique: true
@@ -49,6 +53,21 @@ class BusinessSupportScheme
       a.business_support_identifier.to_i <=> b.business_support_identifier.to_i
     end
     schemes.empty? ? 1 : schemes.last.business_support_identifier.to_i + 1
+  end
+
+  def active?
+    has_started? && !has_ended?
+  end
+
+  private
+
+  def has_started?
+    # if start date is nil, it has been started since beginning of time
+    self.start_date.nil? || (self.start_date <= Date.today)
+  end
+
+  def has_ended?
+    self.end_date.present? && (self.end_date <= Date.today)
   end
 
 end
