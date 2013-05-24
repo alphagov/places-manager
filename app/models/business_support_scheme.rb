@@ -56,14 +56,18 @@ class BusinessSupportScheme
   end
 
   def active?
-    current_date = Date.today.to_time.to_i
-    start_date = self.start_date.nil? ? 0 : self.start_date.to_time.to_i
-    end_date = self.end_date.nil? ? 0 : self.end_date.to_time.to_i
+    has_started? && !has_ended?
+  end
 
-    start_date == 0 && end_date == 0 ||
-    end_date == 0 && start_date <= current_date ||
-    start_date == 0 && end_date >= current_date ||
-    current_date >= start_date && current_date <= end_date
+  private
+
+  def has_started?
+    # if start date is nil, it has been started since beginning of time
+    self.start_date.nil? || (self.start_date <= Date.today)
+  end
+
+  def has_ended?
+    self.end_date.present? && (self.end_date <= Date.today)
   end
 
 end
