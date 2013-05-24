@@ -30,6 +30,14 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
     fill_in "Title", :with => "Wunderbiz 2012 superfunding"
 
     select "Low", :from => "business_support_scheme[priority]"
+
+    select "2013", :from => "business_support_scheme[start_date(1i)]"
+    select "May", :from => "business_support_scheme[start_date(2i)]"
+    select "3", :from => "business_support_scheme[start_date(3i)]"
+
+    select "2013", :from => "business_support_scheme[end_date(1i)]"
+    select "June", :from => "business_support_scheme[end_date(2i)]"
+    select "3", :from => "business_support_scheme[end_date(3i)]"
     
     check "Charity"
     check "Global megacorp"
@@ -49,6 +57,9 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
     assert_equal "Wunderbiz 2012 superfunding", bs.title
     assert_equal 0, bs.priority
     assert_equal "334", bs.business_support_identifier
+
+    assert_equal Date.parse("2013/05/03"), bs.start_date
+    assert_equal Date.parse("2013/06/03"), bs.end_date
     
     assert_equal [@charity.slug, @global_megacorp.slug], bs.business_types
     assert_equal [@england.slug, @london.slug, @wales.slug, @yorkshire_and_the_humber.slug], bs.locations

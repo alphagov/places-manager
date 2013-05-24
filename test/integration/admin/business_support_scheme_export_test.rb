@@ -15,8 +15,8 @@ class BusinessSupportSchemeExportTest < ActionDispatch::IntegrationTest
     FactoryGirl.create(:business_support_scheme, :title => "Super finance triple bonus", :business_support_identifier => 1,
                       :business_types => ['private-limited-company', 'charity'], :locations => ['england'],
                       :sectors => ['healthcare'], :stages => ['startup', 'grow-and-sustain'],
-                      :start_date => DateTime.parse("2013-02-03"),
-                      :end_date => DateTime.parse("2013-03-01"))
+                      :start_date => Date.parse("2013-02-03"),
+                      :end_date => Date.parse("2013-03-01"))
     FactoryGirl.create(:business_support_scheme, :title => "Young business starter award", :business_support_identifier => 2)
     FactoryGirl.create(:business_support_scheme, :title => "Brilliant start-up award", :business_support_identifier => 3)
   end

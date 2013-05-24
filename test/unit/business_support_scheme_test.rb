@@ -121,8 +121,8 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
 
   test "should be active if current time is between start and end day" do
     scheme = FactoryGirl.create(:business_support_scheme, title: "Wunderscheme",
-                                      start_date: DateTime.parse("2012-01-01"),
-                                      end_date: DateTime.parse("2012-02-01"))
+                                      start_date: Date.parse("2012-01-01"),
+                                      end_date: Date.parse("2012-02-01"))
     Timecop.travel("2012-01-10") do 
       assert scheme.active?
     end
@@ -143,7 +143,7 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
 
   test "is not active if end date is in past" do
     scheme = FactoryGirl.create(:business_support_scheme, title: "Wunderscheme",
-                                end_date: DateTime.parse("2012-02-01"))
+                                end_date: Date.parse("2012-02-01"))
     Timecop.travel("2012-03-02") do
       refute scheme.active?
     end
@@ -155,7 +155,7 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
 
   test "is not active if start date hasn't occured" do
     scheme = FactoryGirl.create(:business_support_scheme, title: "Wunderscheme",
-                                start_date: DateTime.parse("2012-02-01"))
+                                start_date: Date.parse("2012-02-01"))
     Timecop.travel("2011-01-01") do
       refute scheme.active?
     end
