@@ -340,7 +340,7 @@ DEPENDENCIES
   simplecov-rcov (= 0.2.3)
   statsd-ruby (= 1.0.0)
   therubyracer (~> 0.9.4)
-  timecop
+  timecop (= 0.5.9.2)
   uglifier
   unicorn (= 4.3.1)
   whenever
