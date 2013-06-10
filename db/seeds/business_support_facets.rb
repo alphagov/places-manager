@@ -7,7 +7,7 @@ def find_or_initialize_facets(klass, facet_names)
 end
 
 # BusinessSupportBusinessType
-find_or_initialize_facets(BusinessSupportBusinessType, 
+find_or_initialize_facets(BusinessSupport::BusinessType, 
                          {"private-company"         => "Private Company", 
                           "public-limited-company"  => "Public limited company", 
                           "partnership"             => "Partnership", 
@@ -16,7 +16,7 @@ find_or_initialize_facets(BusinessSupportBusinessType,
                           "sole-trader"             => "Sole trader"})
 
 # BusinessSupportLocation
-find_or_initialize_facets(BusinessSupportLocation,
+find_or_initialize_facets(BusinessSupport::Location,
                           { "northern-ireland" => "Northern Ireland", 
                             "england"          => "England",
                             "london" => "London",
@@ -32,7 +32,7 @@ find_or_initialize_facets(BusinessSupportLocation,
                             "scotland"         => "Scotland"})
 
 # BusinessSupportSector
-find_or_initialize_facets(BusinessSupportSector,
+find_or_initialize_facets(BusinessSupport::Sector,
                           {"wholesale-and-retail" => "Wholesale and Retail", 
                            "manufacturing" => "Manufacturing", 
                            "hospitality-and-catering" => "Hospitality and Catering", 
@@ -50,18 +50,27 @@ find_or_initialize_facets(BusinessSupportSector,
                            "mining" => "Mining",
                            "real-estate" => "Real Estate"})
 
-# BusinessSupportStage
-find_or_initialize_facets(BusinessSupportStage, {
-                          "pre-startup" => "Pre-startup",
-                          "start-up" => "Start-up",
-                          "grow-and-sustain" => "Grow and sustain"})
-# Clean up deprecated stage. This can be deleted once it's run on production
-if stage = BusinessSupportStage.where(:slug => "exiting-a-business").first
-  stage.destroy
+# Rename pre-startup stage.
+if pre_startup =  BusinessSupport::Stage.where(:slug => 'pre-startup').first
+  pre_startup.name = "Pre-start"
+  pre_startup.slug = "pre-start"
+  pre_startup.save
+
+  BusinessSupportScheme.where.in(stages:['pre-startup']).each do |bs| 
+    bs.stages.map!{ |s| s.gsub('pre-startup','pre-start') }
+    bs.save
+  end
 end
 
+# BusinessSupportStage
+find_or_initialize_facets(BusinessSupport::Stage, {
+                          "pre-start" => "Pre-start",
+                          "start-up" => "Start-up",
+                          "grow-and-sustain" => "Grow and sustain",
+                          "exiting-a-business" => "Exiting a business" })
+
 # BusinessSupportType
-find_or_initialize_facets(BusinessSupportType, {
+find_or_initialize_facets(BusinessSupport::SupportType, {
                           "grant" => "Grant",
                           "finance" => "Finance",
                           "loan" => "Loan",
@@ -70,7 +79,7 @@ find_or_initialize_facets(BusinessSupportType, {
                           "equity" => "Equity"})
 
 # BusinessSupportPurpose
-find_or_initialize_facets(BusinessSupportPurpose, {
+find_or_initialize_facets(BusinessSupport::Purpose, {
   "business-growth-and-expansion" => "Business growth and expansion",
   "developing-new-product-or-service-ideas" => "Developing new product or service ideas",
   "energy-efficiency-and-the-environment" => "Energy efficiency and the environment",
