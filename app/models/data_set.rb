@@ -13,7 +13,7 @@ class DataSet
   validates_presence_of :version
 
   default_scope order_by([:version, :asc])
-  before_save :set_version, :on => :create
+  before_validation :set_version, :on => :create
 
   def places
     Place.where(service_slug: service.slug, data_set_version: version)

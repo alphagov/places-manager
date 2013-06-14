@@ -15,7 +15,7 @@ class Service
   # underscore allowed because one of the existing services uses them in its slug.
   validates :slug, :presence => true, :uniqueness => true, :format => {:with => /\A[a-z0-9_-]*\z/ }
 
-  after_initialize :create_first_data_set
+  before_validation :create_first_data_set, :on => :create
   after_save :process_data_file
 
   def process_data_file
@@ -40,8 +40,8 @@ class Service
   end
 
   def create_first_data_set
-    unless self.persisted? or self.data_sets.any?
-      self.data_sets << DataSet.new
+    unless self.data_sets.any?
+      self.data_sets.build
     end
   end
 end

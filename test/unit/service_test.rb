@@ -59,49 +59,15 @@ class ServiceTest < ActiveSupport::TestCase
         end
       end
     end
-
   end
 
-  context "populating data_set version" do
-    def setup_service
-      Service.create(
-        name: 'Important Government Service',
-        slug: 'important-government-service'
-      )
-    end
+  should "create an initial data_set when creating a service" do
+    Service.create(
+      name: 'Important Government Service',
+      slug: 'important-government-service'
+    )
 
-    should "creating a service creates an initial data set" do
-      s = setup_service
-      assert_equal 1, s.data_sets.count
-      assert_equal 1, s.data_sets[0].version
-    end
-
-    should "creating a second data set increments the version" do
-      s = setup_service
-      s.data_sets.create!
-      assert_equal [1, 2], s.data_sets.map(&:version)
-    end
-
-    should "data set numbering works with skipped versions" do
-      s = setup_service
-      s.data_sets[0].update_attributes!(version: 2)
-      s.data_sets.create!
-      assert_equal [2, 3], s.data_sets.map(&:version)
-    end
-
-    should "data set numbering works out of order" do
-      s = setup_service
-      s.data_sets[0].update_attributes!(version: 5)
-      s.data_sets.create!(version: 3)
-      s.data_sets.create!
-      assert_equal [5, 3, 6], s.data_sets.map(&:version)
-    end
-
-    should "data set defaults to 1 if there are no data sets" do
-      s = setup_service
-      s.data_sets.clear
-      s.data_sets.create!
-      assert_equal [1], s.data_sets.map(&:version)
-    end
+    s = Service.first
+    assert_equal 1, s.data_sets.count
   end
 end
