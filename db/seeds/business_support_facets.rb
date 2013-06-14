@@ -50,18 +50,6 @@ find_or_initialize_facets(BusinessSupport::Sector,
                            "mining" => "Mining",
                            "real-estate" => "Real Estate"})
 
-# Rename pre-startup stage.
-if pre_startup =  BusinessSupport::Stage.where(:slug => 'pre-startup').first
-  pre_startup.name = "Pre-start"
-  pre_startup.slug = "pre-start"
-  pre_startup.save
-
-  BusinessSupportScheme.where.in(stages:['pre-startup']).each do |bs| 
-    bs.stages.map!{ |s| s.gsub('pre-startup','pre-start') }
-    bs.save
-  end
-end
-
 # BusinessSupportStage
 find_or_initialize_facets(BusinessSupport::Stage, {
                           "pre-start" => "Pre-start",
