@@ -70,4 +70,15 @@ class ServiceTest < ActiveSupport::TestCase
     s = Service.first
     assert_equal 1, s.data_sets.count
   end
+
+  context "creating a service with a data_file" do
+    should "create a data_set, and add all places from the data_file to it" do
+      attrs = FactoryGirl.attributes_for(:service)
+      attrs[:data_file] = File.open(fixture_file_path('good_csv.csv'))
+      s = Service.create!(attrs)
+
+      assert_equal 1, s.latest_data_set.places.count
+      assert_equal "1 Stop Instruction", s.latest_data_set.places.first.name
+    end
+  end
 end

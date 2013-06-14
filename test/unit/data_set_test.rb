@@ -25,4 +25,17 @@ class DataSetTest < ActiveSupport::TestCase
       assert_equal [1,3,4], Service.first.data_sets.map(&:version)
     end
   end
+
+  context "creating a data_set with a data_file" do
+    setup do
+      @service = FactoryGirl.create(:service)
+    end
+
+    should "create the data_set, and add all places from the data_file to it" do
+      ds = @service.data_sets.create!(:data_file => File.open(fixture_file_path('good_csv.csv')))
+
+      assert_equal 1, ds.places.count
+      assert_equal "1 Stop Instruction", ds.places.first.name
+    end
+  end
 end

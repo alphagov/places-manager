@@ -14,6 +14,7 @@ class DataSet
 
   default_scope order_by([:version, :asc])
   before_validation :set_version, :on => :create
+  after_save :process_data_file
 
   def places
     Place.where(service_slug: service.slug, data_set_version: version)
@@ -47,10 +48,6 @@ class DataSet
     end
   end
 
-  # This will run after 'set_version' because it is defined later
-  # If these get swapped around, the places will be created without a data set
-  # version, and all kinds of horribleness will ensue
-  before_save :process_data_file
   def process_data_file
     if @data_file
       data = @data_file.read.force_encoding('UTF-8')
