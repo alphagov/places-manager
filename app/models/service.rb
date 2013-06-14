@@ -8,8 +8,12 @@ class Service
 
   embeds_many :data_sets
 
+  index :slug, :unique => true
+
   validates_presence_of :name
-  validates_presence_of :slug
+
+  # underscore allowed because one of the existing services uses them in its slug.
+  validates :slug, :presence => true, :uniqueness => true, :format => {:with => /\A[a-z0-9_-]*\z/ }
 
   after_initialize :create_first_data_set
   after_save :process_data_file
