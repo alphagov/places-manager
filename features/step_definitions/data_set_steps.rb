@@ -6,6 +6,10 @@ Given /^I have uploaded a (second|third) data set$/ do |ordinal|
   upload_extra_data_set(@service)
 end
 
+Given /^background processing has completed$/ do
+  pending # express the regexp above with the code you wish you had
+end
+
 When /^I go to the new service page$/ do
   visit new_admin_service_path
 end
@@ -98,6 +102,10 @@ end
 Then /^I should be on the page for the latest data set for the "(.*?)" service$/ do |name|
   current_path = URI.parse(current_url).path
   assert_equal path_for_latest_data_set_for_service(name), current_path
+end
+
+Then /^I should see an indication that my data set is awaiting processing$/ do
+  assert page.has_content?("Places data is currently being processed")
 end
 
 Then /^I should see an indication that my data set contained (\d+) items$/ do |count|
