@@ -9,12 +9,13 @@ class DataSet
 
   field :version,       type: Integer, :default => 1
   field :change_notes,  type: String
+  field :csv_data,      type: String
 
   validates_presence_of :version
 
   default_scope order_by([:version, :asc])
   before_validation :set_version, :on => :create
-  after_save :process_data_file
+  after_save :schedule_csv_processing
 
   def places
     Place.where(service_slug: service.slug, data_set_version: version)
@@ -48,21 +49,38 @@ class DataSet
     end
   end
 
-  def process_data_file
-    if @data_file
-      data = @data_file.read.force_encoding('UTF-8')
-      if Govspeak::HtmlValidator.new(data).valid?
-        CSV.parse(data, headers: true) do |row|
-          Place.create_from_hash(self, row)
-        end
-      else
-        raise HtmlValidationError
-      end
-    end
+  def processing_complete?
+    self.csv_data.blank?
   end
 
   def data_file=(file)
-    @data_file = file
+    self.csv_data = file.read.force_encoding('UTF-8')
+
+    # TODO: restructure this so that it runs as part of the model validations.
+    raise HtmlValidationError unless Govspeak::HtmlValidator.new(self.csv_data).valid?
+
+    # This instance variable is necessary becasue you can't schedule a delayed job until
+    # the model has been persisted
+    @need_csv_processing = true
+  end
+
+  def schedule_csv_processing
+    if @need_csv_processing
+      # This has to be scheduled on the service because the delayed_job mongoid driver
+      # doesn't support running jobs on embedded documents.
+      service.delay.process_csv_data(self.version)
+      @need_csv_processing = false
+    end
+  end
+
+  def process_csv_data
+    if self.csv_data.present?
+      CSV.parse(self.csv_data, headers: true) do |row|
+        Place.create_from_hash(self, row)
+      end
+      self.csv_data = nil
+      self.save!
+    end
   end
 
   def active?

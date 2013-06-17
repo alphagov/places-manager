@@ -7,7 +7,7 @@ Given /^I have uploaded a (second|third) data set$/ do |ordinal|
 end
 
 Given /^background processing has completed$/ do
-  pending # express the regexp above with the code you wish you had
+  run_all_delayed_jobs
 end
 
 When /^I go to the new service page$/ do

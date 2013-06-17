@@ -2,17 +2,21 @@
   <h4>Version <%= data_set.version %>
     <% if data_set.active? %><span class="label label-success">Active</span><% else %><span class="label">Inactive</span><% end %></h4>
 
-  <% unless data_set.active? %>
-  	<%= button_to 'Activate', activate_admin_service_data_set_path(@service, data_set), :class=> 'btn btn-primary activate' %>
-  <% end %>
+  <% if data_set.processing_complete? %>
+    <% unless data_set.active? %>
+      <%= button_to 'Activate', activate_admin_service_data_set_path(@service, data_set), :class=> 'btn btn-primary activate' %>
+    <% end %>
 
-  <p>
-    Export:
-    <%= link_to 'JSON', place_path(@service.slug, :version => data_set, :format => :json) %> /
-    <%= link_to 'KML', place_path(@service.slug, :version => data_set, :format => :kml) %> /
-    <%= link_to 'CSV', place_path(@service.slug, :version => data_set, :format => :csv) %>
-  </p>
-  <p><%= data_set.places.needs_geocoding.count %> places left to geocode. <%= data_set.places.with_geocoding_errors.count %> places with geocode errors.</p>
+    <p>
+      Export:
+      <%= link_to 'JSON', place_path(@service.slug, :version => data_set, :format => :json) %> /
+      <%= link_to 'KML', place_path(@service.slug, :version => data_set, :format => :kml) %> /
+      <%= link_to 'CSV', place_path(@service.slug, :version => data_set, :format => :csv) %>
+    </p>
+    <p><%= data_set.places.needs_geocoding.count %> places left to geocode. <%= data_set.places.with_geocoding_errors.count %> places with geocode errors.</p>
+  <% else %>
+    <p class="label label-info">Places data is currently being processed.</p>
+  <% end %>
 </div>
 
 <h4>Explore this data set</h4>

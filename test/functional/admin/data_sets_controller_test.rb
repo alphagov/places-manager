@@ -14,6 +14,8 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
       post :create, :service_id => @service.id, :data_set => {:data_file => csv_file}
       assert_response :redirect
 
+      run_all_delayed_jobs
+
       # Services are created with 1 data_set initially, so after creating a data_set, there are now 2
       assert_equal 2, Service.first.data_sets.count
       assert_equal 1, Place.count

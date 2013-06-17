@@ -24,6 +24,7 @@ class Admin::ServicesController < InheritedResources::Base
       fv = Imminence::FileVerifier.new(file)
       unless fv.type == 'text'
         Rails.logger.info "Rejecting file with content type: #{fv.mime_type}"
+        params[:service].delete(:data_file)
         raise CSV::MalformedCSVError
       end
     end

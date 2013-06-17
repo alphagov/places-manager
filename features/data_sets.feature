@@ -88,7 +88,12 @@ Feature: Managing data sets
       And I fill in the form to create the "Register Offices" service with a bad CSV
 
     Then I should be on the page for the "Register Offices" service
-      And I should see an indication that my data set import failed
+      And I should see an indication that my data set is awaiting processing
+
+    When background processing has completed
+      And I go to the page for the "Register Offices" service
+
+    Then I should see an indication that my file wasn't accepted
 
   Scenario: Creating a new service with a non-CSV file
     When I go to the new service page
