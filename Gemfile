@@ -19,7 +19,7 @@ gem 'formtastic-bootstrap', git: 'https://github.com/cgunther/formtastic-bootstr
 gem 'jquery-rails'
 gem 'less-rails-bootstrap'
 
-gem 'gds-api-adapters', '4.1.3'
+gem 'gds-api-adapters', '7.2.0'
 gem 'statsd-ruby', '1.0.0', :require => 'statsd'
 
 if ENV['BUNDLE_DEV']
@@ -29,7 +29,6 @@ else
 end
 gem "faraday", "0.8.1" # Specifying to resolve Jenkins dependency resolution fail
 
-gem 'geogov', '0.0.9'
 gem 'govspeak', '~> 1.2'
 
 gem 'inherited_resources'
@@ -62,4 +61,5 @@ group :test do
   gem 'mocha', '0.13.3', require: false
   gem 'poltergeist', '0.7.0'
   gem 'timecop', '0.5.9.2'
+  gem 'webmock', '1.11.0', :require => false
 end
