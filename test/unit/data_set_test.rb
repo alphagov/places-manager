@@ -26,6 +26,30 @@ class DataSetTest < ActiveSupport::TestCase
     end
   end
 
+  context "activating a data_set" do
+    setup do
+      @service = FactoryGirl.create(:service)
+    end
+
+    should "set the active data_set on the service and return true" do
+      ds = @service.data_sets.create!
+      assert ds.activate!
+
+      @service.reload
+      assert_equal ds.version, @service.active_data_set_version
+    end
+
+    should "do nothing and return false if the data_set hasn't completed processing" do
+      previous_active_set = @service.active_data_set
+
+      ds = @service.data_sets.create!(:csv_data => "something")
+      refute ds.activate!
+
+      @service.reload
+      assert_equal previous_active_set.version, @service.active_data_set_version
+    end
+  end
+
   context "creating a data_set with a data_file" do
     setup do
       @service = FactoryGirl.create(:service)

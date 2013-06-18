@@ -53,14 +53,27 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
     end
   end
 
-  test "it's possible to activate a data set" do
-    as_logged_in_user do
-      set = @service.data_sets.create!
-      post :activate, :service_id => @service.id, :id => set.id
-      assert_response :redirect
-      assert_equal "Data Set #{set.version} successfully activated", flash[:notice]
-      @service.reload
-      assert_equal set, @service.active_data_set
+  context "POST 'activate'" do
+    should "allow activating a data_set" do
+      as_logged_in_user do
+        set = @service.data_sets.create!
+        post :activate, :service_id => @service.id, :id => set.id
+        assert_response :redirect
+        assert_equal "Data Set #{set.version} successfully activated", flash[:notice]
+        @service.reload
+        assert_equal set, @service.active_data_set
+      end
+    end
+
+    should "not allow activating a data_set that hasn't completed processing" do
+      as_logged_in_user do
+        set = @service.data_sets.create!(:data_file => File.open(fixture_file_path('good_csv.csv')))
+        post :activate, :service_id => @service.id, :id => set.id
+        assert_response :redirect
+        assert_equal "Couldn't activate data set", flash[:notice]
+        @service.reload
+        refute_equal set, @service.active_data_set
+      end
     end
   end
 end

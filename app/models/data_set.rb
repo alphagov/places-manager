@@ -98,6 +98,7 @@ class DataSet
   end
 
   def activate!
+    return false unless self.processing_complete?
     service.active_data_set_version = self.version
     service.save
   end
