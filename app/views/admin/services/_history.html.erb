@@ -19,12 +19,18 @@
           <dd><%= set.places.count %></dd>
         </dl>
 
-        <p>
-          Export:
-          <%= link_to 'JSON', place_path(@service.slug, :version => set, :format => :json) %> /
-          <%= link_to 'KML', place_path(@service.slug, :version => set, :format => :kml) %> /
-          <%= link_to 'CSV', place_path(@service.slug, :version => set, :format => :csv) %>
-        </p>
+        <% if set.processing_complete? %>
+          <p>
+            Export:
+            <%= link_to 'JSON', place_path(@service.slug, :version => set, :format => :json) %> /
+            <%= link_to 'KML', place_path(@service.slug, :version => set, :format => :kml) %> /
+            <%= link_to 'CSV', place_path(@service.slug, :version => set, :format => :csv) %>
+          </p>
+        <% elsif set.processing_error.present? %>
+          <p class="label label-important"><%= set.processing_error %></p>
+        <% else %>
+          <p class="label label-info">Places data is currently being processed.</p>
+        <% end %>
       </div>
     </li>
   <% end %>

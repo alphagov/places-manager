@@ -64,5 +64,31 @@ class DataSetTest < ActiveSupport::TestCase
       ds.reload
       assert_nil ds.csv_data
     end
+
+    should "store an error message, and clear the csv_data with an invalid csv" do
+      ds = @service.data_sets.create!(:csv_data => File.read(fixture_file_path('bad_csv.csv')))
+      ds.process_csv_data
+
+      ds.reload
+      assert_equal "Could not process CSV file. Please check the format.", ds.processing_error
+      assert_nil ds.csv_data
+    end
+
+    context "processing state predicates" do
+      should "be processing_complete with no csv_data and no processing_error" do
+        ds = @service.data_sets.build(:csv_data => nil, :processing_error => nil)
+        assert ds.processing_complete?
+      end
+
+      should "not be processing_complete with csv_data" do
+        ds = @service.data_sets.build(:csv_data => "anything", :processing_error => nil)
+        refute ds.processing_complete?
+      end
+
+      should "not be processing_complete with processing_error" do
+        ds = @service.data_sets.build(:csv_data => nil, :processing_error => "something went wrong")
+        refute ds.processing_complete?
+      end
+    end
   end
 end

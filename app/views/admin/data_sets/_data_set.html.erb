@@ -14,6 +14,8 @@
       <%= link_to 'CSV', place_path(@service.slug, :version => data_set, :format => :csv) %>
     </p>
     <p><%= data_set.places.needs_geocoding.count %> places left to geocode. <%= data_set.places.with_geocoding_errors.count %> places with geocode errors.</p>
+  <% elsif data_set.processing_error.present? %>
+    <p class="label label-important"><%= data_set.processing_error %></p>
   <% else %>
     <p class="label label-info">Places data is currently being processed.</p>
   <% end %>

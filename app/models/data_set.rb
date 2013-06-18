@@ -1,4 +1,5 @@
 require "govspeak/html_validator"
+require 'csv'
 
 class DataSet
   include Mongoid::Document
@@ -10,6 +11,7 @@ class DataSet
   field :version,       type: Integer, :default => 1
   field :change_notes,  type: String
   field :csv_data,      type: String
+  field :processing_error, type: String
 
   validates_presence_of :version
 
@@ -50,7 +52,7 @@ class DataSet
   end
 
   def processing_complete?
-    self.csv_data.blank?
+    self.csv_data.blank? and self.processing_error.blank?
   end
 
   def data_file=(file)
@@ -81,6 +83,10 @@ class DataSet
       self.csv_data = nil
       self.save!
     end
+  rescue CSV::MalformedCSVError
+    self.processing_error = "Could not process CSV file. Please check the format."
+    self.csv_data = nil
+    self.save!
   end
 
   def active?
