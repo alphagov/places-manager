@@ -1,6 +1,5 @@
 require_relative 'test_helper'
 require 'capybara/rails'
-require 'govuk_content_models/test_helpers/factories'
 
 DatabaseCleaner.strategy = :truncation
 

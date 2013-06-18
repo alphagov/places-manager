@@ -20,7 +20,6 @@ gem 'jquery-rails'
 gem 'less-rails-bootstrap'
 
 gem 'gds-api-adapters', '4.1.3'
-gem 'govuk_content_models', '4.0.0'
 gem 'statsd-ruby', '1.0.0', :require => 'statsd'
 
 if ENV['BUNDLE_DEV']
