@@ -66,6 +66,24 @@ class DataSetTest < ActiveSupport::TestCase
       assert_equal :process_csv_data, handler.method_name
       assert_equal ds.version, handler.args.first
     end
+
+    context "validating file size" do
+      setup do
+        @ds = @service.data_sets.build
+      end
+
+      should "be valid with a file up to 15M" do
+        @ds.csv_data = "x" * (15.megabytes - 1)
+        assert @ds.valid?
+      end
+
+      should "be invalid with a file over 15M" do
+        @ds.csv_data = "x" * (15.megabytes + 1)
+        refute @ds.valid?
+        assert_equal 1, @ds.errors[:csv_data].size
+      end
+
+    end
   end
 
   context "processing csv data" do

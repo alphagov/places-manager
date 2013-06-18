@@ -15,6 +15,10 @@ class DataSet
 
   validates_presence_of :version
 
+  # Mongoid has a 16M limit on document size.  Set this to
+  # 15M to leave some headroom for storing the rest of the document.
+  validates :csv_data, :length => {:maximum => 15.megabytes, :message => "CSV file is too big (max is 15MB)"}
+
   default_scope order_by([:version, :asc])
   before_validation :set_version, :on => :create
   after_save :schedule_csv_processing
