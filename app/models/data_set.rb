@@ -8,7 +8,7 @@ class DataSet
   embedded_in :service
   embeds_many :actions
 
-  field :version,       type: Integer, :default => 1
+  field :version,       type: Integer
   field :change_notes,  type: String
   field :csv_data,      type: String
   field :processing_error, type: String
@@ -39,9 +39,8 @@ class DataSet
   end
 
   def set_version
-    other_data_sets = service.data_sets.to_a - [self]
-
-    if self.version.blank? or (self.version == 1 and other_data_sets.length >= 1)
+    if self.version.blank?
+      other_data_sets = service.data_sets.to_a - [self]
       highest_version = other_data_sets.map(&:version).max
       if highest_version
         self.version = highest_version + 1
