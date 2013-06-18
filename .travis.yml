@@ -1,0 +1,17 @@
+language: ruby
+rvm:
+  - 1.9.2
+env:
+  - GOVUK_APP_DOMAIN=dev.gov.uk RUBYOPT="-rpsych"
+services:
+  - mongodb
+script:
+  - bundle exec rake db:drop
+  - bundle exec rake ci:setup:minitest
+  - bundle exec rake
+bundler_args: --without=development
+branches:
+  except:
+    - release
+notifications:
+  email: false
