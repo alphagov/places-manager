@@ -20,6 +20,13 @@ class Admin::DataSetsController < InheritedResources::Base
     redirect_to admin_service_data_set_path(@service, duplicated_data_set)
   end
 
+  def activate
+    msg = resource.activate! ? "Data Set #{resource.version} successfully activated" : "Couldn't activate data set"
+    redirect_to admin_service_url(@service), :notice => msg
+  end
+
+  protected
+
   def bad_encoding
     flash[:alert] = "Could not process CSV file because of the file encoding. Please check the format."
     redirect_to :back
@@ -35,12 +42,6 @@ class Admin::DataSetsController < InheritedResources::Base
     redirect_to :back
   end
 
-  def activate
-    msg = resource.activate! ? "Data Set #{resource.version} successfully activated" : "Couldn't activate data set"
-    redirect_to admin_service_url(@service), :notice => msg
-  end
-
-  protected
   def prohibit_non_csv_uploads
     if params[:data_set] && params[:data_set][:data_file]
       file = get_file_from_param(params[:data_set][:data_file])
