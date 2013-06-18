@@ -92,7 +92,7 @@ class PlaceTest < ActiveSupport::TestCase
       data_set_version: 2
     )
 
-    data_set.activate!
+    data_set.activate
 
     place.name = "Aviation House"
 

@@ -33,7 +33,7 @@ class DataSetTest < ActiveSupport::TestCase
 
     should "set the active data_set on the service and return true" do
       ds = @service.data_sets.create!
-      assert ds.activate!
+      assert ds.activate
 
       @service.reload
       assert_equal ds.version, @service.active_data_set_version
@@ -43,7 +43,7 @@ class DataSetTest < ActiveSupport::TestCase
       previous_active_set = @service.active_data_set
 
       ds = @service.data_sets.create!(:csv_data => "something")
-      refute ds.activate!
+      refute ds.activate
 
       @service.reload
       assert_equal previous_active_set.version, @service.active_data_set_version

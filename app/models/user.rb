@@ -21,7 +21,7 @@ class User
   end
 
   def activate_data_set(data_set)
-    data_set.activate!
+    data_set.activate
     record_action(data_set, 'activated')
   end
 

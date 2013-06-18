@@ -21,7 +21,7 @@ class Admin::DataSetsController < InheritedResources::Base
   end
 
   def activate
-    msg = resource.activate! ? "Data Set #{resource.version} successfully activated" : "Couldn't activate data set"
+    msg = resource.activate ? "Data Set #{resource.version} successfully activated" : "Couldn't activate data set"
     redirect_to admin_service_url(@service), :notice => msg
   end
 

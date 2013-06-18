@@ -100,7 +100,7 @@ class DataSet
     self.id.to_s == service.latest_data_set.id.to_s
   end
 
-  def activate!
+  def activate
     return false unless self.processing_complete?
     service.active_data_set_version = self.version
     service.save
