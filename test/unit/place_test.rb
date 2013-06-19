@@ -4,22 +4,6 @@ require 'gds_api/test_helpers/mapit'
 class PlaceTest < ActiveSupport::TestCase
   include GdsApi::TestHelpers::Mapit
 
-  test "a new place is flagged as needing geocoding" do
-    s = Service.create! slug: "chickens", name: "Chickens!"
-    data_set = s.data_sets.create! version: 2
-    p = Place.create!(
-      service_slug: "chickens",
-      data_set_version: 2,
-      name: 'Hercules House',
-      address1: '1 Hercules Road',
-      town: 'London',
-      postcode: 'SE1 7DU',
-      source_address: "Bah"
-    )
-
-    assert Place.needs_geocoding.to_a.include?(p), "Not flagged as needing geocoding"
-  end
-
   test "responds to full_address with a compiled address" do
     p = Place.new(:name => 'Hercules House', :address1 => '1 Hercules Road', :town => 'London', :postcode => 'SE1 7DU')
     assert_equal '1 Hercules Road, London, SE1 7DU, UK', p.full_address
@@ -149,7 +133,7 @@ class PlaceTest < ActiveSupport::TestCase
       @data_set = @service.data_sets.create! version: 2, active: false
     end
 
-    should "gecode a new place" do
+    should "gecode a new place on create" do
       mapit_has_a_postcode("WC2B 6NH", [51.51695975170424, -0.12058693935709164])
 
       place = Place.create!(
@@ -159,8 +143,6 @@ class PlaceTest < ActiveSupport::TestCase
         service_slug: @service.slug,
         data_set_version: 2
       )
-
-      place.geocode!
 
       assert_equal 51.51695975170424, place.location.latitude
       assert_equal -0.12058693935709164, place.location.longitude
@@ -177,8 +159,6 @@ class PlaceTest < ActiveSupport::TestCase
         data_set_version: 2
       )
 
-      place.geocode!
-
       assert_equal 51.501, place.location.latitude
       assert_equal -0.123, place.location.longitude
 
@@ -194,8 +174,6 @@ class PlaceTest < ActiveSupport::TestCase
         service_slug: @service.slug,
         data_set_version: 2
       )
-
-      place.geocode!
 
       assert_equal 51.501, place.location.latitude
       assert_equal -0.123, place.location.longitude
@@ -214,7 +192,6 @@ class PlaceTest < ActiveSupport::TestCase
         service_slug: @service.slug,
         data_set_version: 2
       )
-      place.geocode!
 
       assert_equal 51.498241853641055, place.location.latitude
       assert_equal -0.11354773400359928, place.location.longitude
