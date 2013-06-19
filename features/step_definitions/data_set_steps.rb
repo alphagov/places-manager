@@ -25,6 +25,13 @@ When /^I upload a new data set$/ do
   end
 end
 
+When /^I upload a new data set with a CSV in the wrong format$/ do
+  within "#new-data" do
+    attach_file "Data file", Rails.root.join('features/support/data/wrong_format.csv')
+    click_button "Create Data set"
+  end
+end
+
 When /^I upload a new data set with a PNG claiming to be a CSV$/ do
   within "#new-data" do
     attach_file "Data file", Rails.root.join('features/support/data/rails.csv')
@@ -110,6 +117,10 @@ end
 
 Then /^I should see an indication that my data set contained (\d+) items$/ do |count|
   assert page.has_content?("#{count} places")
+end
+
+Then /^I should see an indication that my data set is empty$/ do
+  assert page.has_content?("There are no places associated with this data set. This may well mean the imported data was in the wrong format")
 end
 
 Then /^I should see that there are now two data sets$/ do

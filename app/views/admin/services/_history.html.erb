@@ -29,6 +29,9 @@
             <%= link_to 'KML', place_path(@service.slug, :version => set, :format => :kml) %> /
             <%= link_to 'CSV', place_path(@service.slug, :version => set, :format => :csv) %>
           </p>
+          <% if set.places.empty? %>
+            <p class="label label-warning">There are no places associated with this data set. This may well mean the imported data was in the wrong format.</p>
+          <% end %>
         <% elsif set.processing_error.present? %>
           <p class="label label-important"><%= set.processing_error %></p>
         <% else %>
