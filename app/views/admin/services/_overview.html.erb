@@ -17,8 +17,3 @@
     <li><%= @service.name %></li>
   <% end %>
 </ul>
-
-<% if @service.data_sets.any? && @service.data_sets.last.places.empty? %>
-<p class="alert">There are no places associated with your last data set. This may well mean the imported data was in the wrong format.</p>
-<% end %>
-

@@ -20,7 +20,6 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
     another_scheme = BusinessSupportScheme.new(
       title: "Tourism support grant. West Dunbartonshire", 
       business_support_identifier: "foo")
-      debugger
     refute another_scheme.valid?, "should validate uniqueness of title."
   end
   

@@ -20,7 +20,6 @@ gem 'jquery-rails'
 gem 'less-rails-bootstrap'
 
 gem 'gds-api-adapters', '4.1.3'
-gem 'govuk_content_models', '4.0.0'
 gem 'statsd-ruby', '1.0.0', :require => 'statsd'
 
 if ENV['BUNDLE_DEV']
@@ -39,6 +38,9 @@ gem 'whenever'
 gem 'lograge', '~> 0.1.0'
 gem 'kaminari', '0.14.1'
 gem 'kaminari-bootstrap', '0.1.3'
+
+gem 'delayed_job', '3.0.5'
+gem 'delayed_job_mongoid', '1.1.0'
 
 group :assets do
   gem "therubyracer", "~> 0.9.4"

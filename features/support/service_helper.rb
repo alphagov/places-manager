@@ -30,6 +30,7 @@ module ServiceHelper
     service.data_sets.create!(
       data_file: File.open(csv_path_for_data(service.name))
     )
+    run_all_delayed_jobs
   end
 
   def create_service(name)
@@ -40,6 +41,7 @@ module ServiceHelper
       data_file: File.open(csv_path_for_data(name))
     )
     s.save!
+    run_all_delayed_jobs
     s
   end
 
