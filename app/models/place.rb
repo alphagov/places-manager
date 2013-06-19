@@ -81,6 +81,7 @@ class Place
 
   index [[:location, Mongo::GEO2D], [:service_slug, Mongo::ASCENDING], [:data_set_version, Mongo::ASCENDING]], background: true
   index [[:service_slug, Mongo::ASCENDING], [:data_set_version, Mongo::ASCENDING]]
+  index :name, :background => true
 
   attr_accessor :dis
   before_validation :build_source_address

@@ -42,7 +42,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
     context "given an active data set" do
       setup do
         @data_set = @service.data_sets.create!(:version => 2)
-        @data_set.activate!
+        @data_set.activate
       end
 
       should "not show the new place form" do
@@ -104,7 +104,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
       setup do
         @data_set = @service.data_sets.create!(:version => 2)
         @place = FactoryGirl.create(:place, service_slug: @service.slug, data_set_version: @data_set.version)
-        @data_set.activate!
+        @data_set.activate
       end
 
       should "not allow the place to be edited" do
@@ -131,7 +131,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
         @place = FactoryGirl.create(:place, service_slug: @service.slug, data_set_version: @data_set.version)
 
         @subsequent_data_set = @service.data_sets.create!(:version => 3)
-        @subsequent_data_set.activate!
+        @subsequent_data_set.activate
       end
 
       should "not allow the place to be edited" do

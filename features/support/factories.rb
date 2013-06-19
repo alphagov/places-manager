@@ -1,1 +1,0 @@
-require 'govuk_content_models/test_helpers/factories'

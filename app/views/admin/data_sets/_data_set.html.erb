@@ -2,53 +2,27 @@
   <h4>Version <%= data_set.version %>
     <% if data_set.active? %><span class="label label-success">Active</span><% else %><span class="label">Inactive</span><% end %></h4>
 
-  <% unless data_set.active? %>
-  	<%= button_to 'Activate', activate_admin_service_data_set_path(@service, data_set), :class=> 'btn btn-primary activate' %>
-  <% end %>
+  <% if data_set.processing_complete? %>
+    <% unless data_set.active? %>
+      <%= button_to 'Activate', activate_admin_service_data_set_path(@service, data_set), :class=> 'btn btn-primary activate' %>
+    <% end %>
 
-  <p>
-    Export:
-    <%= link_to 'JSON', place_path(@service.slug, :version => data_set, :format => :json) %> /
-    <%= link_to 'KML', place_path(@service.slug, :version => data_set, :format => :kml) %> /
-    <%= link_to 'CSV', place_path(@service.slug, :version => data_set, :format => :csv) %>
-  </p>
-  <p><%= data_set.places.needs_geocoding.count %> places left to geocode. <%= data_set.places.with_geocoding_errors.count %> places with geocode errors.</p>
+    <p>
+      Export:
+      <%= link_to 'JSON', place_path(@service.slug, :version => data_set, :format => :json) %> /
+      <%= link_to 'KML', place_path(@service.slug, :version => data_set, :format => :kml) %> /
+      <%= link_to 'CSV', place_path(@service.slug, :version => data_set, :format => :csv) %>
+    </p>
+    <p><%= data_set.places.needs_geocoding.count %> places left to geocode. <%= data_set.places.with_geocoding_errors.count %> places with geocode errors.</p>
+
+    <% if data_set.places.empty? %>
+      <p class="label label-warning">There are no places associated with this data set. This may well mean the imported data was in the wrong format.</p>
+    <% end %>
+  <% elsif data_set.processing_error.present? %>
+    <p class="label label-important"><%= data_set.processing_error %></p>
+  <% else %>
+    <p class="label label-info">Places data is currently being processed.</p>
+  <% end %>
 </div>
 
-<h4>Explore this data set</h4>
-
-<% if data_set.latest_data_set? and !data_set.active? %>
-  <p><%= link_to "Add new place", new_admin_service_data_set_place_path(@service, data_set), :class => 'btn' %></p>
-<% end %>
-
-<% places = data_set.places.page(params[:page]).per(100) %>
-<%= paginate places %>
-
-<table class="table table-striped table-condensed table-places">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Address</th>
-      <th>URL</th>
-      <th>Location</th
-      <% if data_set.latest_data_set? and !data_set.active? %>
-        <th></th>
-      <% end %>
-    </tr>
-  </thead>
-  <% places.each do |place| %>
-    <tr>
-      <td><%= truncate(place.name, :length => 30) || "<em>&mdash;</em>".html_safe %></td>
-      <td><%= truncate(place.full_address, :length => 30) || "<em>&mdash;</em>".html_safe %></td>
-      <td><%= truncate(place.url, :length => 40) || "<em>&mdash;</em>".html_safe %></td>
-      <td><% if place.lat and place.lng %>
-        <%= [ place.lat, place.lng ].map {|a| a.round(4) }.join(', ') %>
-        <% else %><em>&mdash;</em><% end %></td>
-      <% if data_set.latest_data_set? and !data_set.active? %>
-        <td><%= link_to "edit", edit_admin_service_data_set_place_path(@service, data_set, place) %></td>
-      <% end %>
-    </tr>
-  <% end %>
-</table>
-
-<%= paginate places %>
+<%= render :partial => '/admin/data_sets/data_set_explore', :locals => {:data_set => data_set} if data_set.processing_complete? %>

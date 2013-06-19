@@ -10,7 +10,12 @@ Feature: Managing data sets
       And I fill in the form to create the "Register Offices" service
 
     Then I should be on the page for the "Register Offices" service
-      And I should see an indication that my data set contained 174 items
+      And I should see an indication that my data set is awaiting processing
+
+    When background processing has completed
+      And I go to the page for the "Register Offices" service
+
+    Then I should see an indication that my data set contained 174 items
 
   Scenario: Adding another data set to a service
     Given I have previously created the "Register Offices" service
@@ -83,7 +88,12 @@ Feature: Managing data sets
       And I fill in the form to create the "Register Offices" service with a bad CSV
 
     Then I should be on the page for the "Register Offices" service
-      And I should see an indication that my data set import failed
+      And I should see an indication that my data set is awaiting processing
+
+    When background processing has completed
+      And I go to the page for the "Register Offices" service
+
+    Then I should see an indication that my file wasn't accepted
 
   Scenario: Creating a new service with a non-CSV file
     When I go to the new service page
@@ -98,3 +108,17 @@ Feature: Managing data sets
 
     Then I should see an indication that my file wasn't accepted
       And there shouldn't be a "Register Offices" service
+
+  Scenario: Creating a new data set with a CSV file in the wrong format
+    Given I have previously created the "Register Offices" service
+
+    When I go to the page for the "Register Offices" service
+      And I upload a new data set with a CSV in the wrong format
+
+    Then I should be on the page for the latest data set for the "Register Offices" service
+      And I should see an indication that my data set is awaiting processing
+
+    When background processing has completed
+      And I go to the page for the "Register Offices" service
+
+    Then I should see an indication that my data set is empty
