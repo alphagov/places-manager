@@ -61,3 +61,5 @@ module Imminence
     config.action_dispatch.rack_cache = nil
   end
 end
+
+require 'imminence'

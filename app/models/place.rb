@@ -1,6 +1,3 @@
-require 'gds_api/mapit'
-require 'plek'
-
 class CannotEditPlaceDetailsUnlessNewestInactiveDataset < ActiveModel::Validator
   def validate(record)
     if record.changes.except("location", "geocode_error").any?
@@ -50,10 +47,6 @@ class Place
           nil
         end
     end
-  end
-
-  def self.mapit
-    @mapit ||= GdsApi::Mapit.new(Plek.current.find('mapit'))
   end
 
   scope :needs_geocoding, where(:location => nil, :geocode_error.exists => false)
@@ -162,7 +155,7 @@ class Place
     if postcode.blank?
       self.geocode_error = "Can't geocode without postcode"
     else
-      result = self.class.mapit.location_for_postcode(self.postcode)
+      result = Imminence.mapit_api.location_for_postcode(self.postcode)
       if result
         self.location = Point.new(
           latitude: result.lat,
