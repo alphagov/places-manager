@@ -5,6 +5,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
   setup do
     clean_db
     @service = FactoryGirl.create(:service)
+    GdsApi::Mapit.any_instance.stubs(:location_for_postcode).returns(nil)
   end
 
   test "it can successfully import a CSV file" do
