@@ -1,6 +1,9 @@
 require 'test_helper'
+require 'gds_api/test_helpers/mapit'
 
 class PlaceTest < ActiveSupport::TestCase
+  include GdsApi::TestHelpers::Mapit
+
   test "a new place is flagged as needing geocoding" do
     s = Service.create! slug: "chickens", name: "Chickens!"
     data_set = s.data_sets.create! version: 2
@@ -140,33 +143,88 @@ class PlaceTest < ActiveSupport::TestCase
     assert place.save
   end
 
-  test "updating postcode performs geocoding" do
-    service = Service.create! slug: "chickens", name: "Chickens!"
-    data_set = service.data_sets.create! version: 2, active: false
-    
-    Geogov.stubs(:lat_lon_from_postcode).with("SE1 7DU")
-      .returns(latitude: 51.498241853641055, longitude: -0.11354773400359928)
-    Geogov.stubs(:lat_lon_from_postcode).with("SW1H 9NB")
-      .returns(latitude: 51.4999569844724, longitude: -0.13193340292244346)
-    
-    place = Place.create!(
-      name: "Hercules House",
-      source_address: "Blah",
-      postcode: "SE1 7DU",
-      service_slug: "chickens",
-      data_set_version: 2
-    )
+  context "geocoding" do
+    setup do
+      @service = FactoryGirl.create(:service)
+      @data_set = @service.data_sets.create! version: 2, active: false
+    end
 
-    place.geocode
-    
-    assert_equal 51.498241853641055, place.location.latitude
-    assert_equal -0.11354773400359928, place.location.longitude
+    should "gecode a new place" do
+      mapit_has_a_postcode("WC2B 6NH", [51.51695975170424, -0.12058693935709164])
 
-    place.postcode = "SW1H 9NB"
+      place = Place.create!(
+        name: "Aviation House",
+        source_address: "Blah",
+        postcode: "WC2B 6NH",
+        service_slug: @service.slug,
+        data_set_version: 2
+      )
 
-    assert place.save
+      place.geocode!
 
-    assert_equal 51.4999569844724, place.location.latitude
-    assert_equal -0.13193340292244346, place.location.longitude
+      assert_equal 51.51695975170424, place.location.latitude
+      assert_equal -0.12058693935709164, place.location.longitude
+    end
+
+    should "not overwrite location if created with a lat/lon" do
+      place = Place.create!(
+        name: "Aviation House",
+        source_address: "Blah",
+        postcode: "WC2B 6NH",
+        lat: 51.501,
+        lng: -0.123,
+        service_slug: @service.slug,
+        data_set_version: 2
+      )
+
+      place.geocode!
+
+      assert_equal 51.501, place.location.latitude
+      assert_equal -0.123, place.location.longitude
+
+      assert_nil place.geocode_error
+    end
+
+    should "not overwrite location if created with a location" do
+      place = Place.create!(
+        name: "Aviation House",
+        source_address: "Blah",
+        postcode: "WC2B 6NH",
+        location: Point.new(:latitude => 51.501, :longitude => -0.123),
+        service_slug: @service.slug,
+        data_set_version: 2
+      )
+
+      place.geocode!
+
+      assert_equal 51.501, place.location.latitude
+      assert_equal -0.123, place.location.longitude
+
+      assert_nil place.geocode_error
+    end
+
+    should "gecode postcode when postcode is changed" do
+      mapit_has_a_postcode("SE1 7DU", [51.498241853641055, -0.11354773400359928])
+      mapit_has_a_postcode("WC2B 6NH", [51.51695975170424, -0.12058693935709164])
+
+      place = Place.create!(
+        name: "Hercules House",
+        source_address: "Blah",
+        postcode: "SE1 7DU",
+        service_slug: @service.slug,
+        data_set_version: 2
+      )
+      place.geocode!
+
+      assert_equal 51.498241853641055, place.location.latitude
+      assert_equal -0.11354773400359928, place.location.longitude
+
+      place.postcode = "WC2B 6NH"
+
+      assert place.save
+
+      assert_equal 51.51695975170424, place.location.latitude
+      assert_equal -0.12058693935709164, place.location.longitude
+    end
   end
 end

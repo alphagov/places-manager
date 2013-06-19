@@ -150,14 +150,16 @@ class Place
   end
 
   def geocode
+    return unless location.blank?
+
     if postcode.blank?
       self.geocode_error = "Can't geocode without postcode"
-    elsif location.nil? or location.empty?
-      lookup = Geogov.lat_lon_from_postcode(self.postcode)
-      if lookup
+    else
+      result = Imminence.mapit_api.location_for_postcode(self.postcode)
+      if result
         self.location = Point.new(
-          latitude: lookup.values[0],
-          longitude: lookup.values[1]
+          latitude: result.lat,
+          longitude: result.lon
         )
       else
         self.geocode_error = "#{self.postcode} not found for #{self.full_address}"
