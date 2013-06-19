@@ -14,6 +14,7 @@ require 'rails/test_help'
 require 'mocha/setup'
 require 'gds_api/test_helpers/json_client_helper'
 require 'webmock/minitest'
+# Poltergeist requires access to localhost.
 WebMock.disable_net_connect!(:allow_localhost => true)
 
 class ActiveSupport::TestCase
