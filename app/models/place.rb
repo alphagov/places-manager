@@ -85,8 +85,9 @@ class Place
 
   attr_accessor :dis
   before_validation :build_source_address
+  before_validation :clear_location, :if => :postcode_changed?, :on => :update
   before_save :reconcile_location
-  before_update :handle_postcode_change
+  before_save :geocode
 
   def data_set
     service = Service.where(slug: service_slug).first
@@ -202,7 +203,7 @@ class Place
 
   def lat=(value)
     if location
-      location = Point.new(longitude: location.longitude, latitude: value)
+      self.location = Point.new(longitude: location.longitude, latitude: value)
     else
       @temp_lat = value
     end
@@ -210,7 +211,7 @@ class Place
 
   def lng=(value)
     if location
-      location = Point.new(longitude: value, latitude: location.latitude)
+      self.location = Point.new(longitude: value, latitude: location.latitude)
     else
       @temp_lng = value
     end
@@ -238,14 +239,12 @@ class Place
     end
   end
 
-  def handle_postcode_change
-    if postcode_changed?
-      self.location = nil
-      geocode
-    end
+  private
+
+  def clear_location
+    self.location = nil
   end
 
-  private
   def self.parameters_from_hash(data_set, row)
     # Create parameters suitable for passing to build, create, etc.
     base_parameters = {
