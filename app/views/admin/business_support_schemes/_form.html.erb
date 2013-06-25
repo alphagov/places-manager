@@ -6,9 +6,9 @@
     <label for="business_support_scheme[priority]">Priority</label>
     <%= f.select :priority, [["Low",0],["Normal",1],["High",2]] %>
     <label for="business_support_scheme[start_date]">Start Date</label>
-    <%= f.date_select :start_date %>
+    <%= f.date_select :start_date, :include_blank => true %>
     <label for="business_support_scheme[end_date]">End Date</label>
-    <%= f.date_select :end_date %>
+    <%= f.date_select :end_date, :include_blank => true %>
 
     <%= render partial: "facets", locals: { f: f,
                                             title: "Business types",

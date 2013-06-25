@@ -71,6 +71,46 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
 
   end
 
+  test "create a business support scheme with no start and end dates" do
+    
+    visit "/admin/business_support_schemes/new"
+
+    fill_in "Title", :with => "Wunderbiz 2012 superfunding"
+
+    select "Low", :from => "business_support_scheme[priority]"
+
+    check "Charity"
+    check "Global megacorp"
+    check "England"
+    check "Wales"
+    check "Manufacturing"
+    check "Healthcare"
+    check "Agriculture"
+    check "Grant"
+    check "Making the most of the Internet"
+    check "Energy efficiency and the environment"
+
+    click_on "Create Business Support"
+
+    bs = BusinessSupportScheme.last
+
+    assert_equal "Wunderbiz 2012 superfunding", bs.title
+    assert_equal 0, bs.priority
+    assert_equal "334", bs.business_support_identifier
+
+    assert_nil bs.start_date
+    assert_nil bs.end_date
+    
+    assert_equal [@charity.slug, @global_megacorp.slug], bs.business_types
+    assert_equal [@england.slug, @london.slug, @wales.slug, @yorkshire_and_the_humber.slug], bs.locations
+    assert_equal [@agriculture.slug, @healthcare.slug, @manufacturing.slug], bs.sectors
+    assert_equal [@grant.slug], bs.support_types
+    assert_equal [@energy_efficiency_and_the_environment.slug, @making_the_most_of_the_internet.slug], bs.purposes
+
+    assert page.has_content? "Wunderbiz 2012 superfunding successfully created"
+
+  end
+
   test "associating facets with a scheme" do
     
     visit "/admin/business_support_schemes/#{@bs._id.to_s}/edit"
