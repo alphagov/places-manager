@@ -71,8 +71,8 @@ class Place
   field :fax,            :type => String
   field :text_phone,     :type => String
   field :location,       :type => PointField
-  field :override_lat,   :type => Integer
-  field :override_lng,   :type => Integer
+  field :override_lat,   :type => Float 
+  field :override_lng,   :type => Float
   field :geocode_error,  :type => String
 
   validates_presence_of :service_slug
