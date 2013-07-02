@@ -11,6 +11,8 @@
     <%= f.input :address2, :label => "Address 2" %>
     <%= f.input :town %>
     <%= f.input :postcode %>
+    <%= f.input :override_lng, :label => "Override longitude", :placeholder => "Leave blank to use postcode coords"%>
+    <%= f.input :override_lat, :label => "Override latitude", :placeholder => "Leave blank to use postcode coords" %>
   <% end %>
 
   <%= f.inputs "Contact Details" do %>
