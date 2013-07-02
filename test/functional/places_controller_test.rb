@@ -13,21 +13,21 @@ class PlacesControllerTest < ActionController::TestCase
       data_set_version: @service.data_sets.last.version,
       postcode: 'SW1A 1AA',
       source_address: 'Buckingham Palace, Westminster',
-      lat: '51.501009611553926', lng: '-0.141587067110009'
+      override_lat: '51.501009611553926', override_lng: '-0.141587067110009'
     )
     @aviation_house = Place.create!(
       service_slug: 'important-government-service',
       data_set_version: @service.data_sets.last.version,
       postcode: 'WC2B 6SE',
       source_address: 'Aviation House',
-      lat: '51.516960431', lng: '-0.120586400134'
+      override_lat: '51.516960431', override_lng: '-0.120586400134'
     )
     @scottish_parliament = Place.create!(
       service_slug: 'important-government-service',
       data_set_version: @service.data_sets.last.version,
       postcode: 'EH99 1SP',
       source_address: 'Scottish Parliament',
-      lat: '55.95439', lng: '-3.174706'
+      override_lat: '55.95439', override_lng: '-3.174706'
     )
     @utopia = Place.create!(
       service_slug: 'important-government-service',

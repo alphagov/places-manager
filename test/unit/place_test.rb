@@ -9,14 +9,6 @@ class PlaceTest < ActiveSupport::TestCase
     assert_equal '1 Hercules Road, London, SE1 7DU, UK', p.full_address
   end
 
-  test "can import a longitude and latitude" do
-    p = Place.new(lat: '51.501009611553926', lng: '-0.141587067110009')
-    p.reconcile_location
-
-    assert_equal 51.501009611553926, p.lat
-    assert_equal -0.141587067110009, p.lng
-  end
-
   test "points serialise in the correct order" do
     point = Point.new(latitude: 56.2, longitude: -1.0)
     field = Place::PointField.new
@@ -119,8 +111,7 @@ class PlaceTest < ActiveSupport::TestCase
     )
 
     second_data_set = service.data_sets.create! version: 3
-    place.lat = 51.517356
-    place.lng = -0.120742
+    place.location = Point.new(latitude: 51.517356, longitude: -0.120742)
     place.geocode_error = "Error message"
 
     assert place.valid?
@@ -153,8 +144,8 @@ class PlaceTest < ActiveSupport::TestCase
         name: "Aviation House",
         source_address: "Blah",
         postcode: "WC2B 6NH",
-        lat: 51.501,
-        lng: -0.123,
+        override_lat: 51.501,
+        override_lng: -0.123,
         service_slug: @service.slug,
         data_set_version: 2
       )

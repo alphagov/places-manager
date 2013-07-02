@@ -11,7 +11,6 @@ FactoryGirl.define do
     town "Los Angeles"
     postcode "WC2B 6NH"
     phone "01234 567890"
-    lat 53.105491
-    lng -2.017493
+    location { Point.new(latitude: 53.105491, longitude: -2.017493) }
   end
 end

@@ -99,6 +99,33 @@ class Admin::PlacesControllerTest < ActionController::TestCase
           assert_redirected_to admin_service_data_set_url(@service, @data_set)
         end
       end
+
+      should "ignore nil or blank overridden latitude and longitude params" do
+        as_logged_in_user do
+          put :update, service_id: @service.id, data_set_id: @data_set.id, id: @place.id,
+            place: { name: "Updated Place Name", override_lat: "", override_lng: "" }
+
+          @place.reload
+
+          assert_equal "Updated Place Name", @place.name
+          assert_equal 53.105491, @place.location.latitude
+          assert_equal -2.017493, @place.location.longitude
+          assert_redirected_to admin_service_data_set_url(@service, @data_set)
+        end
+      end
+
+      should "create a location from overridden latitude and longitude params" do
+        as_logged_in_user do
+          put :update, service_id: @service.id, data_set_id: @data_set.id, id: @place.id,
+            place: { override_lat: "55.198765", override_lng: "-1.182934" }
+
+          @place.reload
+
+          assert_equal 55.198765, @place.location.latitude
+          assert_equal -1.182934, @place.location.longitude
+          assert_redirected_to admin_service_data_set_url(@service, @data_set)
+        end
+      end
     end
 
     context "given an active data set" do
