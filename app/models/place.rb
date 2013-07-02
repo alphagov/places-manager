@@ -71,12 +71,17 @@ class Place
   field :fax,            :type => String
   field :text_phone,     :type => String
   field :location,       :type => PointField
+  field :override_lat,   :type => Integer
+  field :override_lng,   :type => Integer
   field :geocode_error,  :type => String
 
   validates_presence_of :service_slug
   validates_presence_of :data_set_version
   validates_presence_of :source_address
   validates_presence_of :postcode
+  validates_numericality_of :override_lat, :allow_blank => true
+  validates_numericality_of :override_lng, :allow_blank => true
+  validate :has_both_lat_lng_overrides
   validates_with CannotEditPlaceDetailsUnlessNewestInactiveDataset, :on => :update
 
   index [[:location, Mongo::GEO2D], [:service_slug, Mongo::ASCENDING], [:data_set_version, Mongo::ASCENDING]], background: true
@@ -86,7 +91,6 @@ class Place
   attr_accessor :dis
   before_validation :build_source_address
   before_validation :clear_location, :if => :postcode_changed?, :on => :update
-  before_save :reconcile_location
   before_save :geocode
 
   def data_set
@@ -151,6 +155,10 @@ class Place
   end
 
   def geocode
+    if override_lat_lng?
+      self.location = Point.new(latitude: override_lat, longitude: override_lng)
+    end
+
     return unless location.blank?
 
     if postcode.blank?
@@ -201,22 +209,6 @@ class Place
     location.nil? ? nil : location.longitude
   end
 
-  def lat=(value)
-    if location
-      self.location = Point.new(longitude: location.longitude, latitude: value)
-    else
-      @temp_lat = value
-    end
-  end
-
-  def lng=(value)
-    if location
-      self.location = Point.new(longitude: value, latitude: location.latitude)
-    else
-      @temp_lng = value
-    end
-  end
-
   def can_edit?
     data_set.latest_data_set? and !data_set.active?
   end
@@ -229,20 +221,21 @@ class Place
     end
   end
 
-  def reconcile_location
-    # This slight hack is needed to get around code setting latitude and
-    # longitude separately on a new object. Because we can't construct a Point
-    # field until we have both, we store them in temporary variables and build
-    # the point on save
-    if location.nil? && @temp_lat && @temp_lng
-      self.location = Point.new(longitude: @temp_lng, latitude: @temp_lat)
-    end
-  end
-
   private
 
   def clear_location
     self.location = nil
+  end
+
+  def override_lat_lng?
+    override_lat.present? and override_lng.present?
+  end
+
+  def has_both_lat_lng_overrides
+    unless override_lat_lng? or (!override_lat.present? and !override_lng.present?)
+      errors.add(:override_lat, "latitude must be a valid coordinate") unless override_lat.present?
+      errors.add(:override_lng, "longitude must be a valid coordinate") unless override_lng.present?
+    end
   end
 
   def self.parameters_from_hash(data_set, row)
