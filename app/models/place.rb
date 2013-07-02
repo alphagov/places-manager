@@ -232,7 +232,7 @@ class Place
   end
 
   def has_both_lat_lng_overrides
-    unless override_lat_lng? or (!override_lat.present? and !override_lng.present?)
+    unless override_lat_lng? or (override_lat.blank? and override_lng.blank?)
       errors.add(:override_lat, "latitude must be a valid coordinate") unless override_lat.present?
       errors.add(:override_lng, "longitude must be a valid coordinate") unless override_lng.present?
     end
