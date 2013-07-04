@@ -260,7 +260,7 @@ class Place
     location_parameters = if row['location']
       {location: PointField.new.deserialize(row['location'])}
     elsif row['lng'] && row['lat']
-      {location: Point.new(longitude: row['lng'], latitude: row['lat'])}
+      {override_lng: row['lng'], override_lat: row['lat']}
     else
       {}
     end
