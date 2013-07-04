@@ -56,7 +56,7 @@ class Place
 
   # We use "not null" here instead of "exists", because it works with the index
   scope :with_geocoding_errors, where(:geocode_error.ne => nil)
-  scope :geocoded, where(:location.size => 2)
+  scope :geocoded, where(:location.with_size => 2)
   default_scope order_by([:name,:asc])
 
   field :service_slug,   :type => String

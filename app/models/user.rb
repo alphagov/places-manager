@@ -2,8 +2,6 @@ class User
   include Mongoid::Document
   include GDS::SSO::User
 
-  cache
-
   field  :uid, :type => String
   field  :email, :type => String
   field  :version, :type => Integer
@@ -17,7 +15,7 @@ class User
   end
 
   def self.find_by_uid(uid)
-    first(conditions: {uid: uid})
+    where(:uid => uid).first
   end
 
   def activate_data_set(data_set)
