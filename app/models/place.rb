@@ -257,9 +257,7 @@ class Place
       text_phone: row['text_phone'],
       source_address: row['source_address'] || "#{row['address1']} #{row['address2']} #{row['town']} #{row['postcode']}"
     }
-    location_parameters = if row['location']
-      {location: PointField.new.deserialize(row['location'])}
-    elsif row['lng'] && row['lat']
+    location_parameters = if row['lng'] && row['lat']
       {override_lng: row['lng'], override_lat: row['lat']}
     else
       {}
