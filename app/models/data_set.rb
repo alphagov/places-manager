@@ -39,8 +39,22 @@ class DataSet
     Place.where(service_slug: service.slug, data_set_version: version)
   end
 
+  ##
+  # Find all the places near a given location
+  #
+  # Arguments:
+  #   location - a Point object representing the centre of the search area
+  #   distance (optional) - a Distance object representing the maximum distance
+  #   limit (optional) - a maximum number of results to return
+  #
+  # Returns:
+  #   an array of Place objects
   def places_near(location, distance = nil, limit = nil)
-    Place.find_near(location, distance, limit, {service_slug: service.slug, data_set_version: version})
+    query = places
+    query = query.limit(limit) if limit
+    query = query.geo_near([location.longitude, location.latitude])#.distance_multiplier(Distance::EARTH_RADIUS_IN_MILES)
+    query = query.max_distance(distance.in(:radians)) if distance
+    query.spherical
   end
 
   def duplicate

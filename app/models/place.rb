@@ -64,7 +64,6 @@ class Place
 
   index({:name => 1}, {:background => true})
 
-  attr_accessor :dis
   before_validation :build_source_address
   before_validation :clear_location, :if => :postcode_changed?, :on => :update
   before_save :geocode
@@ -76,45 +75,11 @@ class Place
     end
   end
 
-  ##
-  # Find all the points near a given location
-  #
-  # This returns Place objects with a 'dis' attribute representing the
-  # mongodb derived distance of that place from the origin of the search.
-  #
-  # That doesn't feel quite right and this API is subject to change, perhaps
-  # to return an array of arrays, eg. [[distance, Place], [distance2, Place2]]?
-  #
-  # Arguments:
-  #   location - a Point object representing the centre of the search area
-  #   distance (optional) - a Distance object representing the maximum distance
-  #       - only miles are currently supported
-  #   limit (optional) - a maximum number of results to return
-  #
-  # Returns:
-  #   an array of Place objects with a 'dis' attribute
-  def self.find_near(location, distance = nil, limit = nil, extra_query = {})
-
-    opts = {
-      "geoNear" => "places",
-      "near" => [location.longitude, location.latitude],
-      "spherical" => false,
-      "query" => extra_query
-    }
-
-    if distance
-      opts["maxDistance"] = distance.in(:degrees)
-    end
-
-    if limit
-      opts["num"] = limit.to_i
-    end
-
-    response = Mongoid.master.command(opts)
-    response["results"].collect do |result|
-      Mongoid::Factory.from_db(self, result["obj"]).tap do |doc|
-        doc.dis = Distance.new(result["dis"], :degrees)
-      end
+  # Convert mongoid's geo_near_distance attribute to a Distance object
+  # so that we can easily convert it to other units.
+  def dis
+    if attributes["geo_near_distance"]
+      @dis ||= Distance.new(attributes["geo_near_distance"], :radians)
     end
   end
 

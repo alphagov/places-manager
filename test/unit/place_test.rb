@@ -159,4 +159,20 @@ class PlaceTest < ActiveSupport::TestCase
       assert_equal -0.12058693935709164, place.location.longitude
     end
   end
+
+  context "dis attribute wrapper" do
+    setup do
+      @place = FactoryGirl.create(:place, :override_lat => 53.105491, :override_lng => -2.017493)
+    end
+
+    should "return nil when no geo_near_distance available" do
+      assert_nil @place.dis
+    end
+
+    should "return a distance object for the geo_near_distance if available" do
+      p = Place.geo_near([-2.01, 53.1]).first
+
+      assert_in_epsilon 36.816335, p.dis.in(:miles), 0.001
+    end
+  end
 end
