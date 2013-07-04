@@ -3,7 +3,6 @@ require_relative '../../integration_test_helper'
 class PlaceCreateEditTest < ActionDispatch::IntegrationTest
 
   setup do
-    @controller = Admin::PlacesController
     GDS::SSO.test_user = FactoryGirl.create(:user)
     GdsApi::Mapit.any_instance.stubs(:location_for_postcode).returns(nil)
     @service = FactoryGirl.create(:service)
