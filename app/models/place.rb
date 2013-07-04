@@ -11,44 +11,6 @@ end
 class Place
   include Mongoid::Document
 
-  class PointField
-    # Declare a field of this type to have it deserialise to a Point
-
-    include Mongoid::Fields::Serializable
-
-    def deserialize(value)
-      return nil unless value
-
-      if value.is_a? Array
-        legacy_deserialize value
-      else
-        Point.new(longitude: value["longitude"], latitude: value["latitude"])
-      end
-    end
-
-    def serialize(point)
-      return nil unless point
-
-      {"longitude" => point.longitude, "latitude" => point.latitude}
-    end
-
-  private
-    def legacy_deserialize(value)
-        # Legacy [lat, lng] data format
-        # An empty array (or a single co-ordinate, which shouldn't happen) is
-        # an invalid value and deserializes to nil
-        case value.size
-        when 2
-          Point.new(latitude: value[0], longitude: value[1])
-        when 0
-          nil
-        else
-          Rails.logger.error "Invalid location #{value.inspect}"
-          nil
-        end
-    end
-  end
-
   # Match documents with either no geocode error or a null value. Changed so
   # that anything without a location (or with a null location) is either
   # matched by `needs_geocoding` or `with_geocoding_errors`.
@@ -75,7 +37,7 @@ class Place
   field :phone,          :type => String
   field :fax,            :type => String
   field :text_phone,     :type => String
-  field :location,       :type => PointField
+  field :location,       :type => Point
   field :override_lat,   :type => Float 
   field :override_lng,   :type => Float
   field :geocode_error,  :type => String
