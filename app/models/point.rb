@@ -54,7 +54,7 @@ class Point
       if value.is_a?(Point)
         value.mongoize
       elsif value.is_a?(Hash)
-        new(value).mongoize
+        new(value.symbolize_keys).mongoize
       else
         value
       end

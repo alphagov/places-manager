@@ -52,6 +52,10 @@ class PointTest < ActiveSupport::TestCase
         assert_equal({"latitude" => 56.2, "longitude" => -1.0}, Point.mongoize(:latitude => 56.2, :longitude => -1.0))
       end
 
+      should "serialise a hash with string keys back to a hash" do
+        assert_equal({"latitude" => 56.2, "longitude" => -1.0}, Point.mongoize("latitude" => 56.2, "longitude" => -1.0))
+      end
+
       should "serialise nil as nil" do
         assert_nil Point.mongoize(nil)
       end
