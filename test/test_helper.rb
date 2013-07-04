@@ -46,6 +46,10 @@ class ActiveSupport::TestCase
     @controller.unstub(:authenticate_user!)
   end
 
+  def create_test_user
+    FactoryGirl.create(:user)
+  end
+
   def fixture_file_path(basename)
     Rails.root.join("test", "fixtures", basename)
   end
