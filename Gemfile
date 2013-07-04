@@ -6,10 +6,8 @@ gem 'plek', '1.3.1'
 gem 'rails', '3.2.13'
 gem 'unicorn', '4.3.1'
 
-gem "mongoid", "2.4.10"
+gem "mongoid", "3.1.4"
 gem "mongoid_rails_migrations", "1.0.0"
-gem "mongo", "1.6.2"
-gem "bson_ext", "1.6.2"
 
 gem 'aws-ses', :require => 'aws/ses'
 gem 'exception_notification', '2.5.2', :require => 'exception_notifier'
@@ -51,7 +49,7 @@ end
 group :test do
   gem 'cucumber-rails', require: false
   gem 'capybara', '1.1.2'
-  gem 'database_cleaner'
+  gem 'database_cleaner', '1.0.1'
   gem 'simplecov', '0.6.4'
   gem 'simplecov-rcov', '0.2.3'
   gem 'factory_girl', "3.3.0"
