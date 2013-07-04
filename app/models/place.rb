@@ -89,18 +89,18 @@ class Place
   validate :has_both_lat_lng_overrides
   validates_with CannotEditPlaceDetailsUnlessNewestInactiveDataset, :on => :update
 
-  index [[:location, Mongo::GEO2D], [:service_slug, Mongo::ASCENDING], [:data_set_version, Mongo::ASCENDING]], background: true
-  index [[:service_slug, Mongo::ASCENDING], [:data_set_version, Mongo::ASCENDING]]
+  index({:location => '2d', :service_slug => 1, :data_set_version => 1}, {:background => true})
+  index({:service_slug => 1, :data_set_version => 1})
 
   # Index to speed up the `needs_geocoding` and `with_geocoding_errors` scopes
-  index [
-    [:service_slug, Mongo::ASCENDING],
-    [:data_set_version, Mongo::ASCENDING],
-    [:geocode_error, Mongo::ASCENDING],
-    [:location, Mongo::ASCENDING]
-  ]
+  index({
+    :service_slug => 1,
+    :data_set_version => 1,
+    :geocode_error => 1,
+    :location => 1,
+  })
 
-  index :name, :background => true
+  index({:name => 1}, {:background => true})
 
   attr_accessor :dis
   before_validation :build_source_address

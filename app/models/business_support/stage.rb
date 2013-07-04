@@ -3,7 +3,7 @@ class BusinessSupport::Stage
   
   field :name, type: String
   field :slug, type: String  
-  index :slug 
+  index :slug => 1
 
   validates_presence_of :name
   validates_uniqueness_of :name
