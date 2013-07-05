@@ -18,6 +18,13 @@ require 'sidekiq/testing'
 # Poltergeist requires access to localhost.
 WebMock.disable_net_connect!(:allow_localhost => true)
 
+# Now that mongoid no longer has the autocreate_indexes config option,
+# we need to ensure that the indexes exist in the test databse (the 
+# geo lookup functions won't work without them)
+silence_stream(STDOUT) do
+  Rails::Mongoid.create_indexes
+end
+
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
   #
