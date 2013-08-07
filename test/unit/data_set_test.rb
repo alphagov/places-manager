@@ -111,11 +111,10 @@ class DataSetTest < ActiveSupport::TestCase
         assert_equal expected, @ds.csv_data
       end
 
-      should "handle UTF-16LE files" do
-        @ds.data_file = File.open(fixture_file_path('encodings/utf-16le.csv'))
-        @ds.save!
-        expected = File.read(fixture_file_path('encodings/utf-16le.csv')).force_encoding('utf-16le').encode('utf-8')
-        assert_equal expected, @ds.csv_data
+      should "raise an error with an unknown file encoding" do
+        assert_raise InvalidCharacterEncodingError do
+          @ds.data_file = File.open(fixture_file_path('encodings/utf-16le.csv'))
+        end
       end
     end
   end

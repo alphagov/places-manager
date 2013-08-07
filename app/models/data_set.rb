@@ -59,7 +59,7 @@ class DataSet
   end
 
   def data_file=(file)
-    self.csv_data = file.read.force_encoding('UTF-8')
+    self.csv_data = read_as_utf8(file)
 
     # TODO: restructure this so that it runs as part of the model validations.
     raise HtmlValidationError unless Govspeak::HtmlValidator.new(self.csv_data).valid?
@@ -111,6 +111,24 @@ class DataSet
     self.actions << action
     action
   end
+
+  private
+
+  def read_as_utf8(file)
+    string = file.read
+    unless string.valid_encoding?
+      detected_encoding = `file -b --mime-encoding #{file.path.shellescape}`.chomp
+      case detected_encoding
+      when 'iso-8859-1'
+        string = string.force_encoding('iso-8859-1')
+      else
+        raise InvalidCharacterEncodingError, "Unknown encoding #{detected_encoding.inspect}"
+      end
+      string = string.encode('utf-8')
+    end
+    string
+  end
 end
 
 class HtmlValidationError < StandardError; end
+class InvalidCharacterEncodingError < StandardError; end
