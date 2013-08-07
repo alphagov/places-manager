@@ -52,7 +52,7 @@ class DataSet
   def places_near(location, distance = nil, limit = nil)
     query = places
     query = query.limit(limit) if limit
-    query = query.geo_near([location.longitude, location.latitude])#.distance_multiplier(Distance::EARTH_RADIUS_IN_MILES)
+    query = query.geo_near([location.longitude, location.latitude])
     query = query.max_distance(distance.in(:radians)) if distance
     query.spherical
   end
