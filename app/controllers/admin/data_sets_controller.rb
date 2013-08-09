@@ -7,6 +7,7 @@ class Admin::DataSetsController < InheritedResources::Base
   belongs_to :service
   rescue_from CSV::MalformedCSVError, :with => :bad_csv
   rescue_from BSON::InvalidStringEncoding, :with => :bad_encoding
+  rescue_from InvalidCharacterEncodingError, :with => :bad_encoding
   rescue_from HtmlValidationError, :with => :bad_html
 
   def create

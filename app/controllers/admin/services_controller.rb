@@ -11,7 +11,7 @@ class Admin::ServicesController < InheritedResources::Base
     flash.now[:alert] = "Could not process CSV file. Please check the format."
     @service = Service.new(params[:service])
     render action: 'new'
-  rescue BSON::InvalidStringEncoding => e
+  rescue BSON::InvalidStringEncoding, InvalidCharacterEncodingError => e
     flash.now[:alert] = "Could not process CSV file because of the file encoding. Please check the format."
     @service = Service.new(params[:service])
     render action: 'new'
