@@ -19,9 +19,7 @@ module Imminence
     end
 
     def mime_type
-      shell_result = IO.popen(["file", "--brief", "--mime-type", filename],
-        in: :close, err: :close)
-      shell_result.read.chomp
+      `file --brief --mime-type #{filename.shellescape}`.chomp
     end
 
     def is_mime_type?(comparison_mime_type)
