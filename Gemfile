@@ -42,7 +42,7 @@ gem 'delayed_job', '3.0.5'
 gem 'delayed_job_mongoid', '1.1.0'
 
 group :assets do
-  gem "therubyracer", "~> 0.9.4"
+  gem "therubyracer", "0.11.4"
   gem 'uglifier'
 end
 
