@@ -8,6 +8,7 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
     Capybara.current_driver = Capybara.javascript_driver 
     
     make_facets(:business_support_business_type, ["Global megacorp", "Private limited company", "Charity"])
+    make_facets(:business_support_business_size, ["Under 10", "Up to 249"])
     make_facets(:business_support_location, ["England", "Scotland", "Wales", "Northern Ireland", "London", "Yorkshire and the Humber"])
     make_facets(:business_support_purpose, ["Making the most of the Internet", "Exporting or finding overseas partners", 
                 "Finding new customers and markets", "Energy efficiency and the environment"])
@@ -41,6 +42,8 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
     
     check "Charity"
     check "Global megacorp"
+    check "Under 10"
+    check "Up to 249"
     check "England"
     check "Wales"
     check "Manufacturing"
@@ -62,6 +65,7 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
     assert_equal Date.parse("2013/06/03"), bs.end_date
     
     assert_equal [@charity.slug, @global_megacorp.slug], bs.business_types
+    assert_equal [@under_10.slug, @up_to_249.slug], bs.business_sizes
     assert_equal [@england.slug, @london.slug, @wales.slug, @yorkshire_and_the_humber.slug], bs.locations
     assert_equal [@agriculture.slug, @healthcare.slug, @manufacturing.slug], bs.sectors
     assert_equal [@grant.slug], bs.support_types
@@ -81,6 +85,8 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
 
     check "Charity"
     check "Global megacorp"
+    check "Under 10"
+    check "Up to 249"
     check "England"
     check "Wales"
     check "Manufacturing"
@@ -102,6 +108,7 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
     assert_nil bs.end_date
     
     assert_equal [@charity.slug, @global_megacorp.slug], bs.business_types
+    assert_equal [@under_10.slug, @up_to_249.slug], bs.business_sizes
     assert_equal [@england.slug, @london.slug, @wales.slug, @yorkshire_and_the_humber.slug], bs.locations
     assert_equal [@agriculture.slug, @healthcare.slug, @manufacturing.slug], bs.sectors
     assert_equal [@grant.slug], bs.support_types

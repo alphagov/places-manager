@@ -1,6 +1,7 @@
 class BusinessSupportSchemesController < ApplicationController
 
-  RELATIONAL_KEYS = [:business_types, :sectors, :stages, :locations, :support_types]
+  RELATIONAL_KEYS =
+    [:business_types, :business_sizes, :sectors, :stages, :locations, :support_types]
 
   def index
     relations = params.keep_if{ |k,v| RELATIONAL_KEYS.include?(k.to_sym) }
