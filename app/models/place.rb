@@ -49,8 +49,13 @@ class Place
     end
   end
 
-  scope :needs_geocoding, where(:location => nil, :geocode_error.exists => false)
-  scope :with_geocoding_errors, where(:geocode_error.exists => true)
+  # Match documents with either no geocode error or a null value. Changed so
+  # that anything without a location (or with a null location) is either
+  # matched by `needs_geocoding` or `with_geocoding_errors`.
+  scope :needs_geocoding, where(:location => nil, :geocode_error => nil)
+
+  # We use "not null" here instead of "exists", because it works with the index
+  scope :with_geocoding_errors, where(:geocode_error.ne => nil)
   scope :geocoded, where(:location.size => 2)
   default_scope order_by([:name,:asc])
 
@@ -86,6 +91,15 @@ class Place
 
   index [[:location, Mongo::GEO2D], [:service_slug, Mongo::ASCENDING], [:data_set_version, Mongo::ASCENDING]], background: true
   index [[:service_slug, Mongo::ASCENDING], [:data_set_version, Mongo::ASCENDING]]
+
+  # Index to speed up the `needs_geocoding` and `with_geocoding_errors` scopes
+  index [
+    [:service_slug, Mongo::ASCENDING],
+    [:data_set_version, Mongo::ASCENDING],
+    [:geocode_error, Mongo::ASCENDING],
+    [:location, Mongo::ASCENDING]
+  ]
+
   index :name, :background => true
 
   attr_accessor :dis
