@@ -49,7 +49,10 @@ class Place
     end
   end
 
-  scope :needs_geocoding, where(:location => nil, :geocode_error.exists => false)
+  # Match documents with either no geocode error or a null value. Changed so
+  # that anything without a location (or with a null location) is either
+  # matched by `needs_geocoding` or `with_geocoding_errors`.
+  scope :needs_geocoding, where(:location => nil, :geocode_error => nil)
 
   # We use "not null" here instead of "exists", because it works with the index
   scope :with_geocoding_errors, where(:geocode_error.ne => nil)
