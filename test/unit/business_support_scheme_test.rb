@@ -43,7 +43,14 @@ class BusinessSupportSchemeTest < ActiveSupport::TestCase
     assert_equal "charity", @scheme.business_types.first
     assert_equal "private-company", @scheme.business_types.last
   end
- 
+
+  test "should have and belong to many BusinessSupportBusinessSizes" do
+    @scheme.business_sizes << "under-10"
+    @scheme.business_sizes << "up-to-249"
+    assert_equal "under-10", @scheme.business_sizes.first
+    assert_equal "up-to-249", @scheme.business_sizes.last
+  end
+
   test "should have and belong to many BusinessSupportNations" do
     @scheme.locations << "auchtermuchty"
     @scheme.locations << "ecclefechan"

@@ -64,6 +64,7 @@ protected
 
   def find_all_facets
     @business_types = BusinessSupport::BusinessType.asc(:name)
+    @business_sizes = BusinessSupport::BusinessSize.asc(:name)
     @locations = BusinessSupport::Location.asc(:name)
     @purposes = BusinessSupport::Purpose.asc(:name)
     @sectors = BusinessSupport::Sector.asc(:name)

@@ -3,6 +3,10 @@ FactoryGirl.define do
     name "Charity"
     slug "charity"
   end
+  factory :business_support_business_size, :class => BusinessSupport::BusinessSize do
+    name "Under 10"
+    slug "under-10"
+  end
   factory :business_support_location, :class => BusinessSupport::Location do
     name "England"
     slug "england"

@@ -7,6 +7,7 @@ class BusinessSupportScheme
   field :priority, type: Integer, default: 1
 
   field :business_types,  type: Array, default: []
+  field :business_sizes,  type: Array, default: []
   field :locations,       type: Array, default: []
   field :purposes,        type: Array, default: []
   field :sectors,         type: Array, default: []

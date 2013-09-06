@@ -15,6 +15,13 @@ find_or_initialize_facets(BusinessSupport::BusinessType,
                           "charity"                 => "Charity", 
                           "sole-trader"             => "Sole trader"})
 
+# BusinessSupportBusinessSize
+find_or_initialize_facets(BusinessSupport::BusinessSize,
+                         {"under-10"             => "Under 10",
+                          "up-to-249"            => "Up to 249",
+                          "between-250-and-500"  => "Between 250 and 500",
+                          "between-501-and-100"  => "Between 501 and 1000",
+                          "over-1000"            => "Over 1000"})
 # BusinessSupportLocation
 find_or_initialize_facets(BusinessSupport::Location,
                           { "northern-ireland" => "Northern Ireland", 
