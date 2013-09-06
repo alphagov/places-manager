@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require_relative '../../integration_test_helper'
 require 'gds_api/test_helpers/mapit'
 
@@ -32,6 +34,31 @@ class DataSetCreateEditTest < ActionDispatch::IntegrationTest
 
       assert_equal 51.59918278577261, place.lat
       assert_equal 0.10033740198112132, place.lng
+    end
+
+    should "handle a CSV in a different file encoding" do
+      mapit_has_a_postcode("IG6 3HJ", [51.59918278577261, 0.10033740198112132])
+
+      visit "/admin/services/#{@service.id}"
+
+      within "#new-data" do
+        attach_file "Data file", fixture_file_path("encodings/windows-1252.csv")
+        click_button "Create Data set"
+      end
+
+      run_all_delayed_jobs
+
+      @service.reload
+      assert_equal 2, @service.data_sets.count
+
+      ds = @service.latest_data_set
+      assert_equal 1, ds.places.count
+
+      place = ds.places.first
+
+      assert_equal 51.59918278577261, place.lat
+      assert_equal 0.10033740198112132, place.lng
+      assert_equal "1 Stop Instrüction™", place.name
     end
 
     should "take override lat/lon from csv if present" do
