@@ -16,6 +16,11 @@
                                             model_collection: "business_types" } %>
 
     <%= render partial: "facets", locals: { f: f,
+                                            title: "Business sizes",
+                                            collection: @business_sizes,
+                                            model_collection: "business_sizes" } %>
+
+    <%= render partial: "facets", locals: { f: f,
                                             title: "Locations",
                                             collection: @locations,
                                             model_collection: "locations" } %>

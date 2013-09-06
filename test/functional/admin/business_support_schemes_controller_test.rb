@@ -4,6 +4,7 @@ class Admin::BusinessSupportSchemesControllerTest < ActionController::TestCase
   setup do
 
     make_facets(:business_support_business_type, ["Pre-startup", "Startup", "Private company", "Charity"])
+    make_facets(:business_support_business_size, ["Under 10", "Up to 249"])
     make_facets(:business_support_location, ["England", "Scotland", "Wales", "Northern Ireland"])
     make_facets(:business_support_sector, ["Agriculture", "Healthcare", "Manufacturing"])
     make_facets(:business_support_stage, ["Pre-startup", "Startup", "Grow and sustain"])
