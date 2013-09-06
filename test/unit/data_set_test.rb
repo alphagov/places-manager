@@ -91,29 +91,36 @@ class DataSetTest < ActiveSupport::TestCase
       end
 
       should "handle ASCII files" do
-        @ds.data_file = File.open(fixture_file_path('encodings/ascii.csv'))
+        @ds.data_file = File.open(fixture_file_path('encodings/ascii.csv'), :encoding => 'ascii-8bit')
         @ds.save!
         expected = File.read(fixture_file_path('encodings/ascii.csv'))
         assert_equal expected, @ds.csv_data
       end
 
       should "handle UTF-8 files" do
-        @ds.data_file = File.open(fixture_file_path('encodings/utf-8.csv'))
+        @ds.data_file = File.open(fixture_file_path('encodings/utf-8.csv'), :encoding => 'ascii-8bit')
         @ds.save!
         expected = File.read(fixture_file_path('encodings/utf-8.csv'))
         assert_equal expected, @ds.csv_data
       end
 
       should "handle ISO-8859-1 files" do
-        @ds.data_file = File.open(fixture_file_path('encodings/iso-8859-1.csv'))
+        @ds.data_file = File.open(fixture_file_path('encodings/iso-8859-1.csv'), :encoding => 'ascii-8bit')
         @ds.save!
         expected = File.read(fixture_file_path('encodings/iso-8859-1.csv')).force_encoding('iso-8859-1').encode('utf-8')
         assert_equal expected, @ds.csv_data
       end
 
+      should "handle Windows 1252 files" do
+        @ds.data_file = File.open(fixture_file_path('encodings/windows-1252.csv'), :encoding => 'ascii-8bit')
+        @ds.save!
+        expected = File.read(fixture_file_path('encodings/windows-1252.csv')).force_encoding('windows-1252').encode('utf-8')
+        assert_equal expected, @ds.csv_data
+      end
+
       should "raise an error with an unknown file encoding" do
         assert_raise InvalidCharacterEncodingError do
-          @ds.data_file = File.open(fixture_file_path('encodings/utf-16le.csv'))
+          @ds.data_file = File.open(fixture_file_path('encodings/utf-16le.csv'), :encoding => 'ascii-8bit')
         end
       end
     end
