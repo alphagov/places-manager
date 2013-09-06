@@ -115,16 +115,18 @@ class DataSet
   private
 
   def read_as_utf8(file)
-    string = file.read
+    string = file.read.force_encoding('utf-8')
     unless string.valid_encoding?
-      detected_encoding = `file -b --mime-encoding #{file.path.shellescape}`.chomp
-      case detected_encoding
-      when 'iso-8859-1'
-        string = string.force_encoding('iso-8859-1')
-      else
-        raise InvalidCharacterEncodingError, "Unknown encoding #{detected_encoding.inspect}"
+      # Try windows-1252 (which is a superset of iso-8859-1)
+      string.force_encoding('windows-1252')
+      # Any stream of bytes should be a vaild Windows-1252 string, so we use the presence of any
+      # ASCII control chars (except for \r and \n) as a good heuristic to determine if this is
+      # likely to be the correct charset
+      if string.valid_encoding? and ! string.match(/[\x00-\x09\x0b\x0c\x0e-\x1f]/)
+        return string.encode('utf-8')
       end
-      string = string.encode('utf-8')
+
+      raise InvalidCharacterEncodingError, "Unknown character encoding"
     end
     string
   end
