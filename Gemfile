@@ -25,7 +25,7 @@ gem 'statsd-ruby', '1.0.0', :require => 'statsd'
 if ENV['BUNDLE_DEV']
   gem 'gds-sso', :path => '../gds-sso'
 else
-  gem 'gds-sso', '3.0.0'
+  gem 'gds-sso', '3.0.4'
 end
 gem "faraday", "0.8.1" # Specifying to resolve Jenkins dependency resolution fail
 
@@ -34,12 +34,13 @@ gem 'govspeak', '~> 1.2'
 gem 'inherited_resources'
 gem 'lockfile'
 gem 'whenever'
-gem 'lograge', '~> 0.1.0'
 gem 'kaminari', '0.14.1'
 gem 'kaminari-bootstrap', '0.1.3'
 
 gem 'delayed_job', '3.0.5'
 gem 'delayed_job_mongoid', '1.1.0'
+
+gem 'logstasher', '0.2.5'
 
 group :assets do
   gem "therubyracer", "0.11.4"
