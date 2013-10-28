@@ -162,9 +162,6 @@ GEM
       websocket
     link_header (0.0.6)
     lockfile (2.1.0)
-    lograge (0.1.2)
-      actionpack
-      activesupport
     logstash-event (1.2.02)
     logstasher (0.2.5)
       logstash-event
@@ -332,7 +329,6 @@ DEPENDENCIES
   launchy
   less-rails-bootstrap
   lockfile
-  lograge (~> 0.1.0)
   logstasher (= 0.2.5)
   minitest (= 3.3.0)
   mocha (= 0.13.3)
