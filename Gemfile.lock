@@ -165,6 +165,9 @@ GEM
     lograge (0.1.2)
       actionpack
       activesupport
+    logstash-event (1.2.02)
+    logstasher (0.2.5)
+      logstash-event
     lrucache (0.1.4)
       PriorityQueue (~> 0.1.2)
     mail (2.5.3)
@@ -330,6 +333,7 @@ DEPENDENCIES
   less-rails-bootstrap
   lockfile
   lograge (~> 0.1.0)
+  logstasher (= 0.2.5)
   minitest (= 3.3.0)
   mocha (= 0.13.3)
   mongo (= 1.6.2)
