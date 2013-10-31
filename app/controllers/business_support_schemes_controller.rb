@@ -11,7 +11,7 @@ class BusinessSupportSchemesController < ApplicationController
       schemes = BusinessSupportScheme.for_relations(relations)
     end 
     @count = schemes.size
-    @schemes_json = schemes.to_json(only: [:business_support_identifier, :title, :priority]) 
+    @schemes_json = schemes.to_json(only: [:business_support_identifier, :title, :priority, :business_sizes, :locations, :sectors, :stages, :support_types]) 
     respond_to do |format|
       format.json
     end
