@@ -86,6 +86,9 @@ class BusinessSupportSchemesControllerTest < ActionController::TestCase
     results = JSON.parse(response.body)['results']
     assert_equal "Urban Development Grant", results.first['title']
     assert_equal 2, results.first['priority']
+    assert_equal ['loan'], results.first['support_types']
+    assert_equal ['wales'], results.first['locations']
+    assert_equal ['under-10'], results.first['business_sizes']
   end
   
   test "GET to index with no sectors param" do
