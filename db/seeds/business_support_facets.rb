@@ -61,8 +61,7 @@ find_or_initialize_facets(BusinessSupport::Sector,
 find_or_initialize_facets(BusinessSupport::Stage, {
                           "pre-start" => "Pre-start",
                           "start-up" => "Start-up",
-                          "grow-and-sustain" => "Grow and sustain",
-                          "exiting-a-business" => "Exiting a business" })
+                          "grow-and-sustain" => "Grow and sustain" })
 
 # BusinessSupportType
 find_or_initialize_facets(BusinessSupport::SupportType, {
