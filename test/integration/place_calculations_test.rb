@@ -39,8 +39,8 @@ class PlaceCalculationsTest < ActionDispatch::IntegrationTest
     assert_equal expected_places, places.to_a
 
     # Check that the distances are reported correctly
-    distances_in_miles = [0, 1.425, 331]
-    places.to_a.zip(distances_in_miles).each do |place, expected_distance|
+    expected_distances_in_miles = [0, 1.82, 373]
+    places.to_a.zip(expected_distances_in_miles).each do |place, expected_distance|
       assert_in_epsilon expected_distance, place.dis.in(:miles), 0.01
     end
 
@@ -54,7 +54,7 @@ class PlaceCalculationsTest < ActionDispatch::IntegrationTest
     places = service.data_sets.last.places_near(centre, Distance.miles(1.42))
     assert_equal 1, places.length
 
-    places = service.data_sets.last.places_near(centre, Distance.miles(1.43))
+    places = service.data_sets.last.places_near(centre, Distance.miles(1.83))
     assert_equal 2, places.length
   end
 
@@ -66,7 +66,7 @@ class PlaceCalculationsTest < ActionDispatch::IntegrationTest
     places = service.data_sets.last.places_near(centre, Distance.miles(330))
     assert_equal 2, places.length
 
-    places = service.data_sets.last.places_near(centre, Distance.miles(335))
+    places = service.data_sets.last.places_near(centre, Distance.miles(373))
     assert_equal 3, places.length
   end
 end
