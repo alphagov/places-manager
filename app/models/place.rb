@@ -136,12 +136,12 @@ class Place
     opts = {
       "geoNear" => "places",
       "near" => [location.longitude, location.latitude],
-      "spherical" => true,
+      "spherical" => false,
       "query" => extra_query
     }
 
     if distance
-      opts["maxDistance"] = distance.in(:radians)
+      opts["maxDistance"] = distance.in(:degrees)
     end
 
     if limit
@@ -151,7 +151,7 @@ class Place
     response = Mongoid.master.command(opts)
     response["results"].collect do |result|
       Mongoid::Factory.from_db(self, result["obj"]).tap do |doc|
-        doc.dis = Distance.new(result["dis"], :radians)
+        doc.dis = Distance.new(result["dis"], :degrees)
       end
     end
   end
