@@ -7,7 +7,11 @@ class Service
   field :active_data_set_version, :type => Integer, :default => 1
   field :source_of_data,          :type => String
 
-  embeds_many :data_sets
+  embeds_many :data_sets do
+    def current
+      where(:state.ne => 'archived')
+    end
+  end
 
   index :slug, :unique => true
 
@@ -52,5 +56,19 @@ class Service
     unless self.data_sets.any?
       self.data_sets.build
     end
+  end
+
+  def schedule_archive_places
+    obsolete_data_sets.each {|ds| ds.archive! if ds.places.any? }
+    self.delay.archive_places
+  end
+
+  def archive_places
+    obsolete_data_sets.each {|ds| ds.archive_places if ds.places.any? }
+  end
+
+  # returns all data sets up to but not including the data set before the active set
+  def obsolete_data_sets
+    data_sets.take_while {|ds| ds != active_data_set }.slice(0...-1)
   end
 end

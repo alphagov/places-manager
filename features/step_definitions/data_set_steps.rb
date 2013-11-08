@@ -154,3 +154,11 @@ Then /^I should not see an "edit" action for a record$/ do
     assert ! page.has_link?("edit")
   end
 end
+
+Then /^I should see an indication that the first data set is being archived$/ do
+  assert page.has_content?("Version 1 Archiving")
+end
+
+Then /^I should not see the first data set$/ do
+  assert ! page.has_content?("Version 1")
+end
