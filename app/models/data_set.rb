@@ -4,6 +4,7 @@ require 'csv'
 class DataSet
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Sidekiq::Delay
 
   embedded_in :service
   embeds_many :actions

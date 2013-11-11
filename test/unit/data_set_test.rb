@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class DataSetTest < ActiveSupport::TestCase
+
   context "populating version" do
     setup do
       @service = FactoryGirl.create(:service)
@@ -52,6 +53,7 @@ class DataSetTest < ActiveSupport::TestCase
 
   context "creating a data_set with a data_file" do
     setup do
+      Sidekiq::Testing.fake!
       @service = FactoryGirl.create(:service)
     end
 
@@ -60,11 +62,12 @@ class DataSetTest < ActiveSupport::TestCase
 
       assert_equal File.read(fixture_file_path('good_csv.csv')), ds.csv_data
 
-      job = Delayed::Job.last
-      handler = YAML.load(job.handler)
-      assert_equal @service, handler.object
-      assert_equal :process_csv_data, handler.method_name
-      assert_equal ds.version, handler.args.first
+      job = Sidekiq::Delay::Worker.jobs.last
+      instance_ary, method_name, args = YAML.load(job['args'].first)
+      
+      assert_equal @service, instance_ary.first.send('find', instance_ary.second)
+      assert_equal :process_csv_data, method_name
+      assert_equal ds.version, args.first
     end
 
     context "validating file size" do

@@ -1,5 +1,6 @@
 class Service
   include Mongoid::Document
+  include Sidekiq::Delay
 
   field :name,                    :type => String
   field :slug,                    :type => String
