@@ -18,14 +18,7 @@ class Service
 
   before_validation :create_first_data_set, :on => :create
 
-  after_save do |service|
-    if Rails.env.development?
-      process_csv_data(latest_data_set.version)
-      latest_data_set.save! unless latest_data_set.persisted?
-    else
-      schedule_csv_processing 
-    end
-  end
+  after_save :schedule_csv_processing
 
   def reconcile_place_locations
     data_sets.first.places.map(&:reconcile_location)

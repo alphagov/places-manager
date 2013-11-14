@@ -22,7 +22,7 @@ class DataSet
 
   default_scope order_by([:version, :asc])
   before_validation :set_version, :on => :create
-  after_save { Rails.env.development? ? process_csv_data : schedule_csv_processing }
+  after_save :schedule_csv_processing
 
   def places
     Place.where(service_slug: service.slug, data_set_version: version)
@@ -67,7 +67,6 @@ class DataSet
   end
 
   def schedule_csv_processing
-    # Make queue processing environment specific.
     # This has to be scheduled on the service because the sidekiq-delay mongoid extension
     # doesn't support running jobs on embedded documents.
     service.delay.process_csv_data(self.version)
