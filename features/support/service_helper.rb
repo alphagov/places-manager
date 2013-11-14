@@ -1,3 +1,5 @@
+require 'sidekiq/testing'
+
 module ServiceHelper
   def path_for_service(name)
     service = Service.where(name: name).first

@@ -1,5 +1,6 @@
 class Service
   include Mongoid::Document
+  include Sidekiq::Delay
 
   field :name,                    :type => String
   field :slug,                    :type => String
@@ -16,6 +17,7 @@ class Service
   validates :slug, :presence => true, :uniqueness => true, :format => {:with => /\A[a-z0-9_-]*\z/ }
 
   before_validation :create_first_data_set, :on => :create
+
   after_save :schedule_csv_processing
 
   def reconcile_place_locations
@@ -25,14 +27,10 @@ class Service
   def data_file=(file)
     ds = self.data_sets.build
     ds.data_file = file
-    @need_csv_processing = true
   end
 
   def schedule_csv_processing
-    if @need_csv_processing
-      self.delay.process_csv_data(latest_data_set.version)
-      @need_csv_processing = false
-    end
+    self.delay.process_csv_data(latest_data_set.version)
   end
 
   def process_csv_data(data_set_version)

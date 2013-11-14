@@ -4,6 +4,7 @@ require 'csv'
 class DataSet
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Sidekiq::Delay
 
   embedded_in :service
   embeds_many :actions
@@ -63,19 +64,12 @@ class DataSet
 
     # TODO: restructure this so that it runs as part of the model validations.
     raise HtmlValidationError unless Govspeak::HtmlValidator.new(self.csv_data).valid?
-
-    # This instance variable is necessary becasue you can't schedule a delayed job until
-    # the model has been persisted
-    @need_csv_processing = true
   end
 
   def schedule_csv_processing
-    if @need_csv_processing
-      # This has to be scheduled on the service because the delayed_job mongoid driver
-      # doesn't support running jobs on embedded documents.
-      service.delay.process_csv_data(self.version)
-      @need_csv_processing = false
-    end
+    # This has to be scheduled on the service because the sidekiq-delay mongoid extension
+    # doesn't support running jobs on embedded documents.
+    service.delay.process_csv_data(self.version)
   end
 
   def process_csv_data
@@ -83,13 +77,11 @@ class DataSet
       CSV.parse(self.csv_data, headers: true) do |row|
         Place.create_from_hash(self, row)
       end
-      self.csv_data = nil
-      self.save!
     end
   rescue CSV::MalformedCSVError
-    self.processing_error = "Could not process CSV file. Please check the format."
-    self.csv_data = nil
-    self.save!
+    self.set(:processing_error, "Could not process CSV file. Please check the format.")
+  ensure
+    self.unset(:csv_data)
   end
 
   def active?

@@ -8,6 +8,7 @@ class DataSetCreateEditTest < ActionDispatch::IntegrationTest
 
   context "adding a data_set to a service" do
     setup do
+      Sidekiq::Testing.inline!
       create_test_user
       @service = FactoryGirl.create(:service)
     end
@@ -21,8 +22,6 @@ class DataSetCreateEditTest < ActionDispatch::IntegrationTest
         attach_file "Data file", fixture_file_path("good_csv.csv")
         click_button "Create Data set"
       end
-
-      run_all_delayed_jobs
 
       @service.reload
       assert_equal 2, @service.data_sets.count
@@ -46,8 +45,6 @@ class DataSetCreateEditTest < ActionDispatch::IntegrationTest
         click_button "Create Data set"
       end
 
-      run_all_delayed_jobs
-
       @service.reload
       assert_equal 2, @service.data_sets.count
 
@@ -70,8 +67,6 @@ class DataSetCreateEditTest < ActionDispatch::IntegrationTest
         attach_file "Data file", fixture_file_path("good_csv_with_lat_lng.csv")
         click_button "Create Data set"
       end
-
-      run_all_delayed_jobs
 
       @service.reload
       assert_equal 2, @service.data_sets.count
@@ -97,8 +92,6 @@ class DataSetCreateEditTest < ActionDispatch::IntegrationTest
         attach_file "Data file", fixture_file_path("good_csv_mixed_lat_lng.csv")
         click_button "Create Data set"
       end
-
-      run_all_delayed_jobs
 
       @service.reload
       assert_equal 2, @service.data_sets.count
