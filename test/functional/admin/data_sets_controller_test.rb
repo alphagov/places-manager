@@ -6,6 +6,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
     clean_db
     @service = FactoryGirl.create(:service)
     GdsApi::Mapit.any_instance.stubs(:location_for_postcode).returns(nil)
+    Sidekiq::Testing.inline!
   end
 
   test "it can successfully import a CSV file" do
@@ -14,8 +15,6 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
       csv_file = fixture_file_upload(Rails.root.join('test/fixtures/good_csv.csv'), 'text/csv')
       post :create, :service_id => @service.id, :data_set => {:data_file => csv_file}
       assert_response :redirect
-
-      run_all_delayed_jobs
 
       # Services are created with 1 data_set initially, so after creating a data_set, there are now 2
       assert_equal 2, Service.first.data_sets.count
@@ -52,6 +51,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
 
   test "it handles CSV files in a strange character encoding" do
     DataSet.any_instance.stubs(:data_file=).raises(InvalidCharacterEncodingError)
+
     as_logged_in_user do
       @request.env['HTTP_REFERER'] = "http://localhost:3000/admin/services/#{@service.id}"
       csv_file = fixture_file_upload(Rails.root.join('test/fixtures/good_csv.csv'), 'text/csv')
@@ -65,7 +65,12 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
   end
 
   context "POST 'activate'" do
+    setup do
+      Sidekiq::Testing.fake!
+    end
+    
     should "allow activating a data_set" do
+
       as_logged_in_user do
         set = @service.data_sets.create!
         post :activate, :service_id => @service.id, :id => set.id

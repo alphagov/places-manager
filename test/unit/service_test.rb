@@ -73,6 +73,8 @@ class ServiceTest < ActiveSupport::TestCase
 
   context "creating a service with a data_file" do
     should "create a data_set, store the csv_data and queue a job to process it" do
+      Sidekiq::Testing.fake!
+      
       attrs = FactoryGirl.attributes_for(:service)
       attrs[:data_file] = File.open(fixture_file_path('good_csv.csv'))
       s = Service.create!(attrs)
@@ -80,11 +82,12 @@ class ServiceTest < ActiveSupport::TestCase
       assert_equal 1, s.data_sets.count
       assert_equal File.read(fixture_file_path('good_csv.csv')), s.latest_data_set.csv_data
 
-      job = Delayed::Job.last
-      handler = YAML.load(job.handler)
-      assert_equal s, handler.object
-      assert_equal :process_csv_data, handler.method_name
-      assert_equal s.latest_data_set.version, handler.args.first
+      job = Sidekiq::Delay::Worker.jobs.last
+      instance_ary, method_name, args = YAML.load(job['args'].first)
+
+      assert_equal s, instance_ary.first.send('find', instance_ary.second) 
+      assert_equal :process_csv_data, method_name
+      assert_equal s.latest_data_set.version, args.first
     end
   end
 end

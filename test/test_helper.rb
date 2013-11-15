@@ -14,6 +14,7 @@ require 'rails/test_help'
 require 'mocha/setup'
 require 'gds_api/test_helpers/json_client_helper'
 require 'webmock/minitest'
+require 'sidekiq/testing'
 # Poltergeist requires access to localhost.
 WebMock.disable_net_connect!(:allow_localhost => true)
 
@@ -52,9 +53,5 @@ class ActiveSupport::TestCase
 
   def fixture_file_path(basename)
     Rails.root.join("test", "fixtures", basename)
-  end
-
-  def run_all_delayed_jobs
-    Delayed::Worker.new(:exit_on_complete => true, :quiet => true).start
   end
 end
