@@ -7,7 +7,7 @@ class SetArchivedDataSetsState < Mongoid::Migration
 
     number_plate_service = Service.where(slug: 'number-plate-supplier').first
     if number_plate_service
-      service.data_sets.map { |ds| ds.update_attribute(:state, 'archived') if ds.version < 18 }
+      number_plate_service.data_sets.map { |ds| ds.update_attribute(:state, 'archived') if ds.version < 18 }
     end
   end
 
