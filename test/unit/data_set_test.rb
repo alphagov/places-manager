@@ -55,9 +55,9 @@ class DataSetTest < ActiveSupport::TestCase
     setup do
       @service = FactoryGirl.create(:service)
       FactoryGirl.create(
-	:place,
-	service_slug: @service.slug,
-	data_set_version: 1
+        :place,
+        service_slug: @service.slug,
+        data_set_version: 1
       )
     end
 
