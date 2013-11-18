@@ -1,10 +1,19 @@
 <ul class="row">
-  <% @service.data_sets.reverse.each do |set| %>
+  <% @service.data_sets.current.reverse.each do |set| %>
     <li class="well data_set span4">
       <div>
-        <h4><%= link_to "Version #{set.version}", admin_service_data_set_path(@service,set) %> <% if set.active? %><span class="label label-success">Active</span><% else %><span class="label">Inactive</span><% end %></h4>
+        <h4>
+          <%= link_to "Version #{set.version}", admin_service_data_set_path(@service,set) %>
+          <% if set.archiving? %>
+            <span class="label">Archiving</span>
+          <% elsif set.active? %>
+            <span class="label label-success">Active</span>
+          <% else %>
+            <span class="label">Inactive</span>
+          <% end %>
+        </h4>
 
-        <% if set.processing_complete? %>
+        <% if set.unarchived? && set.processing_complete? %>
           <div class="actions">
             <% unless set.active? %>
               <p><%= button_to "Activate", activate_admin_service_data_set_path(@service, set), :method => "POST", :class => 'btn btn-primary activate' %></p>

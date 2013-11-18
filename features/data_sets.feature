@@ -83,6 +83,24 @@ Feature: Managing data sets
 
     Then I should not see an "edit" action for a record
 
+  Scenario: Archiving place information belonging to an obsolete data set
+    Given I have previously created the "Register Offices" service
+      And I have uploaded a second data set
+      And I have uploaded a third data set
+
+    When I go to the page for the "Register Offices" service
+      And I visit the history tab
+      And I click "Activate"
+      And I visit the history tab
+
+    Then I should see an indication that the first data set is being archived
+
+    When background processing has completed
+      And I go to the page for the "Register Offices" service
+      And I visit the history tab
+
+    Then I should not see the first data set
+
   Scenario: Creating a new service where the data doesn't import
     When I go to the new service page
       And I fill in the form to create the "Register Offices" service with a bad CSV

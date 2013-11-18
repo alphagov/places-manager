@@ -66,6 +66,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
 
   context "POST 'activate'" do
     setup do
+      Sidekiq::Delay::Worker.jobs.clear
       Sidekiq::Testing.fake!
     end
     
@@ -89,6 +90,19 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
         assert_equal "Couldn't activate data set", flash[:notice]
         @service.reload
         refute_equal set, @service.active_data_set
+      end
+    end
+
+    context "when activating the latest data set" do
+      should "create a background job for archiving the place information" do
+        as_logged_in_user do
+          post :activate, service_id: @service.id, id: @service.latest_data_set.id
+          job = Sidekiq::Delay::Worker.jobs.last 
+          instance_ary, method_name, args = YAML.load(job['args'].first)
+          assert_equal @service, instance_ary.first.send('find', instance_ary.second) 
+          assert_equal :archive_places, method_name
+          assert_equal 1, Sidekiq::Delay::Worker.jobs.count
+        end
       end
     end
   end

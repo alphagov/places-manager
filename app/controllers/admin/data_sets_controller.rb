@@ -22,7 +22,12 @@ class Admin::DataSetsController < InheritedResources::Base
   end
 
   def activate
-    msg = resource.activate ? "Data Set #{resource.version} successfully activated" : "Couldn't activate data set"
+    if resource.activate
+      msg = "Data Set #{resource.version} successfully activated"
+      resource.service.schedule_archive_places if resource.latest_data_set?
+    else
+      msg = "Couldn't activate data set"
+    end
     redirect_to admin_service_url(@service), :notice => msg
   end
 

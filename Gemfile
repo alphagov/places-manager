@@ -40,6 +40,7 @@ gem 'kaminari-bootstrap', '0.1.3'
 gem 'sidekiq', '2.16.1'
 gem 'sidekiq-delay', '1.0.4'
 
+gem 'state_machine', '1.2.0'
 gem 'logstasher', '0.2.5'
 
 group :assets do

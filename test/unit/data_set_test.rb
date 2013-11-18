@@ -51,6 +51,43 @@ class DataSetTest < ActiveSupport::TestCase
     end
   end
 
+  context "archiving a data_set" do
+    setup do
+      @service = FactoryGirl.create(:service)
+      FactoryGirl.create(
+        :place,
+        service_slug: @service.slug,
+        data_set_version: 1
+      )
+    end
+
+    should "archive its place information" do
+      @service.data_sets.first.archive_places
+      refute_empty PlaceArchive.all
+    end
+
+    should "remove its place information" do
+      ds = @service.data_sets.first
+      ds.archive_places
+      assert_empty ds.places
+    end
+
+    should "flag it as archived" do
+      ds = @service.data_sets.first
+      ds.archive!
+      ds.archive_places
+      assert ds.archived?
+    end
+
+    should "handle an exception when archiving a place" do
+      PlaceArchive.any_instance.stubs(:save!).raises(Exception)
+      ds = @service.data_sets.first
+      ds.archive_places
+      assert_match /Failed/, ds.archiving_error
+      assert ds.unarchived?
+    end
+  end
+
   context "creating a data_set with a data_file" do
     setup do
       Sidekiq::Testing.fake!

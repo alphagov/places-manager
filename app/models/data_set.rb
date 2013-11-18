@@ -12,6 +12,8 @@ class DataSet
   field :change_notes,  type: String
   field :csv_data,      type: String
   field :processing_error, type: String
+  field :state, type: String
+  field :archiving_error, type: String
 
   validates_presence_of :version
 
@@ -22,6 +24,16 @@ class DataSet
   default_scope order_by([:version, :asc])
   before_validation :set_version, :on => :create
   after_save :schedule_csv_processing
+
+  state_machine :initial => :unarchived do
+    event :archive do
+      transition :unarchived => :archiving
+    end
+
+    event :archived do
+      transition :archiving => :archived
+    end
+  end
 
   def places
     Place.where(service_slug: service.slug, data_set_version: version)
@@ -104,6 +116,20 @@ class DataSet
     return false unless self.processing_complete?
     service.active_data_set_version = self.version
     service.save
+  end
+
+  def archive_places
+    begin
+      places.each do |place|
+        archive = place.becomes(PlaceArchive)
+        archive.new_record = true
+        archive.save!
+      end
+      places.delete_all
+      self.archived
+    rescue Exception => e
+      self.set(:archiving_error, 'Failed to archive place information')
+    end
   end
 
   def new_action(user,type,comment)
