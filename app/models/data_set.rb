@@ -135,9 +135,7 @@ class DataSet
   def archive_places
     begin
       places.each do |place|
-        archive = place.becomes(PlaceArchive)
-        archive.new_record = true
-        archive.save!
+        PlaceArchive.create!(place.attributes)
       end
       places.delete_all
       self.archived

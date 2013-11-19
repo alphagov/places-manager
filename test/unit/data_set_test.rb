@@ -80,7 +80,7 @@ class DataSetTest < ActiveSupport::TestCase
     end
 
     should "handle an exception when archiving a place" do
-      PlaceArchive.any_instance.stubs(:save!).raises(Exception)
+      PlaceArchive.stubs(:create!).raises(Exception)
       ds = @service.data_sets.first
       ds.archive_places
       assert_match /Failed/, ds.archiving_error
