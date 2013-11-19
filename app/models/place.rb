@@ -162,23 +162,6 @@ class Place
     end
   end
 
-  private
-
-  def clear_location
-    self.location = nil
-  end
-
-  def override_lat_lng?
-    override_lat.present? and override_lng.present?
-  end
-
-  def has_both_lat_lng_overrides
-    unless override_lat_lng? or (override_lat.blank? and override_lng.blank?)
-      errors.add(:override_lat, "latitude must be a valid coordinate") unless override_lat.present?
-      errors.add(:override_lng, "longitude must be a valid coordinate") unless override_lng.present?
-    end
-  end
-
   def self.parameters_from_hash(data_set, row)
     # Create parameters suitable for passing to build, create, etc.
     base_parameters = {
@@ -204,5 +187,22 @@ class Place
       {}
     end
     return base_parameters.merge(location_parameters)
+  end
+
+  private
+
+  def clear_location
+    self.location = nil
+  end
+
+  def override_lat_lng?
+    override_lat.present? and override_lng.present?
+  end
+
+  def has_both_lat_lng_overrides
+    unless override_lat_lng? or (override_lat.blank? and override_lng.blank?)
+      errors.add(:override_lat, "latitude must be a valid coordinate") unless override_lat.present?
+      errors.add(:override_lng, "longitude must be a valid coordinate") unless override_lng.present?
+    end
   end
 end

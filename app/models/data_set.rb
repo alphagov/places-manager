@@ -106,9 +106,11 @@ class DataSet
 
   def process_csv_data
     if self.csv_data.present?
+      places_data = []
       CSV.parse(self.csv_data, headers: true) do |row|
-        Place.create_from_hash(self, row)
+        places_data << Place.parameters_from_hash(self, row)
       end
+      Place.create(places_data)
       self.csv_data = nil
       self.save!
     end
