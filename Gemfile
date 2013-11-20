@@ -6,7 +6,7 @@ gem 'plek', '1.3.1'
 gem 'rails', '3.2.13'
 gem 'unicorn', '4.3.1'
 
-gem "mongoid", "3.1.4"
+gem "mongoid", "3.1.5"
 gem "mongoid_rails_migrations", "1.0.0"
 
 gem 'aws-ses', :require => 'aws/ses'
