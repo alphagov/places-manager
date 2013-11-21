@@ -79,7 +79,7 @@ class Place
   # so that we can easily convert it to other units.
   def dis
     if attributes["geo_near_distance"]
-      @dis ||= Distance.new(attributes["geo_near_distance"], :radians)
+      @dis ||= Distance.new(attributes["geo_near_distance"], :degrees)
     end
   end
 

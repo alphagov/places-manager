@@ -247,7 +247,7 @@ class DataSetTest < ActiveSupport::TestCase
       assert_equal expected_places, places.to_a
 
       # Check that the distances are reported correctly
-      distances_in_miles = [0, 1.425, 331]
+      distances_in_miles = [0, 1.82, 373]
       places.to_a.zip(distances_in_miles).each do |place, expected_distance|
         assert_in_epsilon expected_distance, place.dis.in(:miles), 0.01
       end
@@ -257,10 +257,10 @@ class DataSetTest < ActiveSupport::TestCase
       # Buckingham Palace and Aviation House are 1.4252962055598721 miles apart
       centre = @buckingham_palace.location
 
-      places = @service.latest_data_set.places_near(centre, Distance.miles(1.42))
+      places = @service.latest_data_set.places_near(centre, Distance.miles(1.82))
       assert_equal 1, places.count
 
-      places = @service.latest_data_set.places_near(centre, Distance.miles(1.43))
+      places = @service.latest_data_set.places_near(centre, Distance.miles(1.83))
       assert_equal 2, places.count
     end
 
@@ -268,10 +268,10 @@ class DataSetTest < ActiveSupport::TestCase
       # Buckingham Palace and the Scottish Parliament are approximately 331 miles apart
       centre = @buckingham_palace.location
 
-      places = @service.latest_data_set.places_near(centre, Distance.miles(330))
+      places = @service.latest_data_set.places_near(centre, Distance.miles(370))
       assert_equal 2, places.count
 
-      places = @service.latest_data_set.places_near(centre, Distance.miles(335))
+      places = @service.latest_data_set.places_near(centre, Distance.miles(373))
       assert_equal 3, places.count
     end
 
@@ -284,10 +284,10 @@ class DataSetTest < ActiveSupport::TestCase
     should "limit on both distance and number of results" do
       centre = @buckingham_palace.location
 
-      places = @service.latest_data_set.places_near(centre, Distance.miles(1.42), 2)
+      places = @service.latest_data_set.places_near(centre, Distance.miles(1.82), 2)
       assert_equal 1, places.count
 
-      places = @service.latest_data_set.places_near(centre, Distance.miles(1.43), 2)
+      places = @service.latest_data_set.places_near(centre, Distance.miles(1.83), 2)
       assert_equal 2, places.count
 
       places = @service.latest_data_set.places_near(centre, Distance.miles(400), 2)
@@ -302,9 +302,9 @@ class DataSetTest < ActiveSupport::TestCase
       FactoryGirl.create(:place, :service_slug => service2.slug, :data_set_version => service2.latest_data_set.version)
 
       assert_equal 3, ds.places_near(@buckingham_palace.location).count
-      assert_equal 2, ds.places_near(@buckingham_palace.location, Distance.miles(1.43)).count
+      assert_equal 2, ds.places_near(@buckingham_palace.location, Distance.miles(1.83)).count
       assert_equal 2, ds.places_near(@buckingham_palace.location, nil, 2).count
-      assert_equal 1, ds.places_near(@buckingham_palace.location, Distance.miles(1.42), 2).count
+      assert_equal 1, ds.places_near(@buckingham_palace.location, Distance.miles(1.82), 2).count
       assert_equal 2, ds.places_near(@buckingham_palace.location, Distance.miles(400), 2).count
     end
   end

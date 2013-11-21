@@ -172,7 +172,7 @@ class PlaceTest < ActiveSupport::TestCase
     should "return a distance object for the geo_near_distance if available" do
       p = Place.geo_near([-2.01, 53.1]).first
 
-      assert_in_epsilon 36.816335, p.dis.in(:miles), 0.001
+      assert_in_epsilon 0.642566, p.dis.in(:miles), 0.001
     end
   end
 end
