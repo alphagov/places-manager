@@ -1,25 +1,24 @@
 development:
-  host: localhost
-  database: imminence_development
-  autocreate_indexes: true
-  use_activesupport_time_zone: true
+  sessions:
+    default:
+      database: imminence_development
+      hosts:
+        - localhost:27017
+      options:
+        # Change the default consistency model to :eventual or :strong.
+        # :eventual will send reads to secondaries, :strong sends everything
+        # to master. (default: :eventual)
+        # consistency: :eventual
 
 test:
-  host: localhost
-  database: imminence_test
-  autocreate_indexes: true
-  use_activesupport_time_zone: true
-
-# set these environment variables on your prod server
-production:
-  host: <%= ENV['MONGOID_HOST'] %>
-  port: <%= ENV['MONGOID_PORT'] %>
-  username: <%= ENV['MONGOID_USERNAME'] %>
-  password: <%= ENV['MONGOID_PASSWORD'] %>
-  database: <%= ENV['MONGOID_DATABASE'] %>
-  use_activesupport_time_zone: true
-  # slaves:
-  #   - host: slave1.local
-  #     port: 27018
-  #   - host: slave2.local
-  #     port: 27019
+  sessions:
+    default:
+      database: imminence_test
+      hosts:
+        - localhost:27017
+      options:
+        consistency: :strong
+        # In the test environment we lower the retries and retry interval to
+        # low amounts for fast failures.
+        max_retries: 1
+        retry_interval: 0

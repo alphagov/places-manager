@@ -80,7 +80,7 @@ class DataSetTest < ActiveSupport::TestCase
     end
 
     should "handle an exception when archiving a place" do
-      PlaceArchive.any_instance.stubs(:save!).raises(Exception)
+      PlaceArchive.stubs(:create!).raises(Exception)
       ds = @service.data_sets.first
       ds.archive_places
       assert_match /Failed/, ds.archiving_error
@@ -211,6 +211,101 @@ class DataSetTest < ActiveSupport::TestCase
         ds = @service.data_sets.build(:csv_data => nil, :processing_error => "something went wrong")
         refute ds.processing_complete?
       end
+    end
+  end
+
+  context "places near a point" do
+    setup do
+      @service = FactoryGirl.create(:service)
+      @buckingham_palace = Place.create(
+        service_slug: @service.slug,
+        data_set_version: @service.latest_data_set.version,
+        postcode: 'SW1A 1AA',
+        source_address: 'Buckingham Palace, Westminster',
+        override_lat: '51.501009611553926', override_lng: '-0.141587067110009'
+      )
+      @aviation_house = Place.create(
+        service_slug: @service.slug,
+        data_set_version: @service.latest_data_set.version,
+        postcode: 'WC2B 6SE',
+        source_address: 'Aviation House',
+        override_lat: '51.516960431', override_lng: '-0.120586400134'
+      )
+      @scottish_parliament = Place.create(
+        service_slug: @service.slug,
+        data_set_version: @service.latest_data_set.version,
+        postcode: 'EH99 1SP',
+        source_address: 'Scottish Parliament',
+        override_lat: '55.95439', override_lng: '-3.174706'
+      )
+    end
+
+    should "find places near a point in distance order" do
+      places = @service.latest_data_set.places_near(@buckingham_palace.location)
+
+      expected_places = [@buckingham_palace, @aviation_house, @scottish_parliament]
+      assert_equal expected_places, places.to_a
+
+      # Check that the distances are reported correctly
+      distances_in_miles = [0, 1.82, 373]
+      places.to_a.zip(distances_in_miles).each do |place, expected_distance|
+        assert_in_epsilon expected_distance, place.dis.in(:miles), 0.01
+      end
+    end
+
+    should "constrain returned points by distance" do
+      # Buckingham Palace and Aviation House are 1.4252962055598721 miles apart
+      centre = @buckingham_palace.location
+
+      places = @service.latest_data_set.places_near(centre, Distance.miles(1.82))
+      assert_equal 1, places.count
+
+      places = @service.latest_data_set.places_near(centre, Distance.miles(1.83))
+      assert_equal 2, places.count
+    end
+
+    should "work when constraining points by a large distance" do
+      # Buckingham Palace and the Scottish Parliament are approximately 331 miles apart
+      centre = @buckingham_palace.location
+
+      places = @service.latest_data_set.places_near(centre, Distance.miles(370))
+      assert_equal 2, places.count
+
+      places = @service.latest_data_set.places_near(centre, Distance.miles(373))
+      assert_equal 3, places.count
+    end
+
+    should "limit number of results" do
+      places = @service.latest_data_set.places_near(@buckingham_palace.location, nil, 2)
+      assert_equal 2, places.count
+      assert_equal [@buckingham_palace, @aviation_house], places.to_a
+    end
+
+    should "limit on both distance and number of results" do
+      centre = @buckingham_palace.location
+
+      places = @service.latest_data_set.places_near(centre, Distance.miles(1.82), 2)
+      assert_equal 1, places.count
+
+      places = @service.latest_data_set.places_near(centre, Distance.miles(1.83), 2)
+      assert_equal 2, places.count
+
+      places = @service.latest_data_set.places_near(centre, Distance.miles(400), 2)
+      assert_equal 2, places.count
+    end
+
+    should "constrain results to places belonging to the relevant data_set" do
+      ds = @service.latest_data_set
+      ds2 = @service.data_sets.create
+      service2 = FactoryGirl.create(:service)
+      FactoryGirl.create(:place, :service_slug => @service.slug, :data_set_version => ds2.version)
+      FactoryGirl.create(:place, :service_slug => service2.slug, :data_set_version => service2.latest_data_set.version)
+
+      assert_equal 3, ds.places_near(@buckingham_palace.location).count
+      assert_equal 2, ds.places_near(@buckingham_palace.location, Distance.miles(1.83)).count
+      assert_equal 2, ds.places_near(@buckingham_palace.location, nil, 2).count
+      assert_equal 1, ds.places_near(@buckingham_palace.location, Distance.miles(1.82), 2).count
+      assert_equal 2, ds.places_near(@buckingham_palace.location, Distance.miles(400), 2).count
     end
   end
 end

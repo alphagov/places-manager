@@ -17,9 +17,9 @@ class BusinessSupportScheme
   field :end_date,        type: Date
 
 
-  index :title, unique: true
-  index :business_support_identifier, unique: true
-  index :locations
+  index({:title => 1}, {:unique => true})
+  index({:business_support_identifier => 1}, {:unique => true})
+  index({:locations => 1})
 
   validates_presence_of :title, :business_support_identifier
   validates_uniqueness_of :title

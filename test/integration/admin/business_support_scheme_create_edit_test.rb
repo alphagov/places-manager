@@ -55,9 +55,9 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
 
     click_on "Create Business Support"
 
-    bs = BusinessSupportScheme.last
+    bs = BusinessSupportScheme.where(:title => "Wunderbiz 2012 superfunding").first
 
-    assert_equal "Wunderbiz 2012 superfunding", bs.title
+    refute_nil bs
     assert_equal 0, bs.priority
     assert_equal "334", bs.business_support_identifier
 
@@ -98,9 +98,9 @@ class BusinessSupportSchemeCreateEditTest < ActionDispatch::IntegrationTest
 
     click_on "Create Business Support"
 
-    bs = BusinessSupportScheme.last
+    bs = BusinessSupportScheme.where(:title => "Wunderbiz 2012 superfunding").first
 
-    assert_equal "Wunderbiz 2012 superfunding", bs.title
+    refute_nil bs
     assert_equal 0, bs.priority
     assert_equal "334", bs.business_support_identifier
 

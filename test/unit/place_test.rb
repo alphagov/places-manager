@@ -9,42 +9,6 @@ class PlaceTest < ActiveSupport::TestCase
     assert_equal '1 Hercules Road, London, SE1 7DU, UK', p.full_address
   end
 
-  test "points serialise in the correct order" do
-    point = Point.new(latitude: 56.2, longitude: -1.0)
-    field = Place::PointField.new
-    # Note that longitude is serialised first: hashes in Ruby 1.9 keep order
-    expected = {"longitude" => -1.0, "latitude" => 56.2}
-    assert_equal expected.to_a, field.serialize(point).to_a
-  end
-
-  test "points can be deserialised" do
-    point = Point.new(latitude: 56.2, longitude: -1.0)
-    field = Place::PointField.new
-    serialized = {"longitude" => -1.0, "latitude" => 56.2}
-    assert_equal point, field.deserialize(serialized)
-  end
-
-  test "points can be deserialized from arrays" do
-    field = Place::PointField.new
-    assert_equal(
-      Point.new(longitude: 56.2, latitude: -12.5),
-      field.deserialize([-12.5, 56.2])
-    )
-  end
-
-  test "points deserialise as nil from empty arrays" do
-    field = Place::PointField.new
-    assert_nil field.deserialize([])
-  end
-
-  test "points deserialise nil values correctly" do
-    assert_nil Place::PointField.new.deserialize(nil)
-  end
-
-  test "points serialize nil correctly" do
-    assert_nil Place::PointField.new.serialize(nil)
-  end
-
   test "can look up a data set from a place" do
     s = Service.create! slug: "chickens", name: "Chickens!"
     s.data_sets.create! version: 2
@@ -193,6 +157,22 @@ class PlaceTest < ActiveSupport::TestCase
 
       assert_equal 51.51695975170424, place.location.latitude
       assert_equal -0.12058693935709164, place.location.longitude
+    end
+  end
+
+  context "dis attribute wrapper" do
+    setup do
+      @place = FactoryGirl.create(:place, :override_lat => 53.105491, :override_lng => -2.017493)
+    end
+
+    should "return nil when no geo_near_distance available" do
+      assert_nil @place.dis
+    end
+
+    should "return a distance object for the geo_near_distance if available" do
+      p = Place.geo_near([-2.01, 53.1]).first
+
+      assert_in_epsilon 0.642566, p.dis.in(:miles), 0.001
     end
   end
 end

@@ -11,44 +11,6 @@ end
 class Place
   include Mongoid::Document
 
-  class PointField
-    # Declare a field of this type to have it deserialise to a Point
-
-    include Mongoid::Fields::Serializable
-
-    def deserialize(value)
-      return nil unless value
-
-      if value.is_a? Array
-        legacy_deserialize value
-      else
-        Point.new(longitude: value["longitude"], latitude: value["latitude"])
-      end
-    end
-
-    def serialize(point)
-      return nil unless point
-
-      {"longitude" => point.longitude, "latitude" => point.latitude}
-    end
-
-  private
-    def legacy_deserialize(value)
-        # Legacy [lat, lng] data format
-        # An empty array (or a single co-ordinate, which shouldn't happen) is
-        # an invalid value and deserializes to nil
-        case value.size
-        when 2
-          Point.new(latitude: value[0], longitude: value[1])
-        when 0
-          nil
-        else
-          Rails.logger.error "Invalid location #{value.inspect}"
-          nil
-        end
-    end
-  end
-
   # Match documents with either no geocode error or a null value. Changed so
   # that anything without a location (or with a null location) is either
   # matched by `needs_geocoding` or `with_geocoding_errors`.
@@ -56,7 +18,7 @@ class Place
 
   # We use "not null" here instead of "exists", because it works with the index
   scope :with_geocoding_errors, where(:geocode_error.ne => nil)
-  scope :geocoded, where(:location.size => 2)
+  scope :geocoded, where(:location.with_size => 2)
   default_scope order_by([:name,:asc])
 
   field :service_slug,   :type => String
@@ -75,7 +37,7 @@ class Place
   field :phone,          :type => String
   field :fax,            :type => String
   field :text_phone,     :type => String
-  field :location,       :type => PointField
+  field :location,       :type => Point
   field :override_lat,   :type => Float 
   field :override_lng,   :type => Float
   field :geocode_error,  :type => String
@@ -89,20 +51,19 @@ class Place
   validate :has_both_lat_lng_overrides
   validates_with CannotEditPlaceDetailsUnlessNewestInactiveDataset, :on => :update
 
-  index [[:location, Mongo::GEO2D], [:service_slug, Mongo::ASCENDING], [:data_set_version, Mongo::ASCENDING]], background: true
-  index [[:service_slug, Mongo::ASCENDING], [:data_set_version, Mongo::ASCENDING]]
+  index({:location => '2d', :service_slug => 1, :data_set_version => 1}, {:background => true})
+  index({:service_slug => 1, :data_set_version => 1})
 
   # Index to speed up the `needs_geocoding` and `with_geocoding_errors` scopes
-  index [
-    [:service_slug, Mongo::ASCENDING],
-    [:data_set_version, Mongo::ASCENDING],
-    [:geocode_error, Mongo::ASCENDING],
-    [:location, Mongo::ASCENDING]
-  ]
+  index({
+    :service_slug => 1,
+    :data_set_version => 1,
+    :geocode_error => 1,
+    :location => 1,
+  })
 
-  index :name, :background => true
+  index({:name => 1}, {:background => true})
 
-  attr_accessor :dis
   before_validation :build_source_address
   before_validation :clear_location, :if => :postcode_changed?, :on => :update
   before_save :geocode
@@ -114,45 +75,11 @@ class Place
     end
   end
 
-  ##
-  # Find all the points near a given location
-  #
-  # This returns Place objects with a 'dis' attribute representing the
-  # mongodb derived distance of that place from the origin of the search.
-  #
-  # That doesn't feel quite right and this API is subject to change, perhaps
-  # to return an array of arrays, eg. [[distance, Place], [distance2, Place2]]?
-  #
-  # Arguments:
-  #   location - a Point object representing the centre of the search area
-  #   distance (optional) - a Distance object representing the maximum distance
-  #       - only miles are currently supported
-  #   limit (optional) - a maximum number of results to return
-  #
-  # Returns:
-  #   an array of Place objects with a 'dis' attribute
-  def self.find_near(location, distance = nil, limit = nil, extra_query = {})
-
-    opts = {
-      "geoNear" => "places",
-      "near" => [location.longitude, location.latitude],
-      "spherical" => false,
-      "query" => extra_query
-    }
-
-    if distance
-      opts["maxDistance"] = distance.in(:degrees)
-    end
-
-    if limit
-      opts["num"] = limit.to_i
-    end
-
-    response = Mongoid.master.command(opts)
-    response["results"].collect do |result|
-      Mongoid::Factory.from_db(self, result["obj"]).tap do |doc|
-        doc.dis = Distance.new(result["dis"], :degrees)
-      end
+  # Convert mongoid's geo_near_distance attribute to a Distance object
+  # so that we can easily convert it to other units.
+  def dis
+    if attributes["geo_near_distance"]
+      @dis ||= Distance.new(attributes["geo_near_distance"], :degrees)
     end
   end
 
@@ -235,23 +162,6 @@ class Place
     end
   end
 
-  private
-
-  def clear_location
-    self.location = nil
-  end
-
-  def override_lat_lng?
-    override_lat.present? and override_lng.present?
-  end
-
-  def has_both_lat_lng_overrides
-    unless override_lat_lng? or (override_lat.blank? and override_lng.blank?)
-      errors.add(:override_lat, "latitude must be a valid coordinate") unless override_lat.present?
-      errors.add(:override_lng, "longitude must be a valid coordinate") unless override_lng.present?
-    end
-  end
-
   def self.parameters_from_hash(data_set, row)
     # Create parameters suitable for passing to build, create, etc.
     base_parameters = {
@@ -277,5 +187,22 @@ class Place
       {}
     end
     return base_parameters.merge(location_parameters)
+  end
+
+  private
+
+  def clear_location
+    self.location = nil
+  end
+
+  def override_lat_lng?
+    override_lat.present? and override_lng.present?
+  end
+
+  def has_both_lat_lng_overrides
+    unless override_lat_lng? or (override_lat.blank? and override_lng.blank?)
+      errors.add(:override_lat, "latitude must be a valid coordinate") unless override_lat.present?
+      errors.add(:override_lng, "longitude must be a valid coordinate") unless override_lng.present?
+    end
   end
 end

@@ -13,7 +13,7 @@ class Service
     end
   end
 
-  index :slug, :unique => true
+  index({:slug => 1}, {:unique => true})
 
   validates_presence_of :name
 
@@ -49,7 +49,7 @@ class Service
   end
 
   def latest_data_set
-    data_sets.order(version: "desc").first
+    data_sets.desc(:version).first
   end
 
   def create_first_data_set

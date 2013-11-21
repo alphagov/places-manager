@@ -39,8 +39,22 @@ class DataSet
     Place.where(service_slug: service.slug, data_set_version: version)
   end
 
+  ##
+  # Find all the places near a given location
+  #
+  # Arguments:
+  #   location - a Point object representing the centre of the search area
+  #   distance (optional) - a Distance object representing the maximum distance
+  #   limit (optional) - a maximum number of results to return
+  #
+  # Returns:
+  #   an array of Place objects
   def places_near(location, distance = nil, limit = nil)
-    Place.find_near(location, distance, limit, {service_slug: service.slug, data_set_version: version})
+    query = places
+    query = query.limit(limit) if limit
+    query = query.geo_near([location.longitude, location.latitude])
+    query = query.max_distance(distance.in(:degrees)) if distance
+    query
   end
 
   def duplicate
@@ -92,9 +106,11 @@ class DataSet
 
   def process_csv_data
     if self.csv_data.present?
+      places_data = []
       CSV.parse(self.csv_data, headers: true) do |row|
-        Place.create_from_hash(self, row)
+        places_data << Place.parameters_from_hash(self, row)
       end
+      Place.create(places_data)
       self.csv_data = nil
       self.save!
     end
@@ -121,9 +137,7 @@ class DataSet
   def archive_places
     begin
       places.each do |place|
-        archive = place.becomes(PlaceArchive)
-        archive.new_record = true
-        archive.save!
+        PlaceArchive.create!(place.attributes)
       end
       places.delete_all
       self.archived
