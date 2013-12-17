@@ -85,7 +85,14 @@ class DataSet
   end
 
   def data_file=(file)
-    self.csv_data = read_as_utf8(file)
+    fv = Imminence::FileVerifier.new(file)
+    if fv.sub_type == 'zip'
+      Zip::ZipFile.open(file.path) do |zipfile|
+        self.csv_data = to_utf8(zipfile.read(zipfile.first.name))
+      end
+    else
+      self.csv_data = to_utf8(file.read)
+    end
 
     # TODO: restructure this so that it runs as part of the model validations.
     raise HtmlValidationError unless Govspeak::HtmlValidator.new(self.csv_data).valid?
@@ -115,7 +122,7 @@ class DataSet
       self.save!
     end
   rescue CSV::MalformedCSVError
-    self.processing_error = "Could not process CSV file. Please check the format."
+    self.processing_error = "Could not process data file. Please check the format."
     self.csv_data = nil
     self.save!
   end
@@ -154,8 +161,8 @@ class DataSet
 
   private
 
-  def read_as_utf8(file)
-    string = file.read.force_encoding('utf-8')
+  def to_utf8(string)
+    string = string.force_encoding('utf-8')
     unless string.valid_encoding?
       # Try windows-1252 (which is a superset of iso-8859-1)
       string.force_encoding('windows-1252')

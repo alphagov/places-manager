@@ -101,7 +101,7 @@ class DataSetTest < ActiveSupport::TestCase
 
       job = Sidekiq::Delay::Worker.jobs.last
       instance_ary, method_name, args = YAML.load(job['args'].first)
-      
+
       assert_equal @service, instance_ary.first.send('find', instance_ary.second)
       assert_equal :process_csv_data, method_name
       assert_equal ds.version, args.first
@@ -166,6 +166,25 @@ class DataSetTest < ActiveSupport::TestCase
     end
   end
 
+  context "creating a data_set with a zip file" do
+    setup do
+      Sidekiq::Testing.fake!
+      @service = FactoryGirl.create(:service)
+    end
+    should "unzip and store csv_data" do
+      ds = @service.data_sets.create!(:data_file => File.open(fixture_file_path('good_csv.zip')))
+
+      assert_match /\Aname,address1,address2,town,postcode/, ds.csv_data
+
+      job = Sidekiq::Delay::Worker.jobs.last
+      instance_ary, method_name, args = YAML.load(job['args'].first)
+
+      assert_equal @service, instance_ary.first.send('find', instance_ary.second)
+      assert_equal :process_csv_data, method_name
+      assert_equal ds.version, args.first
+    end
+  end
+
   context "processing csv data" do
     setup do
       @service = FactoryGirl.create(:service)
@@ -192,7 +211,7 @@ class DataSetTest < ActiveSupport::TestCase
       ds.process_csv_data
 
       ds.reload
-      assert_equal "Could not process CSV file. Please check the format.", ds.processing_error
+      assert_equal "Could not process data file. Please check the format.", ds.processing_error
       assert_nil ds.csv_data
     end
 
