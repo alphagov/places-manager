@@ -156,9 +156,9 @@ GEM
       websocket
     link_header (0.0.6)
     lockfile (2.1.0)
-    logstash-event (1.2.02)
-    logstasher (0.2.5)
-      logstash-event
+    logstash-event (1.1.5)
+    logstasher (0.4.0)
+      logstash-event (~> 1.1.0)
     lrucache (0.1.4)
       PriorityQueue (~> 0.1.2)
     mail (2.5.4)
@@ -334,7 +334,7 @@ DEPENDENCIES
   launchy
   less-rails-bootstrap
   lockfile
-  logstasher (= 0.2.5)
+  logstasher (= 0.4.0)
   minitest (= 3.3.0)
   mocha (= 0.13.3)
   mongoid (= 3.1.5)
