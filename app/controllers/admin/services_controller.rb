@@ -1,7 +1,6 @@
 require 'imminence/file_verifier'
 require 'csv'
 
-
 class Admin::ServicesController < InheritedResources::Base
   include Admin::AdminControllerMixin
 
@@ -12,8 +11,12 @@ class Admin::ServicesController < InheritedResources::Base
     flash.now[:alert] = "Could not process CSV file. Please check the format."
     @service = Service.new(params[:service])
     render action: 'new'
-  rescue BSON::InvalidStringEncoding, InvalidCharacterEncodingError => e
+  rescue InvalidCharacterEncodingError => e
     flash.now[:alert] = "Could not process CSV file because of the file encoding. Please check the format."
+    @service = Service.new(params[:service])
+    render action: 'new'
+  rescue InvalidUploadError
+    flash.now[:alert] = "Could not process data file. Please check the format."
     @service = Service.new(params[:service])
     render action: 'new'
   end
