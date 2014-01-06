@@ -86,7 +86,7 @@ When /^I update the name to be "(.*?)"$/ do |name|
 end
 
 Then /^I should see an indication that my file wasn't accepted$/ do
-  assert page.has_content?("Could not process CSV file. Please check the format.")
+  assert page.has_content?("Could not process data file. Please check the format.")
 end
 
 Then /^I should see an indication that my data set import failed$/ do

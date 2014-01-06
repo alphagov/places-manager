@@ -35,6 +35,19 @@ class DataSetCreateEditTest < ActionDispatch::IntegrationTest
       assert_equal 0.10033740198112132, place.lng
     end
 
+    should "create a data_set from a zipped csv" do
+      visit "/admin/services/#{@service.id}"
+
+      within "#new-data" do
+        attach_file "Data file", fixture_file_path("good_csv.zip")
+        click_button "Create Data set"
+      end
+
+      @service.reload
+      assert_equal 2, @service.data_sets.count
+      assert_equal "1 Stop Instruction", @service.latest_data_set.places.first.name
+    end
+
     should "handle a CSV in a different file encoding" do
       mapit_has_a_postcode("IG6 3HJ", [51.59918278577261, 0.10033740198112132])
 

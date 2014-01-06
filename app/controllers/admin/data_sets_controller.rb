@@ -5,12 +5,12 @@ class Admin::DataSetsController < InheritedResources::Base
 
   actions :all, :except => [:index, :destroy]
   belongs_to :service
-  rescue_from CSV::MalformedCSVError, :with => :bad_csv
+  rescue_from InvalidUploadError, :with => :bad_upload
   rescue_from InvalidCharacterEncodingError, :with => :bad_encoding
   rescue_from HtmlValidationError, :with => :bad_html
 
   def create
-    prohibit_non_csv_uploads
+    prohibit_invalid_uploads
     create!
   end
 
@@ -37,8 +37,8 @@ class Admin::DataSetsController < InheritedResources::Base
     redirect_to :back
   end
 
-  def bad_csv
-    flash[:alert] = "Could not process CSV file. Please check the format."
+  def bad_upload
+    flash[:alert] = "Could not process data file. Please check the format."
     redirect_to :back
   end
 
@@ -47,13 +47,13 @@ class Admin::DataSetsController < InheritedResources::Base
     redirect_to :back
   end
 
-  def prohibit_non_csv_uploads
+  def prohibit_invalid_uploads
     if params[:data_set] && params[:data_set][:data_file]
       file = get_file_from_param(params[:data_set][:data_file])
       fv = Imminence::FileVerifier.new(file)
-      unless fv.type == 'text'
+      unless fv.type == 'text' or fv.sub_type == 'zip'
         Rails.logger.info "Rejecting file with content type: #{fv.mime_type}"
-        raise CSV::MalformedCSVError
+        raise InvalidUploadError
       end
     end
   end

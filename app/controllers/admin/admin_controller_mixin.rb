@@ -15,3 +15,5 @@ module Admin::AdminControllerMixin
     end
   end
 end
+
+class InvalidUploadError < Exception; end
