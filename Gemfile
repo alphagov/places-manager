@@ -17,7 +17,7 @@ gem 'formtastic-bootstrap', git: 'https://github.com/cgunther/formtastic-bootstr
 gem 'jquery-rails'
 gem 'less-rails-bootstrap'
 
-gem 'gds-api-adapters', '7.2.0'
+gem 'gds-api-adapters', '8.2.1'
 gem 'statsd-ruby', '1.0.0', :require => 'statsd'
 
 if ENV['BUNDLE_DEV']
