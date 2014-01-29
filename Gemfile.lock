@@ -105,8 +105,8 @@ GEM
       null_logger
       plek
       rest-client (~> 1.6.3)
-    gds-sso (3.0.4)
-      omniauth-gds (~> 0.0.3)
+    gds-sso (9.2.0)
+      omniauth-gds (>= 3.0.0)
       rack-accept (~> 0.4.4)
       rails (>= 3.0.0)
       warden (~> 1.2)
@@ -193,7 +193,7 @@ GEM
     omniauth (1.1.4)
       hashie (>= 1.2, < 3)
       rack
-    omniauth-gds (0.0.4)
+    omniauth-gds (3.0.0)
       omniauth-oauth2 (~> 1.0)
     omniauth-oauth2 (1.1.1)
       oauth2 (~> 0.8.0)
@@ -325,7 +325,7 @@ DEPENDENCIES
   formtastic!
   formtastic-bootstrap!
   gds-api-adapters (= 8.2.1)
-  gds-sso (= 3.0.4)
+  gds-sso (= 9.2.0)
   govspeak (~> 1.2)
   inherited_resources
   jquery-rails
