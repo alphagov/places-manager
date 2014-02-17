@@ -39,7 +39,7 @@ gem 'sidekiq', '2.16.1'
 gem 'sidekiq-delay', '1.0.4'
 
 gem 'state_machine', '1.2.0'
-gem 'logstasher', '0.4.1'
+gem 'logstasher', '0.4.8'
 
 group :assets do
   gem "therubyracer", "0.11.4"
