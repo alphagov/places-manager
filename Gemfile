@@ -3,7 +3,7 @@ source 'https://BnrJb6FZyzspBboNJzYZ@gem.fury.io/govuk/'
 
 gem 'plek', '1.3.1'
 
-gem 'rails', '3.2.16'
+gem 'rails', '3.2.17'
 gem 'unicorn', '4.3.1'
 
 gem "mongoid", "3.1.5"
