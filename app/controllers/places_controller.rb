@@ -34,9 +34,19 @@ class PlacesController < ApplicationController
       max_distance = nil
     end
 
-    if params[:lat].present? && params[:lng].present?
+    if params[:postcode].present?
+      result = Imminence.mapit_api.location_for_postcode(params[:postcode])
+      if result
+        location = Point.new(latitude: result.lat, longitude: result.lon)
+      else
+        head 400 and return
+      end
+    elsif params[:lat].present? && params[:lng].present?
       # TODO: should we handle parsing errors here?
       location = Point.new(latitude: params[:lat], longitude: params[:lng])
+    end
+
+    if location
       @places = data_set.places_near(location, max_distance, params[:limit])
     else
       @places = data_set.places
