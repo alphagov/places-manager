@@ -11,6 +11,8 @@ Imminence::Application.routes.draw do
     root :to => 'services#index'
   end
 
+  get '/areas/:area_type', :to => 'areas#index', :constraints => { :area_type => /EUR|CTY|DIS|LBO/ }
+
   resources :business_support_schemes, :only => :index
   resources :data_sets, :only => :show
   resources :places, :only => :show
