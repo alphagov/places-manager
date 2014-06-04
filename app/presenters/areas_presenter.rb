@@ -1,8 +1,8 @@
 class AreasPresenter
 
-  def initialize(api_response)
-    @status = api_response.code
-    @areas = api_response.to_hash.values
+  def initialize(response_bridge)
+    @status = response_bridge.payload[:code]
+    @areas = response_bridge.payload[:areas]
   end
 
   def present
