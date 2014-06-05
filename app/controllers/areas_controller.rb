@@ -1,10 +1,10 @@
-require 'mapit_api/response_bridge'
+require 'mapit_api'
 
 class AreasController < ApplicationController
   def index
     api_response = Imminence.mapit_api.areas_for_type(params[:area_type])
-    response_bridge = MapitApi::ResponseBridge.new(MapitApi::AreasByTypeResponse.new(api_response))
-    @presenter = AreasPresenter.new(response_bridge)
+    response = MapitApi::AreasByTypeResponse.new(api_response)
+    @presenter = AreasPresenter.new(response)
 
     respond_to do |format|
       format.json { render :json => @presenter.present.to_json }
@@ -13,8 +13,8 @@ class AreasController < ApplicationController
 
   def search
     api_response = Imminence.mapit_api.location_for_postcode(params[:postcode])
-    response_bridge = MapitApi::ResponseBridge.new(MapitApi::AreasByPostcodeResponse.new(api_response))
-    @presenter = AreasPresenter.new(response_bridge)
+    response = MapitApi::AreasByPostcodeResponse.new(api_response)
+    @presenter = AreasPresenter.new(response)
 
     respond_to do |format|
       format.json { render :json => @presenter.present.to_json }

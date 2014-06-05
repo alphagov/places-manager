@@ -3,7 +3,7 @@ require 'test_helper'
 class AreasControllerTest < ActionController::TestCase
   test "the index action responds successfully" do
     Imminence.mapit_api.stubs(:areas_for_type)
-    MapitApi::ResponseBridge.any_instance.stubs(:payload).returns(
+    MapitApi::AreasByTypeResponse.any_instance.stubs(:payload).returns(
       :code => 200,
       :areas => []
     )
@@ -17,7 +17,7 @@ class AreasControllerTest < ActionController::TestCase
 
   test "search is successful" do
     Imminence.mapit_api.stubs(:location_for_postcode)
-    MapitApi::ResponseBridge.any_instance.stubs(:payload).returns(
+    MapitApi::AreasByPostcodeResponse.any_instance.stubs(:payload).returns(
       :code => 200,
       :areas => []
     )

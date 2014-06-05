@@ -1,13 +1,4 @@
 module MapitApi
-  class ResponseBridge
-    def initialize(response)
-      @response = response
-    end
-    def payload
-      @response.payload
-    end
-  end
-
   class AreasByTypeResponse
     def initialize(response)
       @response = response
