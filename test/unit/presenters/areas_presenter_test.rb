@@ -18,11 +18,13 @@ class AreasPresenterTest < ActiveSupport::TestCase
       assert_equal 123, @presenter.present["results"].first["id"]
       assert_equal "Westminster City Council", @presenter.present["results"].first["name"]
       assert_equal "England", @presenter.present["results"].first["country_name"]
+      assert_equal "LBO", @presenter.present["results"].first["type"]
       assert_equal 234, @presenter.present["results"].last["id"]
       assert_equal "London", @presenter.present["results"].last["name"]
       assert_equal "England", @presenter.present["results"].last["country_name"]
+      assert_equal "EUR", @presenter.present["results"].last["type"]
 
-      refute @presenter.present["results"].first.has_key?("type")
+      refute @presenter.present["results"].first.has_key?("parent_area")
     end
   end
   context "presenting a postcode lookup mapit response" do
@@ -43,9 +45,11 @@ class AreasPresenterTest < ActiveSupport::TestCase
       assert_equal 123, @presenter.present["results"].first["id"]
       assert_equal "Westminster City Council", @presenter.present["results"].first["name"]
       assert_equal "England", @presenter.present["results"].first["country_name"]
+      assert_equal "LBO", @presenter.present["results"].first["type"]
       assert_equal 234, @presenter.present["results"].last["id"]
       assert_equal "London", @presenter.present["results"].last["name"]
       assert_equal "England", @presenter.present["results"].last["country_name"]
+      assert_equal "EUR", @presenter.present["results"].last["type"]
     end
   end
 end

@@ -34,7 +34,8 @@ class AreasPresenter
       {
         "id" => area["id"],
         "name" => area["name"],
-        "country_name" => area["country_name"]
+        "country_name" => area["country_name"],
+        "type" => area["type"]
       }
     end
 

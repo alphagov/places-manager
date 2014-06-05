@@ -13,7 +13,6 @@ class AreasController < ApplicationController
 
   def search
     api_response = Imminence.mapit_api.location_for_postcode(params[:postcode])
-    puts "api_response #{api_response}"
     response_bridge = MapitApi::ResponseBridge.new(MapitApi::AreasByPostcodeResponse.new(api_response))
     @presenter = AreasPresenter.new(response_bridge)
 
