@@ -22,21 +22,21 @@ class AreasPresenter
 
   private
 
-    def response_status
-      if @status == 200
-        "ok"
-      else
-        @status
-      end
+  def response_status
+    if @status == 200
+      "ok"
+    else
+      @status
     end
+  end
 
-    def area_attrs(area)
-      {
-        "id" => area["id"],
-        "name" => area["name"],
-        "country_name" => area["country_name"],
-        "type" => area["type"]
-      }
-    end
+  def area_attrs(area)
+    {
+      "slug" => area["name"].parameterize,
+      "name" => area["name"],
+      "country_name" => area["country_name"],
+      "type" => area["type"]
+    }
+  end
 
 end

@@ -11,6 +11,27 @@ module MapitApi
     end
   end
 
+  class RegionsResponse
+    def initialize(response)
+      @response = response
+    end
+    def payload
+      {
+        :code => @response.code,
+        :areas => normalise_regions(@response.to_hash.values)
+      }
+    end
+
+    private
+
+    def normalise_regions(regions)
+      eastern_index = regions.index { |r| r["name"] == "Eastern" }
+      regions[eastern_index]["name"] = "East of England" if eastern_index
+
+      regions.unshift({ "name" => "England", "country_name" => "England", "type" => "EUR" })
+    end
+  end
+
   class AreasByPostcodeResponse
     def initialize(location)
       @location = location

@@ -20,14 +20,14 @@ class AreasByPostcodeTest < ActionDispatch::IntegrationTest
     assert_equal 2, parsed_response["total"]
     results = parsed_response["results"]
 
-    assert_equal 44, results.first["id"]
+    assert_equal "westminster-city-council", results.first["slug"]
     assert_equal "Westminster City Council", results.first["name"]
     assert_equal "England", results.first["country_name"]
     assert_equal "LBO", results.first["type"]
-    assert_equal 223, results.last["id"]
-    assert_equal "London", results.last["name"]
-    assert_equal "England", results.last["country_name"]
-    assert_equal "EUR", results.last["type"]
+    assert_equal "london", results.second["slug"]
+    assert_equal "London", results.second["name"]
+    assert_equal "England", results.second["country_name"]
+    assert_equal "EUR", results.second["type"]
   end
 end
 
