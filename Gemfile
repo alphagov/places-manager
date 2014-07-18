@@ -24,7 +24,6 @@ if ENV['BUNDLE_DEV']
 else
   gem 'gds-sso', '9.3.0'
 end
-gem "faraday", "0.8.1" # Specifying to resolve Jenkins dependency resolution fail
 
 gem 'govspeak', '~> 1.2'
 

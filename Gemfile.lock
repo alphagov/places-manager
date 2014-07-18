@@ -328,7 +328,6 @@ DEPENDENCIES
   exception_notification (= 2.5.2)
   factory_girl (= 3.3.0)
   factory_girl_rails
-  faraday (= 0.8.1)
   formtastic!
   formtastic-bootstrap!
   gds-api-adapters (= 10.13.0)
