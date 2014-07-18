@@ -1,5 +1,4 @@
 source 'http://rubygems.org'
-source 'https://BnrJb6FZyzspBboNJzYZ@gem.fury.io/govuk/'
 
 gem 'plek', '1.3.1'
 
@@ -23,9 +22,8 @@ gem 'statsd-ruby', '1.0.0', :require => 'statsd'
 if ENV['BUNDLE_DEV']
   gem 'gds-sso', :path => '../gds-sso'
 else
-  gem 'gds-sso', '9.2.0'
+  gem 'gds-sso', '9.3.0'
 end
-gem "faraday", "0.8.1" # Specifying to resolve Jenkins dependency resolution fail
 
 gem 'govspeak', '~> 1.2'
 
