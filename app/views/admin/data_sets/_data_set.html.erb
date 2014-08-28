@@ -1,6 +1,6 @@
 <div class="well">
   <h4>Version <%= data_set.version %>
-    <% if data_set.active? %><span class="label label-success">Active</span><% else %><span class="label">Inactive</span><% end %></h4>
+    <% if data_set.active? %><span class="label label-success">Active</span><% else %><span class="label label-default">Inactive</span><% end %></h4>
 
   <% if data_set.processing_complete? %>
     <% unless data_set.active? %>

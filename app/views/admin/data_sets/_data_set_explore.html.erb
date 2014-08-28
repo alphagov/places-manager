@@ -1,7 +1,7 @@
 <h4>Explore this data set</h4>
 
 <% if data_set.latest_data_set? and !data_set.active? %>
-  <p><%= link_to "Add new place", new_admin_service_data_set_place_path(@service, data_set), :class => 'btn' %></p>
+  <p><%= link_to "Add new place", new_admin_service_data_set_place_path(@service, data_set), :class => 'btn btn-default' %></p>
 <% end %>
 
 <% places = data_set.places.page(params[:page]).per(100) %>
