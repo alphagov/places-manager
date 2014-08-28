@@ -8,11 +8,11 @@ class Admin::ServicesController < InheritedResources::Base
     prohibit_non_csv_uploads
     create!
   rescue CSV::MalformedCSVError => e
-    flash.now[:alert] = "Could not process CSV file. Please check the format."
+    flash.now[:danger] = "Could not process CSV file. Please check the format."
     @service = Service.new(params[:service])
     render action: 'new'
   rescue BSON::InvalidStringEncoding, InvalidCharacterEncodingError => e
-    flash.now[:alert] = "Could not process CSV file because of the file encoding. Please check the format."
+    flash.now[:danger] = "Could not process CSV file because of the file encoding. Please check the format."
     @service = Service.new(params[:service])
     render action: 'new'
   end

@@ -16,34 +16,34 @@ class Admin::DataSetsController < InheritedResources::Base
 
   def duplicate
     duplicated_data_set = resource.duplicate
-    flash[:notice] = "Version #{duplicated_data_set.version} has been created."
+    flash[:success] = "Version #{duplicated_data_set.version} has been created."
     redirect_to admin_service_data_set_path(@service, duplicated_data_set)
   end
 
   def activate
     if resource.activate
-      msg = "Data Set #{resource.version} successfully activated"
+      flash[:success] = "Data Set #{resource.version} successfully activated"
       resource.service.schedule_archive_places if resource.latest_data_set?
     else
-      msg = "Couldn't activate data set"
+      flash[:danger] = "Couldn't activate data set"
     end
-    redirect_to admin_service_url(@service), :notice => msg
+    redirect_to admin_service_url(@service)
   end
 
   protected
 
   def bad_encoding
-    flash[:alert] = "Could not process CSV file because of the file encoding. Please check the format."
+    flash[:danger] = "Could not process CSV file because of the file encoding. Please check the format."
     redirect_to :back
   end
 
   def bad_csv
-    flash[:alert] = "Could not process CSV file. Please check the format."
+    flash[:danger] = "Could not process CSV file. Please check the format."
     redirect_to :back
   end
 
   def bad_html
-    flash[:alert] = "CSV file contains invalid HTML content. Please check the format."
+    flash[:danger] = "CSV file contains invalid HTML content. Please check the format."
     redirect_to :back
   end
 

@@ -19,7 +19,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
       # Services are created with 1 data_set initially, so after creating a data_set, there are now 2
       assert_equal 2, Service.first.data_sets.count
       assert_equal 1, Place.count
-      
+
       place = Place.first
       assert_equal "1 Stop Instruction", place.name
       assert_equal "Power League", place.address1
@@ -42,7 +42,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
       csv_file = fixture_file_upload(Rails.root.join('test/fixtures/bad_html_csv.csv'), 'text/csv')
       post :create, :service_id => @service.id, :data_set => {:data_file => csv_file}
       assert_response :redirect
-      assert_equal "CSV file contains invalid HTML content. Please check the format.", flash[:alert]
+      assert_equal "CSV file contains invalid HTML content. Please check the format.", flash[:danger]
       # There is always an initial data set
       assert_equal 1, Service.first.data_sets.count
       assert_equal 0, Place.count
@@ -57,7 +57,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
       csv_file = fixture_file_upload(Rails.root.join('test/fixtures/good_csv.csv'), 'text/csv')
       post :create, :service_id => @service.id, :data_set => {:data_file => csv_file}
       assert_response :redirect
-      assert_equal "Could not process CSV file because of the file encoding. Please check the format.", flash[:alert]
+      assert_equal "Could not process CSV file because of the file encoding. Please check the format.", flash[:danger]
       # There is always an initial data set
       assert_equal 1, Service.first.data_sets.count
       assert_equal 0, Place.count
@@ -69,14 +69,14 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
       Sidekiq::Delay::Worker.jobs.clear
       Sidekiq::Testing.fake!
     end
-    
+
     should "allow activating a data_set" do
 
       as_logged_in_user do
         set = @service.data_sets.create!
         post :activate, :service_id => @service.id, :id => set.id
         assert_response :redirect
-        assert_equal "Data Set #{set.version} successfully activated", flash[:notice]
+        assert_equal "Data Set #{set.version} successfully activated", flash[:success]
         @service.reload
         assert_equal set, @service.active_data_set
       end
@@ -87,7 +87,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
         set = @service.data_sets.create!(:data_file => File.open(fixture_file_path('good_csv.csv')))
         post :activate, :service_id => @service.id, :id => set.id
         assert_response :redirect
-        assert_equal "Couldn't activate data set", flash[:notice]
+        assert_equal "Couldn't activate data set", flash[:danger]
         @service.reload
         refute_equal set, @service.active_data_set
       end
@@ -97,9 +97,9 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
       should "create a background job for archiving the place information" do
         as_logged_in_user do
           post :activate, service_id: @service.id, id: @service.latest_data_set.id
-          job = Sidekiq::Delay::Worker.jobs.last 
+          job = Sidekiq::Delay::Worker.jobs.last
           instance_ary, method_name, args = YAML.load(job['args'].first)
-          assert_equal @service, instance_ary.first.send('find', instance_ary.second) 
+          assert_equal @service, instance_ary.first.send('find', instance_ary.second)
           assert_equal :archive_places, method_name
           assert_equal 1, Sidekiq::Delay::Worker.jobs.count
         end
