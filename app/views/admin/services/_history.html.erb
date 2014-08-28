@@ -1,15 +1,15 @@
-<ul class="row">
+<ul class="row list-unstyled">
   <% @service.data_sets.current.reverse.each do |set| %>
-    <li class="well data_set span4">
-      <div>
+    <li class="data_set col-md-4">
+      <div class="well">
         <h4>
           <%= link_to "Version #{set.version}", admin_service_data_set_path(@service,set) %>
           <% if set.archiving? %>
-            <span class="label">Archiving</span>
+            <span class="label label-default">Archiving</span>
           <% elsif set.active? %>
             <span class="label label-success">Active</span>
           <% else %>
-            <span class="label">Inactive</span>
+            <span class="label label-default">Inactive</span>
           <% end %>
         </h4>
 
@@ -18,7 +18,7 @@
             <% unless set.active? %>
               <p><%= button_to "Activate", activate_admin_service_data_set_path(@service, set), :method => "POST", :class => 'btn btn-primary activate' %></p>
             <% end %>
-            <%= button_to "Duplicate", duplicate_admin_service_data_set_path(@service, set), :method => "POST", :class => 'btn duplicate', :title => "Use the data from Version #{set.version} as a basis for a new version" %>
+            <%= button_to "Duplicate", duplicate_admin_service_data_set_path(@service, set), :method => "POST", :class => 'btn btn-default duplicate', :title => "Use the data from Version #{set.version} as a basis for a new version" %>
           </div>
         <% end %>
 
