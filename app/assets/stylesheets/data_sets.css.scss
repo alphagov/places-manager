@@ -1,6 +1,11 @@
-table.table-places td em { color: #aaa; }
+.source-of-data {
+  @include add-bottom-margin;
 
-form.formtastic .controls textarea {
-  color: #333;
-  width: auto;
+  p {
+    margin-bottom: 0;
+  }
+}
+
+.table-places em {
+  color: #aaa;
 }

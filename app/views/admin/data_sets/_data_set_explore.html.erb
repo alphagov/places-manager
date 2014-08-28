@@ -1,15 +1,14 @@
-<h4>Explore this data set</h4>
-
+<h3 class="remove-bottom-margin">Explore data</h3>
 <% if data_set.latest_data_set? and !data_set.active? %>
   <p><%= link_to "Add new place", new_admin_service_data_set_place_path(@service, data_set), :class => 'btn btn-default' %></p>
 <% end %>
 
 <% places = data_set.places.page(params[:page]).per(100) %>
-<%= paginate places %>
+<%= paginate places, theme: 'twitter-bootstrap-3' %>
 
-<table class="table table-striped table-condensed table-places">
+<table class="table table-striped table-bordered table-places <% if places.size < 100 %>add-top-margin<% end %>">
   <thead>
-    <tr>
+    <tr class="table-header">
       <th>Name</th>
       <th>Address</th>
       <th>URL</th>
@@ -34,4 +33,4 @@
   <% end %>
 </table>
 
-<%= paginate places %>
+<%= paginate places, theme: 'twitter-bootstrap-3' %>
