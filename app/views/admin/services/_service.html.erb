@@ -1,17 +1,15 @@
 <tr>
   <td>
-    <p><%= link_to service.name, [:admin, service] %></p>
-    <p class="version">
-    <%= pluralize(service.data_sets.count, 'data set', 'data sets') %> uploaded.
-    <% if service.active_data_set %>
-    Currently serving version <%= service.active_data_set_version %> containing <%= pluralize(service.active_data_set.places.count, 'place', 'places') %>.
+    <%= link_to service.name, [:admin, service], class: 'js-open-on-submit' %>
+    <% if service.active_data_set %><span class="text-muted"> <abbr title="Version <%= service.active_data_set_version %>">#<%= service.active_data_set_version %></abbr></span>
     <% end %>
-    </p>
   </td>
   <td>
-    <p class="button"><%= link_to 'Review active set', [:admin, service] %></p>
+    <%= pluralize(number_with_delimiter(service.data_sets.count), 'data set', 'data sets') %>
   </td>
   <td>
-    <p class="button"><%= link_to 'Upload new set', admin_service_path(service, :anchor => 'new-data') %></p>
+    <% if service.active_data_set %>
+      <%= pluralize(number_with_delimiter(service.active_data_set.places.count), 'place', 'places') %>
+    <% end %>
   </td>
 </tr>

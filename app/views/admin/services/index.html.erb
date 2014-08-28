@@ -1,21 +1,28 @@
-<% content_for :page_title, "Services List" %>
-
+<% content_for :page_title, "All services" %>
 <div class="page-header">
   <h1>
-    All Services
+    All services
   </h1>
 </div>
 
-<div class="format-controls">
-  <%= button_to 'Add new service', new_admin_service_path, :method=>:get, :class => 'service btn btn-primary activate' %>
-</div>
+<%= link_to new_admin_service_path, :class => 'btn btn-default' do %>
+  <span class="glyphicon glyphicon-plus"></span> Add new service
+<% end %>
 
-<table class="add-top-margin table table-striped table-bordered" summary="Full list of available services">
+<table class="add-top-margin table table-striped table-bordered" summary="Full list of available services" data-module="filterable-table">
   <thead>
     <tr class="table-header">
-      <th scope="col">Service Title</th>
-      <th scope="col">Review</th>
-      <th scope="col">Upload</th>
+      <th scope="col">Service</th>
+      <th scope="col">Data sets</th>
+      <th scope="col">Places</th>
+    </tr>
+    <tr class="if-no-js-hide table-header-secondary">
+      <td colspan="3">
+        <form>
+          <label for="table-filter" class="rm">Filter services</label>
+          <input id="table-filter" type="text" class="form-control normal js-filter-table-input" placeholder="Filter list of services">
+        </form>
+      </td>
     </tr>
   </thead>
   <tbody>
