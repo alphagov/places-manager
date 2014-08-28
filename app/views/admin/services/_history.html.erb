@@ -1,9 +1,15 @@
-<ul class="row list-unstyled">
-  <% @service.data_sets.current.reverse.each do |set| %>
-    <li class="data_set col-md-4">
-      <div class="well">
-        <h4>
-          <%= link_to "Version #{set.version}", admin_service_data_set_path(@service,set) %>
+<div class="row">
+  <% @service.data_sets.current.reverse.each_with_index do |set, i| %>
+    <% if i > 0 && i % 3 == 0 %>
+      </div>
+      <div class="row">
+    <% end %>
+    <div class="col-md-4">
+    <section class="panel panel-default">
+      <header class="panel-heading">
+        <h3 class="panel-title">
+          <span class="add-right-margin">
+            <%= link_to "Version #{set.version}", admin_service_data_set_path(@service,set) %></span>
           <% if set.archiving? %>
             <span class="label label-default">Archiving</span>
           <% elsif set.active? %>
@@ -11,42 +17,46 @@
           <% else %>
             <span class="label label-default">Inactive</span>
           <% end %>
-        </h4>
-
-        <% if set.unarchived? && set.processing_complete? %>
-          <div class="actions">
-            <% unless set.active? %>
-              <p><%= button_to "Activate", activate_admin_service_data_set_path(@service, set), :method => "POST", :class => 'btn btn-primary activate' %></p>
-            <% end %>
-            <%= button_to "Duplicate", duplicate_admin_service_data_set_path(@service, set), :method => "POST", :class => 'btn btn-default duplicate', :title => "Use the data from Version #{set.version} as a basis for a new version" %>
-          </div>
+        </h3>
+      </header>
+      <div class="panel-body">
+        <% if set.places.empty? %>
+          <p class="alert alert-warning">No places are associated with this set. The imported data could be in the wrong format.</p>
         <% end %>
-
         <dl>
-          <dt>Uploaded at</dt>
-          <dd><%= set.created_at ? set.created_at.strftime("%d %b %Y") : "the beginning of time" %></dd>
-          <dt>Change notes</dt>
-          <dd><%= set.change_notes.blank? ? "None" : set.change_notes %></dd>
-          <dt>Places</dt>
-          <dd><%= set.places.count %></dd>
+          <dt>Uploaded</dt>
+          <dd><%= set.created_at ? set.created_at.to_date.to_s(:govuk_date) : "the beginning of time" %></dd>
+          <% unless set.change_notes.blank? %>
+            <dt>Change notes</dt>
+            <dd><%= set.change_notes %></dd>
+          <% end %>
+          <% unless set.places.empty? %>
+            <dt>Places</dt>
+            <dd><%= set.places.count %></dd>
+          <% end %>
         </dl>
-
         <% if set.processing_complete? %>
+          <hr />
+          <h4>Export</h4>
           <p>
-            Export:
-            <%= link_to 'JSON', place_path(@service.slug, :version => set, :format => :json) %> /
-            <%= link_to 'KML', place_path(@service.slug, :version => set, :format => :kml) %> /
+            <%= link_to 'JSON', place_path(@service.slug, :version => set, :format => :json) %>,
+            <%= link_to 'KML', place_path(@service.slug, :version => set, :format => :kml) %>,
             <%= link_to 'CSV', place_path(@service.slug, :version => set, :format => :csv) %>
           </p>
-          <% if set.places.empty? %>
-            <p class="label label-warning">There are no places associated with this data set. This may well mean the imported data was in the wrong format.</p>
-          <% end %>
         <% elsif set.processing_error.present? %>
-          <p class="label label-important"><%= set.processing_error %></p>
+          <p class="alert alert-danger remove-bottom-margin"><%= set.processing_error %></p>
         <% else %>
-          <p class="label label-info">Places data is currently being processed.</p>
+          <p class="alert alert-info remove-bottom-margin">Places data is currently being processed.</p>
+        <% end %>
+        <% if set.unarchived? && set.processing_complete? %>
+          <hr />
+          <% unless set.active? %>
+            <%= button_to "Activate", activate_admin_service_data_set_path(@service, set), :method => "POST", :class => 'btn btn-sm btn-primary pull-left add-right-margin' %>
+          <% end %>
+          <%= button_to "Duplicate", duplicate_admin_service_data_set_path(@service, set), :method => "POST", :class => 'btn btn-sm btn-default duplicate', :title => "Use the data from Version #{set.version} as a basis for a new version" %>
         <% end %>
       </div>
-    </li>
+    </section>
+  </div>
   <% end %>
-</ul>
+</div>

@@ -120,7 +120,7 @@ Then /^I should see an indication that my data set contained (\d+) items$/ do |c
 end
 
 Then /^I should see an indication that my data set is empty$/ do
-  assert page.has_content?("There are no places associated with this data set. This may well mean the imported data was in the wrong format")
+  assert page.has_content?("No places are associated with this set. The imported data could be in the wrong format.")
 end
 
 Then /^I should see that there are now two data sets$/ do
