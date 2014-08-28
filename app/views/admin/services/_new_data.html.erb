@@ -27,7 +27,7 @@
         <%= f.input :change_notes, :as => :text, :label => "Changes", :input_html => { :size => "70x3" } %>
       <% end %>
       <%= f.actions do %>
-        <%= f.commit_button "Create Data set", :button_html => {:class => 'btn btn-primary'} %>
+        <%= f.submit "Create Data set", class: 'btn btn-primary' %>
       <% end %>
     <% end %>
   </div>

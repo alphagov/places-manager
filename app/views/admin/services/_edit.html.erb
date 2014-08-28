@@ -5,7 +5,7 @@
     <%= f.input :source_of_data, as: :text, hint: "Use to store relevant contact names, email addresses, etc.", input_html: { class: 'span6' } %>
   <% end %>
 
-  <%= f.buttons do %>
-    <%= f.commit_button "Update Service", :button_html => {:class => 'btn btn-primary'} %>
+  <%= f.actions do %>
+    <%= f.submit "Update Service", class: 'btn btn-primary' %>
   <% end %>
 <% end %>
