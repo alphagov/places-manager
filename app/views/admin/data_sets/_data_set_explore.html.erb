@@ -1,6 +1,6 @@
 <h3 class="remove-bottom-margin">Explore data</h3>
 <% if data_set.latest_data_set? and !data_set.active? %>
-  <p><%= link_to "Add new place", new_admin_service_data_set_place_path(@service, data_set), :class => 'btn btn-default' %></p>
+  <div><%= link_to "Add new place", new_admin_service_data_set_place_path(@service, data_set), :class => 'btn btn-default add-top-margin' %></div>
 <% end %>
 
 <% places = data_set.places.page(params[:page]).per(100) %>
@@ -27,7 +27,7 @@
         <%= [ place.lat, place.lng ].map {|a| a.round(4) }.join(', ') %>
         <% else %><em>&mdash;</em><% end %></td>
       <% if data_set.latest_data_set? and !data_set.active? %>
-        <td><%= link_to "edit", edit_admin_service_data_set_place_path(@service, data_set, place) %></td>
+        <td><%= link_to "Edit place", edit_admin_service_data_set_place_path(@service, data_set, place) %></td>
       <% end %>
     </tr>
   <% end %>

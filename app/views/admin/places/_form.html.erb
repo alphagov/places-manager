@@ -1,36 +1,36 @@
 <%= render :partial => 'admin/services/overview' %>
 
-<%= semantic_form_for [:admin, @service, @data_set, @place] do |f| %>
+<%= semantic_form_for [:admin, @service, @data_set, @place], html: {class: 'well'} do |f| %>
 
-  <%= f.semantic_errors :source_address, :class => "alert alert-error" %>
+  <%= f.semantic_errors :source_address, :class => "alert alert-danger" %>
 
-  <%= f.input :name, :input_html => { :size => 60, :class => 'input-xxlarge' } %>
+  <%= f.input :name, :input_html => { :size => 60, :class => 'input-md-6' } %>
 
   <%= f.inputs "Address" do %>
-    <%= f.input :address1, :label => "Address 1" %>
-    <%= f.input :address2, :label => "Address 2" %>
-    <%= f.input :town %>
-    <%= f.input :postcode %>
-    <%= f.input :override_lng, :label => "Override longitude", :placeholder => "Leave blank to use postcode coords"%>
-    <%= f.input :override_lat, :label => "Override latitude", :placeholder => "Leave blank to use postcode coords" %>
+    <%= f.input :address1, :label => "Address 1", input_html: {class: 'input-md-6'} %>
+    <%= f.input :address2, :label => "Address 2", input_html: {class: 'input-md-6'} %>
+    <%= f.input :town, input_html: {class: 'input-md-6'} %>
+    <%= f.input :postcode, input_html: {class: 'input-md-2'} %>
+    <%= f.input :override_lng, :label => "Override longitude", :placeholder => "Leave blank to use postcode coords", input_html: {class: 'input-md-4'}%>
+    <%= f.input :override_lat, :label => "Override latitude", :placeholder => "Leave blank to use postcode coords", input_html: {class: 'input-md-4'} %>
   <% end %>
 
   <%= f.inputs "Contact Details" do %>
-    <%= f.input :url, :label => "Website", :input_html => { :class => 'input-xxlarge' } %>
-    <%= f.input :email, :input_html => { :class => 'input-xxlarge' } %>
-    <%= f.input :phone %>
-    <%= f.input :fax %>
-    <%= f.input :text_phone %>
+    <%= f.input :url, :label => "Website", :input_html => { :class => 'input-md-6' } %>
+    <%= f.input :email, :input_html => { :class => 'input-md-6' } %>
+    <%= f.input :phone, :input_html => { :class => 'input-md-6' } %>
+    <%= f.input :fax, :input_html => { :class => 'input-md-6' } %>
+    <%= f.input :text_phone, :input_html => { :class => 'input-md-6' } %>
   <% end %>
 
   <%= f.inputs "Access Notes" do %>
-    <%= f.input :access_notes, :as => :text, :input_html => { :rows => 3 } %>
-    <%= f.input :general_notes, :as => :text, :input_html => { :rows => 3 } %>
+    <%= f.input :access_notes, :as => :text, :input_html => { :rows => 3, :class => 'input-md-6' } %>
+    <%= f.input :general_notes, :as => :text, :input_html => { :rows => 3, :class => 'input-md-6' } %>
   <% end %>
 
   <%= f.actions do %>
-    <%= f.action :submit, :as => :button, :input_html => { :class => "btn btn-primary" } %>
-    <%= f.action :cancel %>
+    <%= f.action :submit, :as => :button, :button_html => { :class => "btn btn-primary" } %>
+    <%= link_to 'Cancel', admin_service_data_set_path(@service, @data_set), class: 'btn btn-default add-left-margin' %>
   <% end %>
 
 <% end %>

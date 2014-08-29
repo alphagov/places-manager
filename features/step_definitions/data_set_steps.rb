@@ -77,7 +77,7 @@ end
 
 When /^I click "Edit" on a record$/ do
   within "table.table-places" do
-    click_link "edit"
+    click_link "Edit place"
   end
 end
 
