@@ -1,34 +1,33 @@
 <% if @service.data_sets.any? %>
-<div class="well well-small">
-  <h4>Create new version</h4>
+  <section class="panel panel-default">
+    <header class="panel-heading">
+      <h4 class="panel-title">Create new version</h4>
+    </header>
+    <div class="panel-body">
+      <p>Creates a new version of the data set from an existing version, so that places can be edited.</p>
 
-  <p>Creates a new version of the data set from an existing version, so that places can be edited.</p>
-
-  <%= link_to "Duplicate most recent data set (Version #{@service.latest_data_set.version})", duplicate_admin_service_data_set_path(@service, @service.latest_data_set), :method => "POST", :class => 'btn btn-primary' %>
-  <% if @service.active_data_set and @service.active_data_set != @service.latest_data_set %>
-    <%= link_to "Duplicate currently active data set (Version #{@service.active_data_set.version})", duplicate_admin_service_data_set_path(@service, @service.active_data_set), :method => "POST", :class => 'btn' %>
-  <% end %>
-</div>
+      <%= link_to "Duplicate most recent data set (Version #{@service.latest_data_set.version})", duplicate_admin_service_data_set_path(@service, @service.latest_data_set), :method => "POST", :class => 'btn btn-primary add-right-margin' %>
+      <% if @service.active_data_set and @service.active_data_set != @service.latest_data_set %>
+        <%= link_to "Duplicate currently active data set (Version #{@service.active_data_set.version})", duplicate_admin_service_data_set_path(@service, @service.active_data_set), :method => "POST", :class => 'btn btn-default' %>
+      <% end %>
+    </div>
+  </section>
 <% end %>
 
-<div class="well well-small">
-  <h4>Upload a new data set</h4>
-
-  <div class="row-fluid">
-    <div class="well">
-      <%= render '/admin/data_sets/file_help' %>
-    </div>
-  </div>
-
-  <div class="row-fluid">
+<section class="panel panel-default">
+  <header class="panel-heading">
+    <h4 class="panel-title">Upload a new data set</h4>
+  </header>
+  <div class="panel-body">
+    <%= render '/admin/data_sets/file_help' %>
     <%= semantic_form_for(@service.data_sets.build, :url => admin_service_data_sets_path(@service), :html => {:multipart => true}) do |f| %>
       <%= f.inputs do %>
         <%= f.input :data_file, :as => :file, :accept => 'text/csv' %>
-        <%= f.input :change_notes, :as => :text, :label => "Changes", :input_html => { :size => "70x3" } %>
+        <%= f.input :change_notes, :as => :text, :label => "Change note",  input_html: {class: 'input-md-6'}%>
       <% end %>
       <%= f.actions do %>
-        <%= f.commit_button "Create Data set", :button_html => {:class => 'btn btn-primary'} %>
+        <%= f.submit "Create Data set", class: 'btn btn-primary' %>
       <% end %>
     <% end %>
   </div>
-</div>
+</section>

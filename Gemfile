@@ -11,10 +11,9 @@ gem "mongoid_rails_migrations", "1.0.0"
 gem 'aws-ses', :require => 'aws/ses'
 gem 'exception_notification', '2.5.2', :require => 'exception_notifier'
 
-gem 'formtastic', git: 'https://github.com/justinfrench/formtastic.git', branch: '2.1-stable'
-gem 'formtastic-bootstrap', git: 'https://github.com/cgunther/formtastic-bootstrap.git', branch: 'bootstrap-2'
-gem 'jquery-rails'
-gem 'less-rails-bootstrap'
+gem 'govuk_admin_template', '1.1.2'
+gem 'formtastic', '2.3.0'
+gem 'formtastic-bootstrap', '3.0.0'
 
 gem 'gds-api-adapters', '10.13.0'
 gem 'statsd-ruby', '1.0.0', :require => 'statsd'
@@ -31,13 +30,14 @@ gem 'inherited_resources'
 gem 'lockfile'
 gem 'whenever'
 gem 'kaminari', '0.14.1'
-gem 'kaminari-bootstrap', '0.1.3'
+gem 'bootstrap-kaminari-views', '0.0.3'
 
 gem 'sidekiq', '2.16.1'
 gem 'sidekiq-delay', '1.0.4'
 
 gem 'state_machine', '1.2.0'
 gem 'logstasher', '0.4.8'
+gem 'sass-rails', '3.2.6'
 
 group :assets do
   gem "therubyracer", "0.11.4"

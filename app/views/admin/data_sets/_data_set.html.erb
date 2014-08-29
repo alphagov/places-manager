@@ -1,28 +1,36 @@
-<div class="well">
-  <h4>Version <%= data_set.version %>
-    <% if data_set.active? %><span class="label label-success">Active</span><% else %><span class="label">Inactive</span><% end %></h4>
+<section class="panel panel-default">
+  <header class="panel-heading">
+    <h3 class="panel-title">
+      Version <%= data_set.version %>
+      <% if data_set.active? %><span class="label label-success">Active</span><% else %><span class="label label-default">Inactive</span><% end %>
+    </h3>
+  </header>
+  <div class="panel-body">
+    <% if data_set.processing_complete? %>
+      <% unless data_set.active? %>
+        <%= button_to 'Activate', activate_admin_service_data_set_path(@service, data_set), :class=> 'btn btn-primary activate' %>
+      <% end %>
+      <h4>Status</h4>
+      <p>
+        <%= data_set.places.needs_geocoding.count %> places left to geocode. <%= data_set.places.with_geocoding_errors.count %> places with geocode errors.
+      </p>
+      <hr />
+      <h4>Export</h4>
+      <p>
+        <%= link_to 'JSON', place_path(@service.slug, :version => data_set, :format => :json) %>,
+        <%= link_to 'KML', place_path(@service.slug, :version => data_set, :format => :kml) %>,
+        <%= link_to 'CSV', place_path(@service.slug, :version => data_set, :format => :csv) %>
+      </p>
 
-  <% if data_set.processing_complete? %>
-    <% unless data_set.active? %>
-      <%= button_to 'Activate', activate_admin_service_data_set_path(@service, data_set), :class=> 'btn btn-primary activate' %>
+      <% if data_set.places.empty? %>
+        <p class="alert alert-warning">No places are associated with this set. The imported data could be in the wrong format.</p>
+      <% end %>
+    <% elsif data_set.processing_error.present? %>
+      <p class="label label-important"><%= data_set.processing_error %></p>
+    <% else %>
+      <p class="label label-info">Places data is currently being processed.</p>
     <% end %>
-
-    <p>
-      Export:
-      <%= link_to 'JSON', place_path(@service.slug, :version => data_set, :format => :json) %> /
-      <%= link_to 'KML', place_path(@service.slug, :version => data_set, :format => :kml) %> /
-      <%= link_to 'CSV', place_path(@service.slug, :version => data_set, :format => :csv) %>
-    </p>
-    <p><%= data_set.places.needs_geocoding.count %> places left to geocode. <%= data_set.places.with_geocoding_errors.count %> places with geocode errors.</p>
-
-    <% if data_set.places.empty? %>
-      <p class="label label-warning">There are no places associated with this data set. This may well mean the imported data was in the wrong format.</p>
-    <% end %>
-  <% elsif data_set.processing_error.present? %>
-    <p class="label label-important"><%= data_set.processing_error %></p>
-  <% else %>
-    <p class="label label-info">Places data is currently being processed.</p>
-  <% end %>
-</div>
+  </div>
+</section>
 
 <%= render :partial => '/admin/data_sets/data_set_explore', :locals => {:data_set => data_set} if data_set.processing_complete? %>

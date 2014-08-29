@@ -1,19 +1,22 @@
-<h2>Viewing &ldquo;<%= @service.name %>&rdquo;
-  <% if @service.active_data_set %>
-    (Version <%= @service.active_data_set_version %> active: <%= pluralize(@service.active_data_set.places.count, 'place', 'places') %>)
-  <% end %>
-</h2>
-
 <ul class="breadcrumb">
-  <li><%= link_to "Services", admin_services_path %> <span class="divider">/</span></li>
+  <li><%= link_to "Services", admin_services_path %></li>
   <% if @place %>
-    <li><%= link_to @service.name, admin_service_path(@service) %> <span class="divider">/</span></li>
-    <li><%= link_to "Version #{@data_set.version}", admin_service_data_set_path(@service, @data_set) %> <span class="divider">/</span></li>
-    <li class="active"><% if @place.new_record? %>New<% else %>Edit<% end %></li>
+    <li><%= link_to @service.name, admin_service_path(@service) %></li>
+    <li><%= link_to "Version #{@data_set.version}", admin_service_data_set_path(@service, @data_set) %></li>
+    <li class="active"><% if @place.new_record? %>New place<% else %>Edit place<% end %></li>
   <% elsif @data_set %>
-    <li><%= link_to @service.name, admin_service_path(@service) %> <span class="divider">/</span></li>
+    <li><%= link_to @service.name, admin_service_path(@service) %></li>
     <li class="active">Version <%= @data_set.version %></li>
   <% elsif @service %>
-    <li><%= @service.name %></li>
+    <li class="active"><%= @service.name %></li>
   <% end %>
 </ul>
+
+<div class="page-title">
+  <h1>
+    <%= @service.name %>
+    <% if @service.active_data_set %>
+      (Version <%= @service.active_data_set_version %> active: <%= pluralize(@service.active_data_set.places.count, 'place', 'places') %>)
+    <% end %>
+  </h1>
+</div>

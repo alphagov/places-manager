@@ -1,34 +1,18 @@
-<div class="ui-widget-content new">
-  <div class="inner">
-
-    <h1>Create new service</h1>
-    
-    <%= render '/admin/data_sets/file_help' %>
-
-    <%= semantic_form_for(@service, :url => admin_services_path, :html => {:multipart => true}) do |f| %>
-      <%= f.inputs do %>
-      <%= f.input :name %>
-      <%= f.input :slug %>
-      <%= f.input :data_file, :as => :file, :accept => 'text/csv' %>
-      <%= f.input :source_of_data, as: :text, hint: "Use to store relevant contact names, email addresses, etc." %>
-    <% end %>
-    <%= f.buttons %>
-  <% end %>
-
-  <% content_for :extra_javascript do %>
-  <script type="text/javascript" charset="utf-8">
-    $(function () {
-      $('#service_name').change(function () {
-        if ($('#service_slug').text() == '') {
-          var title = $('#service_name').val();
-          $('#service_slug').val(GovUKGuideUtils.convertToSlug(title));
-        }
-      });
-    });
-  </script>
-  <% end %>
-
-  </div>
+<% content_for :page_title, "Add new service" %>
+<div class="page-header">
+  <h1>Add new service</h1>
 </div>
 
-<% content_for :page_title, "Create new service" %>
+<%= render '/admin/data_sets/file_help' %>
+
+<%= semantic_form_for(@service, :url => admin_services_path, :html => {:multipart => true, class: 'well'}) do |f| %>
+  <%= f.inputs do %>
+    <%= f.input :name, input_html: {class: 'input-md-6'} %>
+    <%= f.input :slug, input_html: {class: 'input-md-6'} %>
+    <%= f.input :data_file, :as => :file, :accept => 'text/csv' %>
+    <%= f.input :source_of_data, as: :text, hint: "Use to store relevant contact names, email addresses, etc.", input_html: {class: 'input-md-6'} %>
+  <% end %>
+  <%= f.actions do %>
+    <%= f.submit "Create service", class: 'btn btn-success' %>
+  <% end %>
+<% end %>

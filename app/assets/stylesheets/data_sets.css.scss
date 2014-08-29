@@ -1,0 +1,11 @@
+.source-of-data {
+  @include add-bottom-margin;
+
+  p {
+    margin-bottom: 0;
+  }
+}
+
+.table-places em {
+  color: #aaa;
+}

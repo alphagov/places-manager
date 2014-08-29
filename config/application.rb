@@ -34,10 +34,6 @@ module Imminence
     # config.i18n.default_locale = :de
     config.i18n.enforce_available_locales = false
 
-    config.assets.precompile += %W(
-      html5.js
-    )
-
     # Enable the asset pipeline
     config.assets.enabled = true
     config.assets.version = '1.0'
@@ -51,7 +47,7 @@ module Imminence
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
-    
+
     config.generators do |g|
       g.orm :mongoid
       g.template_engine :erb # this could be :haml or whatever

@@ -52,7 +52,7 @@ module ServiceHelper
     fill_in 'Slug', with: name.parameterize
     fill_in 'Source of data', with: 'Testing'
     attach_file 'Data file', csv_path
-    click_button 'Create Service'
+    click_button 'Create service'
   end
 
   def fill_in_place_form_with(name)
