@@ -29,7 +29,7 @@ gem 'govspeak', '~> 1.2'
 gem 'inherited_resources'
 gem 'lockfile'
 gem 'whenever'
-gem 'kaminari', "0.14.1"
+gem 'kaminari', '0.14.1'
 gem 'bootstrap-kaminari-views', '0.0.3'
 
 gem 'sidekiq', '2.16.1'
