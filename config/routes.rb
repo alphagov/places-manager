@@ -10,7 +10,7 @@ Imminence::Application.routes.draw do
     root :to => 'services#index'
   end
 
-  get '/areas/:area_type', :to => 'areas#index', :constraints => { :area_type => /EUR|CTY|DIS|LBO/ }
+  get '/areas/:area_type', :to => 'areas#index', :constraints => { :area_type => /EUR|CTY|DIS|LBO|LGD|MTD|UTA/ }
   get '/areas/:postcode', :to => 'areas#search', :constraints => { :postcode => /[\w% ]+/ }
 
   resources :data_sets, :only => :show
