@@ -7,7 +7,7 @@ FactoryGirl.define do
 
   factory :place do
     service_slug { (Service.first || create(:service)).slug }
-    data_set_version { Service.where(:slug => service_slug).first.latest_data_set.version }
+    data_set_version { Service.where(:slug => service_slug).first.active_data_set_version }
     name "CosaNostra Pizza #3569"
     sequence(:address1) {|n| "#{n} Vista Road" }
     town "Los Angeles"
