@@ -1,14 +1,71 @@
-require 'integration_test_helper'
+require_relative '../integration_test_helper'
+require 'csv'
 
 class PlacesAPITest < ActionDispatch::IntegrationTest
 
   context "Requesting the full dataset" do
-    should "return all places as JSON"
+    setup do
+      @service = FactoryGirl.create(:service)
+      @data_set_1 = @service.active_data_set
+      @data_set_2 = @service.data_sets.create()
+      @place1_1 = FactoryGirl.create(:place, :service_slug => @service.slug, :data_set_version => @data_set_1.version,
+                 :location => Point.new(:latitude => 51.613314, :longitude => -0.158278), :name => "Town Hall")
+      @place1_2 = FactoryGirl.create(:place, :service_slug => @service.slug, :data_set_version => @data_set_1.version,
+                 :location => Point.new(:latitude => 51.500728, :longitude => -0.124626), :name => "Palace of Westminster")
+      @place2_1 = FactoryGirl.create(:place, :service_slug => @service.slug, :data_set_version => @data_set_2.version,
+                 :location => Point.new(:latitude => 51.613314, :longitude => -0.158278), :name => "Town Hall 2")
+      @place2_2 = FactoryGirl.create(:place, :service_slug => @service.slug, :data_set_version => @data_set_2.version,
+                 :location => Point.new(:latitude => 51.500728, :longitude => -0.124626), :name => "Palace of Westminster 2")
+      @data_set_2.activate
+    end
 
-    should "return all places as CSV"
+    should "return all places for the current dataset as JSON" do
+      get "/places/#{@service.slug}.json"
 
-    should "return all places as KML"
+      assert_equal "application/json; charset=utf-8", last_response.content_type
 
+      data = JSON.parse(last_response.body)
+      assert_equal ['Palace of Westminster 2', 'Town Hall 2'], data.map {|p| p["name"] }
+    end
+
+    should "return all places as CSV" do
+      get "/places/#{@service.slug}.csv"
+
+      assert_equal "text/csv", last_response.content_type
+
+      data = CSV.new(last_response.body, :headers => true).read
+      assert_equal ['Palace of Westminster 2', 'Town Hall 2'], data.map {|p| p["name"] }
+    end
+
+    should "return all places as KML" do
+      get "/places/#{@service.slug}.kml"
+
+      assert_equal "application/vnd.google-earth.kml+xml; charset=utf-8", last_response.content_type
+
+      data = Nokogiri::XML.parse(last_response.body)
+      names = data.xpath("//xmlns:Placemark/xmlns:name").map(&:text)
+      assert_equal ['Palace of Westminster 2', 'Town Hall 2'], names
+    end
+
+    context "requesting a specific version" do
+      should "return requested version when logged in" do
+        GDS::SSO.test_user = FactoryGirl.create(:user)
+        visit "/admin" # necessary to setup the login session
+
+        visit "/places/#{@service.slug}.json?version=#{@data_set_1.to_param}"
+
+        data = JSON.parse(page.source)
+        assert_equal ['Palace of Westminster', 'Town Hall'], data.map {|p| p["name"] }
+      end
+
+      should "ignore requested version and return active version when not logged in" do
+        visit "/places/#{@service.slug}.json?version=#{@data_set_1.to_param}"
+
+        data = JSON.parse(page.source)
+        # Titles from @data_set_2
+        assert_equal ['Palace of Westminster 2', 'Town Hall 2'], data.map {|p| p["name"] }
+      end
+    end
   end
 
   context "Filtering places by location" do
