@@ -5,6 +5,10 @@
     <%= f.input :data_file, :as => :file, :accept => 'text/csv' %>
   <% end %>
   <%= f.input :source_of_data, as: :text, hint: "Use to store relevant contact names, email addresses, etc." %>
+  <%= f.input :location_match_type, as: :select, input_html: {class: 'input-md-2'},
+    collection: Service::LOCATION_MATCH_TYPES, member_label: :humanize, include_blank: false,
+    hint: "How places are matched for a given location."
+  %>
 <% end %>
 
 <%= f.actions do %>

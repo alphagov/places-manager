@@ -2,10 +2,13 @@ class Service
   include Mongoid::Document
   include Sidekiq::Delay
 
+  LOCATION_MATCH_TYPES = %w(nearest local_authority)
+
   field :name,                    :type => String
   field :slug,                    :type => String
   field :active_data_set_version, :type => Integer, :default => 1
   field :source_of_data,          :type => String
+  field :location_match_type,     :type => String, :default => LOCATION_MATCH_TYPES.first
 
   embeds_many :data_sets do
     def current
@@ -19,6 +22,7 @@ class Service
 
   # underscore allowed because one of the existing services uses them in its slug.
   validates :slug, :presence => true, :uniqueness => true, :format => {:with => /\A[a-z0-9_-]*\z/ }
+  validates :location_match_type, :inclusion => {:in => LOCATION_MATCH_TYPES}
 
   before_validation :create_first_data_set, :on => :create
   after_save :schedule_csv_processing
