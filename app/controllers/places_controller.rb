@@ -1,3 +1,5 @@
+require 'mapit_api'
+
 ActionController::Renderers.add :csv do |places, options|
   if places.first.is_a?(Place)
     filename = "#{places.first.data_set.service.slug}.csv"
@@ -13,6 +15,10 @@ end
 
 class PlacesController < ApplicationController
   respond_to :json, :kml, :csv
+
+  rescue_from MapitApi::InvalidPostcodeError do
+    head 400
+  end
 
   def show
     # Show a set of places in relation to a service
@@ -35,18 +41,11 @@ class PlacesController < ApplicationController
     end
 
     if params[:postcode].present?
-      result = Imminence.mapit_api.location_for_postcode(params[:postcode])
-      if result
-        location = Point.new(latitude: result.lat, longitude: result.lon)
-      else
-        head 400 and return
-      end
+      @places = data_set.places_for_postcode(params[:postcode], max_distance, params[:limit])
     elsif params[:lat].present? && params[:lng].present?
       # TODO: should we handle parsing errors here?
       location = Point.new(latitude: params[:lat], longitude: params[:lng])
-    end
 
-    if location
       @places = data_set.places_near(location, max_distance, params[:limit])
     else
       @places = data_set.places
