@@ -1,4 +1,5 @@
 require_relative '../integration_test_helper'
+require 'gds_api/test_helpers/mapit'
 require 'csv'
 
 class PlacesAPITest < ActionDispatch::IntegrationTest
@@ -79,10 +80,8 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
       end
 
       should "return places near the given postcode" do
-        GdsApi::Mapit.any_instance.expects(:location_for_postcode).with('N11 3HD').
-          returns(GdsApi::Mapit::Location.new('wgs84_lat' => 51.617, 'wgs84_lon' => -0.149))
-        GdsApi::Mapit.any_instance.expects(:location_for_postcode).with('WC2B 6NH').
-          returns(GdsApi::Mapit::Location.new('wgs84_lat' => 51.517, 'wgs84_lon' => -0.120))
+        stub_mapit_postcode_response_from_fixture("N11 3HD")
+        stub_mapit_postcode_response_from_fixture("WC2B 6NH")
 
         get "/places/#{@service.slug}.json?postcode=N11+3HD"
         data = JSON.parse(last_response.body)
@@ -117,12 +116,53 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
 
 
     context "for an authority-bounded service" do
+      setup do
+        pending "Not implemented yet"
 
-      should "return the place(s) for the authority corresponding to the postcode"
+        @service = FactoryGirl.create(:service, :location_match_type => 'local_authority')
+        @place1 = FactoryGirl.create(:place, :service_slug => @service.slug, :snac => "18UK",
+                   :location => Point.new(:latitude => 51.0519276, :longitude => -4.1907002), :name => "John's Of Appledore")
+        @place2 = FactoryGirl.create(:place, :service_slug => @service.slug, :snac => "00AG",
+                   :location => Point.new(:latitude => 51.500728, :longitude => -0.124626), :name => "Palace of Westminster")
 
-      should "return a not-implemented error when attempting to search by lat/lng"
+      end
 
-      should "return a 400 for an invalid postcode"
+      should "return the place(s) for the authority corresponding to the postcode" do
+        stub_mapit_postcode_response_from_fixture("EX39 1QS")
+        stub_mapit_postcode_response_from_fixture("WC2B 6NH")
+
+        get "/places/#{@service.slug}.json?postcode=EX39+1QS"
+        data = JSON.parse(last_response.body)
+        assert_equal 1, data.length
+        assert_equal @place1.name, data[0]['name']
+
+        get "/places/#{@service.slug}.json?postcode=WC2B+6NH"
+        data = JSON.parse(last_response.body)
+        assert_equal 1, data.length
+        assert_equal @place2.name, data[0]['name']
+      end
+
+      should "return empty array if there are no places in the corresponding authority" do
+        stub_mapit_postcode_response_from_fixture("N11 3HD")
+
+        get "/places/#{@service.slug}.json?postcode=N11+3HD"
+        data = JSON.parse(last_response.body)
+        assert_equal [], data
+      end
+
+      should "return a 400 for an invalid postcode" do
+        GdsApi::Mapit.any_instance.expects(:location_for_postcode).with('N11 3QQ').returns(nil)
+
+        get "/places/#{@service.slug}.json?postcode=N11+3QQ"
+        assert_equal 400, last_response.status
+      end
     end
+  end
+
+  def stub_mapit_postcode_response_from_fixture(postcode)
+    fixture_file = Rails.root.join('test', 'fixtures', 'mapit_responses', "#{postcode.gsub(' ', '_')}.json")
+
+    stub_request(:get, "#{GdsApi::TestHelpers::Mapit::MAPIT_ENDPOINT}/postcode/#{postcode.gsub(' ','+')}.json").
+      to_return(:body => File.open(fixture_file), :status => 200, :headers => {'Content-Type' => 'application/json'})
   end
 end
