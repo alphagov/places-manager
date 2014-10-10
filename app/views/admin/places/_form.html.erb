@@ -13,6 +13,7 @@
     <%= f.input :postcode, input_html: {class: 'input-md-2'} %>
     <%= f.input :override_lng, :label => "Override longitude", :placeholder => "Leave blank to use postcode coords", input_html: {class: 'input-md-4'}%>
     <%= f.input :override_lat, :label => "Override latitude", :placeholder => "Leave blank to use postcode coords", input_html: {class: 'input-md-4'} %>
+    <%= f.input :snac, :label => "SNAC code", input_html: {class: 'input-md-2'} %>
   <% end %>
 
   <%= f.inputs "Contact Details" do %>

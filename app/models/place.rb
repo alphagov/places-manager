@@ -41,6 +41,7 @@ class Place
   field :override_lat,   :type => Float 
   field :override_lng,   :type => Float
   field :geocode_error,  :type => String
+  field :snac,           :type => String
 
   validates_presence_of :service_slug
   validates_presence_of :data_set_version
@@ -179,7 +180,8 @@ class Place
       phone: row['phone'],
       fax: row['fax'],
       text_phone: row['text_phone'],
-      source_address: row['source_address'] || "#{row['address1']} #{row['address2']} #{row['town']} #{row['postcode']}"
+      source_address: row['source_address'] || "#{row['address1']} #{row['address2']} #{row['town']} #{row['postcode']}",
+      snac: row['snac'],
     }
     location_parameters = if row['lng'] && row['lat']
       {override_lng: row['lng'], override_lat: row['lat']}
