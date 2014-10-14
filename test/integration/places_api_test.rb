@@ -116,14 +116,11 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
 
     context "for an authority-bounded service" do
       setup do
-        pending "Not implemented yet"
-
         @service = FactoryGirl.create(:service, :location_match_type => 'local_authority')
         @place1 = FactoryGirl.create(:place, :service_slug => @service.slug, :snac => "18UK",
                    :location => Point.new(:latitude => 51.0519276, :longitude => -4.1907002), :name => "John's Of Appledore")
         @place2 = FactoryGirl.create(:place, :service_slug => @service.slug, :snac => "00AG",
                    :location => Point.new(:latitude => 51.500728, :longitude => -0.124626), :name => "Palace of Westminster")
-
       end
 
       should "return the place(s) for the authority corresponding to the postcode" do

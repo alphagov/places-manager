@@ -1,6 +1,8 @@
 require 'test_helper'
+require 'gds_api/test_helpers/mapit'
 
 class DataSetTest < ActiveSupport::TestCase
+  include GdsApi::TestHelpers::Mapit
 
   context "populating version" do
     setup do
@@ -307,5 +309,88 @@ class DataSetTest < ActiveSupport::TestCase
       assert_equal 1, ds.places_near(@buckingham_palace.location, Distance.miles(1.82), 2).count
       assert_equal 2, ds.places_near(@buckingham_palace.location, Distance.miles(400), 2).count
     end
+  end
+
+  context "places_for_postcode" do
+
+    context "for a 'nearest' service" do
+      setup do
+        @service = FactoryGirl.create(:service)
+        @data_set = @service.latest_data_set
+        @buckingham_palace = Place.create(
+          service_slug: @service.slug,
+          data_set_version: @data_set.version,
+          postcode: 'SW1A 1AA',
+          source_address: 'Buckingham Palace, Westminster',
+          override_lat: '51.501009611553926', override_lng: '-0.141587067110009'
+        )
+        @aviation_house = Place.create(
+          service_slug: @service.slug,
+          data_set_version: @data_set.version,
+          postcode: 'WC2B 6SE',
+          source_address: 'Aviation House',
+          override_lat: '51.516960431', override_lng: '-0.120586400134'
+        )
+        @scottish_parliament = Place.create(
+          service_slug: @service.slug,
+          data_set_version: @data_set.version,
+          postcode: 'EH99 1SP',
+          source_address: 'Scottish Parliament',
+          override_lat: '55.95439', override_lng: '-3.174706'
+        )
+      end
+
+      should "return places near the postcode's location" do
+        mapit_has_a_postcode("WC2B 6NH", [51.51695975170424, -0.12058693935709164])
+
+        expected_location = Point.new(latitude: 51.51695975170424, longitude: -0.12058693935709164)
+        @data_set.expects(:places_near).with(expected_location, nil, nil).returns(:some_places)
+
+        assert_equal :some_places, @data_set.places_for_postcode("WC2B 6NH")
+      end
+
+      should "pass distance and limit params through to places_near" do
+        mapit_has_a_postcode("WC2B 6NH", [51.51695975170424, -0.12058693935709164])
+
+        @data_set.expects(:places_near).with(anything(), 14, 5).returns(:some_places)
+
+        assert_equal :some_places, @data_set.places_for_postcode("WC2B 6NH", 14, 5)
+      end
+    end
+
+    context "for a 'local_authority' service" do
+      setup do
+        @service = FactoryGirl.create(:service, :location_match_type => 'local_authority')
+        @data_set = @service.latest_data_set
+
+        @place1 = FactoryGirl.create(:place, :service_slug => @service.slug, :snac => "18UK", :postcode => "EX39 1QS",
+                   :location => Point.new(:latitude => 51.05318361810428, :longitude => -4.191071523498792), :name => "John's Of Appledore")
+        @place2 = FactoryGirl.create(:place, :service_slug => @service.slug, :snac => "00AG", :postcode => "WC2B 6NH",
+                   :location => Point.new(:latitude => 51.51695975170424, :longitude => -0.12058693935709164), :name => "Aviation House")
+        @place3 = FactoryGirl.create(:place, :service_slug => @service.slug, :snac => "00AG", :postcode => "WC1B 5HA",
+                   :location => Point.new(:latitude => 51.51837458322272, :longitude => -0.12133586354538765), :name => "FreeState Coffee")
+      end
+
+      should "return places in the same district as the postcode" do
+        MapitApi.expects(:district_snac_for_postcode).with("EX39 1LH").returns("18UK")
+
+        place_names = @data_set.places_for_postcode("EX39 1LH").map(&:name)
+        assert_equal ["John's Of Appledore"], place_names
+      end
+
+      should "return multiple places if there are more than one in the district" do
+        MapitApi.expects(:district_snac_for_postcode).with("WC2B 6NH").returns("00AG")
+
+        place_names = @data_set.places_for_postcode("WC2B 6NH").map(&:name)
+        assert_equal ["Aviation House", "FreeState Coffee"], place_names.sort
+      end
+
+      should "return empty array if no SNAC can be found for the postcode" do
+        MapitApi.expects(:district_snac_for_postcode).with("BT1 5GS").returns(nil)
+
+        assert_equal [], @data_set.places_for_postcode("BT1 5GS").to_a
+      end
+    end
+
   end
 end
