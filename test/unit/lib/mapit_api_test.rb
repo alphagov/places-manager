@@ -10,6 +10,53 @@ class MockResponse
 end
 
 class MapitApiTest < ActiveSupport::TestCase
+
+  context "district_snac_for_postcode" do
+    should "return the snac for a district council(DIS)" do
+      stub_mapit_postcode_response_from_fixture("EX39 1QS")
+
+      assert_equal "18UK", MapitApi.district_snac_for_postcode("EX39 1QS")
+    end
+
+    should "return the snac for a london borough(LBO)" do
+      stub_mapit_postcode_response_from_fixture("WC2B 6NH")
+
+      assert_equal "00AG", MapitApi.district_snac_for_postcode("WC2B 6NH")
+    end
+
+    should "return the snac for a metropolitan district(MTD)" do
+      stub_mapit_postcode_response_from_fixture("M2 5DB")
+
+      assert_equal "00BN", MapitApi.district_snac_for_postcode("M2 5DB")
+    end
+
+    should "return the snac for a unitary authority(UTA)" do
+      stub_mapit_postcode_response_from_fixture("EH15 1AF")
+
+      assert_equal "00QP", MapitApi.district_snac_for_postcode("EH15 1AF")
+    end
+
+    should "return the snac for a Isles of Scilly parish(COP)" do
+      stub_mapit_postcode_response_from_fixture("TR21 0LW")
+
+      assert_equal "00HF", MapitApi.district_snac_for_postcode("TR21 0LW")
+    end
+
+    should "return nil if mapit doesn't return a district area type" do
+      stub_mapit_postcode_response_from_fixture("BT1 5GS")
+
+      assert_nil MapitApi.district_snac_for_postcode("BT1 5GS")
+    end
+
+    should "raise InvalidPostcodeError for an invalid postcode" do
+      GdsApi::Mapit.any_instance.expects(:location_for_postcode).returns(nil)
+
+      assert_raise MapitApi::InvalidPostcodeError do
+        MapitApi.district_snac_for_postcode("AB1 2CD")
+      end
+    end
+  end
+
   context "payload" do
     setup do
       @areas = {

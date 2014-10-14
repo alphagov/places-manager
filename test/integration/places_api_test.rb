@@ -1,5 +1,4 @@
 require_relative '../integration_test_helper'
-require 'gds_api/test_helpers/mapit'
 require 'csv'
 
 class PlacesAPITest < ActionDispatch::IntegrationTest
@@ -157,12 +156,5 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         assert_equal 400, last_response.status
       end
     end
-  end
-
-  def stub_mapit_postcode_response_from_fixture(postcode)
-    fixture_file = Rails.root.join('test', 'fixtures', 'mapit_responses', "#{postcode.gsub(' ', '_')}.json")
-
-    stub_request(:get, "#{GdsApi::TestHelpers::Mapit::MAPIT_ENDPOINT}/postcode/#{postcode.gsub(' ','+')}.json").
-      to_return(:body => File.open(fixture_file), :status => 200, :headers => {'Content-Type' => 'application/json'})
   end
 end
