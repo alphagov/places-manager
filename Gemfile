@@ -8,8 +8,7 @@ gem 'unicorn', '4.3.1'
 gem "mongoid", "3.1.5"
 gem "mongoid_rails_migrations", "1.0.0"
 
-gem 'aws-ses', :require => 'aws/ses'
-gem 'exception_notification', '2.5.2', :require => 'exception_notifier'
+gem 'airbrake', '~> 4.1.0'
 
 gem 'govuk_admin_template', '1.1.2'
 gem 'formtastic', '2.3.0'
