@@ -1,16 +1,6 @@
-# This file will be overwritten on deployment
 require "sidekiq"
 
-if Rails.env
-  namespace = "imminence-#{Rails.env}"
-else
-  namespace = "imminence"
-end
-
-redis_config = {
-  :url => "redis://localhost:6379/0",
-  :namespace => namespace
-}
+redis_config = YAML.load_file(Rails.root.join("config", "redis.yml"))[Rails.env].symbolize_keys
 
 Sidekiq.configure_server do |config|
   config.redis = redis_config
