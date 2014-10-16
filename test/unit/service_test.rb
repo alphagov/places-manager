@@ -59,6 +59,26 @@ class ServiceTest < ActiveSupport::TestCase
         end
       end
     end
+
+    should "require location_match_type to be one of the allowed values" do
+      Service::LOCATION_MATCH_TYPES.each do |match_type|
+        @service.location_match_type = match_type
+        assert @service.valid?, "Expected service to be valid with location_match_type: '#{match_type}'"
+      end
+
+      [
+        '',
+        'fooey',
+      ].each do |match_type|
+        @service.location_match_type = match_type
+        refute @service.valid?, "Expected service to be invalid with location_match_type: '#{match_type}'"
+        assert_equal 1, @service.errors[:location_match_type].count
+      end
+    end
+  end
+
+  should "default location_match_type to 'nearest'" do
+    assert_equal 'nearest', Service.new.location_match_type
   end
 
   should "create an initial data_set when creating a service" do

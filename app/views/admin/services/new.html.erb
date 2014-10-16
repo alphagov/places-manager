@@ -6,13 +6,5 @@
 <%= render '/admin/data_sets/file_help' %>
 
 <%= semantic_form_for(@service, :url => admin_services_path, :html => {:multipart => true, class: 'well'}) do |f| %>
-  <%= f.inputs do %>
-    <%= f.input :name, input_html: {class: 'input-md-6'} %>
-    <%= f.input :slug, input_html: {class: 'input-md-6'} %>
-    <%= f.input :data_file, :as => :file, :accept => 'text/csv' %>
-    <%= f.input :source_of_data, as: :text, hint: "Use to store relevant contact names, email addresses, etc.", input_html: {class: 'input-md-6'} %>
-  <% end %>
-  <%= f.actions do %>
-    <%= f.submit "Create service", class: 'btn btn-success' %>
-  <% end %>
+  <%= render :partial => 'form_fields', :locals => {:f => f} %>
 <% end %>

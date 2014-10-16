@@ -57,6 +57,20 @@ class DataSet
     query
   end
 
+  def places_for_postcode(postcode, distance = nil, limit = nil)
+    if service.location_match_type == 'local_authority'
+      if snac = MapitApi.district_snac_for_postcode(postcode)
+        places.where(:snac => snac)
+      else
+        []
+      end
+    else
+      location_data = MapitApi.location_for_postcode(postcode)
+      location = Point.new(latitude: location_data.lat, longitude: location_data.lon)
+      places_near(location, distance, limit)
+    end
+  end
+
   def duplicate
     duplicated_data_set = self.service.data_sets.create(:change_notes => "Created from Version #{self.version}")
     self.places.each do |place|
