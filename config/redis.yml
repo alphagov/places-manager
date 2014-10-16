@@ -1,0 +1,9 @@
+---
+development:
+  host: localhost
+  port: 6379
+  namespace: imminence-development
+test:
+  host: localhost
+  port: 6379
+  namespace: imminence-test
