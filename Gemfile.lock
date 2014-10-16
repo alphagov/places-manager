@@ -137,7 +137,6 @@ GEM
       addressable
       websocket
     link_header (0.0.8)
-    lockfile (2.1.0)
     logstash-event (1.1.5)
     logstasher (0.4.8)
       logstash-event (~> 1.1.0)
@@ -322,7 +321,6 @@ DEPENDENCIES
   inherited_resources
   kaminari (= 0.14.1)
   launchy
-  lockfile
   logstasher (= 0.4.8)
   minitest (= 3.3.0)
   mocha (= 0.13.3)
