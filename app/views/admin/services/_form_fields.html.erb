@@ -1,0 +1,12 @@
+<%= f.inputs do %>
+  <%= f.input :name, input_html: { class: 'input-md-6' } %>
+  <%= f.input :slug, input_html: { class: 'input-md-6' } %>
+  <% if f.object.new_record? %>
+    <%= f.input :data_file, :as => :file, :accept => 'text/csv' %>
+  <% end %>
+  <%= f.input :source_of_data, as: :text, hint: "Use to store relevant contact names, email addresses, etc." %>
+<% end %>
+
+<%= f.actions do %>
+  <%= f.submit class: 'btn btn-success' %>
+<% end %>
