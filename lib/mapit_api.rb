@@ -46,9 +46,6 @@ module MapitApi
     private
 
     def normalise_regions(regions)
-      eastern_index = regions.index { |r| r["name"] == "Eastern" }
-      regions[eastern_index]["name"] = "East of England" if eastern_index
-
       regions.unshift({ "name" => "England", "country_name" => "England", "type" => "EUR" })
     end
   end

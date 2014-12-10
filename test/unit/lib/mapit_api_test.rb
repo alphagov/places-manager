@@ -86,14 +86,6 @@ class MapitApiTest < ActiveSupport::TestCase
         assert_equal "Westminster City Council", response.payload[:areas].second["name"]
         assert_equal "London", response.payload[:areas].last["name"]
       end
-      should "normalise region names" do
-        @areas[444] = { "name" => "Eastern" }
-        api_response = MockResponse.new(200, @areas)
-        response = MapitApi::RegionsResponse.new(api_response)
-
-        assert_equal 200, response.payload[:code]
-        assert_equal "East of England", response.payload[:areas].last["name"]
-      end
     end
     context "payload for an AreasByPostcodeResponse" do
       should "return code and areas attributes in a hash" do
