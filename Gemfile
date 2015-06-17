@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 gem 'plek', '1.3.1'
 
-gem 'rails', '3.2.17'
+gem 'rails', '3.2.22'
 gem 'unicorn', '4.3.1'
 
 gem "mongoid", "3.1.5"
@@ -10,7 +10,7 @@ gem "mongoid_rails_migrations", "1.0.0"
 
 gem 'airbrake', '~> 4.1.0'
 
-gem 'govuk_admin_template', '1.4.0'
+gem 'govuk_admin_template', '2.3.1'
 gem 'formtastic', '2.3.0'
 gem 'formtastic-bootstrap', '3.0.0'
 
