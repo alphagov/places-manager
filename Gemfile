@@ -38,7 +38,7 @@ gem 'logstasher', '0.4.8'
 gem 'sass-rails', '3.2.6'
 
 group :assets do
-  gem "therubyracer", "0.11.4"
+  gem "therubyracer", "~> 0.12.0"
   gem 'uglifier'
 end
 
