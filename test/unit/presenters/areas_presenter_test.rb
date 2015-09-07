@@ -12,12 +12,18 @@ class AreasPresenterTest < ActiveSupport::TestCase
             "name" => "Westminster City Council",
             "country_name" => "England",
             "type" => "LBO",
+            "codes" => {
+              "gss" => "E09000033",
+            },
           },
           {
             "id" => 234,
             "name" => "London",
             "country_name" => "England",
             "type" => "EUR",
+            "codes" => {
+              "gss" => "E15000007",
+            },
           },
         ],
       })
@@ -38,6 +44,7 @@ class AreasPresenterTest < ActiveSupport::TestCase
         assert_equal "Westminster City Council", @result["name"]
         assert_equal "England", @result["country_name"]
         assert_equal "LBO", @result["type"]
+        assert_equal "E09000033", @result["codes"]["gss"]
 
         refute @result.has_key?("parent_area")
       end
@@ -53,6 +60,7 @@ class AreasPresenterTest < ActiveSupport::TestCase
         assert_equal "London", @result["name"]
         assert_equal "England", @result["country_name"]
         assert_equal "EUR", @result["type"]
+        assert_equal "E15000007", @result["codes"]["gss"]
       end
     end
   end
@@ -67,12 +75,18 @@ class AreasPresenterTest < ActiveSupport::TestCase
             "name" => "Westminster City Council",
             "country_name" => "England",
             "type" => "LBO",
+            "codes" => {
+              "gss" => "E09000033",
+            },
           },
           {
             "id" => 234,
             "name" => "London",
             "country_name" => "England",
             "type" => "EUR",
+            "codes" => {
+              "gss" => "E15000007",
+            },
           },
         ],
       })
@@ -93,6 +107,7 @@ class AreasPresenterTest < ActiveSupport::TestCase
         assert_equal "Westminster City Council", @result["name"]
         assert_equal "England", @result["country_name"]
         assert_equal "LBO", @result["type"]
+        assert_equal "E09000033", @result["codes"]["gss"]
       end
     end
 
@@ -106,6 +121,7 @@ class AreasPresenterTest < ActiveSupport::TestCase
         assert_equal "London", @result["name"]
         assert_equal "England", @result["country_name"]
         assert_equal "EUR", @result["type"]
+        assert_equal "E15000007", @result["codes"]["gss"]
       end
     end
   end

@@ -35,7 +35,10 @@ class AreasPresenter
       "slug" => area["name"].parameterize,
       "name" => area["name"],
       "country_name" => area["country_name"],
-      "type" => area["type"]
+      "type" => area["type"],
+      "codes" => {
+        "gss"  => area.fetch("codes", {})["gss"],
+      },
     }
   end
 
