@@ -62,5 +62,5 @@ group :test do
   gem 'mocha', '0.13.3', require: false
   gem 'poltergeist', '0.7.0'
   gem 'timecop', '0.5.9.2'
-  gem 'webmock', '1.11.0', :require => false
+  gem 'webmock', '~> 1.11', require: false
 end
