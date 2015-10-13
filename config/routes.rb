@@ -13,7 +13,6 @@ Imminence::Application.routes.draw do
   get '/areas/:area_type', :to => 'areas#index', :constraints => { :area_type => /EUR|CTY|DIS|LBO|LGD|MTD|UTA/ }
   get '/areas/:postcode', :to => 'areas#search', :constraints => { :postcode => /[\w% ]+/ }
 
-  resources :data_sets, :only => :show
   resources :places, :only => :show
   root :to => redirect('/admin')
 
