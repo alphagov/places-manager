@@ -1,4 +1,5 @@
 require 'sidekiq/testing'
+require 'gds_api/test_helpers/mapit'
 
 module ServiceHelper
   def path_for_service(name)
@@ -36,6 +37,8 @@ module ServiceHelper
   end
 
   def create_service(name)
+    mapit_knows_nothing_about_any_postcodes
+
     s = Service.new(
       name: name,
       slug: name.parameterize,
@@ -48,6 +51,8 @@ module ServiceHelper
   end
 
   def fill_in_form_with(name, csv_path)
+    mapit_knows_nothing_about_any_postcodes
+
     fill_in 'Name', with: name
     fill_in 'Slug', with: name.parameterize
     fill_in 'Source of data', with: 'Testing'
@@ -58,6 +63,11 @@ module ServiceHelper
   def fill_in_place_form_with(name)
     fill_in 'Name', with: name
     click_button "Update Place"
+  end
+
+  def mapit_knows_nothing_about_any_postcodes
+    stub_request(:get, %r{#{GdsApi::TestHelpers::Mapit::MAPIT_ENDPOINT}/postcode/[^\.]+\.json})
+      .to_return(:body => { "code" => 404, "error" => "No Postcode matches the given query." }.to_json, :status => 404)
   end
 end
 

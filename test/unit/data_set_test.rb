@@ -103,7 +103,7 @@ class DataSetTest < ActiveSupport::TestCase
 
       job = Sidekiq::Delay::Worker.jobs.last
       instance_ary, method_name, args = YAML.load(job['args'].first)
-      
+
       assert_equal @service, instance_ary.first.send('find', instance_ary.second)
       assert_equal :process_csv_data, method_name
       assert_equal ds.version, args.first
@@ -170,6 +170,8 @@ class DataSetTest < ActiveSupport::TestCase
 
   context "processing csv data" do
     setup do
+      # NOTE: this is the postcode in good_csv.csv
+      mapit_does_not_have_a_postcode('IG6 3HJ')
       @service = FactoryGirl.create(:service)
     end
 
