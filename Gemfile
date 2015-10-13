@@ -25,7 +25,7 @@ end
 
 gem 'govspeak', '~> 1.2'
 
-gem 'inherited_resources'
+gem 'inherited_resources', '~> 1.4.1'
 gem 'whenever'
 gem 'kaminari', '0.14.1'
 gem 'bootstrap-kaminari-views', '0.0.3'
