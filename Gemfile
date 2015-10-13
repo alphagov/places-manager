@@ -48,6 +48,7 @@ end
 
 group :test do
   gem 'cucumber-rails', require: false
+  gem 'cucumber', '~> 1.3.0'
   gem 'capybara', '1.1.2'
   gem 'database_cleaner', '1.0.1'
   gem 'simplecov', '0.6.4'
