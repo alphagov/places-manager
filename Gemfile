@@ -44,8 +44,7 @@ group :development, :test do
 end
 
 group :test do
-  gem 'cucumber-rails', require: false
-  gem 'cucumber', '~> 1.3.0'
+  gem 'cucumber-rails', '~> 1.4.0', require: false
   gem 'capybara', '1.1.2'
   # NOTE: 1.5.0 has a bug with mongoid and truncation: https://github.com/DatabaseCleaner/database_cleaner/issues/299
   gem 'database_cleaner', '~> 1.4.0'
