@@ -23,8 +23,6 @@ else
   gem 'gds-sso', '9.3.0'
 end
 
-gem 'govspeak', '~> 1.2'
-
 gem 'inherited_resources', '~> 1.4.1'
 gem 'whenever'
 gem 'kaminari', '0.14.1'
