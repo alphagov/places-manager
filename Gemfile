@@ -57,7 +57,7 @@ group :test do
   gem 'test-unit', '~> 3.0'
   gem 'launchy'
   gem 'shoulda-context'
-  gem 'mocha', '0.13.3', require: false
+  gem 'mocha', '~> 1.1.0', require: false
   gem 'poltergeist', '0.7.0'
   gem 'webmock', '~> 1.11', require: false
 end
