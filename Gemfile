@@ -50,8 +50,7 @@ group :test do
   gem 'database_cleaner', '1.0.1'
   gem 'simplecov', '0.6.4'
   gem 'simplecov-rcov', '0.2.3'
-  gem 'factory_girl', "3.3.0"
-  gem 'factory_girl_rails'
+  gem 'factory_girl_rails', '~> 4.5.0'
   gem 'ci_reporter', '1.7.1'
   gem 'minitest', '3.3.0'
   gem 'test-unit', '~> 3.0'
