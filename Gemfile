@@ -45,7 +45,7 @@ end
 
 group :test do
   gem 'cucumber-rails', '~> 1.4.0', require: false
-  gem 'capybara', '1.1.2'
+  gem 'capybara', '~> 2.5.0'
   # NOTE: 1.5.0 has a bug with mongoid and truncation: https://github.com/DatabaseCleaner/database_cleaner/issues/299
   gem 'database_cleaner', '~> 1.4.0'
   gem 'simplecov', '~> 0.10.0', require: false
@@ -57,6 +57,6 @@ group :test do
   gem 'launchy'
   gem 'shoulda-context'
   gem 'mocha', '~> 1.1.0', require: false
-  gem 'poltergeist', '0.7.0'
+  gem 'poltergeist', '~> 1.7.0'
   gem 'webmock', '~> 1.11', require: false
 end

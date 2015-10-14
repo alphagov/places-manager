@@ -18,6 +18,7 @@
       <% end %>
     </tr>
   </thead>
+  <tbody>
   <% places.each do |place| %>
     <tr>
       <td><%= truncate(place.name, :length => 30) || "<em>&mdash;</em>".html_safe %></td>
@@ -31,6 +32,7 @@
       <% end %>
     </tr>
   <% end %>
+  </tbody>
 </table>
 
 <%= paginate places, theme: 'twitter-bootstrap-3' %>

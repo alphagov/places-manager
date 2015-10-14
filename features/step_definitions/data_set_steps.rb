@@ -76,8 +76,14 @@ When /^I go to the page for the second data set for the "(.*?)" service$/ do |na
 end
 
 When /^I click "Edit" on a record$/ do
-  within "table.table-places" do
+  within "table.table-places tbody tr:first" do
     click_link "Edit place"
+  end
+end
+
+When /^I (activate|duplicate) the most recent data set$/ do |button_choice|
+  within '#history .row:first .data-set:first' do
+    click_on button_choice.titleize
   end
 end
 
