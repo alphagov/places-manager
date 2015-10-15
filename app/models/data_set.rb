@@ -181,5 +181,3 @@ class DataSet
     string
   end
 end
-
-class InvalidCharacterEncodingError < StandardError; end
