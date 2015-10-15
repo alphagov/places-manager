@@ -8,7 +8,6 @@ class Admin::DataSetsController < InheritedResources::Base
   belongs_to :service
   rescue_from CSV::MalformedCSVError, :with => :bad_csv
   rescue_from InvalidCharacterEncodingError, :with => :bad_encoding
-  rescue_from HtmlValidationError, :with => :bad_html
 
   def create
     prohibit_non_csv_uploads
@@ -40,11 +39,6 @@ class Admin::DataSetsController < InheritedResources::Base
 
   def bad_csv
     flash[:danger] = "Could not process CSV file. Please check the format."
-    redirect_to :back
-  end
-
-  def bad_html
-    flash[:danger] = "CSV file contains invalid HTML content. Please check the format."
     redirect_to :back
   end
 

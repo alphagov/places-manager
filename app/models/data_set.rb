@@ -1,4 +1,3 @@
-require "govspeak/html_validator"
 require 'csv'
 
 class DataSet
@@ -101,9 +100,6 @@ class DataSet
   def data_file=(file)
     self.csv_data = read_as_utf8(file)
 
-    # TODO: restructure this so that it runs as part of the model validations.
-    raise HtmlValidationError unless Govspeak::HtmlValidator.new(self.csv_data).valid?
-
     # This instance variable is necessary becasue you can't schedule a delayed job until
     # the model has been persisted
     @need_csv_processing = true
@@ -186,5 +182,4 @@ class DataSet
   end
 end
 
-class HtmlValidationError < StandardError; end
 class InvalidCharacterEncodingError < StandardError; end

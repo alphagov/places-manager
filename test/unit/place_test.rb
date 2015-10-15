@@ -4,6 +4,10 @@ require 'gds_api/test_helpers/mapit'
 class PlaceTest < ActiveSupport::TestCase
   include GdsApi::TestHelpers::Mapit
 
+  setup do
+    mapit_does_not_have_a_postcode('SE1 7DU')
+  end
+
   test "responds to full_address with a compiled address" do
     p = Place.new(:name => 'Hercules House', :address1 => '1 Hercules Road', :town => 'London', :postcode => 'SE1 7DU')
     assert_equal '1 Hercules Road, London, SE1 7DU, UK', p.full_address

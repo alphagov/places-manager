@@ -5,8 +5,8 @@ gem 'plek', '1.3.1'
 gem 'rails', '3.2.22'
 gem 'unicorn', '4.3.1'
 
-gem "mongoid", "3.1.5"
-gem "mongoid_rails_migrations", "1.0.0"
+gem "mongoid", "~> 3.1.5"
+gem "mongoid_rails_migrations", "~> 1.0.0"
 
 gem 'airbrake', '~> 4.1.0'
 
@@ -23,9 +23,7 @@ else
   gem 'gds-sso', '9.3.0'
 end
 
-gem 'govspeak', '~> 1.2'
-
-gem 'inherited_resources'
+gem 'inherited_resources', '~> 1.4.1'
 gem 'whenever'
 gem 'kaminari', '0.14.1'
 gem 'bootstrap-kaminari-views', '0.0.3'
@@ -48,6 +46,7 @@ end
 
 group :test do
   gem 'cucumber-rails', require: false
+  gem 'cucumber', '~> 1.3.0'
   gem 'capybara', '1.1.2'
   gem 'database_cleaner', '1.0.1'
   gem 'simplecov', '0.6.4'
@@ -56,10 +55,11 @@ group :test do
   gem 'factory_girl_rails'
   gem 'ci_reporter', '1.7.1'
   gem 'minitest', '3.3.0'
+  gem 'test-unit', '~> 3.0'
   gem 'launchy'
   gem 'shoulda', '3.3.1'
   gem 'mocha', '0.13.3', require: false
   gem 'poltergeist', '0.7.0'
   gem 'timecop', '0.5.9.2'
-  gem 'webmock', '1.11.0', :require => false
+  gem 'webmock', '~> 1.11', require: false
 end

@@ -1,6 +1,8 @@
 require 'test_helper'
+require 'gds_api/test_helpers/mapit'
 
 class PlacesControllerTest < ActionController::TestCase
+  include GdsApi::TestHelpers::Mapit
 
   setup do
     @service = Service.create!(
@@ -29,6 +31,8 @@ class PlacesControllerTest < ActionController::TestCase
       source_address: 'Scottish Parliament',
       override_lat: '55.95439', override_lng: '-3.174706'
     )
+
+    mapit_does_not_have_a_postcode('AB11 2CD')
     @utopia = Place.create!(
       service_slug: 'important-government-service',
       data_set_version: @service.data_sets.last.version,
