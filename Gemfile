@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'plek', '1.3.1'
+gem 'plek', '~> 1.11.0'
 
 gem 'rails', '3.2.22'
 gem 'unicorn', '4.3.1'
@@ -14,13 +14,13 @@ gem 'govuk_admin_template', '3.0.0'
 gem 'formtastic', '2.3.0'
 gem 'formtastic-bootstrap', '3.0.0'
 
-gem 'gds-api-adapters', '20.1.1'
+gem 'gds-api-adapters', '~> 24.5.0'
 gem 'statsd-ruby', '1.0.0', :require => 'statsd'
 
 if ENV['BUNDLE_DEV']
   gem 'gds-sso', :path => '../gds-sso'
 else
-  gem 'gds-sso', '9.3.0'
+  gem 'gds-sso', '~> 11.0.0'
 end
 
 gem 'inherited_resources', '~> 1.4.1'
