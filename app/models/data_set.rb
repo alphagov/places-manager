@@ -100,16 +100,12 @@ class DataSet
   def data_file=(file)
     self.csv_data = read_as_utf8(file)
 
-    # This instance variable is necessary becasue you can't schedule a delayed job until
-    # the model has been persisted
     @need_csv_processing = true
   end
 
   def schedule_csv_processing
     if @need_csv_processing
-      # This has to be scheduled on the service because the delayed_job mongoid driver
-      # doesn't support running jobs on embedded documents.
-      service.delay.process_csv_data(self.version)
+      ProcessCsvDataWorker.perform_async(service.id.to_s, self.version)
       @need_csv_processing = false
     end
   end

@@ -53,7 +53,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
 
   context "POST 'activate'" do
     setup do
-      Sidekiq::Delay::Worker.jobs.clear
+      ArchivePlacesWorker.jobs.clear
       Sidekiq::Testing.fake!
     end
 
@@ -84,11 +84,10 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
       should "create a background job for archiving the place information" do
         as_logged_in_user do
           post :activate, service_id: @service.id, id: @service.latest_data_set.id
-          job = Sidekiq::Delay::Worker.jobs.last
-          instance_ary, method_name, args = YAML.load(job['args'].first)
-          assert_equal @service, instance_ary.first.send('find', instance_ary.second)
-          assert_equal :archive_places, method_name
-          assert_equal 1, Sidekiq::Delay::Worker.jobs.count
+          job = ArchivePlacesWorker.jobs.last
+          service_id_to_process = job['args'].first
+          assert_equal @service, Service.find(service_id_to_process)
+          assert_equal 1, ArchivePlacesWorker.jobs.count
         end
       end
     end

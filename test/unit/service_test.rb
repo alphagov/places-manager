@@ -94,7 +94,7 @@ class ServiceTest < ActiveSupport::TestCase
   context "creating a service with a data_file" do
     should "create a data_set, store the csv_data and queue a job to process it" do
       Sidekiq::Testing.fake!
-      
+
       attrs = FactoryGirl.attributes_for(:service)
       attrs[:data_file] = File.open(fixture_file_path('good_csv.csv'))
       s = Service.create!(attrs)
@@ -102,12 +102,11 @@ class ServiceTest < ActiveSupport::TestCase
       assert_equal 1, s.data_sets.count
       assert_equal File.read(fixture_file_path('good_csv.csv')), s.latest_data_set.csv_data
 
-      job = Sidekiq::Delay::Worker.jobs.last
-      instance_ary, method_name, args = YAML.load(job['args'].first)
+      job = ProcessCsvDataWorker.jobs.last
+      service_id_to_process, version_to_process = *job['args']
 
-      assert_equal s, instance_ary.first.send('find', instance_ary.second) 
-      assert_equal :process_csv_data, method_name
-      assert_equal s.latest_data_set.version, args.first
+      assert_equal s, Service.find(service_id_to_process)
+      assert_equal s.latest_data_set.version, version_to_process
     end
   end
 
@@ -133,7 +132,7 @@ class ServiceTest < ActiveSupport::TestCase
 
   context "archiving of places" do
     setup do
-      Sidekiq::Delay::Worker.jobs.clear
+      ArchivePlacesWorker.jobs.clear
       Sidekiq::Testing.fake!
       @service = FactoryGirl.create(:service, active_data_set_version: 3)
       @service.data_sets.create!
@@ -154,11 +153,10 @@ class ServiceTest < ActiveSupport::TestCase
 
     should "schedule the archiving of obsolete data_sets with places" do
       @service.schedule_archive_places
-      job = Sidekiq::Delay::Worker.jobs.last 
-      instance_ary, method_name, args = YAML.load(job['args'].first)
-      assert_equal @service, instance_ary.first.send('find', instance_ary.second) 
-      assert_equal :archive_places, method_name
-      assert_equal 1, Sidekiq::Delay::Worker.jobs.count
+      job = ArchivePlacesWorker.jobs.last
+      service_id_to_process = job['args'].first
+      assert_equal @service, Service.find(service_id_to_process)
+      assert_equal 1, ArchivePlacesWorker.jobs.count
       assert @service.data_sets.first.archiving?
     end
 

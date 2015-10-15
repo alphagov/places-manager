@@ -1,6 +1,5 @@
 class Service
   include Mongoid::Document
-  include Sidekiq::Delay
 
   LOCATION_MATCH_TYPES = %w(nearest local_authority)
 
@@ -39,7 +38,7 @@ class Service
 
   def schedule_csv_processing
     if @need_csv_processing
-      self.delay.process_csv_data(latest_data_set.version)
+      ProcessCsvDataWorker.perform_async(self.id.to_s, latest_data_set.version)
       @need_csv_processing = false
     end
   end
@@ -64,7 +63,7 @@ class Service
 
   def schedule_archive_places
     obsolete_data_sets.each {|ds| ds.archive! if ds.places.any? }
-    self.delay.archive_places
+    ArchivePlacesWorker.perform_async(self.id.to_s)
   end
 
   def archive_places

@@ -101,12 +101,11 @@ class DataSetTest < ActiveSupport::TestCase
 
       assert_equal File.read(fixture_file_path('good_csv.csv')), ds.csv_data
 
-      job = Sidekiq::Delay::Worker.jobs.last
-      instance_ary, method_name, args = YAML.load(job['args'].first)
+      job = ProcessCsvDataWorker.jobs.last
+      service_id_to_process, version_to_process = *job['args']
 
-      assert_equal @service, instance_ary.first.send('find', instance_ary.second)
-      assert_equal :process_csv_data, method_name
-      assert_equal ds.version, args.first
+      assert_equal @service, Service.find(service_id_to_process)
+      assert_equal ds.version, version_to_process
     end
 
     context "validating file size" do
