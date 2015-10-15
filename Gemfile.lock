@@ -37,7 +37,7 @@ GEM
     autoprefixer-rails (6.0.3)
       execjs
       json
-    bootstrap-kaminari-views (0.0.3)
+    bootstrap-kaminari-views (0.0.5)
       kaminari (>= 0.13)
       rails (>= 3.1)
     bootstrap-sass (3.3.5.1)
@@ -129,7 +129,7 @@ GEM
       thor (>= 0.14, < 2.0)
     json (1.8.3)
     jwt (1.5.1)
-    kaminari (0.14.1)
+    kaminari (0.16.3)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
     kgio (2.10.0)
@@ -308,7 +308,7 @@ PLATFORMS
 
 DEPENDENCIES
   airbrake (~> 4.1.0)
-  bootstrap-kaminari-views (= 0.0.3)
+  bootstrap-kaminari-views (~> 0.0.3)
   capybara (~> 2.5.0)
   ci_reporter (= 1.7.1)
   cucumber-rails (~> 1.4.0)
@@ -320,7 +320,7 @@ DEPENDENCIES
   gds-sso (~> 11.0.0)
   govuk_admin_template (= 3.0.0)
   inherited_resources (~> 1.4.1)
-  kaminari (= 0.14.1)
+  kaminari (~> 0.16.0)
   launchy
   logstasher (= 0.4.8)
   minitest (= 3.3.0)

@@ -24,8 +24,8 @@ else
 end
 
 gem 'inherited_resources', '~> 1.4.1'
-gem 'kaminari', '0.14.1'
-gem 'bootstrap-kaminari-views', '0.0.3'
+gem 'kaminari', '~> 0.16.0'
+gem 'bootstrap-kaminari-views', '~> 0.0.3'
 
 gem 'sidekiq', '2.16.1'
 gem 'sidekiq-delay', '1.0.4'
