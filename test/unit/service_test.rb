@@ -120,12 +120,12 @@ class ServiceTest < ActiveSupport::TestCase
     end
 
     should "return data_sets which are being archived" do
-      @service.data_sets.first.set(:state, 'archiving')
+      @service.data_sets.first.set(state: 'archiving')
       refute_empty @service.data_sets.current
     end
 
     should "not return archived data_sets" do
-      @service.data_sets.first.set(:state, 'archived')
+      @service.data_sets.first.set(state: 'archived')
       assert_empty @service.data_sets.current
     end
   end

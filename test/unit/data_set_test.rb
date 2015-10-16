@@ -1,5 +1,6 @@
 require 'test_helper'
 require 'gds_api/test_helpers/mapit'
+require 'mapit_api'
 
 class DataSetTest < ActiveSupport::TestCase
   include GdsApi::TestHelpers::Mapit
@@ -81,11 +82,12 @@ class DataSetTest < ActiveSupport::TestCase
       assert ds.archived?
     end
 
-    should "handle an exception when archiving a place" do
-      PlaceArchive.stubs(:create!).raises(Exception)
+    should "handles errors when archiving a place" do
+      PlaceArchive.stubs(:create!).raises("A problem occurred")
       ds = @service.data_sets.first
       ds.archive_places
       assert_match /Failed/, ds.archiving_error
+      assert_match /'A problem occurred'/, ds.archiving_error
       assert ds.unarchived?
     end
   end

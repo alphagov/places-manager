@@ -89,7 +89,7 @@ class PlaceTest < ActiveSupport::TestCase
   context "geocoding" do
     setup do
       @service = FactoryGirl.create(:service)
-      @data_set = @service.data_sets.create! version: 2, active: false
+      @data_set = @service.data_sets.create! version: 2
     end
 
     should "gecode a new place on create" do
