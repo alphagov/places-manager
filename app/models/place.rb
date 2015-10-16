@@ -14,12 +14,12 @@ class Place
   # Match documents with either no geocode error or a null value. Changed so
   # that anything without a location (or with a null location) is either
   # matched by `needs_geocoding` or `with_geocoding_errors`.
-  scope :needs_geocoding, where(:location => nil, :geocode_error => nil)
+  scope :needs_geocoding, -> { where(:location => nil, :geocode_error => nil) }
 
   # We use "not null" here instead of "exists", because it works with the index
-  scope :with_geocoding_errors, where(:geocode_error.ne => nil)
-  scope :geocoded, where(:location.with_size => 2)
-  default_scope order_by([:name,:asc])
+  scope :with_geocoding_errors, -> { where(:geocode_error.ne => nil) }
+  scope :geocoded, -> { where(:location.with_size => 2) }
+  default_scope -> { order_by([:name,:asc]) }
 
   field :service_slug,   :type => String
   field :data_set_version, :type => Integer
@@ -38,7 +38,7 @@ class Place
   field :fax,            :type => String
   field :text_phone,     :type => String
   field :location,       :type => Point
-  field :override_lat,   :type => Float 
+  field :override_lat,   :type => Float
   field :override_lng,   :type => Float
   field :geocode_error,  :type => String
   field :snac,           :type => String
