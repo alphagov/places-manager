@@ -32,7 +32,7 @@ class AreasControllerTest < ActionController::TestCase
   end
 
   test "only permitted area types are successfully routed" do
-    assert_raise ActionController::RoutingError do
+    assert_raise ActionController::UrlGenerationError do
       get :index, { :area_type => 'FOO' }
     end
   end
