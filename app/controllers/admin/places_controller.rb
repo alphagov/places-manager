@@ -20,7 +20,7 @@ class Admin::PlacesController < InheritedResources::Base
   end
 
   def create
-    @place = parent.places.build(params[:place])
+    @place = parent.places.build(place_params)
     head(:unprocessable_entity) and return unless @place.can_edit?
     create!
   end
@@ -41,5 +41,27 @@ class Admin::PlacesController < InheritedResources::Base
 
     def resource
       @place ||= Place.where(data_set_version: data_set.version, service_slug: service.slug).find(params['id'])
+    end
+
+    def place_params
+      params.
+        require(:place).
+        permit(
+          :name,
+          :address1,
+          :address2,
+          :town,
+          :postcode,
+          :override_lng,
+          :override_lat,
+          :snac,
+          :url,
+          :email,
+          :phone,
+          :fax,
+          :text_phone,
+          :access_notes,
+          :general_notes
+        )
     end
 end

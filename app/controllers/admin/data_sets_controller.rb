@@ -52,4 +52,13 @@ class Admin::DataSetsController < InheritedResources::Base
       end
     end
   end
+
+  def data_set_params
+    params.
+      require(:data_set).
+      permit(
+        :data_file,
+        :change_notes
+      )
+  end
 end
