@@ -19,6 +19,10 @@ require 'sidekiq/testing'
 # Poltergeist requires access to localhost.
 WebMock.disable_net_connect!(:allow_localhost => true)
 
+require 'minitest/reporters'
+reporter_options = { color: true }
+Minitest::Reporters.use! [Minitest::Reporters::DefaultReporter.new(reporter_options)]
+
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   # fixtures :all

@@ -52,7 +52,8 @@ group :test do
   gem 'simplecov', '~> 0.10.0', require: false
   gem 'simplecov-rcov', '~> 0.2.3', require: false
   gem 'factory_girl_rails', '~> 4.5.0'
-  gem 'ci_reporter', '1.7.1'
+  gem 'ci_reporter_minitest'
+  gem 'minitest-reporters'
   gem 'launchy'
   gem 'shoulda-context'
   gem 'mocha', '~> 1.1.0', require: false

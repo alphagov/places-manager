@@ -41,6 +41,7 @@ GEM
     airbrake (4.1.0)
       builder
       multi_json
+    ansi (1.5.0)
     arel (6.0.3)
     autoprefixer-rails (6.0.3)
       execjs
@@ -61,8 +62,11 @@ GEM
       xpath (~> 2.0)
     celluloid (0.15.2)
       timers (~> 1.1.0)
-    ci_reporter (1.7.1)
+    ci_reporter (2.0.0)
       builder (>= 2.1.2)
+    ci_reporter_minitest (1.0.0)
+      ci_reporter (~> 2.0)
+      minitest (~> 5.0)
     cliver (0.3.2)
     coderay (1.1.0)
     connection_pool (2.2.0)
@@ -162,6 +166,11 @@ GEM
     mime-types (2.6.2)
     mini_portile (0.6.2)
     minitest (5.8.1)
+    minitest-reporters (1.1.4)
+      ansi
+      builder
+      minitest (>= 5.0)
+      ruby-progressbar
     mocha (1.1.0)
       metaclass (~> 0.0.1)
     mongoid (4.0.2)
@@ -258,6 +267,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
+    ruby-progressbar (1.7.5)
     safe_yaml (1.0.4)
     sass (3.4.19)
     sass-rails (5.0.4)
@@ -337,7 +347,7 @@ DEPENDENCIES
   airbrake (~> 4.1.0)
   bootstrap-kaminari-views (~> 0.0.3)
   capybara (~> 2.5.0)
-  ci_reporter (= 1.7.1)
+  ci_reporter_minitest
   cucumber-rails (~> 1.4.0)
   database_cleaner (~> 1.4.0)
   factory_girl_rails (~> 4.5.0)
@@ -350,6 +360,7 @@ DEPENDENCIES
   kaminari (~> 0.16.0)
   launchy
   logstasher (= 0.4.8)
+  minitest-reporters
   mocha (~> 1.1.0)
   mongoid (~> 4.0)
   mongoid_rails_migrations (~> 1.1.0)
