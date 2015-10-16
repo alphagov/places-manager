@@ -30,7 +30,7 @@ gem 'bootstrap-kaminari-views', '~> 0.0.3'
 
 gem 'sidekiq', '~> 2.16'
 
-gem 'state_machine', '1.2.0'
+gem 'state_machines-mongoid', '~> 0.1.1'
 gem 'logstasher', '0.4.8'
 
 gem 'sass-rails', '~> 5.0'
