@@ -7,5 +7,5 @@ if Rails.env.development? || Rails.env.test?
   require 'ci/reporter/rake/test_unit'
 end
 
-Imminence::Application.load_tasks
+Rails.application.load_tasks
 task :default => [:test, :check_for_bad_time_handling]
