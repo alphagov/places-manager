@@ -4,6 +4,7 @@
 require File.expand_path('../config/application', __FILE__)
 if Rails.env.development? || Rails.env.test?
   require 'ci/reporter/rake/minitest'
+  require 'ci/reporter/rake/test_unit'
 end
 
 Imminence::Application.load_tasks
