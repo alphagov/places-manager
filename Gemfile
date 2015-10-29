@@ -34,7 +34,6 @@ gem 'state_machines-mongoid', '~> 0.1.1'
 gem 'logstasher', '0.4.8'
 
 gem 'sass-rails', '~> 5.0'
-gem "therubyracer", platforms: :ruby
 gem 'uglifier', '>= 1.3.0'
 
 # bundle exec rake doc:rails generates the API under doc/api.
