@@ -18,19 +18,19 @@ class DataSet
 
   # Mongoid has a 16M limit on document size.  Set this to
   # 15M to leave some headroom for storing the rest of the document.
-  validates :csv_data, :length => {:maximum => 15.megabytes, :message => "CSV file is too big (max is 15MB)"}
+  validates :csv_data, length: { maximum: 15.megabytes, message: "CSV file is too big (max is 15MB)" }
 
   default_scope -> { order_by([:version, :asc]) }
-  before_validation :set_version, :on => :create
+  before_validation :set_version, on: :create
   after_save :schedule_csv_processing
 
-  state_machine :initial => :unarchived do
+  state_machine initial: :unarchived do
     event :archive do
-      transition :unarchived => :archiving
+      transition unarchived: :archiving
     end
 
     event :archived do
-      transition :archiving => :archived
+      transition archiving: :archived
     end
   end
 
@@ -59,7 +59,7 @@ class DataSet
   def places_for_postcode(postcode, distance = nil, limit = nil)
     if service.location_match_type == 'local_authority'
       if snac = MapitApi.district_snac_for_postcode(postcode)
-        places.where(:snac => snac)
+        places.where(snac: snac)
       else
         []
       end
@@ -71,7 +71,7 @@ class DataSet
   end
 
   def duplicate
-    duplicated_data_set = self.service.data_sets.create(:change_notes => "Created from Version #{self.version}")
+    duplicated_data_set = self.service.data_sets.create(change_notes: "Created from Version #{self.version}")
     self.places.each do |place|
       duplicated_place = place.dup
       duplicated_place.data_set_version = duplicated_data_set.version
@@ -153,7 +153,7 @@ class DataSet
   end
 
   def new_action(user,type,comment)
-    action = Action.new(:requester_id=>user.id,:request_type=>type,:comment=>comment)
+    action = Action.new(requester_id: user.id, request_type: type, comment: comment)
     self.actions << action
     action
   end

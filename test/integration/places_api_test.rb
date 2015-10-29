@@ -8,14 +8,14 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
       @service = FactoryGirl.create(:service)
       @data_set_1 = @service.active_data_set
       @data_set_2 = @service.data_sets.create()
-      @place1_1 = FactoryGirl.create(:place, :service_slug => @service.slug, :data_set_version => @data_set_1.version,
-                 :location => Point.new(:latitude => 51.613314, :longitude => -0.158278), :name => "Town Hall")
-      @place1_2 = FactoryGirl.create(:place, :service_slug => @service.slug, :data_set_version => @data_set_1.version,
-                 :location => Point.new(:latitude => 51.500728, :longitude => -0.124626), :name => "Palace of Westminster")
-      @place2_1 = FactoryGirl.create(:place, :service_slug => @service.slug, :data_set_version => @data_set_2.version,
-                 :location => Point.new(:latitude => 51.613314, :longitude => -0.158278), :name => "Town Hall 2")
-      @place2_2 = FactoryGirl.create(:place, :service_slug => @service.slug, :data_set_version => @data_set_2.version,
-                 :location => Point.new(:latitude => 51.500728, :longitude => -0.124626), :name => "Palace of Westminster 2")
+      @place1_1 = FactoryGirl.create(:place, service_slug: @service.slug, data_set_version: @data_set_1.version,
+                  location: Point.new(latitude: 51.613314, longitude: -0.158278), name: "Town Hall")
+      @place1_2 = FactoryGirl.create(:place, service_slug: @service.slug, data_set_version: @data_set_1.version,
+                  location: Point.new(latitude: 51.500728, longitude: -0.124626), name: "Palace of Westminster")
+      @place2_1 = FactoryGirl.create(:place, service_slug: @service.slug, data_set_version: @data_set_2.version,
+                  location: Point.new(latitude: 51.613314, longitude: -0.158278), name: "Town Hall 2")
+      @place2_2 = FactoryGirl.create(:place, service_slug: @service.slug, data_set_version: @data_set_2.version,
+                  location: Point.new(latitude: 51.500728, longitude: -0.124626), name: "Palace of Westminster 2")
       @data_set_2.activate
     end
 
@@ -33,7 +33,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
 
       assert_equal "text/csv", last_response.content_type
 
-      data = CSV.new(last_response.body, :headers => true).read
+      data = CSV.new(last_response.body, headers: true).read
       assert_equal ['Palace of Westminster 2', 'Town Hall 2'], data.map {|p| p["name"] }
     end
 
@@ -72,10 +72,10 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
     context "for a geo-distance service" do
       setup do
         @service = FactoryGirl.create(:service)
-        @place1 = FactoryGirl.create(:place, :service_slug => @service.slug,
-                   :location => Point.new(:latitude => 51.613314, :longitude => -0.158278), :name => "Town Hall")
-        @place2 = FactoryGirl.create(:place, :service_slug => @service.slug,
-                   :location => Point.new(:latitude => 51.500728, :longitude => -0.124626), :name => "Palace of Westminster")
+        @place1 = FactoryGirl.create(:place, service_slug: @service.slug,
+                  location: Point.new(latitude: 51.613314, longitude: -0.158278), name: "Town Hall")
+        @place2 = FactoryGirl.create(:place, service_slug: @service.slug,
+                  location: Point.new(latitude: 51.500728, longitude: -0.124626), name: "Palace of Westminster")
       end
 
       should "return places near the given postcode" do
@@ -117,10 +117,10 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
     context "for an authority-bounded service" do
       setup do
         @service = FactoryGirl.create(:service, :location_match_type => 'local_authority')
-        @place1 = FactoryGirl.create(:place, :service_slug => @service.slug, :snac => "18UK",
-                   :location => Point.new(:latitude => 51.0519276, :longitude => -4.1907002), :name => "John's Of Appledore")
-        @place2 = FactoryGirl.create(:place, :service_slug => @service.slug, :snac => "00AG",
-                   :location => Point.new(:latitude => 51.500728, :longitude => -0.124626), :name => "Palace of Westminster")
+        @place1 = FactoryGirl.create(:place, service_slug: @service.slug, snac: "18UK",
+                  location: Point.new(latitude: 51.0519276, longitude: -4.1907002), name: "John's Of Appledore")
+        @place2 = FactoryGirl.create(:place, service_slug: @service.slug, snac: "00AG",
+                  location: Point.new(latitude: 51.500728, longitude: -0.124626), name: "Palace of Westminster")
       end
 
       should "return the place(s) for the authority corresponding to the postcode" do

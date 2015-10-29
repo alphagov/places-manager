@@ -21,52 +21,52 @@ class Place
   scope :geocoded, -> { where(:location.with_size => 2) }
   default_scope -> { order_by([:name,:asc]) }
 
-  field :service_slug,   :type => String
-  field :data_set_version, :type => Integer
+  field :service_slug,   type: String
+  field :data_set_version, type: Integer
 
-  field :name,           :type => String
-  field :source_address, :type => String
-  field :address1,       :type => String
-  field :address2,       :type => String
-  field :town,           :type => String
-  field :postcode,       :type => String
-  field :access_notes,   :type => String
-  field :general_notes,  :type => String
-  field :url,            :type => String
-  field :email,          :type => String
-  field :phone,          :type => String
-  field :fax,            :type => String
-  field :text_phone,     :type => String
-  field :location,       :type => Point
-  field :override_lat,   :type => Float
-  field :override_lng,   :type => Float
-  field :geocode_error,  :type => String
-  field :snac,           :type => String
+  field :name,           type: String
+  field :source_address, type: String
+  field :address1,       type: String
+  field :address2,       type: String
+  field :town,           type: String
+  field :postcode,       type: String
+  field :access_notes,   type: String
+  field :general_notes,  type: String
+  field :url,            type: String
+  field :email,          type: String
+  field :phone,          type: String
+  field :fax,            type: String
+  field :text_phone,     type: String
+  field :location,       type: Point
+  field :override_lat,   type: Float
+  field :override_lng,   type: Float
+  field :geocode_error,  type: String
+  field :snac,           type: String
 
   validates_presence_of :service_slug
   validates_presence_of :data_set_version
   validates_presence_of :source_address
   validates_presence_of :postcode
-  validates_numericality_of :override_lat, :allow_blank => true
-  validates_numericality_of :override_lng, :allow_blank => true
+  validates_numericality_of :override_lat, allow_blank: true
+  validates_numericality_of :override_lng, allow_blank: true
   validate :has_both_lat_lng_overrides
-  validates_with CannotEditPlaceDetailsUnlessNewestInactiveDataset, :on => :update
+  validates_with CannotEditPlaceDetailsUnlessNewestInactiveDataset, on: :update
 
-  index({:location => '2d', :service_slug => 1, :data_set_version => 1}, {:background => true})
-  index({:service_slug => 1, :data_set_version => 1})
+  index({location: '2d', service_slug: 1, data_set_version: 1}, {background: true})
+  index({service_slug: 1, data_set_version: 1})
 
   # Index to speed up the `needs_geocoding` and `with_geocoding_errors` scopes
   index({
-    :service_slug => 1,
-    :data_set_version => 1,
-    :geocode_error => 1,
-    :location => 1,
+    service_slug: 1,
+    data_set_version: 1,
+    geocode_error: 1,
+    location: 1,
   })
 
-  index({:name => 1}, {:background => true})
+  index({name: 1}, {background: true})
 
   before_validation :build_source_address
-  before_validation :clear_location, :if => :postcode_changed?, :on => :update
+  before_validation :clear_location, if: :postcode_changed?, on: :update
   before_save :geocode
 
   def data_set

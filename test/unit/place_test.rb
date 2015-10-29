@@ -9,7 +9,7 @@ class PlaceTest < ActiveSupport::TestCase
   end
 
   test "responds to full_address with a compiled address" do
-    p = Place.new(:name => 'Hercules House', :address1 => '1 Hercules Road', :town => 'London', :postcode => 'SE1 7DU')
+    p = Place.new(name: 'Hercules House', address1: '1 Hercules Road', town: 'London', postcode: 'SE1 7DU')
     assert_equal '1 Hercules Road, London, SE1 7DU, UK', p.full_address
   end
 
@@ -129,7 +129,7 @@ class PlaceTest < ActiveSupport::TestCase
         name: "Aviation House",
         source_address: "Blah",
         postcode: "WC2B 6NH",
-        location: Point.new(:latitude => 51.501, :longitude => -0.123),
+        location: Point.new(latitude: 51.501, longitude: -0.123),
         service_slug: @service.slug,
         data_set_version: 2
       )
@@ -166,7 +166,7 @@ class PlaceTest < ActiveSupport::TestCase
 
   context "dis attribute wrapper" do
     setup do
-      @place = FactoryGirl.create(:place, :override_lat => 53.105491, :override_lng => -2.017493)
+      @place = FactoryGirl.create(:place, override_lat: 53.105491, override_lng: -2.017493)
     end
 
     should "return nil when no geo_near_distance available" do

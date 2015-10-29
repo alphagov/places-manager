@@ -3,11 +3,11 @@ class Service
 
   LOCATION_MATCH_TYPES = %w(nearest local_authority)
 
-  field :name,                    :type => String
-  field :slug,                    :type => String
-  field :active_data_set_version, :type => Integer, :default => 1
-  field :source_of_data,          :type => String
-  field :location_match_type,     :type => String, :default => LOCATION_MATCH_TYPES.first
+  field :name,                    type: String
+  field :slug,                    type: String
+  field :active_data_set_version, type: Integer, default: 1
+  field :source_of_data,          type: String
+  field :location_match_type,     type: String, default: LOCATION_MATCH_TYPES.first
 
   embeds_many :data_sets do
     def current
@@ -15,15 +15,15 @@ class Service
     end
   end
 
-  index({:slug => 1}, {:unique => true})
+  index({slug: 1}, {unique: true})
 
   validates_presence_of :name
 
   # underscore allowed because one of the existing services uses them in its slug.
-  validates :slug, :presence => true, :uniqueness => true, :format => {:with => /\A[a-z0-9_-]*\z/ }
-  validates :location_match_type, :inclusion => {:in => LOCATION_MATCH_TYPES}
+  validates :slug, presence: true, uniqueness: true, format: {with: /\A[a-z0-9_-]*\z/ }
+  validates :location_match_type, inclusion: {in: LOCATION_MATCH_TYPES}
 
-  before_validation :create_first_data_set, :on => :create
+  before_validation :create_first_data_set, on: :create
   after_save :schedule_csv_processing
 
   def reconcile_place_locations
@@ -44,7 +44,7 @@ class Service
   end
 
   def process_csv_data(data_set_version)
-    self.data_sets.where(:version => data_set_version).first.process_csv_data
+    self.data_sets.where(version: data_set_version).first.process_csv_data
   end
 
   def active_data_set

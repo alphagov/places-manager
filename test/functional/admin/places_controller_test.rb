@@ -10,7 +10,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
   context "adding a place" do
     context "given the latest inactive data set" do
       setup do
-        @data_set = @service.data_sets.create!(:version => 2)
+        @data_set = @service.data_sets.create!(version: 2)
       end
 
       should "display the new place form" do
@@ -42,7 +42,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
 
     context "given an active data set" do
       setup do
-        @data_set = @service.data_sets.create!(:version => 2)
+        @data_set = @service.data_sets.create!(version: 2)
         @data_set.activate
       end
 
@@ -72,7 +72,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
   context "editing a place" do
     context "given the latest inactive data set" do
       setup do
-        @data_set = @service.data_sets.create!(:version => 2)
+        @data_set = @service.data_sets.create!(version: 2)
         @place = FactoryGirl.create(:place, service_slug: @service.slug, data_set_version: @data_set.version)
       end
 
@@ -130,7 +130,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
 
     context "given an active data set" do
       setup do
-        @data_set = @service.data_sets.create!(:version => 2)
+        @data_set = @service.data_sets.create!(version: 2)
         @place = FactoryGirl.create(:place, service_slug: @service.slug, data_set_version: @data_set.version)
         @data_set.activate
       end
@@ -155,10 +155,10 @@ class Admin::PlacesControllerTest < ActionController::TestCase
 
     context "given an inactive data set which is not the latest version" do
       setup do
-        @data_set = @service.data_sets.create!(:version => 2)
+        @data_set = @service.data_sets.create!(version: 2)
         @place = FactoryGirl.create(:place, service_slug: @service.slug, data_set_version: @data_set.version)
 
-        @subsequent_data_set = @service.data_sets.create!(:version => 3)
+        @subsequent_data_set = @service.data_sets.create!(version: 3)
         @subsequent_data_set.activate
       end
 

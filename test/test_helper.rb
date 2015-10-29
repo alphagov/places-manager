@@ -17,7 +17,7 @@ require 'gds_api/test_helpers/mapit'
 require 'webmock/minitest'
 require 'sidekiq/testing'
 # Poltergeist requires access to localhost.
-WebMock.disable_net_connect!(:allow_localhost => true)
+WebMock.disable_net_connect!(allow_localhost: true)
 
 require 'minitest/reporters'
 reporter_options = { color: true }
@@ -59,6 +59,6 @@ class ActiveSupport::TestCase
     fixture_file = fixture_file_path("mapit_responses/#{postcode.gsub(' ', '_')}.json")
 
     stub_request(:get, "#{GdsApi::TestHelpers::Mapit::MAPIT_ENDPOINT}/postcode/#{postcode.gsub(' ','+')}.json").
-      to_return(:body => File.open(fixture_file), :status => 200, :headers => {'Content-Type' => 'application/json'})
+      to_return(body: File.open(fixture_file), status: 200, headers: {'Content-Type' => 'application/json'})
   end
 end

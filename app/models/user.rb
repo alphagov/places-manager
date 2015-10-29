@@ -18,7 +18,7 @@ class User
   end
 
   def self.find_by_uid(uid)
-    where(:uid => uid).first
+    where(uid: uid).first
   end
 
   def activate_data_set(data_set)

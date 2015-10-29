@@ -32,7 +32,7 @@ class PointTest < ActiveSupport::TestCase
   context "serialising for mongoid" do
     context "serialising" do
       should "serialise a Point instance to a hash" do
-        p = Point.new(:latitude => 56.2, :longitude => -1.0)
+        p = Point.new(latitude: 56.2, longitude: -1.0)
 
         assert_equal({"latitude" => 56.2, "longitude" => -1.0}, p.mongoize)
         assert_equal({"latitude" => 56.2, "longitude" => -1.0}, Point.mongoize(p))
@@ -41,7 +41,7 @@ class PointTest < ActiveSupport::TestCase
       should "serialise the fields in the required order" do
         # Mongo requires the fields to be in the order longitude, latitude
         # in order for the geospatial indes to work.
-        p = Point.new(:latitude => 56.2, :longitude => -1.0)
+        p = Point.new(latitude: 56.2, longitude: -1.0)
 
         # Note: hashes in ruby 1.9 keep order
         expected = {"longitude" => -1.0, "latitude" => 56.2}
@@ -49,7 +49,7 @@ class PointTest < ActiveSupport::TestCase
       end
 
       should "serialise a hash back to a hash" do
-        assert_equal({"latitude" => 56.2, "longitude" => -1.0}, Point.mongoize(:latitude => 56.2, :longitude => -1.0))
+        assert_equal({"latitude" => 56.2, "longitude" => -1.0}, Point.mongoize(latitude: 56.2, longitude: -1.0))
       end
 
       should "serialise a hash with string keys back to a hash" do
