@@ -1,9 +1,7 @@
 development:
   sessions:
     default:
-      database: imminence_development
-      hosts:
-        - localhost:27017
+      uri: mongodb://localhost/imminence_development
       options:
         write:
           w: 1
@@ -12,9 +10,7 @@ development:
 test:
   sessions:
     default:
-      database: imminence_test
-      hosts:
-        - localhost:27017
+      uri: mongodb://localhost/imminence_test
       options:
         write:
           w: 1
@@ -23,3 +19,13 @@ test:
         # low amounts for fast failures.
         max_retries: 1
         retry_interval: 0
+
+production:
+  sessions:
+    default:
+      uri: <%= ENV['MONGODB_URI'] %>
+      options:
+        write:
+          w: 1
+        read: primary
+        retry_interval: 120
