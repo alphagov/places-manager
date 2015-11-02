@@ -18,7 +18,11 @@ class AreasController < ApplicationController
   end
 
   def search
-    api_response = Imminence.mapit_api.location_for_postcode(params[:postcode])
+    # Strip trailing whitespace, most non-alphanumerics, and use the
+    # uk_postcode gem to potentially transpose O/0 and I/1.
+    sanitized_postcode = UKPostcode.parse(params[:postcode].gsub(/[^\w\s]/i, '').strip).to_s
+
+    api_response = Imminence.mapit_api.location_for_postcode(sanitized_postcode)
     response = MapitApi::AreasByPostcodeResponse.new(api_response)
     @presenter = AreasPresenter.new(response)
 
