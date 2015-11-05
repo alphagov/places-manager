@@ -1,24 +1,31 @@
 development:
   sessions:
     default:
-      database: imminence_development
-      hosts:
-        - localhost:27017
+      uri: mongodb://localhost/imminence_development
       options:
-        # Change the default consistency model to :eventual or :strong.
-        # :eventual will send reads to secondaries, :strong sends everything
-        # to master. (default: :eventual)
-        # consistency: :eventual
+        write:
+          w: 1
+        read: primary
 
 test:
   sessions:
     default:
-      database: imminence_test
-      hosts:
-        - localhost:27017
+      uri: mongodb://localhost/imminence_test
       options:
-        consistency: :strong
+        write:
+          w: 1
+        read: primary
         # In the test environment we lower the retries and retry interval to
         # low amounts for fast failures.
         max_retries: 1
         retry_interval: 0
+
+production:
+  sessions:
+    default:
+      uri: <%= ENV['MONGODB_URI'] %>
+      options:
+        write:
+          w: 1
+        read: primary
+        retry_interval: 120

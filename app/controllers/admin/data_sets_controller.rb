@@ -4,10 +4,10 @@ require "imminence/file_verifier"
 class Admin::DataSetsController < InheritedResources::Base
   include Admin::AdminControllerMixin
 
-  actions :all, :except => [:index, :destroy]
+  actions :all, except: [:index, :destroy]
   belongs_to :service
-  rescue_from CSV::MalformedCSVError, :with => :bad_csv
-  rescue_from InvalidCharacterEncodingError, :with => :bad_encoding
+  rescue_from CSV::MalformedCSVError, with: :bad_csv
+  rescue_from InvalidCharacterEncodingError, with: :bad_encoding
 
   def create
     prohibit_non_csv_uploads
@@ -51,5 +51,14 @@ class Admin::DataSetsController < InheritedResources::Base
         raise CSV::MalformedCSVError
       end
     end
+  end
+
+  def data_set_params
+    params.
+      require(:data_set).
+      permit(
+        :data_file,
+        :change_notes
+      )
   end
 end

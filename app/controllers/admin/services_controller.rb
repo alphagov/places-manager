@@ -9,11 +9,11 @@ class Admin::ServicesController < InheritedResources::Base
     create!
   rescue CSV::MalformedCSVError => e
     flash.now[:danger] = "Could not process CSV file. Please check the format."
-    @service = Service.new(params[:service])
+    @service = Service.new(service_params)
     render action: 'new'
-  rescue BSON::InvalidStringEncoding, InvalidCharacterEncodingError => e
+  rescue InvalidCharacterEncodingError => e
     flash.now[:danger] = "Could not process CSV file because of the file encoding. Please check the format."
-    @service = Service.new(params[:service])
+    @service = Service.new(service_params)
     render action: 'new'
   end
 
@@ -28,5 +28,13 @@ class Admin::ServicesController < InheritedResources::Base
         raise CSV::MalformedCSVError
       end
     end
+  end
+
+  def service_params
+    permitted_params = [:name, :slug, :source_of_data, :location_match_type]
+    permitted_params << :data_file if ['create', 'new'].include? action_name.to_s
+    params.
+      require(:service).
+      permit(*permitted_params)
   end
 end

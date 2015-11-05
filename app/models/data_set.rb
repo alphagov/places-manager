@@ -18,19 +18,19 @@ class DataSet
 
   # Mongoid has a 16M limit on document size.  Set this to
   # 15M to leave some headroom for storing the rest of the document.
-  validates :csv_data, :length => {:maximum => 15.megabytes, :message => "CSV file is too big (max is 15MB)"}
+  validates :csv_data, length: { maximum: 15.megabytes, message: "CSV file is too big (max is 15MB)" }
 
-  default_scope order_by([:version, :asc])
-  before_validation :set_version, :on => :create
+  default_scope -> { order_by([:version, :asc]) }
+  before_validation :set_version, on: :create
   after_save :schedule_csv_processing
 
-  state_machine :initial => :unarchived do
+  state_machine initial: :unarchived do
     event :archive do
-      transition :unarchived => :archiving
+      transition unarchived: :archiving
     end
 
     event :archived do
-      transition :archiving => :archived
+      transition archiving: :archived
     end
   end
 
@@ -59,7 +59,7 @@ class DataSet
   def places_for_postcode(postcode, distance = nil, limit = nil)
     if service.location_match_type == 'local_authority'
       if snac = MapitApi.district_snac_for_postcode(postcode)
-        places.where(:snac => snac)
+        places.where(snac: snac)
       else
         []
       end
@@ -71,7 +71,7 @@ class DataSet
   end
 
   def duplicate
-    duplicated_data_set = self.service.data_sets.create(:change_notes => "Created from Version #{self.version}")
+    duplicated_data_set = self.service.data_sets.create(change_notes: "Created from Version #{self.version}")
     self.places.each do |place|
       duplicated_place = place.dup
       duplicated_place.data_set_version = duplicated_data_set.version
@@ -100,16 +100,12 @@ class DataSet
   def data_file=(file)
     self.csv_data = read_as_utf8(file)
 
-    # This instance variable is necessary becasue you can't schedule a delayed job until
-    # the model has been persisted
     @need_csv_processing = true
   end
 
   def schedule_csv_processing
     if @need_csv_processing
-      # This has to be scheduled on the service because the delayed_job mongoid driver
-      # doesn't support running jobs on embedded documents.
-      service.delay.process_csv_data(self.version)
+      ProcessCsvDataWorker.perform_async(service.id.to_s, self.version)
       @need_csv_processing = false
     end
   end
@@ -151,13 +147,13 @@ class DataSet
       end
       places.delete_all
       self.archived
-    rescue Exception => e
-      self.set(:archiving_error, 'Failed to archive place information')
+    rescue => e
+      self.set(archiving_error: "Failed to archive place information: '#{e.message}'")
     end
   end
 
   def new_action(user,type,comment)
-    action = Action.new(:requester_id=>user.id,:request_type=>type,:comment=>comment)
+    action = Action.new(requester_id: user.id, request_type: type, comment: comment)
     self.actions << action
     action
   end
@@ -181,5 +177,3 @@ class DataSet
     string
   end
 end
-
-class InvalidCharacterEncodingError < StandardError; end

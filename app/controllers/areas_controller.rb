@@ -13,7 +13,7 @@ class AreasController < ApplicationController
     @presenter = AreasPresenter.new(response)
 
     respond_to do |format|
-      format.json { render :json => @presenter.present.to_json }
+      format.json { render json: @presenter.present.to_json }
     end
   end
 
@@ -23,7 +23,7 @@ class AreasController < ApplicationController
     @presenter = AreasPresenter.new(response)
 
     respond_to do |format|
-      format.json { render :json => @presenter.present.to_json }
+      format.json { render json: @presenter.present.to_json }
     end
   end
 

@@ -8,35 +8,26 @@ end
 
 require 'database_cleaner'
 
-ENV["RAILS_ENV"] = "test"
+ENV["RAILS_ENV"] ||= "test"
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 require 'mocha/setup'
 require 'gds_api/test_helpers/json_client_helper'
 require 'gds_api/test_helpers/mapit'
-# NOTE: can probably switch back to webmock/minitest at rails 4.x
-require 'webmock/test_unit'
+require 'webmock/minitest'
 require 'sidekiq/testing'
 # Poltergeist requires access to localhost.
-WebMock.disable_net_connect!(:allow_localhost => true)
+WebMock.disable_net_connect!(allow_localhost: true)
 
-# Now that mongoid no longer has the autocreate_indexes config option,
-# we need to ensure that the indexes exist in the test databse (the
-# geo lookup functions won't work without them)
-silence_stream(STDOUT) do
-  Rails::Mongoid.create_indexes
-end
+require 'minitest/reporters'
+reporter_options = { color: true }
+Minitest::Reporters.use! [Minitest::Reporters::DefaultReporter.new(reporter_options)]
 
 class ActiveSupport::TestCase
-  # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
-  #
-  # Note: You'll currently still have to declare fixtures explicitly in integration tests
-  # -- they do not yet inherit this setting
+  # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   # fixtures :all
 
   # Add more helper methods to be used by all tests here...
-
-  include MiniTest::Assertions
 
   def clean_db
     DatabaseCleaner.clean
@@ -68,6 +59,6 @@ class ActiveSupport::TestCase
     fixture_file = fixture_file_path("mapit_responses/#{postcode.gsub(' ', '_')}.json")
 
     stub_request(:get, "#{GdsApi::TestHelpers::Mapit::MAPIT_ENDPOINT}/postcode/#{postcode.gsub(' ','+')}.json").
-      to_return(:body => File.open(fixture_file), :status => 200, :headers => {'Content-Type' => 'application/json'})
+      to_return(body: File.open(fixture_file), status: 200, headers: {'Content-Type' => 'application/json'})
   end
 end

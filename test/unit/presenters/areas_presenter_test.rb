@@ -4,9 +4,9 @@ require 'areas_presenter'
 class AreasPresenterTest < ActiveSupport::TestCase
   context "presenting a mapit response" do
     setup do
-      bridge = OpenStruct.new(:payload => {
-        :code => 200,
-        :areas => [
+      bridge = OpenStruct.new(payload: {
+        code: 200,
+        areas: [
           {
             "id" => 123,
             "name" => "Westminster City Council",

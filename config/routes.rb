@@ -1,10 +1,10 @@
-Imminence::Application.routes.draw do
+Rails.application.routes.draw do
   namespace :admin do
     resources :services do
-      resources :data_sets do
+      resources :data_sets, except: [:index, :destroy] do
         post :activate, :on => :member
         post :duplicate, :on => :member
-        resources :places
+        resources :places, except: [:index, :show]
       end
     end
     root :to => 'services#index'

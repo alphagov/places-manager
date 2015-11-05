@@ -41,7 +41,7 @@ Feature: Managing data sets
 
     When I go to the page for the "Register Offices" service
       And I visit the history tab
-      And I click "Activate"
+      And I activate the most recent data set
 
     Then I should see that the second data set is active
 
@@ -51,7 +51,7 @@ Feature: Managing data sets
 
     When I go to the page for the "Register Offices" service
       And I visit the history tab
-      And I click "Duplicate"
+      And I duplicate the most recent data set
 
     Then I should be on the page for the latest data set for the "Register Offices" service
       And I should see that there are now three data sets
@@ -90,7 +90,7 @@ Feature: Managing data sets
 
     When I go to the page for the "Register Offices" service
       And I visit the history tab
-      And I click "Activate"
+      And I activate the most recent data set
       And I visit the history tab
 
     Then I should see an indication that the first data set is being archived

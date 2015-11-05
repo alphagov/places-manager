@@ -1,5 +1,6 @@
 require 'test_helper'
 require 'gds_api/test_helpers/mapit'
+require 'mapit_api'
 
 class DataSetTest < ActiveSupport::TestCase
   include GdsApi::TestHelpers::Mapit
@@ -22,7 +23,7 @@ class DataSetTest < ActiveSupport::TestCase
     end
 
     should "cope with non-contiguous existing versions" do
-      @service.data_sets.create(:version => 3)
+      @service.data_sets.create(version: 3)
       @service.data_sets.create
 
       assert_equal [1,3,4], Service.first.data_sets.map(&:version)
@@ -45,7 +46,7 @@ class DataSetTest < ActiveSupport::TestCase
     should "do nothing and return false if the data_set hasn't completed processing" do
       previous_active_set = @service.active_data_set
 
-      ds = @service.data_sets.create!(:csv_data => "something")
+      ds = @service.data_sets.create!(csv_data: "something")
       refute ds.activate
 
       @service.reload
@@ -81,11 +82,12 @@ class DataSetTest < ActiveSupport::TestCase
       assert ds.archived?
     end
 
-    should "handle an exception when archiving a place" do
-      PlaceArchive.stubs(:create!).raises(Exception)
+    should "handles errors when archiving a place" do
+      PlaceArchive.stubs(:create!).raises("A problem occurred")
       ds = @service.data_sets.first
       ds.archive_places
       assert_match /Failed/, ds.archiving_error
+      assert_match /'A problem occurred'/, ds.archiving_error
       assert ds.unarchived?
     end
   end
@@ -97,16 +99,15 @@ class DataSetTest < ActiveSupport::TestCase
     end
 
     should "create a data_set, store the csv_data and queue a job to process it" do
-      ds = @service.data_sets.create!(:data_file => File.open(fixture_file_path('good_csv.csv')))
+      ds = @service.data_sets.create!(data_file: File.open(fixture_file_path('good_csv.csv')))
 
       assert_equal File.read(fixture_file_path('good_csv.csv')), ds.csv_data
 
-      job = Sidekiq::Delay::Worker.jobs.last
-      instance_ary, method_name, args = YAML.load(job['args'].first)
+      job = ProcessCsvDataWorker.jobs.last
+      service_id_to_process, version_to_process = *job['args']
 
-      assert_equal @service, instance_ary.first.send('find', instance_ary.second)
-      assert_equal :process_csv_data, method_name
-      assert_equal ds.version, args.first
+      assert_equal @service, Service.find(service_id_to_process)
+      assert_equal ds.version, version_to_process
     end
 
     context "validating file size" do
@@ -133,28 +134,28 @@ class DataSetTest < ActiveSupport::TestCase
       end
 
       should "handle ASCII files" do
-        @ds.data_file = File.open(fixture_file_path('encodings/ascii.csv'), :encoding => 'ascii-8bit')
+        @ds.data_file = File.open(fixture_file_path('encodings/ascii.csv'), encoding: 'ascii-8bit')
         @ds.save!
         expected = File.read(fixture_file_path('encodings/ascii.csv'))
         assert_equal expected, @ds.csv_data
       end
 
       should "handle UTF-8 files" do
-        @ds.data_file = File.open(fixture_file_path('encodings/utf-8.csv'), :encoding => 'ascii-8bit')
+        @ds.data_file = File.open(fixture_file_path('encodings/utf-8.csv'), encoding: 'ascii-8bit')
         @ds.save!
         expected = File.read(fixture_file_path('encodings/utf-8.csv'))
         assert_equal expected, @ds.csv_data
       end
 
       should "handle ISO-8859-1 files" do
-        @ds.data_file = File.open(fixture_file_path('encodings/iso-8859-1.csv'), :encoding => 'ascii-8bit')
+        @ds.data_file = File.open(fixture_file_path('encodings/iso-8859-1.csv'), encoding: 'ascii-8bit')
         @ds.save!
         expected = File.read(fixture_file_path('encodings/iso-8859-1.csv')).force_encoding('iso-8859-1').encode('utf-8')
         assert_equal expected, @ds.csv_data
       end
 
       should "handle Windows 1252 files" do
-        @ds.data_file = File.open(fixture_file_path('encodings/windows-1252.csv'), :encoding => 'ascii-8bit')
+        @ds.data_file = File.open(fixture_file_path('encodings/windows-1252.csv'), encoding: 'ascii-8bit')
         @ds.save!
         expected = File.read(fixture_file_path('encodings/windows-1252.csv')).force_encoding('windows-1252').encode('utf-8')
         assert_equal expected, @ds.csv_data
@@ -162,7 +163,7 @@ class DataSetTest < ActiveSupport::TestCase
 
       should "raise an error with an unknown file encoding" do
         assert_raise InvalidCharacterEncodingError do
-          @ds.data_file = File.open(fixture_file_path('encodings/utf-16le.csv'), :encoding => 'ascii-8bit')
+          @ds.data_file = File.open(fixture_file_path('encodings/utf-16le.csv'), encoding: 'ascii-8bit')
         end
       end
     end
@@ -176,7 +177,7 @@ class DataSetTest < ActiveSupport::TestCase
     end
 
     should "add all places from the csv_data" do
-      ds = @service.data_sets.create!(:csv_data => File.read(fixture_file_path('good_csv.csv')))
+      ds = @service.data_sets.create!(csv_data: File.read(fixture_file_path('good_csv.csv')))
       ds.process_csv_data
 
       assert_equal 1, ds.places.count
@@ -184,7 +185,7 @@ class DataSetTest < ActiveSupport::TestCase
     end
 
     should "clear the stored csv_data" do
-      ds = @service.data_sets.create!(:csv_data => File.read(fixture_file_path('good_csv.csv')))
+      ds = @service.data_sets.create!(csv_data: File.read(fixture_file_path('good_csv.csv')))
       ds.process_csv_data
 
       ds.reload
@@ -192,7 +193,7 @@ class DataSetTest < ActiveSupport::TestCase
     end
 
     should "store an error message, and clear the csv_data with an invalid csv" do
-      ds = @service.data_sets.create!(:csv_data => File.read(fixture_file_path('bad_csv.csv')))
+      ds = @service.data_sets.create!(csv_data: File.read(fixture_file_path('bad_csv.csv')))
       ds.process_csv_data
 
       ds.reload
@@ -202,17 +203,17 @@ class DataSetTest < ActiveSupport::TestCase
 
     context "processing state predicates" do
       should "be processing_complete with no csv_data and no processing_error" do
-        ds = @service.data_sets.build(:csv_data => nil, :processing_error => nil)
+        ds = @service.data_sets.build(csv_data: nil, processing_error: nil)
         assert ds.processing_complete?
       end
 
       should "not be processing_complete with csv_data" do
-        ds = @service.data_sets.build(:csv_data => "anything", :processing_error => nil)
+        ds = @service.data_sets.build(csv_data: "anything", processing_error: nil)
         refute ds.processing_complete?
       end
 
       should "not be processing_complete with processing_error" do
-        ds = @service.data_sets.build(:csv_data => nil, :processing_error => "something went wrong")
+        ds = @service.data_sets.build(csv_data: nil, processing_error: "something went wrong")
         refute ds.processing_complete?
       end
     end
@@ -302,8 +303,8 @@ class DataSetTest < ActiveSupport::TestCase
       ds = @service.latest_data_set
       ds2 = @service.data_sets.create
       service2 = FactoryGirl.create(:service)
-      FactoryGirl.create(:place, :service_slug => @service.slug, :data_set_version => ds2.version)
-      FactoryGirl.create(:place, :service_slug => service2.slug, :data_set_version => service2.latest_data_set.version)
+      FactoryGirl.create(:place, service_slug: @service.slug, data_set_version: ds2.version)
+      FactoryGirl.create(:place, service_slug: service2.slug, data_set_version: service2.latest_data_set.version)
 
       assert_equal 3, ds.places_near(@buckingham_palace.location).count
       assert_equal 2, ds.places_near(@buckingham_palace.location, Distance.miles(1.83)).count
@@ -362,15 +363,15 @@ class DataSetTest < ActiveSupport::TestCase
 
     context "for a 'local_authority' service" do
       setup do
-        @service = FactoryGirl.create(:service, :location_match_type => 'local_authority')
+        @service = FactoryGirl.create(:service, location_match_type: 'local_authority')
         @data_set = @service.latest_data_set
 
-        @place1 = FactoryGirl.create(:place, :service_slug => @service.slug, :snac => "18UK", :postcode => "EX39 1QS",
-                   :location => Point.new(:latitude => 51.05318361810428, :longitude => -4.191071523498792), :name => "John's Of Appledore")
-        @place2 = FactoryGirl.create(:place, :service_slug => @service.slug, :snac => "00AG", :postcode => "WC2B 6NH",
-                   :location => Point.new(:latitude => 51.51695975170424, :longitude => -0.12058693935709164), :name => "Aviation House")
-        @place3 = FactoryGirl.create(:place, :service_slug => @service.slug, :snac => "00AG", :postcode => "WC1B 5HA",
-                   :location => Point.new(:latitude => 51.51837458322272, :longitude => -0.12133586354538765), :name => "FreeState Coffee")
+        @place1 = FactoryGirl.create(:place, service_slug: @service.slug, snac: "18UK", postcode: "EX39 1QS",
+                   location: Point.new(latitude: 51.05318361810428, longitude: -4.191071523498792), name: "John's Of Appledore")
+        @place2 = FactoryGirl.create(:place, service_slug: @service.slug, snac: "00AG", postcode: "WC2B 6NH",
+                   location: Point.new(latitude: 51.51695975170424, longitude: -0.12058693935709164), name: "Aviation House")
+        @place3 = FactoryGirl.create(:place, service_slug: @service.slug, snac: "00AG", postcode: "WC1B 5HA",
+                   location: Point.new(latitude: 51.51837458322272, longitude: -0.12133586354538765), name: "FreeState Coffee")
       end
 
       should "return places in the same district as the postcode" do

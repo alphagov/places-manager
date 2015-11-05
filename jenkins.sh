@@ -10,6 +10,5 @@ fi
 
 bundle install --path "${HOME}/bundles/${JOB_NAME}" --deployment
 bundle exec rake db:drop
-# We only need one of the minitest or testunit setup tasks, but we'll fix it
-# when we jump to rails 4.x and decide which one it is
-bundle exec rake ci:setup:minitest ci:setup:testunit default
+bundle exec rake ci:setup:minitest default
+bundle exec rake assets:precompile
