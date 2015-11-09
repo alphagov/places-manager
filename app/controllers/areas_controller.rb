@@ -1,4 +1,5 @@
 require 'mapit_api'
+require 'postcode_sanitizer'
 
 class AreasController < ApplicationController
   def index
@@ -18,7 +19,7 @@ class AreasController < ApplicationController
   end
 
   def search
-    api_response = Imminence.mapit_api.location_for_postcode(params[:postcode])
+    api_response = Imminence.mapit_api.location_for_postcode(PostcodeSanitizer.sanitize(params[:postcode]))
     response = MapitApi::AreasByPostcodeResponse.new(api_response)
     @presenter = AreasPresenter.new(response)
 

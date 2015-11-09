@@ -36,4 +36,21 @@ class AreasControllerTest < ActionController::TestCase
       get :index, { area_type: 'FOO' }
     end
   end
+
+  test "typos in postcodes are silently corrected" do
+    # This is what the postcode searched for should be transformed to.
+    Imminence.mapit_api.stubs(:location_for_postcode).with("WC2B 6NH")
+    MapitApi::AreasByPostcodeResponse.any_instance.stubs(:payload).returns(
+      :code => 200,
+      :areas => []
+    )
+
+    get :search, { :postcode => "WC2B-6NH] ", :format => :json }
+
+    assert_equal 200, response.status
+
+    response_hash = assigns(:presenter).present
+
+    assert_equal "ok", response_hash["_response_info"]["status"]
+  end
 end

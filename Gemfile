@@ -28,6 +28,8 @@ gem 'inherited_resources', '~> 1.6.0'
 gem 'kaminari', '~> 0.16.0'
 gem 'bootstrap-kaminari-views', '~> 0.0.3'
 
+gem 'uk_postcode', '2.1.0'
+
 gem 'sidekiq', '~> 2.16'
 gem 'sidekiq-statsd', '0.1.5'
 
