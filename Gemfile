@@ -15,10 +15,10 @@ gem 'formtastic', '~> 3.1.2'
 gem 'formtastic-bootstrap', '~> 3.1.1'
 
 gem 'gds-api-adapters', '~> 24.5.0'
-gem 'statsd-ruby', '1.0.0', :require => 'statsd'
+gem 'statsd-ruby', '1.1.0', require: 'statsd'
 
 if ENV['BUNDLE_DEV']
-  gem 'gds-sso', :path => '../gds-sso'
+  gem 'gds-sso', path: '../gds-sso'
 else
   gem 'gds-sso', '~> 11.0.0'
 end
@@ -29,6 +29,7 @@ gem 'kaminari', '~> 0.16.0'
 gem 'bootstrap-kaminari-views', '~> 0.0.3'
 
 gem 'sidekiq', '~> 2.16'
+gem 'sidekiq-statsd', '0.1.5'
 
 gem 'state_machines-mongoid', '~> 0.1.1'
 gem 'logstasher', '0.4.8'
