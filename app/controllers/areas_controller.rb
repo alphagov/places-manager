@@ -4,11 +4,7 @@ class AreasController < ApplicationController
   def index
     api_response = Imminence.mapit_api.areas_for_type(params[:area_type])
 
-    if regions_request?
-      response = MapitApi::RegionsResponse.new(api_response)
-    else
-      response = MapitApi::AreasByTypeResponse.new(api_response)
-    end
+    response = MapitApi::AreasByTypeResponse.new(api_response)
 
     @presenter = AreasPresenter.new(response)
 
@@ -26,11 +22,4 @@ class AreasController < ApplicationController
       format.json { render json: @presenter.present.to_json }
     end
   end
-
-  private
-
-  def regions_request?
-    params[:area_type] == "EUR"
-  end
-
 end
