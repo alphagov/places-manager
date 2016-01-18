@@ -140,3 +140,12 @@ Feature: Managing data sets
       And I go to the page for the "Register Offices" service
 
     Then I should see an indication that my data set is empty
+
+  Scenario: Exporting a data set to CSV and uploading it again
+    Given I have previously created the "Council tax valuation offices" service
+
+    When I export the latest "Council tax valuation offices" data set to CSV
+      And I upload the exported CSV to the "Council tax valuation offices" service
+
+    Then the "Council tax valuation offices" service should have two data sets
+      And the places should be identical between the datasets in the "Council tax valuation offices" service
