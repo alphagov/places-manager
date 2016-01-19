@@ -1,5 +1,7 @@
 class UpdateIncorrectBusinessSizeSlugs < Mongoid::Migration
   def self.up
+    return unless defined?(BusinessSupportScheme)
+
     BusinessSupportScheme.all.each do |bss|
       if bss[:business_sizes].include? 'between-501-and-100'
         bss.pull(:business_sizes, 'between-501-and-100')

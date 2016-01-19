@@ -1,5 +1,7 @@
 class FixBusinessSupportFacetDuplication < Mongoid::Migration
   def self.up
+    return unless defined? BusinessSupportScheme
+
     BusinessSupportScheme.all.each do |scheme|
       scheme.business_types.uniq!
       scheme.locations.uniq!

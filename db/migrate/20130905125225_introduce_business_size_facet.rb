@@ -1,5 +1,7 @@
 class IntroduceBusinessSizeFacet < Mongoid::Migration
   def self.up
+    return unless defined?(BusinessSupportScheme)
+
     BusinessSupportScheme.all.each do |scheme|
       scheme.add_to_set(
         business_sizes: [
