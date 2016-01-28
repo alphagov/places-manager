@@ -1,14 +1,57 @@
-#!/bin/bash -x
+#!/bin/bash
 
-# This removes rbenv shims from the PATH where there is no
-# .ruby-version file. This is because certain gems call their
-# respective tasks with ruby -S which causes the following error to
-# appear: ruby: no Ruby script found in input (LoadError).
-if [ ! -f .ruby-version ]; then
-  export PATH=$(printf $PATH | awk 'BEGIN { RS=":"; ORS=":" } !/rbenv/' | sed 's/:$//')
+GH_STATUS_REPO_NAME=${INITIATING_REPO_NAME:-"alphagov/imminence"}
+CONTEXT_MESSAGE=${CONTEXT_MESSAGE:-"default"}
+GH_STATUS_GIT_COMMIT=${INITIATING_GIT_COMMIT:-${GIT_COMMIT}}
+
+function github_status {
+  STATUS="$1"
+  MESSAGE="$2"
+  gh-status "$GH_STATUS_REPO_NAME" "$GH_STATUS_GIT_COMMIT" "$STATUS" -d "Build #${BUILD_NUMBER} ${MESSAGE}" -u "$BUILD_URL" -c "$CONTEXT_MESSAGE" >/dev/null
+}
+
+function error_handler {
+  trap - ERR # disable error trap to avoid recursion
+  local parent_lineno="$1"
+  local message="$2"
+  local code="${3:-1}"
+  if [[ -n "$message" ]] ; then
+    echo "Error on or near line ${parent_lineno}: ${message}; exiting with status ${code}"
+  else
+    echo "Error on or near line ${parent_lineno}; exiting with status ${code}"
+  fi
+  github_status error "errored on Jenkins"
+  exit "${code}"
+}
+
+trap 'error_handler ${LINENO}' ERR
+github_status pending "is running on Jenkins"
+
+# Cleanup anything left from previous test runs
+git clean -fdx
+
+# Try to merge master into the current branch, and abort if it doesn't exit
+# cleanly (ie there are conflicts). This will be a noop if the current branch
+# is master.
+git merge --no-commit origin/master || git merge --abort
+
+export RAILS_ENV=test
+bundle install --path "${HOME}/bundles/${JOB_NAME}" --deployment --without development
+
+# Uncomment if this app uses a database
+bundle exec rake db:drop
+bundle exec rake db:mongoid:create_indexes
+
+bundle exec rake ci:setup:minitest ${TEST_TASK:-"default"}
+bundle exec rake assets:precompile
+
+EXIT_STATUS=$?
+echo "EXIT STATUS: $EXIT_STATUS"
+
+if [ "$EXIT_STATUS" == "0" ]; then
+  github_status success "succeeded on Jenkins"
+else
+  github_status failure "failed on Jenkins"
 fi
 
-bundle install --path "${HOME}/bundles/${JOB_NAME}" --deployment
-bundle exec rake db:drop
-bundle exec rake ci:setup:minitest default
-bundle exec rake assets:precompile
+exit $EXIT_STATUS
