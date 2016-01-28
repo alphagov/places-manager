@@ -10,7 +10,6 @@ class MockResponse
 end
 
 class MapitApiTest < ActiveSupport::TestCase
-
   context "district_snac_for_postcode" do
     should "return the snac for a district council(DIS)" do
       stub_mapit_postcode_response_from_fixture("EX39 1QS")
@@ -78,7 +77,7 @@ class MapitApiTest < ActiveSupport::TestCase
     end
     context "payload for an AreasByPostcodeResponse" do
       should "return code and areas attributes in a hash" do
-        location = OpenStruct.new(:response => MockResponse.new(200, { "areas" => @areas }))
+        location = OpenStruct.new(response: MockResponse.new(200, { "areas" => @areas }))
         response = MapitApi::AreasByPostcodeResponse.new(location)
 
         assert_equal 200, response.payload[:code]
@@ -94,7 +93,6 @@ class MapitApiTest < ActiveSupport::TestCase
         assert_equal 404, response.payload[:code]
         assert_equal [], response.payload[:areas]
       end
-
     end
   end
 end

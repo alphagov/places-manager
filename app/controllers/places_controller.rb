@@ -1,6 +1,6 @@
 require 'mapit_api'
 
-ActionController::Renderers.add :csv do |places, options|
+ActionController::Renderers.add :csv do |places, _options|
   if places.first.is_a?(Place)
     filename = "#{places.first.data_set.service.slug}.csv"
 
@@ -54,9 +54,10 @@ class PlacesController < ApplicationController
     respond_with(@places)
   end
 
-  protected
+protected
+
   def select_data_set(service, version = nil)
-    if user_signed_in? and version.present?
+    if user_signed_in? && version.present?
       service.data_sets.find(version)
     else
       service.active_data_set

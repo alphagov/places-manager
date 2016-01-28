@@ -1,7 +1,6 @@
 require_relative '../../integration_test_helper'
 
 class PlaceCreateEditTest < ActionDispatch::IntegrationTest
-
   setup do
     GDS::SSO.test_user = FactoryGirl.create(:user)
     GdsApi::Mapit.any_instance.stubs(:location_for_postcode).returns(nil)
@@ -58,5 +57,4 @@ class PlaceCreateEditTest < ActionDispatch::IntegrationTest
       assert page.has_css?("td", text: "53.1055, -2.0175")
     end
   end
-
 end

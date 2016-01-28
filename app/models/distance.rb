@@ -1,5 +1,4 @@
 class Distance
-
   attr_reader :magnitude, :unit
 
   # Degrees and radians are for the surface of an idealised, spherical Earth.
@@ -21,7 +20,8 @@ class Distance
   def initialize(magnitude, unit)
     raise "Invalid unit #{unit.inspect}" unless UNITS.include? unit
     raise "#{magnitude.inspect} is not a number" unless magnitude.is_a? Numeric
-    @magnitude, @unit = magnitude, unit
+    @magnitude = magnitude
+    @unit = unit
   end
 
   # Define class methods for each distance unit. For example, the code:
@@ -61,9 +61,9 @@ class Distance
   # "in" would cause problems
   alias_method :in_unit, :in
 
-  private
+private
+
   def self.conversion_ratio(from_unit, to_unit)
     EQUIVALENTS[to_unit] / EQUIVALENTS[from_unit]
   end
-
 end

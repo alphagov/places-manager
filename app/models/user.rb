@@ -12,7 +12,7 @@ class User
   field :organisation_content_id, type: String
   field :disabled, type: Boolean, default: false
 
-  def record_action(data_set, type, comment=nil)
+  def record_action(data_set, type, comment = nil)
     action = data_set.new_action(self, type, comment)
     # NoisyWorkflow.make_noise(edition.container,action).deliver
   end

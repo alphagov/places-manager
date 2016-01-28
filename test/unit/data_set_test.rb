@@ -19,14 +19,14 @@ class DataSetTest < ActiveSupport::TestCase
       @service.data_sets.create
       @service.data_sets.create
 
-      assert_equal [1,2,3], Service.first.data_sets.map(&:version)
+      assert_equal [1, 2, 3], Service.first.data_sets.map(&:version)
     end
 
     should "cope with non-contiguous existing versions" do
       @service.data_sets.create(version: 3)
       @service.data_sets.create
 
-      assert_equal [1,3,4], Service.first.data_sets.map(&:version)
+      assert_equal [1, 3, 4], Service.first.data_sets.map(&:version)
     end
   end
 
@@ -125,7 +125,6 @@ class DataSetTest < ActiveSupport::TestCase
         refute @ds.valid?
         assert_equal 1, @ds.errors[:csv_data].size
       end
-
     end
 
     context "handling various file encodings" do
@@ -315,7 +314,6 @@ class DataSetTest < ActiveSupport::TestCase
   end
 
   context "places_for_postcode" do
-
     context "for a 'nearest' service" do
       setup do
         @service = FactoryGirl.create(:service)
@@ -355,7 +353,7 @@ class DataSetTest < ActiveSupport::TestCase
       should "pass distance and limit params through to places_near" do
         mapit_has_a_postcode("WC2B 6NH", [51.51695975170424, -0.12058693935709164])
 
-        @data_set.expects(:places_near).with(anything(), 14, 5).returns(:some_places)
+        @data_set.expects(:places_near).with(anything, 14, 5).returns(:some_places)
 
         assert_equal :some_places, @data_set.places_for_postcode("WC2B 6NH", 14, 5)
       end
@@ -394,6 +392,5 @@ class DataSetTest < ActiveSupport::TestCase
         assert_equal [], @data_set.places_for_postcode("BT1 5GS").to_a
       end
     end
-
   end
 end

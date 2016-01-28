@@ -56,9 +56,7 @@ class Service
   end
 
   def create_first_data_set
-    unless self.data_sets.any?
-      self.data_sets.build
-    end
+    self.data_sets.build unless self.data_sets.any?
   end
 
   def schedule_archive_places

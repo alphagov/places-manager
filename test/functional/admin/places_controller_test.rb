@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class Admin::PlacesControllerTest < ActionController::TestCase
-
   setup do
     @service = FactoryGirl.create(:service)
     GdsApi::Mapit.any_instance.stubs(:location_for_postcode).returns(nil)
@@ -180,5 +179,4 @@ class Admin::PlacesControllerTest < ActionController::TestCase
       end
     end
   end
-
 end

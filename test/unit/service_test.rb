@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class ServiceTest < ActiveSupport::TestCase
-
   context "validations" do
     setup do
       @service = FactoryGirl.build(:service)
@@ -25,17 +24,17 @@ class ServiceTest < ActiveSupport::TestCase
       end
 
       should "be unique" do
-        service2 = FactoryGirl.create(:service, :slug => 'a-service')
+        service2 = FactoryGirl.create(:service, slug: 'a-service')
         @service.slug = 'a-service'
         refute @service.valid?
         assert_equal 1, @service.errors[:slug].count
       end
 
       should "have database level uniqueness constraint" do
-        service2 = FactoryGirl.create(:service, :slug => 'a-service')
+        service2 = FactoryGirl.create(:service, slug: 'a-service')
         @service.slug = 'a-service'
         assert_raises Moped::Errors::OperationFailure do
-          @service.with(:safe => true).save :validate => false
+          @service.with(safe: true).save validate: false
         end
       end
 

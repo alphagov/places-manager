@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class Admin::DataSetsControllerTest < ActionController::TestCase
-
   setup do
     clean_db
     @service = FactoryGirl.create(:service)
@@ -58,7 +57,6 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
     end
 
     should "allow activating a data_set" do
-
       as_logged_in_user do
         set = @service.data_sets.create!
         post :activate, service_id: @service.id, id: set.id

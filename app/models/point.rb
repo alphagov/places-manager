@@ -1,5 +1,4 @@
 class Point
-
   attr_reader :longitude, :latitude
   alias :lat :latitude
   alias :lng :longitude
@@ -13,10 +12,10 @@ class Point
     @longitude, @latitude = [:longitude, :latitude].map { |key|
       Float(coordinates[key])
     }
-    unless (-90..90).include? @latitude  # [-90, 90]
+    unless (-90..90).include? @latitude # [-90, 90]
       raise "Invalid latitude #{@latitude.inspect}"
     end
-    unless (-180...180).include? @longitude  # [-180, 180)
+    unless (-180...180).include? @longitude # [-180, 180)
       raise "Invalid longitude #{@longitude.inspect}"
     end
   end
@@ -67,7 +66,7 @@ class Point
       value
     end
 
-    private
+  private
 
     def legacy_demongoize(value)
       # Legacy [lat, lng] data format

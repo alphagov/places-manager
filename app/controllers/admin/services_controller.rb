@@ -17,7 +17,8 @@ class Admin::ServicesController < InheritedResources::Base
     render action: 'new'
   end
 
-  protected
+protected
+
   def prohibit_non_csv_uploads
     if params[:service][:data_file]
       file = get_file_from_param(params[:service][:data_file])
@@ -32,7 +33,7 @@ class Admin::ServicesController < InheritedResources::Base
 
   def service_params
     permitted_params = [:name, :slug, :source_of_data, :location_match_type]
-    permitted_params << :data_file if ['create', 'new'].include? action_name.to_s
+    permitted_params << :data_file if %w(create new).include? action_name.to_s
     params.
       require(:service).
       permit(*permitted_params)

@@ -13,7 +13,7 @@ class PointTest < ActiveSupport::TestCase
   end
 
   test "points can be compared for equality" do
-    point_a, point_b = [[56, 0.1], [-20, 95]].map { |lat,lng|
+    point_a, point_b = [[56, 0.1], [-20, 95]].map { |lat, lng|
       Point.new(latitude: lat, longitude: lng)
     }
     # Not using assert_equals or refute_equals as we're not testing for a value

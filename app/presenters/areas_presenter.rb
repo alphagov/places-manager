@@ -1,5 +1,4 @@
 class AreasPresenter
-
   def initialize(response_bridge)
     @status = response_bridge.payload[:code]
     @areas = response_bridge.payload[:areas]
@@ -20,7 +19,7 @@ class AreasPresenter
     }
   end
 
-  private
+private
 
   def response_status
     if @status == 200
@@ -41,5 +40,4 @@ class AreasPresenter
       },
     }
   end
-
 end
