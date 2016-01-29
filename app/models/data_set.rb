@@ -58,7 +58,8 @@ class DataSet
 
   def places_for_postcode(postcode, distance = nil, limit = nil)
     if service.location_match_type == 'local_authority'
-      if snac = MapitApi.district_snac_for_postcode(postcode)
+      snac = MapitApi.district_snac_for_postcode(postcode)
+      if snac
         places.where(snac: snac)
       else
         []

@@ -29,10 +29,10 @@ class PlacesController < ApplicationController
     #   max_distance: maximum distance in miles from the lat/long given
     #   limit: maximum number of places to show
     @service = Service.where(slug: params[:id]).first
-    head 404 and return if @service.nil?
+    head 404 && return if @service.nil?
 
     data_set = select_data_set(@service, params[:version])
-    head 404 and return if data_set.nil?
+    head 404 && return if data_set.nil?
 
     if params[:max_distance].present?
       max_distance = Distance.new(Float(params[:max_distance]), :miles)

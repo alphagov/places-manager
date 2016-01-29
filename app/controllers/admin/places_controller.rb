@@ -21,12 +21,12 @@ class Admin::PlacesController < InheritedResources::Base
 
   def create
     @place = parent.places.build(place_params)
-    head(:unprocessable_entity) and return unless @place.can_edit?
+    head(:unprocessable_entity) && return unless @place.can_edit?
     create!
   end
 
   def update
-    head(:unprocessable_entity) and return unless resource.can_edit?
+    head(:unprocessable_entity) && return unless resource.can_edit?
     update!
   end
 

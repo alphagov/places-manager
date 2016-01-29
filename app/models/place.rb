@@ -185,7 +185,7 @@ class Place
                             {override_lng: row['lng'], override_lat: row['lat']}
                           else
                             {}
-    end
+                          end
     base_parameters.merge(location_parameters)
   end
 

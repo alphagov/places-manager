@@ -61,8 +61,6 @@ class Distance
   # "in" would cause problems
   alias_method :in_unit, :in
 
-private
-
   def self.conversion_ratio(from_unit, to_unit)
     EQUIVALENTS[to_unit] / EQUIVALENTS[from_unit]
   end

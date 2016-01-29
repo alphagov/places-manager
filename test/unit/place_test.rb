@@ -49,7 +49,7 @@ class PlaceTest < ActiveSupport::TestCase
 
   test "cannot be edited if the data set is inactive and not the latest version" do
     service = Service.create! slug: "chickens", name: "Chickens!"
-    first_data_set = service.data_sets.create! version: 2
+    service.data_sets.create! version: 2
 
     place = Place.create!(
       name: "Hercules House",
@@ -59,7 +59,7 @@ class PlaceTest < ActiveSupport::TestCase
       data_set_version: 2
     )
 
-    second_data_set = service.data_sets.create! version: 3
+    service.data_sets.create! version: 3
     place.name = "Aviation House"
 
     assert !place.valid?
@@ -68,7 +68,7 @@ class PlaceTest < ActiveSupport::TestCase
 
   test "can be edited if the data set is active but the only changed fields are 'location' or 'geocode_error'" do
     service = Service.create! slug: "chickens", name: "Chickens!"
-    first_data_set = service.data_sets.create! version: 2
+    service.data_sets.create! version: 2
 
     place = Place.create!(
       name: "Hercules House",
@@ -78,7 +78,7 @@ class PlaceTest < ActiveSupport::TestCase
       data_set_version: 2
     )
 
-    second_data_set = service.data_sets.create! version: 3
+    service.data_sets.create! version: 3
     place.location = Point.new(latitude: 51.517356, longitude: -0.120742)
     place.geocode_error = "Error message"
 
@@ -104,7 +104,7 @@ class PlaceTest < ActiveSupport::TestCase
       )
 
       assert_equal 51.51695975170424, place.location.latitude
-      assert_equal -0.12058693935709164, place.location.longitude
+      assert_equal(-0.12058693935709164, place.location.longitude)
     end
 
     should "not overwrite location if created with a lat/lon" do
@@ -119,7 +119,7 @@ class PlaceTest < ActiveSupport::TestCase
       )
 
       assert_equal 51.501, place.location.latitude
-      assert_equal -0.123, place.location.longitude
+      assert_equal(-0.123, place.location.longitude)
 
       assert_nil place.geocode_error
     end
@@ -135,7 +135,7 @@ class PlaceTest < ActiveSupport::TestCase
       )
 
       assert_equal 51.501, place.location.latitude
-      assert_equal -0.123, place.location.longitude
+      assert_equal(-0.123, place.location.longitude)
 
       assert_nil place.geocode_error
     end
@@ -153,14 +153,14 @@ class PlaceTest < ActiveSupport::TestCase
       )
 
       assert_equal 51.498241853641055, place.location.latitude
-      assert_equal -0.11354773400359928, place.location.longitude
+      assert_equal(-0.11354773400359928, place.location.longitude)
 
       place.postcode = "WC2B 6NH"
 
       assert place.save
 
       assert_equal 51.51695975170424, place.location.latitude
-      assert_equal -0.12058693935709164, place.location.longitude
+      assert_equal(-0.12058693935709164, place.location.longitude)
     end
   end
 

@@ -101,7 +101,7 @@ class DataSetCreateEditTest < ActionDispatch::IntegrationTest
 
       place = ds.places.first
       assert_equal 51.96876977095302, place.lat
-      assert_equal -0.4343681877525634, place.lng
+      assert_equal(-0.4343681877525634, place.lng)
       assert_nil place.override_lat
       assert_nil place.override_lng
 

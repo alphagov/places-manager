@@ -4,7 +4,7 @@ class PointTest < ActiveSupport::TestCase
   test "can create a Point" do
     point = Point.new(latitude: 56.2, longitude: -1.0)
     assert_equal 56.2, point.latitude
-    assert_equal -1.0, point.longitude
+    assert_equal(-1.0, point.longitude)
   end
 
   test "require both coordinates for a point" do
@@ -16,9 +16,7 @@ class PointTest < ActiveSupport::TestCase
     point_a, point_b = [[56, 0.1], [-20, 95]].map { |lat, lng|
       Point.new(latitude: lat, longitude: lng)
     }
-    # Not using assert_equals or refute_equals as we're not testing for a value
-    assert point_a == point_a
-    assert point_b == point_b
+    # Not using refute_equals as we're not testing for a value
     refute point_a == point_b
     refute point_b == point_a
   end
@@ -67,7 +65,7 @@ class PointTest < ActiveSupport::TestCase
 
         assert p.is_a?(Point)
         assert_equal 56.2, p.lat
-        assert_equal -1.0, p.lng
+        assert_equal(-1.0, p.lng)
       end
 
       should "deserialise nil as nil" do
@@ -80,7 +78,7 @@ class PointTest < ActiveSupport::TestCase
 
           assert p.is_a?(Point)
           assert_equal 56.2, p.lat
-          assert_equal -12.5, p.lng
+          assert_equal(-12.5, p.lng)
         end
 
         should "deserialise empty array as nil" do

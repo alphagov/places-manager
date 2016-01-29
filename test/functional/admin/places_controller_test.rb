@@ -108,7 +108,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
 
           assert_equal "Updated Place Name", @place.name
           assert_equal 53.105491, @place.location.latitude
-          assert_equal -2.017493, @place.location.longitude
+          assert_equal(-2.017493, @place.location.longitude)
           assert_redirected_to admin_service_data_set_url(@service, @data_set)
         end
       end
@@ -121,7 +121,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
           @place.reload
 
           assert_equal 55.198765, @place.location.latitude
-          assert_equal -1.182934, @place.location.longitude
+          assert_equal(-1.182934, @place.location.longitude)
           assert_redirected_to admin_service_data_set_url(@service, @data_set)
         end
       end

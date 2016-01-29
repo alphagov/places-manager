@@ -86,8 +86,8 @@ class DataSetTest < ActiveSupport::TestCase
       PlaceArchive.stubs(:create!).raises("A problem occurred")
       ds = @service.data_sets.first
       ds.archive_places
-      assert_match /Failed/, ds.archiving_error
-      assert_match /'A problem occurred'/, ds.archiving_error
+      assert_match(/Failed/, ds.archiving_error)
+      assert_match(/'A problem occurred'/, ds.archiving_error)
       assert ds.unarchived?
     end
   end
