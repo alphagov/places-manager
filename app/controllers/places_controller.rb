@@ -51,11 +51,7 @@ class PlacesController < ApplicationController
       @places = data_set.places
     end
 
-    # For some reason, Rails isn't picking up that we want to use the CSV
-    # renderer to render CSV files.
-    respond_with(@places) do |format|
-      format.csv { render csv: @places }
-    end
+    respond_with(@places)
   end
 
   protected

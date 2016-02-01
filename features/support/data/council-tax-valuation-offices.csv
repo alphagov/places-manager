@@ -1,0 +1,2 @@
+service_slug,data_set_version,name,source_address,address1,address2,town,postcode,access_notes,general_notes,url,email,phone,fax,text_phone,geocode_error,snac,lng,lat
+council-tax-valuation-offices,1,Fife Council,Fife House (03) North Street Glenrothes KY7 5LY,Fife House (03),North Street,Glenrothes,KY7 5LY,Access note,General note,www.example.com,fife@example.com,01592 414141,01592 413194,01592 413195,,00QR,-3.17575,56.19755

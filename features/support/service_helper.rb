@@ -65,6 +65,22 @@ module ServiceHelper
     click_button "Update Place"
   end
 
+  def upload_csv_data(csv_data)
+    csv_file = Tempfile.new('exported_data_set.csv')
+    begin
+      csv_file.write(csv_data)
+      csv_file.rewind
+
+      within "#new-data" do
+        attach_file "Data file", csv_file.path
+        click_button "Create Data set"
+      end
+    ensure
+      csv_file.close
+      csv_file.unlink
+    end
+  end
+
   def mapit_knows_nothing_about_any_postcodes
     stub_request(:get, %r{#{GdsApi::TestHelpers::Mapit::MAPIT_ENDPOINT}/postcode/[^\.]+\.json})
       .to_return(:body => { "code" => 404, "error" => "No Postcode matches the given query." }.to_json, :status => 404)

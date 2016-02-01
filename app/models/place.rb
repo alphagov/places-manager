@@ -191,14 +191,14 @@ class Place
     return base_parameters.merge(location_parameters)
   end
 
-  private
+  def override_lat_lng?
+    override_lat.present? and override_lng.present?
+  end
+
+private
 
   def clear_location
     self.location = nil
-  end
-
-  def override_lat_lng?
-    override_lat.present? and override_lng.present?
   end
 
   def has_both_lat_lng_overrides

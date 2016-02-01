@@ -5,7 +5,7 @@ class ChangePermissionsToArray < Mongoid::Migration
 
     field "permissions"
 
-    # Migrations should be independent of the app, so we need this class, but 
+    # Migrations should be independent of the app, so we need this class, but
     # it was defaulting the collection_name to the migration's class name.
     def self.collection_name
       "users"
