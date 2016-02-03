@@ -105,4 +105,16 @@ class PlacesControllerTest < ActionController::TestCase
       end
     end
   end
+
+  test "rescue from MapitApi::ValidPostcodeNoLocation" do
+    service = Service.create!(
+      name: "Number Plate Supplier",
+      slug: "number-plate-supplier"
+    )
+    stub_mapit_postcode_response_from_fixture("JE4 5TP")
+    get :show, id: service.slug, postcode: "JE4 5TP", format: :json
+
+    assert_response 400
+    assert_equal(JSON.parse(response.body)["error"], "validPostcodeNoLocation")
+  end
 end

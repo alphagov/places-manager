@@ -50,9 +50,15 @@ class MapitApiTest < ActiveSupport::TestCase
     should "raise InvalidPostcodeError for an invalid postcode" do
       GdsApi::Mapit.any_instance.expects(:location_for_postcode).returns(nil)
 
-      assert_raise MapitApi::InvalidPostcodeError do
-        MapitApi.district_snac_for_postcode("AB1 2CD")
-      end
+      assert_raises(MapitApi::InvalidPostcodeError) { MapitApi.district_snac_for_postcode("AB1 2CD") }
+    end
+  end
+
+  context "valid_post_code_no_location" do
+    should "raise ValidPostcodeNoLocation for a valid postcode with no location" do
+      stub_mapit_postcode_response_from_fixture("JE4 5TP")
+
+      assert_raises(MapitApi::ValidPostcodeNoLocation) { MapitApi.location_for_postcode("JE4 5TP") }
     end
   end
 
