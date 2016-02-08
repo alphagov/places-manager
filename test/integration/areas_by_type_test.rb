@@ -32,4 +32,3 @@ class AreasByTypeTest < ActionDispatch::IntegrationTest
     assert_equal "EUR", results.last["type"]
   end
 end
-

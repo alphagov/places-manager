@@ -1,7 +1,7 @@
 class PlaceArchive
   include Mongoid::Document
 
-  field :service_slug,   type: String
+  field :service_slug, type: String
   field :data_set_version, type: Integer
 
   field :name,           type: String
@@ -22,5 +22,4 @@ class PlaceArchive
   field :override_lng,   type: Float
   field :geocode_error,  type: String
   field :snac,           type: String
-
 end

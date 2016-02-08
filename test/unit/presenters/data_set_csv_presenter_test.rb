@@ -10,27 +10,27 @@ class DataSetCsvPresenterTest < ActiveSupport::TestCase
   end
 
   def expected_header_row
-    [
-      "service_slug",
-      "data_set_version",
-      "name",
-      "source_address",
-      "address1",
-      "address2",
-      "town",
-      "postcode",
-      "access_notes",
-      "general_notes",
-      "url",
-      "email",
-      "phone",
-      "fax",
-      "text_phone",
-      "geocode_error",
-      "snac",
-      "lng",
-      "lat",
-    ]
+    %w(
+      service_slug
+      data_set_version
+      name
+      source_address
+      address1
+      address2
+      town
+      postcode
+      access_notes
+      general_notes
+      url
+      email
+      phone
+      fax
+      text_phone
+      geocode_error
+      snac
+      lng
+      lat
+    )
   end
 
   context "presenting an empty dataset" do

@@ -7,17 +7,18 @@ class Admin::ServicesController < InheritedResources::Base
   def create
     prohibit_non_csv_uploads
     create!
-  rescue CSV::MalformedCSVError => e
+  rescue CSV::MalformedCSVError
     flash.now[:danger] = "Could not process CSV file. Please check the format."
     @service = Service.new(service_params)
     render action: 'new'
-  rescue InvalidCharacterEncodingError => e
+  rescue InvalidCharacterEncodingError
     flash.now[:danger] = "Could not process CSV file because of the file encoding. Please check the format."
     @service = Service.new(service_params)
     render action: 'new'
   end
 
-  protected
+protected
+
   def prohibit_non_csv_uploads
     if params[:service][:data_file]
       file = get_file_from_param(params[:service][:data_file])
@@ -32,7 +33,7 @@ class Admin::ServicesController < InheritedResources::Base
 
   def service_params
     permitted_params = [:name, :slug, :source_of_data, :location_match_type]
-    permitted_params << :data_file if ['create', 'new'].include? action_name.to_s
+    permitted_params << :data_file if %w(create new).include? action_name.to_s
     params.
       require(:service).
       permit(*permitted_params)

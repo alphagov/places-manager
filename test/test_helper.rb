@@ -35,7 +35,7 @@ class ActiveSupport::TestCase
   set_callback :teardown, :before, :clean_db
 
 
-  def as_logged_in_user(&block)
+  def as_logged_in_user(&_block)
     @controller.stubs(:authenticate_user!).returns(true)
     @controller.stubs(:require_signin_permission!).returns(true)
     @controller.stubs(:user_signed_in?).returns(true)
@@ -56,9 +56,9 @@ class ActiveSupport::TestCase
   end
 
   def stub_mapit_postcode_response_from_fixture(postcode)
-    fixture_file = fixture_file_path("mapit_responses/#{postcode.gsub(' ', '_')}.json")
+    fixture_file = fixture_file_path("mapit_responses/#{postcode.tr(' ', '_')}.json")
 
-    stub_request(:get, "#{GdsApi::TestHelpers::Mapit::MAPIT_ENDPOINT}/postcode/#{postcode.gsub(' ','+')}.json").
+    stub_request(:get, "#{GdsApi::TestHelpers::Mapit::MAPIT_ENDPOINT}/postcode/#{postcode.tr(' ', '+')}.json").
       to_return(body: File.open(fixture_file), status: 200, headers: {'Content-Type' => 'application/json'})
   end
 end

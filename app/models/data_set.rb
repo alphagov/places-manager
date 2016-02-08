@@ -58,7 +58,8 @@ class DataSet
 
   def places_for_postcode(postcode, distance = nil, limit = nil)
     if service.location_match_type == 'local_authority'
-      if snac = MapitApi.district_snac_for_postcode(postcode)
+      snac = MapitApi.district_snac_for_postcode(postcode)
+      if snac
         places.where(snac: snac)
       else
         []
@@ -94,7 +95,7 @@ class DataSet
   end
 
   def processing_complete?
-    self.csv_data.blank? and self.processing_error.blank?
+    self.csv_data.blank? && self.processing_error.blank?
   end
 
   def data_file=(file)
@@ -152,13 +153,13 @@ class DataSet
     end
   end
 
-  def new_action(user,type,comment)
+  def new_action(user, type, comment)
     action = Action.new(requester_id: user.id, request_type: type, comment: comment)
     self.actions << action
     action
   end
 
-  private
+private
 
   def read_as_utf8(file)
     string = file.read.force_encoding('utf-8')
@@ -168,7 +169,7 @@ class DataSet
       # Any stream of bytes should be a vaild Windows-1252 string, so we use the presence of any
       # ASCII control chars (except for \r and \n) as a good heuristic to determine if this is
       # likely to be the correct charset
-      if string.valid_encoding? and ! string.match(/[\x00-\x09\x0b\x0c\x0e-\x1f]/)
+      if string.valid_encoding? && ! string.match(/[\x00-\x09\x0b\x0c\x0e-\x1f]/)
         return string.encode('utf-8')
       end
 

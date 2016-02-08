@@ -2,7 +2,7 @@ require_relative '../integration_test_helper'
 
 class AreasByPostcodeTest < ActionDispatch::IntegrationTest
   setup do
-    mapit_areas_response = OpenStruct.new(:code => 200, to_hash: {
+    mapit_areas_response = OpenStruct.new(code: 200, to_hash: {
       "areas" => {
         44 => { "id" => 44, "name" => "Westminster City Council", "country_name" => "England", "type" => "LBO" },
         223 => { "id" => 223, "name" => "London", "country_name" => "England", "type" => "EUR" }
@@ -30,4 +30,3 @@ class AreasByPostcodeTest < ActionDispatch::IntegrationTest
     assert_equal "EUR", results.second["type"]
   end
 end
-

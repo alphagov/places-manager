@@ -21,47 +21,48 @@ class Admin::PlacesController < InheritedResources::Base
 
   def create
     @place = parent.places.build(place_params)
-    head(:unprocessable_entity) and return unless @place.can_edit?
+    head(:unprocessable_entity) && return unless @place.can_edit?
     create!
   end
 
   def update
-    head(:unprocessable_entity) and return unless resource.can_edit?
+    head(:unprocessable_entity) && return unless resource.can_edit?
     update!
   end
 
-  protected
-    def service
-      @service ||= Service.find(params['service_id'])
-    end
+protected
 
-    def data_set
-      @data_set ||= service.data_sets.find(params['data_set_id'])
-    end
+  def service
+    @service ||= Service.find(params['service_id'])
+  end
 
-    def resource
-      @place ||= Place.where(data_set_version: data_set.version, service_slug: service.slug).find(params['id'])
-    end
+  def data_set
+    @data_set ||= service.data_sets.find(params['data_set_id'])
+  end
 
-    def place_params
-      params.
-        require(:place).
-        permit(
-          :name,
-          :address1,
-          :address2,
-          :town,
-          :postcode,
-          :override_lng,
-          :override_lat,
-          :snac,
-          :url,
-          :email,
-          :phone,
-          :fax,
-          :text_phone,
-          :access_notes,
-          :general_notes
-        )
-    end
+  def resource
+    @place ||= Place.where(data_set_version: data_set.version, service_slug: service.slug).find(params['id'])
+  end
+
+  def place_params
+    params.
+      require(:place).
+      permit(
+        :name,
+        :address1,
+        :address2,
+        :town,
+        :postcode,
+        :override_lng,
+        :override_lat,
+        :snac,
+        :url,
+        :email,
+        :phone,
+        :fax,
+        :text_phone,
+        :access_notes,
+        :general_notes
+      )
+  end
 end

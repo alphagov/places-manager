@@ -30,7 +30,7 @@ class Admin::DataSetsController < InheritedResources::Base
     redirect_to admin_service_url(@service)
   end
 
-  protected
+protected
 
   def bad_encoding
     flash[:danger] = "Could not process CSV file because of the file encoding. Please check the format."

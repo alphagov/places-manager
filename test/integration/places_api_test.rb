@@ -2,12 +2,11 @@ require_relative '../integration_test_helper'
 require 'csv'
 
 class PlacesAPITest < ActionDispatch::IntegrationTest
-
   context "Requesting the full dataset" do
     setup do
       @service = FactoryGirl.create(:service)
       @data_set_1 = @service.active_data_set
-      @data_set_2 = @service.data_sets.create()
+      @data_set_2 = @service.data_sets.create
       @place1_1 = FactoryGirl.create(:place, service_slug: @service.slug, data_set_version: @data_set_1.version,
                   location: Point.new(latitude: 51.613314, longitude: -0.158278), name: "Town Hall")
       @place1_2 = FactoryGirl.create(:place, service_slug: @service.slug, data_set_version: @data_set_1.version,
@@ -116,7 +115,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
 
     context "for an authority-bounded service" do
       setup do
-        @service = FactoryGirl.create(:service, :location_match_type => 'local_authority')
+        @service = FactoryGirl.create(:service, location_match_type: 'local_authority')
         @place1 = FactoryGirl.create(:place, service_slug: @service.slug, snac: "18UK",
                   location: Point.new(latitude: 51.0519276, longitude: -4.1907002), name: "John's Of Appledore")
         @place2 = FactoryGirl.create(:place, service_slug: @service.slug, snac: "00AG",

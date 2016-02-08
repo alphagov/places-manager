@@ -1,7 +1,7 @@
 class CannotEditPlaceDetailsUnlessNewestInactiveDataset < ActiveModel::Validator
   def validate(record)
     if record.changes.except("location", "geocode_error").any?
-      unless !record.data_set or record.can_edit?
+      unless !record.data_set || record.can_edit?
         record.errors[:base] << ("Can only edit the most recent inactive dataset.")
       end
     end
@@ -14,14 +14,14 @@ class Place
   # Match documents with either no geocode error or a null value. Changed so
   # that anything without a location (or with a null location) is either
   # matched by `needs_geocoding` or `with_geocoding_errors`.
-  scope :needs_geocoding, -> { where(:location => nil, :geocode_error => nil) }
+  scope :needs_geocoding, -> { where(location: nil, geocode_error: nil) }
 
   # We use "not null" here instead of "exists", because it works with the index
   scope :with_geocoding_errors, -> { where(:geocode_error.ne => nil) }
   scope :geocoded, -> { where(:location.with_size => 2) }
-  default_scope -> { order_by([:name,:asc]) }
+  default_scope -> { order_by([:name, :asc]) }
 
-  field :service_slug,   type: String
+  field :service_slug, type: String
   field :data_set_version, type: Integer
 
   field :name,           type: String
@@ -71,9 +71,7 @@ class Place
 
   def data_set
     service = Service.where(slug: service_slug).first
-    if service
-      service.data_sets.where(version: data_set_version).first
-    end
+    service.data_sets.where(version: data_set_version).first if service
   end
 
   # Convert mongoid's geo_near_distance attribute to a Distance object
@@ -84,13 +82,13 @@ class Place
     end
   end
 
-  def self.create_from_hash(data_set, row, options={})
+  def self.create_from_hash(data_set, row, options = {})
     place = new(parameters_from_hash(data_set, row))
     place.save(options)
     place
   end
 
-  def self.create_from_hash!(data_set, row, options={})
+  def self.create_from_hash!(data_set, row, options = {})
     place = new(parameters_from_hash(data_set, row))
     place.save!(options)
     place
@@ -136,7 +134,7 @@ class Place
   end
 
   def full_address
-    [address, town, postcode, 'UK'].select { |i| i.present? }.map(&:strip).join(', ')
+    [address, town, postcode, 'UK'].select(&:present?).map(&:strip).join(', ')
   end
 
   def to_s
@@ -152,13 +150,13 @@ class Place
   end
 
   def can_edit?
-    data_set.latest_data_set? and !data_set.active?
+    data_set.latest_data_set? && !data_set.active?
   end
 
   def build_source_address
     new_source_address = [address1, address2, town, postcode].compact.join(', ')
 
-    if self.new_record? and self.source_address.blank?
+    if self.new_record? && self.source_address.blank?
       self.source_address = new_source_address
     end
   end
@@ -184,15 +182,15 @@ class Place
       snac: row['snac'],
     }
     location_parameters = if row['lng'] && row['lat']
-      {override_lng: row['lng'], override_lat: row['lat']}
-    else
-      {}
-    end
-    return base_parameters.merge(location_parameters)
+                            {override_lng: row['lng'], override_lat: row['lat']}
+                          else
+                            {}
+                          end
+    base_parameters.merge(location_parameters)
   end
 
   def override_lat_lng?
-    override_lat.present? and override_lng.present?
+    override_lat.present? && override_lng.present?
   end
 
 private
@@ -202,7 +200,7 @@ private
   end
 
   def has_both_lat_lng_overrides
-    unless override_lat_lng? or (override_lat.blank? and override_lng.blank?)
+    unless override_lat_lng? || (override_lat.blank? && override_lng.blank?)
       errors.add(:override_lat, "latitude must be a valid coordinate") unless override_lat.present?
       errors.add(:override_lng, "longitude must be a valid coordinate") unless override_lng.present?
     end

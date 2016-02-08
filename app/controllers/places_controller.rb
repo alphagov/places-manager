@@ -1,6 +1,6 @@
 require 'mapit_api'
 
-ActionController::Renderers.add :csv do |places, options|
+ActionController::Renderers.add :csv do |places, _options|
   if places.first.is_a?(Place)
     filename = "#{places.first.data_set.service.slug}.csv"
 
@@ -29,10 +29,10 @@ class PlacesController < ApplicationController
     #   max_distance: maximum distance in miles from the lat/long given
     #   limit: maximum number of places to show
     @service = Service.where(slug: params[:id]).first
-    head 404 and return if @service.nil?
+    head 404 && return if @service.nil?
 
     data_set = select_data_set(@service, params[:version])
-    head 404 and return if data_set.nil?
+    head 404 && return if data_set.nil?
 
     if params[:max_distance].present?
       max_distance = Distance.new(Float(params[:max_distance]), :miles)
@@ -54,9 +54,10 @@ class PlacesController < ApplicationController
     respond_with(@places)
   end
 
-  protected
+protected
+
   def select_data_set(service, version = nil)
-    if user_signed_in? and version.present?
+    if user_signed_in? && version.present?
       service.data_sets.find(version)
     else
       service.active_data_set

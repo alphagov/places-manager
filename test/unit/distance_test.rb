@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class DistanceTest < ActiveSupport::TestCase
-
   test "can create a distance" do
     d = Distance.new 500, :miles
     assert_equal 500, d.magnitude
@@ -25,5 +24,4 @@ class DistanceTest < ActiveSupport::TestCase
   test "distances are not equal to numbers" do
     refute_equal 500, Distance.new(500, :miles)
   end
-
 end
