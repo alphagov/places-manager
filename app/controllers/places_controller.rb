@@ -16,9 +16,8 @@ end
 class PlacesController < ApplicationController
   respond_to :json, :kml, :csv
 
-  rescue_from MapitApi::InvalidPostcodeError do
-    head 400
-  end
+  rescue_from MapitApi::InvalidPostcodeError, with: :error_400
+  rescue_from MapitApi::ValidPostcodeNoLocation, with: :error_400
 
   def show
     # Show a set of places in relation to a service
@@ -55,6 +54,10 @@ class PlacesController < ApplicationController
   end
 
 protected
+  def error_400(e)
+    error_message = e.message.gsub("MapitApi::", "").camelize(:lower)
+    render status: 400, json: { error: "#{error_message}" }
+  end
 
   def select_data_set(service, version = nil)
     if user_signed_in? && version.present?

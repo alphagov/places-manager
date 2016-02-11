@@ -1,9 +1,11 @@
 module MapitApi
   class InvalidPostcodeError < StandardError; end
+  class ValidPostcodeNoLocation < StandardError; end
 
   def self.location_for_postcode(postcode)
     location_data = Imminence.mapit_api.location_for_postcode(postcode)
     raise InvalidPostcodeError if location_data.nil?
+    raise ValidPostcodeNoLocation if location_data.lat.nil? || location_data.lon.nil?
     location_data
   end
 
