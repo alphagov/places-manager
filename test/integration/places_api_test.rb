@@ -118,23 +118,29 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         @service = FactoryGirl.create(:service, location_match_type: 'local_authority')
         @place1 = FactoryGirl.create(:place, service_slug: @service.slug, snac: "18UK",
                   location: Point.new(latitude: 51.0519276, longitude: -4.1907002), name: "John's Of Appledore")
-        @place2 = FactoryGirl.create(:place, service_slug: @service.slug, snac: "00AG",
+        @place2 = FactoryGirl.create(:place, service_slug: @service.slug, snac: "18UK",
+                  location: Point.new(latitude: 51.053834, longitude: -4.191422), name: "Susie's Tea Rooms")
+        @place3 = FactoryGirl.create(:place, service_slug: @service.slug, snac: "00AG",
                   location: Point.new(latitude: 51.500728, longitude: -0.124626), name: "Palace of Westminster")
+        @place4 = FactoryGirl.create(:place, service_slug: @service.slug, snac: "00AG",
+                  location: Point.new(latitude: 51.51837458322272, longitude: -0.12133586354538765), name: "FreeState Coffee")
       end
 
-      should "return the place(s) for the authority corresponding to the postcode" do
+      should "return the place(s) for the authority corresponding to the postcode in order of nearness" do
         stub_mapit_postcode_response_from_fixture("EX39 1QS")
         stub_mapit_postcode_response_from_fixture("WC2B 6NH")
 
         get "/places/#{@service.slug}.json?postcode=EX39+1QS"
         data = JSON.parse(last_response.body)
-        assert_equal 1, data.length
-        assert_equal @place1.name, data[0]['name']
+        assert_equal 2, data.length
+        assert_equal @place2.name, data[0]['name']
+        assert_equal @place1.name, data[1]['name']
 
         get "/places/#{@service.slug}.json?postcode=WC2B+6NH"
         data = JSON.parse(last_response.body)
-        assert_equal 1, data.length
-        assert_equal @place2.name, data[0]['name']
+        assert_equal 2, data.length
+        assert_equal @place4.name, data[0]['name']
+        assert_equal @place3.name, data[1]['name']
       end
 
       should "return empty array if there are no places in the corresponding authority" do
