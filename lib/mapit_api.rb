@@ -17,8 +17,11 @@ module MapitApi
 
   def self.district_snac_for_postcode(postcode)
     location_data = location_for_postcode(postcode)
+    extract_snac_from_mapit_response(location_data)
+  end
 
-    district = location_data.areas.detect {|area| DISTRICT_TYPES.include?(area.type) }
+  def self.extract_snac_from_mapit_response(location_data)
+    district = location_data.areas.detect { |area| DISTRICT_TYPES.include?(area.type) }
     district.codes['ons'] if district
   end
 

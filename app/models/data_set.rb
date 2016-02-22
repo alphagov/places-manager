@@ -59,18 +59,16 @@ class DataSet
   end
 
   def places_for_postcode(postcode, distance = nil, limit = nil)
+    location_data = MapitApi.location_for_postcode(postcode)
+    location = Point.new(latitude: location_data.lat, longitude: location_data.lon)
     if service.location_match_type == 'local_authority'
-      snac = MapitApi.district_snac_for_postcode(postcode)
+      snac = MapitApi.extract_snac_from_mapit_response(location_data)
       if snac
-        location_data = MapitApi.location_for_postcode(postcode)
-        location = Point.new(latitude: location_data.lat, longitude: location_data.lon)
         places_near(location, distance, limit, snac)
       else
         []
       end
     else
-      location_data = MapitApi.location_for_postcode(postcode)
-      location = Point.new(latitude: location_data.lat, longitude: location_data.lon)
       places_near(location, distance, limit)
     end
   end
