@@ -366,28 +366,30 @@ class DataSetTest < ActiveSupport::TestCase
 
         @place1 = FactoryGirl.create(:place, service_slug: @service.slug, snac: "18UK", postcode: "EX39 1QS",
                    location: Point.new(latitude: 51.05318361810428, longitude: -4.191071523498792), name: "John's Of Appledore")
-        @place2 = FactoryGirl.create(:place, service_slug: @service.slug, snac: "00AG", postcode: "WC2B 6NH",
+        @place2 = FactoryGirl.create(:place, service_slug: @service.slug, snac: "18UK", postcode: "EX39 1PP",
+                  location: Point.new(latitude: 51.053834, longitude: -4.191422), name: "Susie's Tea Rooms")
+        @place3 = FactoryGirl.create(:place, service_slug: @service.slug, snac: "00AG", postcode: "WC2B 6NH",
                    location: Point.new(latitude: 51.51695975170424, longitude: -0.12058693935709164), name: "Aviation House")
-        @place3 = FactoryGirl.create(:place, service_slug: @service.slug, snac: "00AG", postcode: "WC1B 5HA",
+        @place4 = FactoryGirl.create(:place, service_slug: @service.slug, snac: "00AG", postcode: "WC1B 5HA",
                    location: Point.new(latitude: 51.51837458322272, longitude: -0.12133586354538765), name: "FreeState Coffee")
       end
 
       should "return places in the same district as the postcode" do
-        MapitApi.expects(:district_snac_for_postcode).with("EX39 1LH").returns("18UK")
+        mapit_has_a_postcode_and_areas("EX39 1LH", [51.0413792674, -4.23640704632], [{ "type" => "DIS", "ons" => "18UK"}])
 
         place_names = @data_set.places_for_postcode("EX39 1LH").map(&:name)
-        assert_equal ["John's Of Appledore"], place_names
+        assert_equal ["Susie's Tea Rooms", "John's Of Appledore"], place_names
       end
 
-      should "return multiple places if there are more than one in the district" do
-        MapitApi.expects(:district_snac_for_postcode).with("WC2B 6NH").returns("00AG")
+      should "return multiple places in order of nearness if there are more than one in the district" do
+        mapit_has_a_postcode_and_areas("WC2B 6NH", [51.51695975170424, -0.12058693935709164], [{"type" => "DIS", "ons" => "00AG"}])
 
         place_names = @data_set.places_for_postcode("WC2B 6NH").map(&:name)
-        assert_equal ["Aviation House", "FreeState Coffee"], place_names.sort
+        assert_equal ["Aviation House", "FreeState Coffee"], place_names
       end
 
       should "return empty array if no SNAC can be found for the postcode" do
-        MapitApi.expects(:district_snac_for_postcode).with("BT1 5GS").returns(nil)
+        mapit_has_a_postcode_and_areas("BT1 5GS", [21.54, -5.93], [])
 
         assert_equal [], @data_set.places_for_postcode("BT1 5GS").to_a
       end

@@ -45,11 +45,13 @@ class DataSet
   #   location - a Point object representing the centre of the search area
   #   distance (optional) - a Distance object representing the maximum distance
   #   limit (optional) - a maximum number of results to return
+  #   snac (optional) - a SNAC code to scope the results to a local authority
   #
   # Returns:
   #   an array of Place objects
-  def places_near(location, distance = nil, limit = nil)
+  def places_near(location, distance = nil, limit = nil, snac = nil)
     query = places
+    query = query.where(snac: snac) if snac
     query = query.limit(limit) if limit
     query = query.geo_near([location.longitude, location.latitude])
     query = query.max_distance(distance.in(:degrees)) if distance
@@ -57,16 +59,16 @@ class DataSet
   end
 
   def places_for_postcode(postcode, distance = nil, limit = nil)
+    location_data = MapitApi.location_for_postcode(postcode)
+    location = Point.new(latitude: location_data.lat, longitude: location_data.lon)
     if service.location_match_type == 'local_authority'
-      snac = MapitApi.district_snac_for_postcode(postcode)
+      snac = MapitApi.extract_snac_from_mapit_response(location_data)
       if snac
-        places.where(snac: snac)
+        places_near(location, distance, limit, snac)
       else
         []
       end
     else
-      location_data = MapitApi.location_for_postcode(postcode)
-      location = Point.new(latitude: location_data.lat, longitude: location_data.lon)
       places_near(location, distance, limit)
     end
   end
