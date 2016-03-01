@@ -54,6 +54,64 @@ class MapitApiTest < ActiveSupport::TestCase
     end
   end
 
+  context 'extract_snac_from_mapit_response' do
+    context 'when asked to extract a district snac code' do
+      MapitApi::DISTRICT_TYPES.each do |district_type|
+        should "return the ons code of the first area with a type of #{district_type}" do
+          location_data = stub(areas: [
+            stub(codes: {'ons' => 'do-not-pick-me'}, type: 'WMC'),
+            stub(codes: {'ons' => 'pick-me'}, type: district_type),
+            stub(codes: {'ons' => 'do-not-pick-me'}, type: 'DIS'),
+          ])
+
+          assert_equal "pick-me", MapitApi.extract_snac_from_mapit_response(location_data, 'district')
+        end
+      end
+
+      should 'not return the ons code of an area with a type of CTY' do
+        location_data = stub(areas: [
+          stub(codes: {'ons' => 'do-not-pick-me'}, type: 'CTY'),
+        ])
+
+        assert_nil MapitApi.extract_snac_from_mapit_response(location_data, 'district')
+      end
+
+      should 'return nil if no area types match' do
+        location_data = stub(areas: [])
+
+        assert_nil MapitApi.extract_snac_from_mapit_response(location_data, 'district')
+      end
+    end
+
+    context 'when asked to extract a county snac code' do
+      MapitApi::COUNTY_TYPES.each do |county_type|
+        should "return the ons code of the first area with a type of #{county_type}" do
+          location_data = stub(areas: [
+            stub(codes: {'ons' => 'do-not-pick-me'}, type: 'WMC'),
+            stub(codes: {'ons' => 'pick-me'}, type: county_type),
+            stub(codes: {'ons' => 'do-not-pick-me'}, type: 'CTY'),
+          ])
+
+          assert_equal "pick-me", MapitApi.extract_snac_from_mapit_response(location_data, 'county')
+        end
+      end
+
+      should 'not return the ons code of an area with a type of DIS' do
+        location_data = stub(areas: [
+          stub(codes: {'ons' => 'do-not-pick-me'}, type: 'DIS'),
+        ])
+
+        assert_nil MapitApi.extract_snac_from_mapit_response(location_data, 'county')
+      end
+
+      should 'return nil if no area types match' do
+        location_data = stub(areas: [])
+
+        assert_nil MapitApi.extract_snac_from_mapit_response(location_data, 'county')
+      end
+    end
+  end
+
   context "valid_post_code_no_location" do
     should "raise ValidPostcodeNoLocation for a valid postcode with no location" do
       stub_mapit_postcode_response_from_fixture("JE4 5TP")
@@ -81,7 +139,8 @@ class MapitApiTest < ActiveSupport::TestCase
         assert_equal "London", response.payload[:areas].last["name"]
       end
     end
-    context "payload for an AreasByPostcodeResponse" do
+
+    context "for an AreasByPostcodeResponse" do
       should "return code and areas attributes in a hash" do
         location = OpenStruct.new(response: MockResponse.new(200, { "areas" => @areas }))
         response = MapitApi::AreasByPostcodeResponse.new(location)
