@@ -30,6 +30,7 @@ gem 'bootstrap-kaminari-views', '~> 0.0.3'
 
 gem 'sidekiq', '~> 4.1'
 gem 'sidekiq-statsd', '0.1.5'
+gem 'redis-namespace', '1.5.2'
 
 gem 'state_machines-mongoid', '~> 0.1.1'
 gem 'logstasher', '0.4.8'
