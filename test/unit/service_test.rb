@@ -74,10 +74,30 @@ class ServiceTest < ActiveSupport::TestCase
         assert_equal 1, @service.errors[:location_match_type].count
       end
     end
+
+    should "require local_authority_hierarchy_match_type to be one of the allowed values" do
+      Service::LOCAL_AUTHORITY_HIERARCHY_MATCH_TYPES.each do |match_type|
+        @service.local_authority_hierarchy_match_type = match_type
+        assert @service.valid?, "Expected service to be valid with local_authority_hierarchy_match_type: '#{match_type}'"
+      end
+
+      [
+        '',
+        'fooey',
+      ].each do |match_type|
+        @service.local_authority_hierarchy_match_type = match_type
+        refute @service.valid?, "Expected service to be invalid with local_authority_hierarchy_match_type: '#{match_type}'"
+        assert_equal 1, @service.errors[:local_authority_hierarchy_match_type].count
+      end
+    end
   end
 
   should "default location_match_type to 'nearest'" do
     assert_equal 'nearest', Service.new.location_match_type
+  end
+
+  should "default local_authority_hierarchy_match_type to 'district'" do
+    assert_equal 'district', Service.new.local_authority_hierarchy_match_type
   end
 
   should "create an initial data_set when creating a service" do
