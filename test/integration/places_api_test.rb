@@ -211,7 +211,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
       end
 
       should "return a 400 for an invalid postcode" do
-        GdsApi::Mapit.any_instance.expects(:location_for_postcode).with('N11 3QQ').returns(nil)
+        mapit_does_not_have_a_postcode('N11 3QQ')
 
         get "/places/#{@service.slug}.json?postcode=N11+3QQ"
         assert_equal 400, last_response.status
