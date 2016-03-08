@@ -110,6 +110,14 @@ class MapitApiTest < ActiveSupport::TestCase
         assert_nil MapitApi.extract_snac_from_mapit_response(location_data, 'county')
       end
     end
+
+    context 'when asked to extract any other type of snac code' do
+      should 'raise a InvalidLocationHierarchyType exception' do
+        assert_raises(MapitApi::InvalidLocationHierarchyType) do
+          MapitApi.extract_snac_from_mapit_response(stub(areas: []), 'super output area')
+        end
+      end
+    end
   end
 
   context "valid_post_code_no_location" do

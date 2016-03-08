@@ -1,6 +1,7 @@
 module MapitApi
   class InvalidPostcodeError < StandardError; end
   class ValidPostcodeNoLocation < StandardError; end
+  class InvalidLocationHierarchyType < ArgumentError; end
 
   def self.location_for_postcode(postcode)
     location_data = Imminence.mapit_api.location_for_postcode(postcode)
@@ -33,6 +34,8 @@ module MapitApi
       DISTRICT_TYPES
     when 'county'
       COUNTY_TYPES
+    else
+      raise InvalidLocationHierarchyType.new(location_hiearachy_type)
     end
   end
   private_class_method :area_types
