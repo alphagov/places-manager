@@ -9,6 +9,17 @@
     collection: service_location_match_type_options, include_blank: false,
     hint: "How places are matched for a given location."
   %>
+  <%= f.input :local_authority_hierarchy_match_type, as: :select, input_html: {class: 'input-md-2'},
+    collection: service_local_authority_hierarchy_match_type_options, include_blank: false,
+    hint: "For services that use 'Local authority' location matching which council should be used for those areas that have a County and District hierarchy.",
+    wrapper_html: {
+      data: {
+        module: 'form-value-dependent',
+        'form-value-dependent-elem': 'service_location_match_type',
+        'form-value-dependent-value': 'local_authority'
+      }
+    }
+  %>
 <% end %>
 
 <%= f.actions do %>

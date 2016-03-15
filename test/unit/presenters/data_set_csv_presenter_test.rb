@@ -41,10 +41,15 @@ class DataSetCsvPresenterTest < ActiveSupport::TestCase
 
   context "presenting a dataset with a place" do
     setup do
-      @place = FactoryGirl.create(:place, service_slug: @service.slug,
-                                  data_set_version: @data_set.version,
-                                  email: "camden@example.com", snac: "00AG",
-                                  override_lng: 0.0, override_lat: 1.0)
+      @place = FactoryGirl.create(
+        :place,
+        service_slug: @service.slug,
+        data_set_version: @data_set.version,
+        email: "camden@example.com",
+        snac: "00AG",
+        override_lng: 0.0,
+        override_lat: 1.0
+      )
       @result = @presenter.to_array_for_csv
     end
 

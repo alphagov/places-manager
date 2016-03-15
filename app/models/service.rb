@@ -2,12 +2,16 @@ class Service
   include Mongoid::Document
 
   LOCATION_MATCH_TYPES = %w(nearest local_authority)
+  LOCAL_AUTHORITY_DISTRICT_MATCH = 'district'
+  LOCAL_AUTHORITY_COUNTY_MATCH = 'county'
+  LOCAL_AUTHORITY_HIERARCHY_MATCH_TYPES = [LOCAL_AUTHORITY_DISTRICT_MATCH, LOCAL_AUTHORITY_COUNTY_MATCH]
 
   field :name,                    type: String
   field :slug,                    type: String
   field :active_data_set_version, type: Integer, default: 1
   field :source_of_data,          type: String
   field :location_match_type,     type: String, default: LOCATION_MATCH_TYPES.first
+  field :local_authority_hierarchy_match_type, type: String, default: LOCAL_AUTHORITY_DISTRICT_MATCH
 
   embeds_many :data_sets do
     def current
@@ -22,6 +26,7 @@ class Service
   # underscore allowed because one of the existing services uses them in its slug.
   validates :slug, presence: true, uniqueness: true, format: {with: /\A[a-z0-9_-]*\z/ }
   validates :location_match_type, inclusion: {in: LOCATION_MATCH_TYPES}
+  validates :local_authority_hierarchy_match_type, inclusion: {in: LOCAL_AUTHORITY_HIERARCHY_MATCH_TYPES}
 
   before_validation :create_first_data_set, on: :create
   after_save :schedule_csv_processing

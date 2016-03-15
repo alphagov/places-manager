@@ -62,7 +62,7 @@ class DataSet
     location_data = MapitApi.location_for_postcode(postcode)
     location = Point.new(latitude: location_data.lat, longitude: location_data.lon)
     if service.location_match_type == 'local_authority'
-      snac = MapitApi.extract_snac_from_mapit_response(location_data)
+      snac = MapitApi.extract_snac_from_mapit_response(location_data, service.local_authority_hierarchy_match_type)
       if snac
         places_near(location, distance, limit, snac)
       else

@@ -2,19 +2,45 @@ require_relative '../integration_test_helper'
 require 'csv'
 
 class PlacesAPITest < ActionDispatch::IntegrationTest
+  include GdsApi::TestHelpers::Mapit
+
   context "Requesting the full dataset" do
     setup do
       @service = FactoryGirl.create(:service)
       @data_set_1 = @service.active_data_set
       @data_set_2 = @service.data_sets.create
-      @place1_1 = FactoryGirl.create(:place, service_slug: @service.slug, data_set_version: @data_set_1.version,
-                  location: Point.new(latitude: 51.613314, longitude: -0.158278), name: "Town Hall")
-      @place1_2 = FactoryGirl.create(:place, service_slug: @service.slug, data_set_version: @data_set_1.version,
-                  location: Point.new(latitude: 51.500728, longitude: -0.124626), name: "Palace of Westminster")
-      @place2_1 = FactoryGirl.create(:place, service_slug: @service.slug, data_set_version: @data_set_2.version,
-                  location: Point.new(latitude: 51.613314, longitude: -0.158278), name: "Town Hall 2")
-      @place2_2 = FactoryGirl.create(:place, service_slug: @service.slug, data_set_version: @data_set_2.version,
-                  location: Point.new(latitude: 51.500728, longitude: -0.124626), name: "Palace of Westminster 2")
+      @place1_1 = FactoryGirl.create(
+        :place,
+        service_slug: @service.slug,
+        data_set_version: @data_set_1.version,
+        latitude: 51.613314,
+        longitude: -0.158278,
+        name: "Town Hall"
+      )
+      @place1_2 = FactoryGirl.create(
+        :place,
+        service_slug: @service.slug,
+        data_set_version: @data_set_1.version,
+        latitude: 51.500728,
+        longitude: -0.124626,
+        name: "Palace of Westminster"
+      )
+      @place2_1 = FactoryGirl.create(
+        :place,
+        service_slug: @service.slug,
+        data_set_version: @data_set_2.version,
+        latitude: 51.613314,
+        longitude: -0.158278,
+        name: "Town Hall 2"
+      )
+      @place2_2 = FactoryGirl.create(
+        :place,
+        service_slug: @service.slug,
+        data_set_version: @data_set_2.version,
+        latitude: 51.500728,
+        longitude: -0.124626,
+        name: "Palace of Westminster 2"
+      )
       @data_set_2.activate
     end
 
@@ -71,10 +97,20 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
     context "for a geo-distance service" do
       setup do
         @service = FactoryGirl.create(:service)
-        @place1 = FactoryGirl.create(:place, service_slug: @service.slug,
-                  location: Point.new(latitude: 51.613314, longitude: -0.158278), name: "Town Hall")
-        @place2 = FactoryGirl.create(:place, service_slug: @service.slug,
-                  location: Point.new(latitude: 51.500728, longitude: -0.124626), name: "Palace of Westminster")
+        @place1 = FactoryGirl.create(
+          :place,
+          service_slug: @service.slug,
+          latitude: 51.613314,
+          longitude: -0.158278,
+          name: "Town Hall"
+        )
+        @place2 = FactoryGirl.create(
+          :place,
+          service_slug: @service.slug,
+          latitude: 51.500728,
+          longitude: -0.124626,
+          name: "Palace of Westminster"
+        )
       end
 
       should "return places near the given postcode" do
@@ -112,35 +148,57 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
       end
     end
 
-
     context "for an authority-bounded service" do
       setup do
         @service = FactoryGirl.create(:service, location_match_type: 'local_authority')
-        @place1 = FactoryGirl.create(:place, service_slug: @service.slug, snac: "18UK",
-                  location: Point.new(latitude: 51.0519276, longitude: -4.1907002), name: "John's Of Appledore")
-        @place2 = FactoryGirl.create(:place, service_slug: @service.slug, snac: "18UK",
-                  location: Point.new(latitude: 51.053834, longitude: -4.191422), name: "Susie's Tea Rooms")
-        @place3 = FactoryGirl.create(:place, service_slug: @service.slug, snac: "00AG",
-                  location: Point.new(latitude: 51.500728, longitude: -0.124626), name: "Palace of Westminster")
-        @place4 = FactoryGirl.create(:place, service_slug: @service.slug, snac: "00AG",
-                  location: Point.new(latitude: 51.51837458322272, longitude: -0.12133586354538765), name: "FreeState Coffee")
-      end
-
-      should "return the place(s) for the authority corresponding to the postcode in order of nearness" do
-        stub_mapit_postcode_response_from_fixture("EX39 1QS")
-        stub_mapit_postcode_response_from_fixture("WC2B 6NH")
-
-        get "/places/#{@service.slug}.json?postcode=EX39+1QS"
-        data = JSON.parse(last_response.body)
-        assert_equal 2, data.length
-        assert_equal @place2.name, data[0]['name']
-        assert_equal @place1.name, data[1]['name']
-
-        get "/places/#{@service.slug}.json?postcode=WC2B+6NH"
-        data = JSON.parse(last_response.body)
-        assert_equal 2, data.length
-        assert_equal @place4.name, data[0]['name']
-        assert_equal @place3.name, data[1]['name']
+        @place1 = FactoryGirl.create(
+          :place,
+          service_slug: @service.slug,
+          snac: "18UK",
+          latitude: 51.0519276,
+          longitude: -4.1907002,
+          name: "John's Of Appledore"
+        )
+        @place2 = FactoryGirl.create(
+          :place,
+          service_slug: @service.slug,
+          snac: "18UK",
+          latitude: 51.053834,
+          longitude: -4.191422,
+          name: "Susie's Tea Rooms"
+        )
+        @place3 = FactoryGirl.create(
+          :place,
+          service_slug: @service.slug,
+          snac: "00AG",
+          latitude: 51.500728,
+          longitude: -0.124626,
+          name: "Palace of Westminster"
+        )
+        @place4 = FactoryGirl.create(
+          :place,
+          service_slug: @service.slug,
+          snac: "00AG",
+          latitude: 51.51837458322272,
+          longitude: -0.12133586354538765,
+          name: "FreeState Coffee"
+        )
+        @place5 = FactoryGirl.create(
+          :place,
+          service_slug: @service.slug,
+          snac: "18",
+          latitude: 51.05420,
+          longitude: -4.19096,
+          name: "The Coffee Cabin"
+        )
+        @place6 = FactoryGirl.create(
+          :place,
+          service_slug: @service.slug,
+          snac: "18",
+          latitude: 51.05289,
+          longitude: -4.19111,
+          name: "The Quay Restaurant and Gallery"
+        )
       end
 
       should "return empty array if there are no places in the corresponding authority" do
@@ -152,10 +210,62 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
       end
 
       should "return a 400 for an invalid postcode" do
-        GdsApi::Mapit.any_instance.expects(:location_for_postcode).with('N11 3QQ').returns(nil)
+        mapit_does_not_have_a_postcode('N11 3QQ')
 
         get "/places/#{@service.slug}.json?postcode=N11+3QQ"
         assert_equal 400, last_response.status
+      end
+
+      context "when the service is bounded to districts" do
+        setup do
+          @service.update_attributes(local_authority_hierarchy_match_type: Service::LOCAL_AUTHORITY_DISTRICT_MATCH)
+        end
+
+        should "return the district places in order of nearness, not the county ones for postcodes in a county+district council hierarchy" do
+          stub_mapit_postcode_response_from_fixture("EX39 1QS")
+
+          get "/places/#{@service.slug}.json?postcode=EX39+1QS"
+          data = JSON.parse(last_response.body)
+          assert_equal 2, data.length
+          assert_equal @place2.name, data[0]['name']
+          assert_equal @place1.name, data[1]['name']
+        end
+
+        should "return all the places in order of nearness for postcodes not in a county+district council hierarchy" do
+          stub_mapit_postcode_response_from_fixture("WC2B 6NH")
+
+          get "/places/#{@service.slug}.json?postcode=WC2B+6NH"
+          data = JSON.parse(last_response.body)
+          assert_equal 2, data.length
+          assert_equal @place4.name, data[0]['name']
+          assert_equal @place3.name, data[1]['name']
+        end
+      end
+
+      context "when the service is bounded to counties" do
+        setup do
+          @service.update_attributes(local_authority_hierarchy_match_type: Service::LOCAL_AUTHORITY_COUNTY_MATCH)
+        end
+
+        should "only return the county results in order of nearness, not the district ones for postcodes in a county+district council hierarchy" do
+          stub_mapit_postcode_response_from_fixture("EX39 1QS")
+
+          get "/places/#{@service.slug}.json?postcode=EX39+1QS"
+          data = JSON.parse(last_response.body)
+          assert_equal 2, data.length
+          assert_equal @place6.name, data[0]['name']
+          assert_equal @place5.name, data[1]['name']
+        end
+
+        should "return all the places in order of nearness for postcodes not in a county+district council hierarchy" do
+          stub_mapit_postcode_response_from_fixture("WC2B 6NH")
+
+          get "/places/#{@service.slug}.json?postcode=WC2B+6NH"
+          data = JSON.parse(last_response.body)
+          assert_equal 2, data.length
+          assert_equal @place4.name, data[0]['name']
+          assert_equal @place3.name, data[1]['name']
+        end
       end
     end
   end

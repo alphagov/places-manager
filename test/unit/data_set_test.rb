@@ -364,14 +364,42 @@ class DataSetTest < ActiveSupport::TestCase
         @service = FactoryGirl.create(:service, location_match_type: 'local_authority')
         @data_set = @service.latest_data_set
 
-        @place1 = FactoryGirl.create(:place, service_slug: @service.slug, snac: "18UK", postcode: "EX39 1QS",
-                   location: Point.new(latitude: 51.05318361810428, longitude: -4.191071523498792), name: "John's Of Appledore")
-        @place2 = FactoryGirl.create(:place, service_slug: @service.slug, snac: "18UK", postcode: "EX39 1PP",
-                  location: Point.new(latitude: 51.053834, longitude: -4.191422), name: "Susie's Tea Rooms")
-        @place3 = FactoryGirl.create(:place, service_slug: @service.slug, snac: "00AG", postcode: "WC2B 6NH",
-                   location: Point.new(latitude: 51.51695975170424, longitude: -0.12058693935709164), name: "Aviation House")
-        @place4 = FactoryGirl.create(:place, service_slug: @service.slug, snac: "00AG", postcode: "WC1B 5HA",
-                   location: Point.new(latitude: 51.51837458322272, longitude: -0.12133586354538765), name: "FreeState Coffee")
+        @place1 = FactoryGirl.create(
+          :place,
+          service_slug: @service.slug,
+          snac: "18UK",
+          postcode: "EX39 1QS",
+          latitude: 51.05318361810428,
+          longitude: -4.191071523498792,
+          name: "John's Of Appledore"
+        )
+        @place2 = FactoryGirl.create(
+          :place,
+          service_slug: @service.slug,
+          snac: "18UK",
+          postcode: "EX39 1PP",
+          latitude: 51.053834,
+          longitude: -4.191422,
+          name: "Susie's Tea Rooms"
+        )
+        @place3 = FactoryGirl.create(
+          :place,
+          service_slug: @service.slug,
+          snac: "00AG",
+          postcode: "WC2B 6NH",
+          latitude: 51.51695975170424,
+          longitude: -0.12058693935709164,
+          name: "Aviation House"
+        )
+        @place4 = FactoryGirl.create(
+          :place,
+          service_slug: @service.slug,
+          snac: "00AG",
+          postcode: "WC1B 5HA",
+          latitude: 51.51837458322272,
+          longitude: -0.12133586354538765,
+          name: "FreeState Coffee"
+        )
       end
 
       should "return places in the same district as the postcode" do
