@@ -119,7 +119,8 @@ class ServiceTest < ActiveSupport::TestCase
       s = Service.create!(attrs)
 
       assert_equal 1, s.data_sets.count
-      assert_equal File.read(fixture_file_path('good_csv.csv')), s.latest_data_set.csv_data
+      assert s.latest_data_set.csv_data
+      assert_equal File.read(fixture_file_path('good_csv.csv')), s.latest_data_set.csv_data.data
 
       job = ProcessCsvDataWorker.jobs.last
       service_id_to_process, version_to_process = *job['args']

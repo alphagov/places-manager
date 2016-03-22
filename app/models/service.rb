@@ -36,15 +36,13 @@ class Service
   end
 
   def data_file=(file)
-    ds = self.data_sets.build
-    ds.data_file = file
-    @need_csv_processing = true
+    @need_csv_processing = self.data_sets.build(data_file: file)
   end
 
   def schedule_csv_processing
     if @need_csv_processing
-      ProcessCsvDataWorker.perform_async(self.id.to_s, latest_data_set.version)
-      @need_csv_processing = false
+      @need_csv_processing.schedule_csv_processing
+      @need_csv_processing = nil
     end
   end
 
