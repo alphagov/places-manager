@@ -9,19 +9,15 @@ class DataSet
 
   field :version,       type: Integer
   field :change_notes,  type: String
-  field :csv_data,      type: String
   field :processing_error, type: String
   field :state, type: String
   field :archiving_error, type: String
 
   validates_presence_of :version
 
-  # Mongoid has a 16M limit on document size.  Set this to
-  # 15M to leave some headroom for storing the rest of the document.
-  validates :csv_data, length: { maximum: 15.megabytes, message: "CSV file is too big (max is 15MB)" }
-
   default_scope -> { order_by([:version, :asc]) }
   before_validation :set_version, on: :create
+  validate :csv_data_is_valid
   after_save :schedule_csv_processing
 
   state_machine initial: :unarchived do
@@ -101,31 +97,52 @@ class DataSet
   end
 
   def data_file=(file)
-    self.csv_data = read_as_utf8(file)
-
-    @need_csv_processing = true
+    if file.nil?
+      @csv_data = nil
+      @need_csv_processing = false
+    else
+      @csv_data = CsvData.new(data_file: file)
+      @need_csv_processing = true
+    end
   end
 
   def schedule_csv_processing
     if @need_csv_processing
+      @csv_data.save!
       ProcessCsvDataWorker.perform_async(service.id.to_s, self.version)
       @need_csv_processing = false
     end
   end
 
+  def csv_data
+    @csv_data ||= CsvData.where(service_slug: service.slug, data_set_version: self.version).first
+  end
+
+  def csv_data_is_valid
+    return if @csv_data.nil? || @csv_data.destroyed?
+    @csv_data.service_slug = service.slug
+    @csv_data.data_set_version = self.version
+    errors.add(:csv_data, @csv_data.errors) unless @csv_data.valid?
+  end
+
+  def reset_csv_data
+    @csv_data.destroy
+    @csv_data = nil
+  end
+
   def process_csv_data
-    if self.csv_data.present?
+    if csv_data.present?
       places_data = []
-      CSV.parse(self.csv_data, headers: true) do |row|
+      CSV.parse(csv_data.data, headers: true) do |row|
         places_data << Place.parameters_from_hash(self, row)
       end
       Place.create(places_data)
-      self.csv_data = nil
+      reset_csv_data
       self.save!
     end
   rescue CSV::MalformedCSVError
     self.processing_error = "Could not process CSV file. Please check the format."
-    self.csv_data = nil
+    reset_csv_data
     self.save!
   end
 
