@@ -8,45 +8,65 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
     Sidekiq::Testing.inline!
   end
 
-  test "it can successfully import a CSV file" do
-    as_logged_in_user do
+  context 'POST create' do
+    setup do
       @request.env['HTTP_REFERER'] = "http://localhost:3000/admin/services/#{@service.id}"
-      csv_file = fixture_file_upload(Rails.root.join('test/fixtures/good_csv.csv'), 'text/csv')
-      post :create, service_id: @service.id, data_set: {data_file: csv_file}
-      assert_response :redirect
-
-      # Services are created with 1 data_set initially, so after creating a data_set, there are now 2
-      assert_equal 2, Service.first.data_sets.count
-      assert_equal 1, Place.count
-
-      place = Place.first
-      assert_equal "1 Stop Instruction", place.name
-      assert_equal "Power League", place.address1
-      assert_equal "Forest Road", place.address2
-      assert_equal "Ilford (Fairlop)", place.town
-      assert_equal "IG6 3HJ", place.postcode
-      assert_equal "Some access notes", place.access_notes
-      assert_equal "Some general notes", place.general_notes
-      assert_equal "http://www.1stopinstruction.com", place.url
-      assert_equal "info@1stopinstruction.com", place.email
-      assert_equal "0800 848 8418", place.phone
-      assert_equal "0800 848 8419", place.fax
-      assert_equal "0800 848 8420", place.text_phone
     end
-  end
 
-  test "it handles CSV files in a strange character encoding" do
-    DataSet.any_instance.stubs(:data_file=).raises(InvalidCharacterEncodingError)
+    should "successfully import a CSV file" do
+      as_logged_in_user do
+        csv_file = fixture_file_upload(Rails.root.join('test/fixtures/good_csv.csv'), 'text/csv')
+        post :create, service_id: @service.id, data_set: {data_file: csv_file}
+        assert_response :redirect
 
-    as_logged_in_user do
-      @request.env['HTTP_REFERER'] = "http://localhost:3000/admin/services/#{@service.id}"
-      csv_file = fixture_file_upload(Rails.root.join('test/fixtures/good_csv.csv'), 'text/csv')
-      post :create, service_id: @service.id, data_set: {data_file: csv_file}
-      assert_response :redirect
-      assert_equal "Could not process CSV file because of the file encoding. Please check the format.", flash[:danger]
-      # There is always an initial data set
-      assert_equal 1, Service.first.data_sets.count
-      assert_equal 0, Place.count
+        # Services are created with 1 data_set initially, so after creating a data_set, there are now 2
+        assert_equal 2, Service.first.data_sets.count
+        assert_equal 1, Place.count
+
+        place = Place.first
+        assert_equal "1 Stop Instruction", place.name
+        assert_equal "Power League", place.address1
+        assert_equal "Forest Road", place.address2
+        assert_equal "Ilford (Fairlop)", place.town
+        assert_equal "IG6 3HJ", place.postcode
+        assert_equal "Some access notes", place.access_notes
+        assert_equal "Some general notes", place.general_notes
+        assert_equal "http://www.1stopinstruction.com", place.url
+        assert_equal "info@1stopinstruction.com", place.email
+        assert_equal "0800 848 8418", place.phone
+        assert_equal "0800 848 8419", place.fax
+        assert_equal "0800 848 8420", place.text_phone
+      end
+    end
+
+    should "handle CSV files in a strange character encoding" do
+      DataSet.any_instance.stubs(:data_file=).raises(InvalidCharacterEncodingError)
+
+      as_logged_in_user do
+        csv_file = fixture_file_upload(Rails.root.join('test/fixtures/good_csv.csv'), 'text/csv')
+        post :create, service_id: @service.id, data_set: {data_file: csv_file}
+        assert_response :redirect
+        assert_equal "Could not process CSV file because of the file encoding. Please check the format.", flash[:danger]
+        # There is always an initial data set
+        assert_equal 1, Service.first.data_sets.count
+        assert_equal 0, Place.count
+      end
+    end
+
+    should "display a new data form if the data set can't be created" do
+      as_logged_in_user do
+        Tempfile.create('too-much-data') do |tmpfile|
+          tmpfile.write('x' * (15.megabytes + 1))
+          tmpfile.close
+          csv_file = fixture_file_upload(tmpfile.path, 'text/csv')
+          post :create, service_id: @service.id, data_set: { data_file: csv_file }
+
+          assert_response(:success)
+          assert_template "new_data"
+          assert_equal 1, Service.first.data_sets.count
+          assert_equal 0, Place.count
+        end
+      end
     end
   end
 

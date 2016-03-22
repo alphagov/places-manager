@@ -4,14 +4,16 @@ require "imminence/file_verifier"
 class Admin::DataSetsController < InheritedResources::Base
   include Admin::AdminControllerMixin
 
-  actions :all, except: [:index, :destroy]
+  actions :all, except: [:new, :index, :destroy]
   belongs_to :service
   rescue_from CSV::MalformedCSVError, with: :bad_csv
   rescue_from InvalidCharacterEncodingError, with: :bad_encoding
 
   def create
     prohibit_non_csv_uploads
-    create!
+    create! do |_success, failure|
+      failure.html { render 'new_data' }
+    end
   end
 
   def duplicate
