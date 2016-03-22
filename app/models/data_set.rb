@@ -122,7 +122,11 @@ class DataSet
     return if @csv_data.nil? || @csv_data.destroyed?
     @csv_data.service_slug = service.slug
     @csv_data.data_set_version = self.version
-    errors.add(:csv_data, @csv_data.errors) unless @csv_data.valid?
+    unless @csv_data.valid?
+      @csv_data.errors[:data].each do |message|
+        errors.add(:data_file, message)
+      end
+    end
   end
 
   def reset_csv_data

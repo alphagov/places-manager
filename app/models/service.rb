@@ -30,6 +30,7 @@ class Service
 
   before_validation :create_first_data_set, on: :create
   after_save :schedule_csv_processing
+  after_validation :promote_data_file_errors
 
   def reconcile_place_locations
     data_sets.first.places.map(&:reconcile_location)
@@ -43,6 +44,14 @@ class Service
     if @need_csv_processing
       @need_csv_processing.schedule_csv_processing
       @need_csv_processing = nil
+    end
+  end
+
+  def promote_data_file_errors
+    if @need_csv_processing
+      @need_csv_processing.errors[:data_file].each do |message|
+        errors.add(:data_file, message)
+      end
     end
   end
 

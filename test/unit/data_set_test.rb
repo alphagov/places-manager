@@ -123,7 +123,7 @@ class DataSetTest < ActiveSupport::TestCase
       should "be invalid with a file over 15M" do
         @ds.data_file = StringIO.new("x" * (15.megabytes + 1))
         refute @ds.valid?
-        assert_equal 1, @ds.errors[:csv_data].size
+        assert_equal 1, @ds.errors[:data_file].size
       end
     end
 
