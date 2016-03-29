@@ -46,7 +46,7 @@ class DataSetTest < ActiveSupport::TestCase
     should "do nothing and return false if the data_set hasn't completed processing" do
       previous_active_set = @service.active_data_set
 
-      ds = @service.data_sets.create!(csv_data: "something")
+      ds = @service.data_sets.create!(data_file: StringIO.new("something"))
       refute ds.activate
 
       @service.reload
@@ -101,7 +101,7 @@ class DataSetTest < ActiveSupport::TestCase
     should "create a data_set, store the csv_data and queue a job to process it" do
       ds = @service.data_sets.create!(data_file: File.open(fixture_file_path('good_csv.csv')))
 
-      assert_equal File.read(fixture_file_path('good_csv.csv')), ds.csv_data
+      assert_equal File.read(fixture_file_path('good_csv.csv')), ds.csv_data.data
 
       job = ProcessCsvDataWorker.jobs.last
       service_id_to_process, version_to_process = *job['args']
@@ -116,14 +116,14 @@ class DataSetTest < ActiveSupport::TestCase
       end
 
       should "be valid with a file up to 15M" do
-        @ds.csv_data = "x" * (15.megabytes - 1)
+        @ds.data_file = StringIO.new("x" * (15.megabytes - 1))
         assert @ds.valid?
       end
 
       should "be invalid with a file over 15M" do
-        @ds.csv_data = "x" * (15.megabytes + 1)
+        @ds.data_file = StringIO.new("x" * (15.megabytes + 1))
         refute @ds.valid?
-        assert_equal 1, @ds.errors[:csv_data].size
+        assert_equal 1, @ds.errors[:data_file].size
       end
     end
 
@@ -136,28 +136,28 @@ class DataSetTest < ActiveSupport::TestCase
         @ds.data_file = File.open(fixture_file_path('encodings/ascii.csv'), encoding: 'ascii-8bit')
         @ds.save!
         expected = File.read(fixture_file_path('encodings/ascii.csv'))
-        assert_equal expected, @ds.csv_data
+        assert_equal expected, @ds.csv_data.data
       end
 
       should "handle UTF-8 files" do
         @ds.data_file = File.open(fixture_file_path('encodings/utf-8.csv'), encoding: 'ascii-8bit')
         @ds.save!
         expected = File.read(fixture_file_path('encodings/utf-8.csv'))
-        assert_equal expected, @ds.csv_data
+        assert_equal expected, @ds.csv_data.data
       end
 
       should "handle ISO-8859-1 files" do
         @ds.data_file = File.open(fixture_file_path('encodings/iso-8859-1.csv'), encoding: 'ascii-8bit')
         @ds.save!
         expected = File.read(fixture_file_path('encodings/iso-8859-1.csv')).force_encoding('iso-8859-1').encode('utf-8')
-        assert_equal expected, @ds.csv_data
+        assert_equal expected, @ds.csv_data.data
       end
 
       should "handle Windows 1252 files" do
         @ds.data_file = File.open(fixture_file_path('encodings/windows-1252.csv'), encoding: 'ascii-8bit')
         @ds.save!
         expected = File.read(fixture_file_path('encodings/windows-1252.csv')).force_encoding('windows-1252').encode('utf-8')
-        assert_equal expected, @ds.csv_data
+        assert_equal expected, @ds.csv_data.data
       end
 
       should "raise an error with an unknown file encoding" do
@@ -176,7 +176,7 @@ class DataSetTest < ActiveSupport::TestCase
     end
 
     should "add all places from the csv_data" do
-      ds = @service.data_sets.create!(csv_data: File.read(fixture_file_path('good_csv.csv')))
+      ds = @service.data_sets.create!(data_file: File.open(fixture_file_path('good_csv.csv')))
       ds.process_csv_data
 
       assert_equal 1, ds.places.count
@@ -184,7 +184,7 @@ class DataSetTest < ActiveSupport::TestCase
     end
 
     should "clear the stored csv_data" do
-      ds = @service.data_sets.create!(csv_data: File.read(fixture_file_path('good_csv.csv')))
+      ds = @service.data_sets.create!(data_file: File.open(fixture_file_path('good_csv.csv')))
       ds.process_csv_data
 
       ds.reload
@@ -192,7 +192,7 @@ class DataSetTest < ActiveSupport::TestCase
     end
 
     should "store an error message, and clear the csv_data with an invalid csv" do
-      ds = @service.data_sets.create!(csv_data: File.read(fixture_file_path('bad_csv.csv')))
+      ds = @service.data_sets.create!(data_file: File.open(fixture_file_path('bad_csv.csv')))
       ds.process_csv_data
 
       ds.reload
@@ -202,17 +202,17 @@ class DataSetTest < ActiveSupport::TestCase
 
     context "processing state predicates" do
       should "be processing_complete with no csv_data and no processing_error" do
-        ds = @service.data_sets.build(csv_data: nil, processing_error: nil)
+        ds = @service.data_sets.build(data_file: nil, processing_error: nil)
         assert ds.processing_complete?
       end
 
       should "not be processing_complete with csv_data" do
-        ds = @service.data_sets.build(csv_data: "anything", processing_error: nil)
+        ds = @service.data_sets.build(data_file: StringIO.new("anything"), processing_error: nil)
         refute ds.processing_complete?
       end
 
       should "not be processing_complete with processing_error" do
-        ds = @service.data_sets.build(csv_data: nil, processing_error: "something went wrong")
+        ds = @service.data_sets.build(data_file: nil, processing_error: "something went wrong")
         refute ds.processing_complete?
       end
     end
