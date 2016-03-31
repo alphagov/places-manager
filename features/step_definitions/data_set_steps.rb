@@ -103,7 +103,7 @@ When /^I upload the exported CSV to the "(.*?)" service$/ do |name|
   run_all_delayed_jobs
 end
 
-Then /^I should see an indication that my file wasn't accepted$/ do
+Then /^I should see an indication that my file was not accepted$/ do
   assert page.has_content?("Could not process CSV file. Please check the format.")
 end
 
@@ -161,7 +161,7 @@ Then /^the "(.*?)" service should have two data sets$/ do |name|
   assert_equal 2, Service.where(name: name).first.data_sets.count
 end
 
-Then /^there shouldn't be a "(.*?)" service$/ do |name|
+Then /^there should not be a "(.*?)" service$/ do |name|
   assert_equal 0, Service.where(name: name).count
 end
 

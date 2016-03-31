@@ -32,7 +32,7 @@ Feature: Managing data sets
     When I go to the page for the "Register Offices" service
       And I upload a new data set with a PNG claiming to be a CSV
 
-    Then I should see an indication that my file wasn't accepted
+    Then I should see an indication that my file was not accepted
       And there should still just be one data set
 
   Scenario: Activating a new data set
@@ -111,21 +111,21 @@ Feature: Managing data sets
     When background processing has completed
       And I go to the page for the "Register Offices" service
 
-    Then I should see an indication that my file wasn't accepted
+    Then I should see an indication that my file was not accepted
 
   Scenario: Creating a new service with a non-CSV file
     When I go to the new service page
       And I fill in the form to create the "Register Offices" service with a PNG
 
-    Then I should see an indication that my file wasn't accepted
-      And there shouldn't be a "Register Offices" service
+    Then I should see an indication that my file was not accepted
+      And there should not be a "Register Offices" service
 
   Scenario: Creating a new service with a mis-labelled file
     When I go to the new service page
       And I fill in the form to create the "Register Offices" service with a PNG claiming to be a CSV
 
-    Then I should see an indication that my file wasn't accepted
-      And there shouldn't be a "Register Offices" service
+    Then I should see an indication that my file was not accepted
+      And there should not be a "Register Offices" service
 
   Scenario: Creating a new data set with a CSV file in the wrong format
     Given I have previously created the "Register Offices" service
