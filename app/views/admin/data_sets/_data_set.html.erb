@@ -12,7 +12,12 @@
       <% end %>
       <h4>Status</h4>
       <p>
-        <%= data_set.places.needs_geocoding.count %> places left to geocode. <%= data_set.places.with_geocoding_errors.count %> places with geocode errors.
+        <%= data_set.places.needs_geocoding.count %> places left to geocode.
+        <%= data_set.places.with_geocoding_errors.count %> places with geocode errors.
+
+        <% if @service.uses_local_authority_lookup? %>
+          <%= data_set.places.missing_snacs.count %> places with missing SNAC codes.
+        <% end %>
       </p>
       <hr />
       <h4>Export</h4>

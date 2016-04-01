@@ -21,6 +21,8 @@ class Place
   scope :geocoded, -> { where(:location.with_size => 2) }
   default_scope -> { order_by([:name, :asc]) }
 
+  scope :missing_snacs, -> { where(snac: nil) }
+
   field :service_slug, type: String
   field :data_set_version, type: Integer
 

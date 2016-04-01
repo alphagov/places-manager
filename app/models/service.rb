@@ -84,4 +84,8 @@ class Service
   def obsolete_data_sets
     data_sets.take_while {|ds| ds != active_data_set }.slice(0...-1)
   end
+
+  def uses_local_authority_lookup?
+    location_match_type == "local_authority"
+  end
 end
