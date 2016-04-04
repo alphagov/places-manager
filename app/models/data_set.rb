@@ -182,6 +182,10 @@ class DataSet
     action
   end
 
+  def has_places_with_missing_snacs?
+    service.uses_local_authority_lookup? && places.missing_snacs.count > 0
+  end
+
 private
 
   def read_as_utf8(file)

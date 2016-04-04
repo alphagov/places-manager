@@ -74,6 +74,7 @@ Feature: Managing services
 
     Then the first version panel has the title "Version 1"
       And the first version panel has the text "2 places with missing SNAC codes"
+      And the first version panel shows a warning about missing SNAC codes
 
   Scenario: Creating a new service with nearest lookup with a file with missing snac codes
     When I go to the new service page

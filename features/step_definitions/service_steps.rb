@@ -118,3 +118,9 @@ Then /^the first version panel has the text "(.*?)"$/ do |text|
     assert page.has_content?(text)
   end
 end
+
+Then /^the first version panel shows a warning about missing SNAC codes$/ do
+  within "div.data-set:nth-child(1)" do
+    assert page.has_css?("p.missing-snac-warning")
+  end
+end
