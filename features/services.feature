@@ -29,6 +29,10 @@ Feature: Managing services
 
     Then I should see an indication that my data set contained 174 items
 
+    When I visit the history tab
+
+    Then the first version panel has the title "Version 1"
+
   Scenario: Creating a new service where the data doesn't import
     When I go to the new service page
       And I fill in the form to create the "Register Offices" service with a bad CSV
@@ -65,6 +69,11 @@ Feature: Managing services
       And I go to the page for the "Register Offices With Missing Snac Codes" service
 
     Then I should see that the current service has 2 missing SNAC codes
+
+    When I visit the history tab
+
+    Then the first version panel has the title "Version 1"
+      And the first version panel has the text "2 places with missing SNAC codes"
 
   Scenario: Creating a new service with nearest lookup with a file with missing snac codes
     When I go to the new service page

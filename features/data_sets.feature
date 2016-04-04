@@ -14,6 +14,10 @@ Feature: Managing data sets
     Then I should be on the page for the latest data set for the "Register Offices" service
       And I should see that there are now 2 data sets
 
+    When I go to the page for the "Register Offices" service
+      And I visit the history tab
+      And I should see 2 version panels
+
   Scenario: Uploading a new data set with a mis-labelled file
     Given I have previously created the "Register Offices" service
 

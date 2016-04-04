@@ -99,3 +99,22 @@ When /^I activate the most recent data set for the "(.*?)" service$/ do |name|
     And I activate the most recent data set
   }
 end
+
+When /^I should see (\d+) version panels?$/ do |count|
+  version_panels = page.all(:css, 'div .data-set')
+  assert_equal version_panels.size, count.to_i
+end
+
+Then /^the first version panel has the title "(.*?)"$/ do |title|
+  within "div.data-set:nth-child(1)" do
+    within "h3.panel-title" do
+      assert page.has_content?(title)
+    end
+  end
+end
+
+Then /^the first version panel has the text "(.*?)"$/ do |text|
+  within "div.data-set:nth-child(1)" do
+    assert page.has_content?(text)
+  end
+end
