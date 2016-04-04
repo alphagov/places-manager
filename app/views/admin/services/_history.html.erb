@@ -37,12 +37,11 @@
         </dl>
         <% if set.processing_complete? %>
           <hr />
-          <h4>Export</h4>
-          <p>
-            <%= link_to 'JSON', place_path(@service.slug, :version => set, :format => :json) %>,
-            <%= link_to 'KML', place_path(@service.slug, :version => set, :format => :kml) %>,
-            <%= link_to 'CSV', place_path(@service.slug, :version => set, :format => :csv) %>
-          </p>
+          <%= render partial: '/admin/data_sets/status', locals: { service: @service, dataset: set } %>
+
+          <hr />
+          <%= render partial: '/admin/data_sets/export', locals: { service: @service, dataset: set } %>
+
         <% elsif set.processing_error.present? %>
           <p class="alert alert-danger remove-bottom-margin"><%= set.processing_error %></p>
         <% else %>
