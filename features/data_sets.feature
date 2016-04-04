@@ -12,7 +12,7 @@ Feature: Managing data sets
       And I upload a new data set
 
     Then I should be on the page for the latest data set for the "Register Offices" service
-      And I should see that there are now two data sets
+      And I should see that there are now 2 data sets
 
   Scenario: Uploading a new data set with a mis-labelled file
     Given I have previously created the "Register Offices" service
@@ -42,7 +42,7 @@ Feature: Managing data sets
       And I duplicate the most recent data set
 
     Then I should be on the page for the latest data set for the "Register Offices" service
-      And I should see that there are now three data sets
+      And I should see that there are now 3 data sets
 
   Scenario: Editing an inactive data set
     Given I have previously created the "Register Offices" service

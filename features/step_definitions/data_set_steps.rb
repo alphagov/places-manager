@@ -111,12 +111,8 @@ Then /^I should see an indication that my data set is empty$/ do
   assert page.has_content?("No places are associated with this set. The imported data could be in the wrong format.")
 end
 
-Then /^I should see that there are now two data sets$/ do
-  assert page.has_content?("Version 2")
-end
-
-Then /^I should see that there are now three data sets$/ do
-  assert page.has_content?("Version 3")
+Then /^I should see that there are now (\d+) data sets$/ do |count|
+  assert page.has_content?("Version #{count}")
 end
 
 Then /^I should see that the second data set is active$/ do
