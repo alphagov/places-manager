@@ -54,3 +54,25 @@ Feature: Managing services
 
     Then I should see an indication that my file was not accepted
       And there should not be a "Register Offices" service
+
+  Scenario: Creating a new service with local authority lookup with a file with missing snac codes
+    When I go to the new service page
+      And I fill out the form with the following attributes to create a service:
+        | name                | Register Offices With Missing Snac Codes |
+        | location_match_type | Local authority                          |
+
+    When background processing has completed
+      And I go to the page for the "Register Offices With Missing Snac Codes" service
+
+    Then I should see that the current service has 2 missing SNAC codes
+
+  Scenario: Creating a new service with nearest lookup with a file with missing snac codes
+    When I go to the new service page
+      And I fill out the form with the following attributes to create a service:
+        | name                | Register Offices With Missing Snac Codes |
+        | location_match_type | Nearest                                  |
+
+    When background processing has completed
+      And I go to the page for the "Register Offices With Missing Snac Codes" service
+
+    Then I should not see any text about missing SNAC codes

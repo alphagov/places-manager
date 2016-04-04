@@ -27,6 +27,13 @@ When /^I upload a new data set with a PNG claiming to be a CSV$/ do
   end
 end
 
+When /^I upload a new data set with a CSV with missing SNAC codes$/ do
+  within "#new-data" do
+    attach_file "Data file", Rails.root.join('features/support/data/register-offices-with-missing-snac-codes.csv')
+    click_button "Create Data set"
+  end
+end
+
 When /^I click "Activate"$/ do
   click_button 'Activate'
 end

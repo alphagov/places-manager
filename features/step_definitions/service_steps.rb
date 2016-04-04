@@ -82,3 +82,20 @@ end
 Then /^there should not be a "(.*?)" service$/ do |name|
   assert_equal 0, Service.where(name: name).count
 end
+
+Then /^I should see that the current service has (\d+) missing SNAC codes$/ do |count|
+  content = "#{count} places with missing SNAC codes."
+  assert page.has_content?(content)
+end
+
+Then /^I should not see any text about missing SNAC codes$/ do
+  assert !page.has_content?("places with missing SNAC codes.")
+end
+
+When /^I activate the most recent data set for the "(.*?)" service$/ do |name|
+  steps %Q{
+    And I go to the page for the "#{name}" service
+    And I visit the history tab
+    And I activate the most recent data set
+  }
+end
