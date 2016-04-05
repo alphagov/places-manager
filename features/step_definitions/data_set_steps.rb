@@ -39,6 +39,10 @@ When /^I upload a new data set with a PNG claiming to be a CSV$/ do
   end
 end
 
+When /^I visit the details tab$/ do
+  click_link 'Service details'
+end
+
 When /^I visit the history tab$/ do
   click_link 'Version history'
 end
@@ -52,15 +56,33 @@ When /^I click "Duplicate"$/ do
 end
 
 When /^I fill in the form to create the "(.*?)" service with a bad CSV$/ do |name|
-  fill_in_form_with(name, Rails.root.join('features/support/data/bad.csv'))
+  params = {
+    name: name,
+    slug: name.parameterize,
+    csv_path: Rails.root.join('features/support/data/bad.csv')
+  }
+
+  fill_in_form_with(params)
 end
 
 When /^I fill in the form to create the "(.*?)" service with a PNG claiming to be a CSV$/ do |name|
-  fill_in_form_with(name, Rails.root.join('features/support/data/rails.csv'))
+  params = {
+    name: name,
+    slug: name.parameterize,
+    csv_path: Rails.root.join('features/support/data/rails.csv')
+  }
+
+  fill_in_form_with(params)
 end
 
 When /^I fill in the form to create the "(.*?)" service with a PNG$/ do |name|
-  fill_in_form_with(name, Rails.root.join('features/support/data/rails.png'))
+  params = {
+    name: name,
+    slug: name.parameterize,
+    csv_path: Rails.root.join('features/support/data/rails.png')
+  }
+
+  fill_in_form_with(params)
 end
 
 When /^I go to the page for the latest data set for the "(.*?)" service$/ do |name|
@@ -115,8 +137,16 @@ Then /^show me the page$/ do
   save_and_open_page
 end
 
-Then /^I fill in the form to create the "(.*?)" service$/ do |name|
-  fill_in_form_with(name, csv_path_for_data(name))
+When /^I fill out the form with the following attributes to create a service:$/ do |table|
+  params = table.rows_hash.symbolize_keys!
+  raise ArgumentError, "name cannot be nil" if params[:name].nil?
+
+  params = {
+    slug: params[:name].parameterize,
+    csv_path: csv_path_for_data(params[:name])
+  }.merge(params)
+
+  fill_in_form_with(params)
 end
 
 Then /^I should be on the page for the "(.*?)" service$/ do |name|

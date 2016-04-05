@@ -7,10 +7,22 @@ Feature: Managing data sets
 
   Scenario: Creating a new service
     When I go to the new service page
-      And I fill in the form to create the "Register Offices" service
+      And I fill out the form with the following attributes to create a service:
+        | name                                 | Register Offices         |
+        | slug                                 | all-new-register-offices |
+        | source_of_data                       | Testing source of data   |
+        | location_match_type                  | Local authority          |
+        | local_authority_hierarchy_match_type | County                   |
 
     Then I should be on the page for the "Register Offices" service
       And I should see an indication that my data set is awaiting processing
+
+    When I visit the details tab
+    Then I should see the "Name" field filled with "Register Offices"
+      And I should see the "Slug" field filled with "all-new-register-offices"
+      And I should see the "Source of data" field filled with "Testing source of data"
+      And I should see the "Location match type" select field set to "Local authority"
+      And I should see the "Local authority hierarchy match type" select field set to "County"
 
     When background processing has completed
       And I go to the page for the "Register Offices" service

@@ -50,14 +50,33 @@ module ServiceHelper
     s
   end
 
-  def fill_in_form_with(name, csv_path)
+  def fill_in_form_with(params)
     mapit_knows_nothing_about_any_postcodes
 
-    fill_in 'Name', with: name
-    fill_in 'Slug', with: name.parameterize
-    fill_in 'Source of data', with: 'Testing'
-    attach_file 'Data file', csv_path
+    params = service_defaults.merge(params)
+
+    fill_in 'Name', with: params[:name]
+    fill_in 'Slug', with: params[:slug]
+    fill_in 'Source of data', with: (params[:source_of_data])
+
+    select (params[:location_match_type]), from: 'Location match type'
+    if params[:location_match_type] == "Local authority"
+      select (params[:local_authority_hierarchy_match_type]), from: 'Local authority hierarchy match type'
+    end
+
+    attach_file 'Data file', params[:csv_path]
     click_button 'Create Service'
+  end
+
+  def service_defaults
+    {
+      name: "Register Offices",
+      slug: "register-offices",
+      source_of_data: "test source of data",
+      location_match_type: "Local authority",
+      local_authority_hierarchy_match_type: "District",
+      csv_path: csv_path_for_data("Register Offices")
+    }
   end
 
   def fill_in_place_form_with(name)
