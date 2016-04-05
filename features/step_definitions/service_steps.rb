@@ -1,5 +1,19 @@
 Given /^I have previously created the "(.*?)" service$/ do |name|
-  @service = create_service(name)
+  params = { name: name, slug: name.parameterize, csv_path: csv_path_for_data(name) }
+
+  @service = create_service(params)
+end
+
+Given /^I have previously created a service with the following attributes:$/ do |table|
+  params = table.rows_hash.symbolize_keys!
+  raise ArgumentError, "name cannot be nil" if params[:name].nil?
+
+  params = { 
+    slug: params[:name].parameterize,
+    csv_path: csv_path_for_data(params[:name])
+  }.merge(params)
+
+  @service = create_service(params)
 end
 
 When /^I go to the new service page$/ do

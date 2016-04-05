@@ -36,18 +36,40 @@ module ServiceHelper
     run_all_delayed_jobs
   end
 
-  def create_service(name)
+  def create_service(params)
     mapit_knows_nothing_about_any_postcodes
 
+    params = service_defaults.merge(params)
+
     s = Service.new(
-      name: name,
-      slug: name.parameterize,
-      source_of_data: "Testing",
-      data_file: File.open(csv_path_for_data(name))
+      name: params[:name],
+      slug: params[:slug],
+      source_of_data: params[:source_of_data],
+      location_match_type: location_match_type(params[:location_match_type]),
+      local_authority_hierarchy_match_type: local_authority_hierarchy_match_type(params[:local_authority_hierarchy_match_type]),
+      data_file: File.open(params[:csv_path])
     )
     s.save!
     run_all_delayed_jobs
     s
+  end
+
+  def location_match_type(select_option_name)
+    case select_option_name
+    when "Nearest"
+      "nearest"
+    when "Local authority"
+      "local_authority"
+    end
+  end
+
+  def local_authority_hierarchy_match_type(select_option_name)
+    case select_option_name
+    when "District"
+      "district"
+    when "County"
+      "county"
+    end
   end
 
   def fill_in_form_with(params)
