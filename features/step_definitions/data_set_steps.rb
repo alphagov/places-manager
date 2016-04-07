@@ -1,21 +1,9 @@
-Given /^I have previously created the "(.*?)" service$/ do |name|
-  @service = create_service(name)
-end
-
 Given /^I have uploaded a (second|third) data set$/ do |ordinal|
   upload_extra_data_set(@service)
 end
 
 Given /^background processing has completed$/ do
   run_all_delayed_jobs
-end
-
-When /^I go to the new service page$/ do
-  visit new_admin_service_path
-end
-
-When /^I go to the page for the "(.*?)" service$/ do |name|
-  visit path_for_service(name)
 end
 
 When /^I upload a new data set$/ do
@@ -39,8 +27,11 @@ When /^I upload a new data set with a PNG claiming to be a CSV$/ do
   end
 end
 
-When /^I visit the history tab$/ do
-  click_link 'Version history'
+When /^I upload a new data set with a CSV with missing SNAC codes$/ do
+  within "#new-data" do
+    attach_file "Data file", Rails.root.join('features/support/data/register-offices-with-missing-snac-codes.csv')
+    click_button "Create Data set"
+  end
 end
 
 When /^I click "Activate"$/ do
@@ -49,18 +40,6 @@ end
 
 When /^I click "Duplicate"$/ do
   click_button 'Duplicate'
-end
-
-When /^I fill in the form to create the "(.*?)" service with a bad CSV$/ do |name|
-  fill_in_form_with(name, Rails.root.join('features/support/data/bad.csv'))
-end
-
-When /^I fill in the form to create the "(.*?)" service with a PNG claiming to be a CSV$/ do |name|
-  fill_in_form_with(name, Rails.root.join('features/support/data/rails.csv'))
-end
-
-When /^I fill in the form to create the "(.*?)" service with a PNG$/ do |name|
-  fill_in_form_with(name, Rails.root.join('features/support/data/rails.png'))
 end
 
 When /^I go to the page for the latest data set for the "(.*?)" service$/ do |name|
@@ -103,7 +82,7 @@ When /^I upload the exported CSV to the "(.*?)" service$/ do |name|
   run_all_delayed_jobs
 end
 
-Then /^I should see an indication that my file wasn't accepted$/ do
+Then /^I should see an indication that my file was not accepted$/ do
   assert page.has_content?("Could not process CSV file. Please check the format.")
 end
 
@@ -113,15 +92,6 @@ end
 
 Then /^show me the page$/ do
   save_and_open_page
-end
-
-Then /^I fill in the form to create the "(.*?)" service$/ do |name|
-  fill_in_form_with(name, csv_path_for_data(name))
-end
-
-Then /^I should be on the page for the "(.*?)" service$/ do |name|
-  current_path = URI.parse(current_url).path
-  assert_equal path_for_service(name), current_path
 end
 
 Then /^I should be on the page for the latest data set for the "(.*?)" service$/ do |name|
@@ -141,12 +111,8 @@ Then /^I should see an indication that my data set is empty$/ do
   assert page.has_content?("No places are associated with this set. The imported data could be in the wrong format.")
 end
 
-Then /^I should see that there are now two data sets$/ do
-  assert page.has_content?("Version 2")
-end
-
-Then /^I should see that there are now three data sets$/ do
-  assert page.has_content?("Version 3")
+Then /^I should see that there are now (\d+) data sets$/ do |count|
+  assert page.has_content?("Version #{count}")
 end
 
 Then /^I should see that the second data set is active$/ do
@@ -159,10 +125,6 @@ end
 
 Then /^the "(.*?)" service should have two data sets$/ do |name|
   assert_equal 2, Service.where(name: name).first.data_sets.count
-end
-
-Then /^there shouldn't be a "(.*?)" service$/ do |name|
-  assert_equal 0, Service.where(name: name).count
 end
 
 Then /^there should be a place named "(.*?)"$/ do |name|

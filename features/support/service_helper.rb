@@ -36,28 +36,69 @@ module ServiceHelper
     run_all_delayed_jobs
   end
 
-  def create_service(name)
+  def create_service(params)
     mapit_knows_nothing_about_any_postcodes
 
+    params = service_defaults.merge(params)
+
     s = Service.new(
-      name: name,
-      slug: name.parameterize,
-      source_of_data: "Testing",
-      data_file: File.open(csv_path_for_data(name))
+      name: params[:name],
+      slug: params[:slug],
+      source_of_data: params[:source_of_data],
+      location_match_type: location_match_type(params[:location_match_type]),
+      local_authority_hierarchy_match_type: local_authority_hierarchy_match_type(params[:local_authority_hierarchy_match_type]),
+      data_file: File.open(params[:csv_path])
     )
     s.save!
     run_all_delayed_jobs
     s
   end
 
-  def fill_in_form_with(name, csv_path)
+  def location_match_type(select_option_name)
+    case select_option_name
+    when "Nearest"
+      "nearest"
+    when "Local authority"
+      "local_authority"
+    end
+  end
+
+  def local_authority_hierarchy_match_type(select_option_name)
+    case select_option_name
+    when "District"
+      "district"
+    when "County"
+      "county"
+    end
+  end
+
+  def fill_in_form_with(params)
     mapit_knows_nothing_about_any_postcodes
 
-    fill_in 'Name', with: name
-    fill_in 'Slug', with: name.parameterize
-    fill_in 'Source of data', with: 'Testing'
-    attach_file 'Data file', csv_path
+    params = service_defaults.merge(params)
+
+    fill_in 'Name', with: params[:name]
+    fill_in 'Slug', with: params[:slug]
+    fill_in 'Source of data', with: (params[:source_of_data])
+
+    select (params[:location_match_type]), from: 'Location match type'
+    if params[:location_match_type] == "Local authority"
+      select (params[:local_authority_hierarchy_match_type]), from: 'Local authority hierarchy match type'
+    end
+
+    attach_file 'Data file', params[:csv_path]
     click_button 'Create Service'
+  end
+
+  def service_defaults
+    {
+      name: "Register Offices",
+      slug: "register-offices",
+      source_of_data: "test source of data",
+      location_match_type: "Local authority",
+      local_authority_hierarchy_match_type: "District",
+      csv_path: csv_path_for_data("Register Offices")
+    }
   end
 
   def fill_in_place_form_with(name)

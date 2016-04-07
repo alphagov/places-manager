@@ -10,17 +10,10 @@
       <% unless data_set.active? %>
         <%= button_to 'Activate', activate_admin_service_data_set_path(@service, data_set), :class=> 'btn btn-primary activate' %>
       <% end %>
-      <h4>Status</h4>
-      <p>
-        <%= data_set.places.needs_geocoding.count %> places left to geocode. <%= data_set.places.with_geocoding_errors.count %> places with geocode errors.
-      </p>
+
+      <%= render partial: '/admin/data_sets/status', locals: { service: @service, dataset: data_set } %>
       <hr />
-      <h4>Export</h4>
-      <p>
-        <%= link_to 'JSON', place_path(@service.slug, :version => data_set, :format => :json) %>,
-        <%= link_to 'KML', place_path(@service.slug, :version => data_set, :format => :kml) %>,
-        <%= link_to 'CSV', place_path(@service.slug, :version => data_set, :format => :csv) %>
-      </p>
+      <%= render partial: '/admin/data_sets/export', locals: { service: @service, dataset: data_set } %>
 
       <% if data_set.places.empty? %>
         <p class="alert alert-warning">No places are associated with this set. The imported data could be in the wrong format.</p>

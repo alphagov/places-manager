@@ -23,6 +23,13 @@
         <% if set.places.empty? %>
           <p class="alert alert-warning">No places are associated with this set. The imported data could be in the wrong format.</p>
         <% end %>
+
+        <% if set.has_places_with_missing_snacs? %>
+          <p class="alert alert-warning missing-snac-warning">
+            This Service uses 'Local authority' as location match type and this dataset contains places that are missing SNAC codes.
+          </p>
+        <% end %>
+
         <dl>
           <dt>Uploaded</dt>
           <dd><%= set.created_at ? set.created_at.to_date.to_s(:govuk_date) : "the beginning of time" %></dd>
@@ -37,12 +44,11 @@
         </dl>
         <% if set.processing_complete? %>
           <hr />
-          <h4>Export</h4>
-          <p>
-            <%= link_to 'JSON', place_path(@service.slug, :version => set, :format => :json) %>,
-            <%= link_to 'KML', place_path(@service.slug, :version => set, :format => :kml) %>,
-            <%= link_to 'CSV', place_path(@service.slug, :version => set, :format => :csv) %>
-          </p>
+          <%= render partial: '/admin/data_sets/status', locals: { service: @service, dataset: set } %>
+
+          <hr />
+          <%= render partial: '/admin/data_sets/export', locals: { service: @service, dataset: set } %>
+
         <% elsif set.processing_error.present? %>
           <p class="alert alert-danger remove-bottom-margin"><%= set.processing_error %></p>
         <% else %>

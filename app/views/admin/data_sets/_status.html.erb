@@ -1,0 +1,9 @@
+<h4>Status</h4>
+<p>
+  <%= dataset.places.needs_geocoding.count %> places left to geocode.
+  <%= dataset.places.with_geocoding_errors.count %> places with geocode errors.
+
+  <% if service.uses_local_authority_lookup? %>
+    <%= dataset.places.missing_snacs.count %> places with missing SNAC codes.
+  <% end %>
+</p>

@@ -1,0 +1,6 @@
+<h4>Export</h4>
+<p>
+  <%= link_to 'JSON', place_path(service.slug, version: dataset, format: :json) %>,
+  <%= link_to 'KML', place_path(service.slug, version: dataset, format: :kml) %>,
+  <%= link_to 'CSV', place_path(service.slug, version: dataset, format: :csv) %>
+</p>
