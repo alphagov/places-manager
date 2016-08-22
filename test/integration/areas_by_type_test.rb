@@ -9,6 +9,7 @@ class AreasByTypeTest < ActionDispatch::IntegrationTest
     })
     Imminence.mapit_api.stubs(:areas_for_type).returns(mapit_response)
   end
+
   test "areas are returned for valid types" do
     visit "/areas/EUR.json"
 
@@ -18,15 +19,14 @@ class AreasByTypeTest < ActionDispatch::IntegrationTest
     assert_equal 3, parsed_response["total"]
     results = parsed_response["results"]
 
-    assert_equal "london", results.first["slug"]
+    assert results.none? { |r| r.key?("slug") }
+
     assert_equal "London", results.first["name"]
     assert_equal "England", results.first["country_name"]
     assert_equal "EUR", results.first["type"]
-    assert_equal "yorkshire-and-the-humber", results.second["slug"]
     assert_equal "Yorkshire and the Humber", results.second["name"]
     assert_equal "England", results.second["country_name"]
     assert_equal "EUR", results.second["type"]
-    assert_equal "scotland", results.last["slug"]
     assert_equal "Scotland", results.last["name"]
     assert_equal "Scotland", results.last["country_name"]
     assert_equal "EUR", results.last["type"]
