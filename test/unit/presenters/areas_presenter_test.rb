@@ -40,7 +40,7 @@ class AreasPresenterTest < ActiveSupport::TestCase
       end
 
       should "expose the correct data" do
-        assert_equal "westminster-city-council", @result["slug"]
+        refute @result.key?('slug')
         assert_equal "Westminster City Council", @result["name"]
         assert_equal "England", @result["country_name"]
         assert_equal "LBO", @result["type"]
@@ -56,7 +56,7 @@ class AreasPresenterTest < ActiveSupport::TestCase
       end
 
       should "expose the correct data" do
-        assert_equal "london", @result["slug"]
+        refute @result.key?('slug')
         assert_equal "London", @result["name"]
         assert_equal "England", @result["country_name"]
         assert_equal "EUR", @result["type"]

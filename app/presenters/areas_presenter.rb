@@ -31,7 +31,6 @@ private
 
   def area_attrs(area)
     {
-      "slug" => area["name"].parameterize,
       "name" => area["name"],
       "country_name" => area["country_name"],
       "type" => area["type"],
