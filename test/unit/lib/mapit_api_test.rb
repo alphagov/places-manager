@@ -1,5 +1,6 @@
 require 'test_helper'
 require 'mapit_api'
+require 'gds_api/test_helpers/mapit'
 
 class MockResponse
   attr_reader :code, :to_hash
@@ -10,6 +11,8 @@ class MockResponse
 end
 
 class MapitApiTest < ActiveSupport::TestCase
+  include GdsApi::TestHelpers::Mapit
+
   context "district_snac_for_postcode" do
     should "return the snac for a district council(DIS)" do
       stub_mapit_postcode_response_from_fixture("EX39 1QS")
@@ -47,8 +50,8 @@ class MapitApiTest < ActiveSupport::TestCase
       assert_nil MapitApi.district_snac_for_postcode("BT1 5GS")
     end
 
-    should "raise InvalidPostcodeError for an invalid postcode" do
-      GdsApi::Mapit.any_instance.expects(:location_for_postcode).returns(nil)
+    should "raise InvalidPostcodeError for a missing postcode" do
+      mapit_does_not_have_a_postcode('AB1 2CD')
 
       assert_raises(MapitApi::InvalidPostcodeError) { MapitApi.district_snac_for_postcode("AB1 2CD") }
     end
@@ -58,26 +61,30 @@ class MapitApiTest < ActiveSupport::TestCase
     context 'when asked to extract a district snac code' do
       MapitApi::DISTRICT_TYPES.each do |district_type|
         should "return the ons code of the first area with a type of #{district_type}" do
-          location_data = stub(areas: [
-            stub(codes: {'ons' => 'do-not-pick-me'}, type: 'WMC'),
-            stub(codes: {'ons' => 'pick-me'}, type: district_type),
-            stub(codes: {'ons' => 'do-not-pick-me'}, type: 'DIS'),
-          ])
+          location_data = GdsApi::Mapit::Location.new({
+            'areas' => {
+              '1' => { 'codes' => {'ons' => 'do-not-pick-me'}, 'type' => 'WMC' },
+              '2' => { 'codes' => {'ons' => 'pick-me'}, 'type' => district_type },
+              '3' => { 'codes' => {'ons' => 'do-not-pick-me'}, 'type' => 'DIS' },
+            }
+          })
 
           assert_equal "pick-me", MapitApi.extract_snac_from_mapit_response(location_data, 'district')
         end
       end
 
       should 'not return the ons code of an area with a type of CTY' do
-        location_data = stub(areas: [
-          stub(codes: {'ons' => 'do-not-pick-me'}, type: 'CTY'),
-        ])
+        location_data = GdsApi::Mapit::Location.new({
+          'areas' => {
+            '1' => { 'codes' => {'ons' => 'do-not-pick-me'}, 'type' => 'CTY' },
+          }
+        })
 
         assert_nil MapitApi.extract_snac_from_mapit_response(location_data, 'district')
       end
 
       should 'return nil if no area types match' do
-        location_data = stub(areas: [])
+        location_data = GdsApi::Mapit::Location.new({ 'areas' => [] })
 
         assert_nil MapitApi.extract_snac_from_mapit_response(location_data, 'district')
       end
@@ -86,26 +93,30 @@ class MapitApiTest < ActiveSupport::TestCase
     context 'when asked to extract a county snac code' do
       MapitApi::COUNTY_TYPES.each do |county_type|
         should "return the ons code of the first area with a type of #{county_type}" do
-          location_data = stub(areas: [
-            stub(codes: {'ons' => 'do-not-pick-me'}, type: 'WMC'),
-            stub(codes: {'ons' => 'pick-me'}, type: county_type),
-            stub(codes: {'ons' => 'do-not-pick-me'}, type: 'CTY'),
-          ])
+          location_data = GdsApi::Mapit::Location.new({
+            'areas' => {
+              '1' => { 'codes' => {'ons' => 'do-not-pick-me'}, 'type' => 'WMC' },
+              '2' => { 'codes' => {'ons' => 'pick-me'}, 'type' => county_type },
+              '3' => { 'codes' => {'ons' => 'do-not-pick-me'}, 'type' => 'CTY' },
+            }
+          })
 
           assert_equal "pick-me", MapitApi.extract_snac_from_mapit_response(location_data, 'county')
         end
       end
 
       should 'not return the ons code of an area with a type of DIS' do
-        location_data = stub(areas: [
-          stub(codes: {'ons' => 'do-not-pick-me'}, type: 'DIS'),
-        ])
+        location_data = GdsApi::Mapit::Location.new({
+          'areas' => {
+            '1' => { 'codes' => {'ons' => 'do-not-pick-me'}, 'type' => 'DIS' },
+          }
+        })
 
         assert_nil MapitApi.extract_snac_from_mapit_response(location_data, 'county')
       end
 
       should 'return nil if no area types match' do
-        location_data = stub(areas: [])
+        location_data = GdsApi::Mapit::Location.new({ 'areas' => [] })
 
         assert_nil MapitApi.extract_snac_from_mapit_response(location_data, 'county')
       end
@@ -114,7 +125,7 @@ class MapitApiTest < ActiveSupport::TestCase
     context 'when asked to extract any other type of snac code' do
       should 'raise a InvalidLocationHierarchyType exception' do
         assert_raises(MapitApi::InvalidLocationHierarchyType) do
-          MapitApi.extract_snac_from_mapit_response(stub(areas: []), 'super output area')
+          MapitApi.extract_snac_from_mapit_response(GdsApi::Mapit::Location.new({ 'areas' => [] }), 'super output area')
         end
       end
     end
@@ -146,6 +157,13 @@ class MapitApiTest < ActiveSupport::TestCase
         assert_equal 234, response.payload[:areas].last["id"]
         assert_equal "London", response.payload[:areas].last["name"]
       end
+
+      should 'return a 404 code and no areas if no area types are found' do
+        response = MapitApi::AreasByTypeResponse.new(nil)
+
+        assert_equal 404, response.payload[:code]
+        assert_equal [], response.payload[:areas]
+      end
     end
 
     context "for an AreasByPostcodeResponse" do
@@ -159,9 +177,9 @@ class MapitApiTest < ActiveSupport::TestCase
         assert_equal 234, response.payload[:areas].last["id"]
         assert_equal "London", response.payload[:areas].last["name"]
       end
+
       should "return a 404 code and no areas if no location is found" do
-        location = nil
-        response = MapitApi::AreasByPostcodeResponse.new(location)
+        response = MapitApi::AreasByPostcodeResponse.new(nil)
 
         assert_equal 404, response.payload[:code]
         assert_equal [], response.payload[:areas]

@@ -14,7 +14,7 @@ gem 'govuk_admin_template', '3.0.0'
 gem 'formtastic', '~> 3.1.2'
 gem 'formtastic-bootstrap', '~> 3.1.1'
 
-gem 'gds-api-adapters', '~> 24.5.0'
+gem 'gds-api-adapters', '~> 36.0'
 gem 'statsd-ruby', '1.1.0', require: 'statsd'
 
 if ENV['BUNDLE_DEV']
