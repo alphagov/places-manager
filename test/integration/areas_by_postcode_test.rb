@@ -1,15 +1,14 @@
 require_relative '../integration_test_helper'
+require 'gds_api/test_helpers/mapit'
 
 class AreasByPostcodeTest < ActionDispatch::IntegrationTest
+  include GdsApi::TestHelpers::Mapit
+
   setup do
-    mapit_areas_response = OpenStruct.new(code: 200, to_hash: {
-      "areas" => {
-        44 => { "id" => 44, "name" => "Westminster City Council", "country_name" => "England", "type" => "LBO" },
-        223 => { "id" => 223, "name" => "London", "country_name" => "England", "type" => "EUR" }
-      }
-    })
-    mapit_location_response = OpenStruct.new(response: mapit_areas_response)
-    Imminence.mapit_api.stubs(:location_for_postcode).returns(mapit_location_response)
+    mapit_has_a_postcode_and_areas('WC2B 6SE', [51.516, -0.121], [
+      { "name" => "Westminster City Council", "type" => "LBO" },
+      { "name" => "London", "type" => "EUR" }
+    ])
   end
 
   test "areas are returned for valid types" do
@@ -24,10 +23,8 @@ class AreasByPostcodeTest < ActionDispatch::IntegrationTest
     assert results.none? { |r| r.key?("slug") }
 
     assert_equal "Westminster City Council", results.first["name"]
-    assert_equal "England", results.first["country_name"]
     assert_equal "LBO", results.first["type"]
     assert_equal "London", results.second["name"]
-    assert_equal "England", results.second["country_name"]
     assert_equal "EUR", results.second["type"]
   end
 end

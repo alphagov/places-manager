@@ -1,13 +1,15 @@
 require_relative '../integration_test_helper'
+require 'gds_api/test_helpers/mapit'
 
 class AreasByTypeTest < ActionDispatch::IntegrationTest
+  include GdsApi::TestHelpers::Mapit
+
   setup do
-    mapit_response = OpenStruct.new(code: 200, to_hash: {
-      123 => { "id" => 123, "name" => "London", "country_name" => "England", "type" => "EUR" },
-      234 => { "id" => 234, "name" => "Yorkshire and the Humber", "country_name" => "England", "type" => "EUR" },
-      345 => { "id" => 345, "name" => "Scotland", "country_name" => "Scotland", "type" => "EUR" }
+    mapit_has_areas('EUR', {
+      '123' => { "id" => 123, "name" => "London", "country_name" => "England", "type" => "EUR" },
+      '234' => { "id" => 234, "name" => "Yorkshire and the Humber", "country_name" => "England", "type" => "EUR" },
+      '345' => { "id" => 345, "name" => "Scotland", "country_name" => "Scotland", "type" => "EUR" }
     })
-    Imminence.mapit_api.stubs(:areas_for_type).returns(mapit_response)
   end
 
   test "areas are returned for valid types" do
