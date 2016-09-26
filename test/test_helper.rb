@@ -34,6 +34,10 @@ class ActiveSupport::TestCase
   end
   set_callback :teardown, :before, :clean_db
 
+  def reset_sidekiq_testing
+    Sidekiq::Testing.fake!
+  end
+  set_callback :setup, :before, :reset_sidekiq_testing
 
   def as_logged_in_user(&_block)
     @controller.stubs(:authenticate_user!).returns(true)

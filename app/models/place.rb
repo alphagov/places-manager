@@ -1,3 +1,5 @@
+require 'gds_api/exceptions'
+
 class CannotEditPlaceDetailsUnlessNewestInactiveDataset < ActiveModel::Validator
   def validate(record)
     if record.changes.except("location", "geocode_error").any?
@@ -107,15 +109,13 @@ class Place
       self.geocode_error = "Can't geocode without postcode"
     else
       result = Imminence.mapit_api.location_for_postcode(self.postcode)
-      if result
-        self.location = Point.new(
-          latitude: result.lat,
-          longitude: result.lon
-        )
-      else
-        self.geocode_error = "#{self.postcode} not found for #{self.full_address}"
-      end
+      self.location = Point.new(
+        latitude: result.lat,
+        longitude: result.lon
+      )
     end
+  rescue GdsApi::HTTPNotFound, GdsApi::HTTPGone
+    self.geocode_error = "#{self.postcode} not found for #{self.full_address}"
   rescue => e
     error = "Error geocoding place #{self.postcode} : #{e.message}"
     Rails.logger.warn error
