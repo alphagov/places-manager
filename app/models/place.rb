@@ -114,7 +114,7 @@ class Place
         longitude: result.lon
       )
     end
-  rescue GdsApi::HTTPNotFound, GdsApi::HTTPGone
+  rescue GdsApi::HTTPClientError
     self.geocode_error = "#{self.postcode} not found for #{self.full_address}"
   rescue => e
     error = "Error geocoding place #{self.postcode} : #{e.message}"
