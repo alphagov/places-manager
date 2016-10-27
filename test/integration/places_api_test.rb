@@ -140,10 +140,17 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         assert_equal @place2.name, data[0]['name']
       end
 
-      should "return a 400 for an invalid postcode" do
+      should "return a 400 for a missing postcode" do
         mapit_does_not_have_a_postcode('N11 3QQ')
 
         get "/places/#{@service.slug}.json?postcode=N11+3QQ"
+        assert_equal 400, last_response.status
+      end
+
+      should "return a 400 for an invalid postcode" do
+        mapit_does_not_have_a_bad_postcode('N1')
+
+        get "/places/#{@service.slug}.json?postcode=N1"
         assert_equal 400, last_response.status
       end
     end

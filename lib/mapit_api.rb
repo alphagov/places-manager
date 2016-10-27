@@ -9,7 +9,7 @@ module MapitApi
     location_data = Imminence.mapit_api.location_for_postcode(postcode)
     raise ValidPostcodeNoLocation if location_data.lat.nil? || location_data.lon.nil?
     location_data
-  rescue GdsApi::HTTPNotFound, GdsApi::HTTPGone
+  rescue GdsApi::HTTPClientError
     raise InvalidPostcodeError
   end
 

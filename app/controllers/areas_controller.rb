@@ -28,13 +28,13 @@ private
 
   def fetch_areas_for_type(type)
     Imminence.mapit_api.areas_for_type(type)
-  rescue GdsApi::HTTPNotFound, GdsApi::HTTPGone
+  rescue GdsApi::HTTPClientError
     nil
   end
 
   def fetch_location_for_postcode(postcode)
     Imminence.mapit_api.location_for_postcode(postcode)
-  rescue GdsApi::HTTPNotFound, GdsApi::HTTPGone
+  rescue GdsApi::HTTPClientError
     nil
   end
 end
