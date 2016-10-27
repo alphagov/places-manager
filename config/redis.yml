@@ -1,9 +1,16 @@
----
+defaults: &defaults
+  host: localhost
+  port: 6379
+
 development:
-  host: localhost
-  port: 6379
+  <<: *defaults
   namespace: imminence-development
+
 test:
-  host: localhost
-  port: 6379
+  <<: *defaults
   namespace: imminence-test
+
+production:
+  host: redis-2.backend
+  port: 6379
+  namespace: imminence
