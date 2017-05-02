@@ -2,17 +2,17 @@ source 'http://rubygems.org'
 
 gem 'plek', '~> 1.11.0'
 
-gem 'rails', '4.2.8'
+gem 'rails', '5.0.2'
 gem 'unicorn', '4.3.1'
 
-gem "mongoid", "~> 4.0"
-gem "mongoid_rails_migrations", "~> 1.1.0"
+gem "mongoid"
+gem "mongoid_rails_migrations"
 
-gem 'airbrake', '~> 4.1.0'
+gem 'airbrake', '~> 4.3.8'
 
-gem 'govuk_admin_template', '3.0.0'
-gem 'formtastic', '~> 3.1.2'
-gem 'formtastic-bootstrap', '~> 3.1.1'
+gem 'govuk_admin_template', '6.0.0'
+gem 'formtastic'
+gem 'formtastic-bootstrap'
 
 gem 'gds-api-adapters', '~> 36.0'
 gem 'statsd-ruby', '1.1.0', require: 'statsd'
@@ -20,11 +20,11 @@ gem 'statsd-ruby', '1.1.0', require: 'statsd'
 if ENV['BUNDLE_DEV']
   gem 'gds-sso', path: '../gds-sso'
 else
-  gem 'gds-sso', '~> 11.0.0'
+  gem 'gds-sso', '~> 13.0.0'
 end
 
 gem 'responders', '~> 2.0'
-gem 'inherited_resources', '~> 1.6.0'
+gem 'inherited_resources'
 gem 'kaminari', '~> 0.16.0'
 gem 'bootstrap-kaminari-views', '~> 0.0.3'
 
@@ -47,7 +47,7 @@ group :development, :test do
 end
 
 group :test do
-  gem 'cucumber-rails', '~> 1.4.0', require: false
+  gem 'cucumber-rails', require: false
   gem 'capybara', '~> 2.5.0'
   # NOTE: 1.5.0 has a bug with mongoid and truncation: https://github.com/DatabaseCleaner/database_cleaner/issues/299
   gem 'database_cleaner', '~> 1.4.0'
