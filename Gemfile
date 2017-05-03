@@ -61,4 +61,5 @@ group :test do
   gem 'mocha', '~> 1.1.0', require: false
   gem 'poltergeist', '~> 1.7.0'
   gem 'webmock', '~> 1.11', require: false
+  gem 'rails-controller-testing'
 end
