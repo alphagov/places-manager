@@ -19,7 +19,7 @@ class Admin::DataSetsController < InheritedResources::Base
   def duplicate
     duplicated_data_set = resource.duplicate
     flash[:success] = "Version #{duplicated_data_set.version} has been created."
-    redirect_to admin_service_data_set_path(@service, duplicated_data_set)
+    redirect_to admin_service_data_set_path(service, duplicated_data_set)
   end
 
   def activate
@@ -29,19 +29,19 @@ class Admin::DataSetsController < InheritedResources::Base
     else
       flash[:danger] = "Couldn't activate data set"
     end
-    redirect_to admin_service_url(@service)
+    redirect_to admin_service_url(service)
   end
 
 protected
 
   def bad_encoding
     flash[:danger] = "Could not process CSV file because of the file encoding. Please check the format."
-    redirect_to :back
+    redirect_back(fallback_location: admin_service_url(service))
   end
 
   def bad_csv
     flash[:danger] = "Could not process CSV file. Please check the format."
-    redirect_to :back
+    redirect_back(fallback_location: admin_service_url(service))
   end
 
   def prohibit_non_csv_uploads
@@ -62,5 +62,11 @@ protected
         :data_file,
         :change_notes
       )
+  end
+
+  def service
+    # This is ActiveAdmin's accessor for the service object. We are calling it
+    # directly rather than using the @ accessor.
+    parent
   end
 end
