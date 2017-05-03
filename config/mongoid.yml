@@ -1,31 +1,34 @@
 development:
-  sessions:
+  clients:
     default:
       uri: mongodb://localhost/imminence_development
       options:
         write:
           w: 1
-        read: primary
+        read:
+          mode: :primary
 
 test:
-  sessions:
+  clients:
     default:
       uri: mongodb://localhost/imminence_test
       options:
         write:
           w: 1
-        read: primary
+        read:
+          mode: :primary
         # In the test environment we lower the retries and retry interval to
         # low amounts for fast failures.
         max_retries: 1
         retry_interval: 0
 
 production:
-  sessions:
+  clients:
     default:
       uri: <%= ENV['MONGODB_URI'] %>
       options:
         write:
           w: 1
-        read: primary
+        read:
+          mode: :primary
         retry_interval: 120
