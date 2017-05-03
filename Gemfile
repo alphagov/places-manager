@@ -25,7 +25,8 @@ end
 
 gem 'responders', '~> 2.0'
 gem 'inherited_resources'
-gem 'kaminari', '~> 0.16.0'
+gem 'kaminari-mongoid'
+gem 'kaminari-actionview'
 gem 'bootstrap-kaminari-views', '~> 0.0.3'
 
 gem 'sidekiq', '~> 4.1'
@@ -48,9 +49,8 @@ end
 
 group :test do
   gem 'cucumber-rails', require: false
-  gem 'capybara', '~> 2.5.0'
-  # NOTE: 1.5.0 has a bug with mongoid and truncation: https://github.com/DatabaseCleaner/database_cleaner/issues/299
-  gem 'database_cleaner', '~> 1.4.0'
+  gem 'capybara'
+  gem 'database_cleaner'
   gem 'simplecov', '~> 0.10.0', require: false
   gem 'simplecov-rcov', '~> 0.2.3', require: false
   gem 'factory_girl_rails', '~> 4.5.0'
