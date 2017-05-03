@@ -33,7 +33,7 @@ class ServiceTest < ActiveSupport::TestCase
       should "have database level uniqueness constraint" do
         FactoryGirl.create(:service, slug: 'a-service')
         @service.slug = 'a-service'
-        assert_raises Moped::Errors::OperationFailure do
+        assert_raises Mongoid::Errors::InvalidPersistenceOption do
           @service.with(safe: true).save validate: false
         end
       end

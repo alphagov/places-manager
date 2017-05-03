@@ -43,7 +43,7 @@ class PlacesControllerTest < ActionController::TestCase
 
   test "as a logged in user I can access a non-active data set" do
     as_logged_in_user do
-      get :show, id: @service.slug, format: :json
+      get :show, params: { id: @service.slug }, format: :json
       assert_response :success
       assert_equal 4, JSON.parse(response.body).size
     end
@@ -51,7 +51,7 @@ class PlacesControllerTest < ActionController::TestCase
 
   test "can show a JSON representation of places" do
     as_logged_in_user do
-      get :show, id: @service.slug, format: :json
+      get :show, params: { id: @service.slug }, format: :json
       assert_response :success
       json_data = JSON.parse(response.body)
 
@@ -67,7 +67,7 @@ class PlacesControllerTest < ActionController::TestCase
 
   test "can show a JSON representation of a place with no coordinates" do
     as_logged_in_user do
-      get :show, id: @service.slug, format: :json
+      get :show, params: { id: @service.slug }, format: :json
       assert_response :success
       json_data = JSON.parse(response.body)
 
@@ -78,7 +78,7 @@ class PlacesControllerTest < ActionController::TestCase
 
   test "can show a KML representation of places" do
     as_logged_in_user do
-      get :show, id: @service.slug, format: :kml
+      get :show, params: { id: @service.slug }, format: :kml
       assert_response :success
       kml_data = Hash.from_xml(response.body)
       assert_equal 4, kml_data["kml"]["Document"]["Placemark"].size
@@ -112,7 +112,7 @@ class PlacesControllerTest < ActionController::TestCase
       slug: "number-plate-supplier"
     )
     stub_mapit_postcode_response_from_fixture("JE4 5TP")
-    get :show, id: service.slug, postcode: "JE4 5TP", format: :json
+    get :show, params: { id: service.slug, postcode: "JE4 5TP" }, format: :json
 
     assert_response 400
     assert_equal(JSON.parse(response.body)["error"], "validPostcodeNoLocation")

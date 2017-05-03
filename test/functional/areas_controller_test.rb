@@ -17,7 +17,7 @@ class AreasControllerTest < ActionController::TestCase
       }
     })
 
-    get :index, { area_type: 'CTY', format: :json }
+    get :index, params: { area_type: 'CTY' }, format: :json
 
     response_hash = assigns(:presenter).present
 
@@ -27,7 +27,7 @@ class AreasControllerTest < ActionController::TestCase
   test "search is successful" do
     mapit_has_a_postcode('WC2B 6SE', [51.516, -0.121])
 
-    get :search, { postcode: "WC2B 6SE", format: :json }
+    get :search, params: { postcode: "WC2B 6SE" }, format: :json
 
     assert_equal 200, response.status
 
@@ -38,7 +38,7 @@ class AreasControllerTest < ActionController::TestCase
 
   test "only permitted area types are successfully routed" do
     assert_raise ActionController::UrlGenerationError do
-      get :index, { area_type: 'FOO' }
+      get :index, params: { area_type: 'FOO' }
     end
   end
 end

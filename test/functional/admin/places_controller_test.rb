@@ -17,7 +17,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
 
       should "display the new place form" do
         as_logged_in_user do
-          get :new, service_id: @service.id, data_set_id: @data_set.id
+          get :new, params: { service_id: @service.id, data_set_id: @data_set.id }
 
           assert_response(:success)
           assert_template "new"
@@ -32,7 +32,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
             town: "Blackpool"
           }
 
-          post :create, service_id: @service.id, data_set_id: @data_set.id, place: place_attributes
+          post :create, params: { service_id: @service.id, data_set_id: @data_set.id, place: place_attributes }
 
           place = Place.where(service_slug: @service.slug, data_set_version: @data_set.version, name: "Plaice Inc.").first
 
@@ -50,7 +50,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
 
       should "not show the new place form" do
         as_logged_in_user do
-          get :new, service_id: @service.id, data_set_id: @data_set.id
+          get :new, params: { service_id: @service.id, data_set_id: @data_set.id }
 
           assert_redirected_to admin_service_data_set_url(@service, @data_set)
         end
@@ -63,7 +63,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
             postcode: "FY4 1AZ",
             town: "Blackpool"
           }
-          post :create, service_id: @service.id, data_set_id: @data_set.id, place: place_attributes
+          post :create, params: { service_id: @service.id, data_set_id: @data_set.id, place: place_attributes }
 
           assert_response(:unprocessable_entity)
         end
@@ -80,7 +80,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
 
       should "display the edit form" do
         as_logged_in_user do
-          get :edit, service_id: @service.id, data_set_id: @data_set.id, id: @place.id
+          get :edit, params: { service_id: @service.id, data_set_id: @data_set.id, id: @place.id }
 
           assert_response(:success)
           assert_template "edit"
@@ -92,8 +92,8 @@ class Admin::PlacesControllerTest < ActionController::TestCase
 
       should "persist changes" do
         as_logged_in_user do
-          put :update, service_id: @service.id, data_set_id: @data_set.id, id: @place.id,
-            place: { name: "Updated Place Name" }
+          put :update, params: { service_id: @service.id, data_set_id: @data_set.id, id: @place.id,
+            place: { name: "Updated Place Name" } }
 
           @place.reload
 
@@ -104,8 +104,8 @@ class Admin::PlacesControllerTest < ActionController::TestCase
 
       should "ignore nil or blank overridden latitude and longitude params" do
         as_logged_in_user do
-          put :update, service_id: @service.id, data_set_id: @data_set.id, id: @place.id,
-            place: { name: "Updated Place Name", override_lat: "", override_lng: "" }
+          put :update, params: { service_id: @service.id, data_set_id: @data_set.id, id: @place.id,
+            place: { name: "Updated Place Name", override_lat: "", override_lng: "" } }
 
           @place.reload
 
@@ -118,8 +118,8 @@ class Admin::PlacesControllerTest < ActionController::TestCase
 
       should "create a location from overridden latitude and longitude params" do
         as_logged_in_user do
-          put :update, service_id: @service.id, data_set_id: @data_set.id, id: @place.id,
-            place: { override_lat: "55.198765", override_lng: "-1.182934" }
+          put :update, params: { service_id: @service.id, data_set_id: @data_set.id, id: @place.id,
+            place: { override_lat: "55.198765", override_lng: "-1.182934" } }
 
           @place.reload
 
@@ -139,7 +139,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
 
       should "not allow the place to be edited" do
         as_logged_in_user do
-          get :edit, service_id: @service.id, data_set_id: @data_set.id, id: @place.id
+          get :edit, params: { service_id: @service.id, data_set_id: @data_set.id, id: @place.id }
 
           assert_redirected_to admin_service_data_set_url(@service, @data_set)
         end
@@ -147,8 +147,8 @@ class Admin::PlacesControllerTest < ActionController::TestCase
 
       should "not persist changes" do
         as_logged_in_user do
-          put :update, service_id: @service.id, data_set_id: @data_set.id, id: @place.id,
-            place: { name: "Updated Place Name" }
+          put :update, params: { service_id: @service.id, data_set_id: @data_set.id, id: @place.id,
+            place: { name: "Updated Place Name" } }
 
           assert_response(:unprocessable_entity)
         end
@@ -166,7 +166,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
 
       should "not allow the place to be edited" do
         as_logged_in_user do
-          get :edit, service_id: @service.id, data_set_id: @data_set.id, id: @place.id
+          get :edit, params: { service_id: @service.id, data_set_id: @data_set.id, id: @place.id }
 
           assert_redirected_to admin_service_data_set_url(@service, @data_set)
         end
@@ -174,8 +174,8 @@ class Admin::PlacesControllerTest < ActionController::TestCase
 
       should "not persist changes" do
         as_logged_in_user do
-          put :update, service_id: @service.id, data_set_id: @data_set.id, id: @place.id,
-            place: { name: "Updated Place Name" }
+          put :update, params: { service_id: @service.id, data_set_id: @data_set.id, id: @place.id,
+            place: { name: "Updated Place Name" } }
 
           assert_response(:unprocessable_entity)
         end
