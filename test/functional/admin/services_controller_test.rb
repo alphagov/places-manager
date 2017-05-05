@@ -10,7 +10,7 @@ class Admin::ServicesControllerTest < ActionController::TestCase
         "local_authority_hierarchy_match_type" => "county"
       }
 
-      post :create, service: service_params
+      post :create, params: { service: service_params }
       assert_response :redirect
 
       assert_equal 1, Service.count
@@ -22,6 +22,4 @@ class Admin::ServicesControllerTest < ActionController::TestCase
       assert_equal "county", service.local_authority_hierarchy_match_type
     end
   end
-
-  # TODO: Write more controller tests here
 end

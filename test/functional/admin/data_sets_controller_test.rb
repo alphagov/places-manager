@@ -19,7 +19,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
     should "successfully import a CSV file" do
       as_logged_in_user do
         csv_file = fixture_file_upload(Rails.root.join('test/fixtures/good_csv.csv'), 'text/csv')
-        post :create, service_id: @service.id, data_set: {data_file: csv_file}
+        post :create, params: { service_id: @service.id, data_set: {data_file: csv_file} }
         assert_response :redirect
 
         # Services are created with 1 data_set initially, so after creating a data_set, there are now 2
@@ -47,7 +47,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
 
       as_logged_in_user do
         csv_file = fixture_file_upload(Rails.root.join('test/fixtures/good_csv.csv'), 'text/csv')
-        post :create, service_id: @service.id, data_set: {data_file: csv_file}
+        post :create, params: { service_id: @service.id, data_set: {data_file: csv_file} }
         assert_response :redirect
         assert_equal "Could not process CSV file because of the file encoding. Please check the format.", flash[:danger]
         # There is always an initial data set
@@ -62,7 +62,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
           tmpfile.write('x' * (15.megabytes + 1))
           tmpfile.close
           csv_file = fixture_file_upload(tmpfile.path, 'text/csv')
-          post :create, service_id: @service.id, data_set: { data_file: csv_file }
+          post :create, params: { service_id: @service.id, data_set: { data_file: csv_file } }
 
           assert_response(:success)
           assert_template "new_data"
@@ -82,7 +82,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
     should "allow activating a data_set" do
       as_logged_in_user do
         set = @service.data_sets.create!
-        post :activate, service_id: @service.id, id: set.id
+        post :activate, params: { service_id: @service.id, id: set.id }
         assert_response :redirect
         assert_equal "Data Set #{set.version} successfully activated", flash[:success]
         @service.reload
@@ -93,7 +93,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
     should "not allow activating a data_set that hasn't completed processing" do
       as_logged_in_user do
         set = @service.data_sets.create!(data_file: File.open(fixture_file_path('good_csv.csv')))
-        post :activate, service_id: @service.id, id: set.id
+        post :activate, params: { service_id: @service.id, id: set.id }
         assert_response :redirect
         assert_equal "Couldn't activate data set", flash[:danger]
         @service.reload
@@ -104,7 +104,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
     context "when activating the latest data set" do
       should "create a background job for archiving the place information" do
         as_logged_in_user do
-          post :activate, service_id: @service.id, id: @service.latest_data_set.id
+          post :activate, params: { service_id: @service.id, id: @service.latest_data_set.id }
           job = ArchivePlacesWorker.jobs.last
           service_id_to_process = job['args'].first
           assert_equal @service, Service.find(service_id_to_process)
