@@ -11,6 +11,6 @@ test:
   namespace: imminence-test
 
 production:
-  host: redis-2.backend
+  host: <%= ENV["REDIS_HOST"] %>
   port: 6379
   namespace: imminence
