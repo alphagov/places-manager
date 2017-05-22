@@ -1,6 +1,6 @@
 require "sidekiq"
 
-redis_config = YAML.load_file(Rails.root.join("config", "redis.yml"))[Rails.env].symbolize_keys
+redis_config = YAML.load(ERB.new(File.read("config/redis.yml")).result)[Rails.env].symbolize_keys
 
 Sidekiq.configure_server do |config|
   config.redis = redis_config
