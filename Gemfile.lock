@@ -112,7 +112,7 @@ GEM
       actionpack (>= 3.2.13)
     formtastic-bootstrap (3.1.1)
       formtastic (>= 3.0)
-    gds-api-adapters (36.4.1)
+    gds-api-adapters (47.9.1)
       link_header
       lrucache (~> 0.1.1)
       null_logger
@@ -246,10 +246,10 @@ GEM
       method_source (~> 0.8.1)
       slop (~> 3.4)
     public_suffix (2.0.5)
-    rack (2.0.1)
-    rack-cache (1.7.0)
+    rack (2.0.3)
+    rack-cache (1.7.1)
       rack (>= 0.4)
-    rack-protection (1.5.3)
+    rack-protection (2.0.0)
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -390,7 +390,7 @@ DEPENDENCIES
   factory_girl_rails (~> 4.5.0)
   formtastic
   formtastic-bootstrap
-  gds-api-adapters (~> 36.0)
+  gds-api-adapters (~> 47.9.1)
   gds-sso (~> 13.0.0)
   govuk-lint (= 0.5.1)
   govuk_admin_template (= 6.0.0)
@@ -424,4 +424,4 @@ DEPENDENCIES
   webmock (~> 1.11)
 
 BUNDLED WITH
-   1.14.5
+   1.15.4
