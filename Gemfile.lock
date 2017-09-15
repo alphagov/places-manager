@@ -41,9 +41,6 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.5.1)
       public_suffix (~> 2.0, >= 2.0.2)
-    airbrake (4.3.8)
-      builder
-      multi_json
     ansi (1.5.0)
     arel (7.1.4)
     ast (2.3.0)
@@ -112,7 +109,7 @@ GEM
       actionpack (>= 3.2.13)
     formtastic-bootstrap (3.1.1)
       formtastic (>= 3.0)
-    gds-api-adapters (36.4.1)
+    gds-api-adapters (47.9.1)
       link_header
       lrucache (~> 0.1.1)
       null_logger
@@ -136,6 +133,15 @@ GEM
       bootstrap-sass (= 3.3.5.1)
       jquery-rails (~> 4.1.1)
       rails (>= 3.2.0)
+    govuk_app_config (0.2.0)
+      sentry-raven (~> 2.6.3)
+      statsd-ruby (~> 1.4.0)
+    govuk_sidekiq (2.0.0)
+      gds-api-adapters (>= 19.1.0)
+      redis-namespace (~> 1.5.2)
+      sidekiq (~> 4.2.8)
+      sidekiq-logging-json (~> 0.0)
+      sidekiq-statsd (~> 0.1)
     has_scope (0.7.1)
       actionpack (>= 4.1, < 5.2)
       activesupport (>= 4.1, < 5.2)
@@ -246,10 +252,10 @@ GEM
       method_source (~> 0.8.1)
       slop (~> 3.4)
     public_suffix (2.0.5)
-    rack (2.0.1)
-    rack-cache (1.7.0)
+    rack (2.0.3)
+    rack-cache (1.7.1)
       rack (>= 0.4)
-    rack-protection (1.5.3)
+    rack-protection (2.0.0)
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -286,7 +292,7 @@ GEM
     rake (12.0.0)
     rdoc (4.3.0)
     redis (3.3.3)
-    redis-namespace (1.5.2)
+    redis-namespace (1.5.3)
       redis (~> 3.0, >= 3.0.4)
     responders (2.4.0)
       actionpack (>= 4.2.0, < 5.3)
@@ -314,12 +320,16 @@ GEM
     sdoc (0.4.2)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
+    sentry-raven (2.6.3)
+      faraday (>= 0.7.6, < 1.0)
     shoulda-context (1.2.2)
     sidekiq (4.2.10)
       concurrent-ruby (~> 1.0)
       connection_pool (~> 2.2, >= 2.2.0)
       rack-protection (>= 1.5.0)
       redis (~> 3.2, >= 3.2.1)
+    sidekiq-logging-json (0.0.18)
+      sidekiq (>= 3)
     sidekiq-statsd (0.1.5)
       activesupport
       sidekiq (>= 2.6)
@@ -346,7 +356,7 @@ GEM
     state_machines-mongoid (0.1.1)
       mongoid (>= 4.0.0)
       state_machines-activemodel
-    statsd-ruby (1.1.0)
+    statsd-ruby (1.4.0)
     thor (0.19.4)
     thread_safe (0.3.6)
     tilt (2.0.7)
@@ -381,7 +391,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  airbrake (~> 4.3.8)
   bootstrap-kaminari-views (~> 0.0.3)
   capybara
   ci_reporter_minitest
@@ -390,10 +399,12 @@ DEPENDENCIES
   factory_girl_rails (~> 4.5.0)
   formtastic
   formtastic-bootstrap
-  gds-api-adapters (~> 36.0)
+  gds-api-adapters (~> 47.9.1)
   gds-sso (~> 13.0.0)
   govuk-lint (= 0.5.1)
   govuk_admin_template (= 6.0.0)
+  govuk_app_config (~> 0.2.0)
+  govuk_sidekiq (~> 2.0.0)
   inherited_resources
   kaminari-actionview
   kaminari-mongoid
@@ -408,20 +419,17 @@ DEPENDENCIES
   pry
   rails (= 5.0.2)
   rails-controller-testing
-  redis-namespace (= 1.5.2)
   responders (~> 2.0)
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   shoulda-context
-  sidekiq (~> 4.1)
-  sidekiq-statsd (= 0.1.5)
   simplecov (~> 0.10.0)
   simplecov-rcov (~> 0.2.3)
   state_machines-mongoid (~> 0.1.1)
-  statsd-ruby (= 1.1.0)
+  statsd-ruby (= 1.4.0)
   uglifier (= 2.7.2)
   unicorn (= 4.3.1)
   webmock (~> 1.11)
 
 BUNDLED WITH
-   1.14.5
+   1.15.4

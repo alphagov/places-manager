@@ -8,14 +8,12 @@ gem 'unicorn', '4.3.1'
 gem "mongoid"
 gem "mongoid_rails_migrations"
 
-gem 'airbrake', '~> 4.3.8'
-
 gem 'govuk_admin_template', '6.0.0'
 gem 'formtastic'
 gem 'formtastic-bootstrap'
 
-gem 'gds-api-adapters', '~> 36.0'
-gem 'statsd-ruby', '1.1.0', require: 'statsd'
+gem 'gds-api-adapters', '~> 47.9.1'
+gem 'statsd-ruby', '1.4.0', require: 'statsd'
 
 if ENV['BUNDLE_DEV']
   gem 'gds-sso', path: '../gds-sso'
@@ -23,15 +21,14 @@ else
   gem 'gds-sso', '~> 13.0.0'
 end
 
+gem 'govuk_app_config', '~> 0.2.0'
+gem "govuk_sidekiq", "~> 2.0.0"
+
 gem 'responders', '~> 2.0'
 gem 'inherited_resources'
 gem 'kaminari-mongoid'
 gem 'kaminari-actionview'
 gem 'bootstrap-kaminari-views', '~> 0.0.3'
-
-gem 'sidekiq', '~> 4.1'
-gem 'sidekiq-statsd', '0.1.5'
-gem 'redis-namespace', '1.5.2'
 
 gem 'state_machines-mongoid', '~> 0.1.1'
 gem 'logstasher', '0.4.8'

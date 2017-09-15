@@ -1,4 +1,3 @@
-require 'sidekiq/testing'
 require 'gds_api/test_helpers/mapit'
 
 module ServiceHelper

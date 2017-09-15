@@ -15,7 +15,7 @@ require 'mocha/setup'
 require 'gds_api/test_helpers/json_client_helper'
 require 'gds_api/test_helpers/mapit'
 require 'webmock/minitest'
-require 'sidekiq/testing'
+require 'govuk_sidekiq/testing'
 # Poltergeist requires access to localhost.
 WebMock.disable_net_connect!(allow_localhost: true)
 
