@@ -30,6 +30,7 @@ gem 'kaminari-mongoid'
 gem 'kaminari-actionview'
 gem 'bootstrap-kaminari-views', '~> 0.0.3'
 
+gem 'state_machines', '~> 0.4.0'
 gem 'state_machines-mongoid', '~> 0.1.1'
 gem 'logstasher', '~> 1.2.1'
 
@@ -57,6 +58,6 @@ group :test do
   gem 'shoulda-context'
   gem 'mocha', '~> 1.1.0', require: false
   gem 'poltergeist', '~> 1.7.0'
-  gem 'webmock', '~> 1.11', require: false
+  gem 'webmock', '~> 2.3.0', require: false
   gem 'rails-controller-testing'
 end
