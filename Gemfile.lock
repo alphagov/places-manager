@@ -254,10 +254,9 @@ GEM
     parser (2.4.0.2)
       ast (~> 2.3)
     plek (1.11.0)
-    poltergeist (1.7.0)
+    poltergeist (1.17.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
-      multi_json (~> 1.0)
       websocket-driver (>= 0.2.0)
     powerpack (0.1.1)
     pry (0.11.3)
@@ -434,7 +433,7 @@ DEPENDENCIES
   mongoid
   mongoid_rails_migrations
   plek (~> 1.11.0)
-  poltergeist (~> 1.7.0)
+  poltergeist (~> 1.17.0)
   pry
   rails (= 5.0.2)
   rails-controller-testing
