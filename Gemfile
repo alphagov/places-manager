@@ -21,7 +21,7 @@ else
   gem 'gds-sso', '~> 13.0.0'
 end
 
-gem 'govuk_app_config', '~> 0.2.0'
+gem 'govuk_app_config', '~> 0.3.0'
 gem "govuk_sidekiq", "~> 2.0.0"
 
 gem 'responders', '~> 2.0'

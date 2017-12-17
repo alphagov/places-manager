@@ -141,7 +141,7 @@ GEM
       bootstrap-sass (= 3.3.5.1)
       jquery-rails (~> 4.1.1)
       rails (>= 3.2.0)
-    govuk_app_config (0.2.0)
+    govuk_app_config (0.3.0)
       sentry-raven (~> 2.6.3)
       statsd-ruby (~> 1.4.0)
     govuk_sidekiq (2.0.0)
@@ -422,7 +422,7 @@ DEPENDENCIES
   gds-sso (~> 13.0.0)
   govuk-lint (= 0.5.1)
   govuk_admin_template (= 6.0.0)
-  govuk_app_config (~> 0.2.0)
+  govuk_app_config (~> 0.3.0)
   govuk_sidekiq (~> 2.0.0)
   inherited_resources
   kaminari-actionview
