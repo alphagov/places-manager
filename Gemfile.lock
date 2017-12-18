@@ -354,9 +354,9 @@ GEM
       activesupport
       sidekiq (>= 2.6)
       statsd-ruby (>= 1.1.0)
-    simplecov (0.10.0)
+    simplecov (0.15.1)
       docile (~> 1.1.0)
-      json (~> 1.8)
+      json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
     simplecov-rcov (0.2.3)
@@ -442,7 +442,7 @@ DEPENDENCIES
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   shoulda-context
-  simplecov (~> 0.10.0)
+  simplecov (~> 0.15.1)
   simplecov-rcov (~> 0.2.3)
   state_machines (~> 0.4.0)
   state_machines-mongoid (~> 0.1.1)
