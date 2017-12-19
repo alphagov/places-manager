@@ -30,7 +30,7 @@ gem 'kaminari-mongoid'
 gem 'kaminari-actionview'
 gem 'bootstrap-kaminari-views', '~> 0.0.3'
 
-gem 'state_machines', '~> 0.4.0'
+gem 'state_machines', '~> 0.5.0'
 gem 'state_machines-mongoid', '~> 0.1.1'
 gem 'logstasher', '~> 1.2.1'
 
