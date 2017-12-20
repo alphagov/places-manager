@@ -18,7 +18,7 @@ gem 'statsd-ruby', '1.4.0', require: 'statsd'
 if ENV['BUNDLE_DEV']
   gem 'gds-sso', path: '../gds-sso'
 else
-  gem 'gds-sso', '~> 13.0.0'
+  gem 'gds-sso', '~> 13.5.0'
 end
 
 gem 'govuk_app_config', '~> 0.2.0'
