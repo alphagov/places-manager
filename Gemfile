@@ -8,7 +8,7 @@ gem 'unicorn', '4.3.1'
 gem "mongoid"
 gem "mongoid_rails_migrations"
 
-gem 'govuk_admin_template', '6.0.0'
+gem 'govuk_admin_template', '6.4.0'
 gem 'formtastic'
 gem 'formtastic-bootstrap'
 
