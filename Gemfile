@@ -3,7 +3,7 @@ source 'http://rubygems.org'
 gem 'plek', '~> 1.11.0'
 
 gem 'rails', '5.0.2'
-gem 'unicorn', '4.3.1'
+gem 'unicorn', '5.3.1'
 
 gem "mongoid"
 gem "mongoid_rails_migrations"
