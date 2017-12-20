@@ -254,7 +254,7 @@ GEM
     parallel (1.12.1)
     parser (2.4.0.2)
       ast (~> 2.3)
-    plek (1.11.0)
+    plek (2.0.0)
     poltergeist (1.7.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
@@ -439,7 +439,7 @@ DEPENDENCIES
   mocha (~> 1.1.0)
   mongoid
   mongoid_rails_migrations
-  plek (~> 1.11.0)
+  plek (~> 2.0.0)
   poltergeist (~> 1.7.0)
   pry
   rails (= 5.0.2)
