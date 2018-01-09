@@ -133,7 +133,7 @@ GEM
     gherkin (5.0.0)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
-    govuk-lint (3.4.0)
+    govuk-lint (3.5.0)
       rubocop (~> 0.51.0)
       rubocop-rspec (~> 1.19.0)
       scss_lint
@@ -329,7 +329,7 @@ GEM
       rubocop (>= 0.51.0)
     ruby-progressbar (1.9.0)
     safe_yaml (1.0.4)
-    sass (3.5.3)
+    sass (3.5.5)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -426,7 +426,7 @@ DEPENDENCIES
   formtastic-bootstrap
   gds-api-adapters (~> 47.9.1)
   gds-sso (~> 13.0.0)
-  govuk-lint (= 3.4.0)
+  govuk-lint (= 3.5.0)
   govuk_admin_template (= 6.0.0)
   govuk_app_config (~> 0.2.0)
   govuk_sidekiq (~> 2.0.0)
