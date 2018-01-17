@@ -35,7 +35,7 @@ gem 'state_machines-mongoid', '~> 0.1.1'
 gem 'logstasher', '~> 1.2.1'
 
 gem 'sass-rails', '~> 5.0'
-gem 'uglifier', '2.7.2'
+gem 'uglifier', '4.1.3'
 
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
