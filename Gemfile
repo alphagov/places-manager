@@ -3,7 +3,6 @@ source 'http://rubygems.org'
 gem 'plek', '~> 1.11.0'
 
 gem 'rails', '5.0.2'
-gem 'unicorn', '4.3.1'
 
 gem "mongoid"
 gem "mongoid_rails_migrations"
@@ -13,7 +12,6 @@ gem 'formtastic'
 gem 'formtastic-bootstrap'
 
 gem 'gds-api-adapters', '~> 51.0.0'
-gem 'statsd-ruby', '1.4.0', require: 'statsd'
 
 if ENV['BUNDLE_DEV']
   gem 'gds-sso', path: '../gds-sso'
@@ -21,7 +19,7 @@ else
   gem 'gds-sso', '~> 13.0.0'
 end
 
-gem 'govuk_app_config', '~> 0.2.0'
+gem 'govuk_app_config', '~> 1.2'
 gem "govuk_sidekiq", "~> 2.0.0"
 
 gem 'responders', '~> 2.0'
@@ -32,7 +30,6 @@ gem 'bootstrap-kaminari-views', '~> 0.0.3'
 
 gem 'state_machines', '~> 0.4.0'
 gem 'state_machines-mongoid', '~> 0.1.1'
-gem 'logstasher', '~> 1.2.1'
 
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '2.7.2'
