@@ -55,6 +55,6 @@ group :test do
   gem 'shoulda-context'
   gem 'mocha', '~> 1.3.0', require: false
   gem 'poltergeist', '~> 1.7.0'
-  gem 'webmock', '~> 3.2.1', require: false
+  gem 'webmock', '~> 3.3.0', require: false
   gem 'rails-controller-testing'
 end
