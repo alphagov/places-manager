@@ -10,7 +10,7 @@ class DataSetCreateEditTest < ActionDispatch::IntegrationTest
     setup do
       Sidekiq::Testing.inline!
       create_test_user
-      @service = FactoryGirl.create(:service)
+      @service = FactoryBot.create(:service)
     end
 
     should "create a data_set from csv and geocode postcodes" do

@@ -7,7 +7,7 @@ class DataSetTest < ActiveSupport::TestCase
 
   context "populating version" do
     setup do
-      @service = FactoryGirl.create(:service)
+      @service = FactoryBot.create(:service)
     end
 
     should "set version to 1 for first set" do
@@ -32,7 +32,7 @@ class DataSetTest < ActiveSupport::TestCase
 
   context "activating a data_set" do
     setup do
-      @service = FactoryGirl.create(:service)
+      @service = FactoryBot.create(:service)
     end
 
     should "set the active data_set on the service and return true" do
@@ -56,8 +56,8 @@ class DataSetTest < ActiveSupport::TestCase
 
   context "archiving a data_set" do
     setup do
-      @service = FactoryGirl.create(:service)
-      FactoryGirl.create(
+      @service = FactoryBot.create(:service)
+      FactoryBot.create(
         :place,
         service_slug: @service.slug,
         data_set_version: 1
@@ -95,7 +95,7 @@ class DataSetTest < ActiveSupport::TestCase
   context "creating a data_set with a data_file" do
     setup do
       Sidekiq::Testing.fake!
-      @service = FactoryGirl.create(:service)
+      @service = FactoryBot.create(:service)
     end
 
     should "create a data_set, store the csv_data and queue a job to process it" do
@@ -172,7 +172,7 @@ class DataSetTest < ActiveSupport::TestCase
     setup do
       # NOTE: this is the postcode in good_csv.csv
       mapit_does_not_have_a_postcode('IG6 3HJ')
-      @service = FactoryGirl.create(:service)
+      @service = FactoryBot.create(:service)
     end
 
     should "add all places from the csv_data" do
@@ -220,7 +220,7 @@ class DataSetTest < ActiveSupport::TestCase
 
   context "places near a point" do
     setup do
-      @service = FactoryGirl.create(:service)
+      @service = FactoryBot.create(:service)
       @buckingham_palace = Place.create(
         service_slug: @service.slug,
         data_set_version: @service.latest_data_set.version,
@@ -301,9 +301,9 @@ class DataSetTest < ActiveSupport::TestCase
     should "constrain results to places belonging to the relevant data_set" do
       ds = @service.latest_data_set
       ds2 = @service.data_sets.create
-      service2 = FactoryGirl.create(:service)
-      FactoryGirl.create(:place, service_slug: @service.slug, data_set_version: ds2.version)
-      FactoryGirl.create(:place, service_slug: service2.slug, data_set_version: service2.latest_data_set.version)
+      service2 = FactoryBot.create(:service)
+      FactoryBot.create(:place, service_slug: @service.slug, data_set_version: ds2.version)
+      FactoryBot.create(:place, service_slug: service2.slug, data_set_version: service2.latest_data_set.version)
 
       assert_equal 3, ds.places_near(@buckingham_palace.location).count
       assert_equal 2, ds.places_near(@buckingham_palace.location, Distance.miles(1.83)).count
@@ -316,7 +316,7 @@ class DataSetTest < ActiveSupport::TestCase
   context "places_for_postcode" do
     context "for a 'nearest' service" do
       setup do
-        @service = FactoryGirl.create(:service)
+        @service = FactoryBot.create(:service)
         @data_set = @service.latest_data_set
         @buckingham_palace = Place.create(
           service_slug: @service.slug,
@@ -361,10 +361,10 @@ class DataSetTest < ActiveSupport::TestCase
 
     context "for a 'local_authority' service" do
       setup do
-        @service = FactoryGirl.create(:service, location_match_type: 'local_authority')
+        @service = FactoryBot.create(:service, location_match_type: 'local_authority')
         @data_set = @service.latest_data_set
 
-        @place1 = FactoryGirl.create(
+        @place1 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
           snac: "18UK",
@@ -373,7 +373,7 @@ class DataSetTest < ActiveSupport::TestCase
           longitude: -4.191071523498792,
           name: "John's Of Appledore"
         )
-        @place2 = FactoryGirl.create(
+        @place2 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
           snac: "18UK",
@@ -382,7 +382,7 @@ class DataSetTest < ActiveSupport::TestCase
           longitude: -4.191422,
           name: "Susie's Tea Rooms"
         )
-        @place3 = FactoryGirl.create(
+        @place3 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
           snac: "00AG",
@@ -391,7 +391,7 @@ class DataSetTest < ActiveSupport::TestCase
           longitude: -0.12058693935709164,
           name: "Aviation House"
         )
-        @place4 = FactoryGirl.create(
+        @place4 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
           snac: "00AG",

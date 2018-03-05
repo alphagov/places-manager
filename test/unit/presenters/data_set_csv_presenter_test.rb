@@ -3,7 +3,7 @@ require 'data_set_csv_presenter'
 
 class DataSetCsvPresenterTest < ActiveSupport::TestCase
   setup do
-    @service = FactoryGirl.create(:service)
+    @service = FactoryBot.create(:service)
     @data_set = @service.data_sets.create!
     @presenter = DataSetCsvPresenter.new(@data_set)
     @result = @presenter.to_array_for_csv
@@ -41,7 +41,7 @@ class DataSetCsvPresenterTest < ActiveSupport::TestCase
 
   context "presenting a dataset with a place" do
     setup do
-      @place = FactoryGirl.create(
+      @place = FactoryBot.create(
         :place,
         service_slug: @service.slug,
         data_set_version: @data_set.version,

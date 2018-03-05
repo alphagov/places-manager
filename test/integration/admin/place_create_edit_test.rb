@@ -5,11 +5,11 @@ class PlaceCreateEditTest < ActionDispatch::IntegrationTest
   include GdsApi::TestHelpers::Mapit
 
   setup do
-    GDS::SSO.test_user = FactoryGirl.create(:user)
+    GDS::SSO.test_user = FactoryBot.create(:user)
     mapit_does_not_have_a_postcode('WC2B 6NH')
-    @service = FactoryGirl.create(:service)
+    @service = FactoryBot.create(:service)
     @data_set = @service.data_sets.create!(version: 2)
-    @place = FactoryGirl.create(:place, service_slug: @service.slug, data_set_version: @data_set.version, postcode: 'WC2B 6NH')
+    @place = FactoryBot.create(:place, service_slug: @service.slug, data_set_version: @data_set.version, postcode: 'WC2B 6NH')
   end
 
   test "Editing a place to override location coordinates" do

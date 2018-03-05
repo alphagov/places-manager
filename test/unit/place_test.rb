@@ -88,7 +88,7 @@ class PlaceTest < ActiveSupport::TestCase
 
   context "geocoding" do
     setup do
-      @service = FactoryGirl.create(:service)
+      @service = FactoryBot.create(:service)
       @data_set = @service.data_sets.create! version: 2
     end
 
@@ -166,7 +166,7 @@ class PlaceTest < ActiveSupport::TestCase
 
   context "dis attribute wrapper" do
     setup do
-      @place = FactoryGirl.create(:place, override_lat: 53.105491, override_lng: -2.017493)
+      @place = FactoryBot.create(:place, override_lat: 53.105491, override_lng: -2.017493)
     end
 
     should "return nil when no geo_near_distance available" do

@@ -52,7 +52,7 @@ class ActiveSupport::TestCase
   end
 
   def create_test_user
-    FactoryGirl.create(:user)
+    FactoryBot.create(:user)
   end
 
   def fixture_file_path(basename)

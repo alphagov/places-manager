@@ -5,7 +5,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
   include GdsApi::TestHelpers::Mapit
 
   setup do
-    @service = FactoryGirl.create(:service)
+    @service = FactoryBot.create(:service)
     mapit_does_not_have_a_postcode('FY4 1AZ')
   end
 
@@ -75,7 +75,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
     context "given the latest inactive data set" do
       setup do
         @data_set = @service.data_sets.create!(version: 2)
-        @place = FactoryGirl.create(:place, service_slug: @service.slug, data_set_version: @data_set.version)
+        @place = FactoryBot.create(:place, service_slug: @service.slug, data_set_version: @data_set.version)
       end
 
       should "display the edit form" do
@@ -133,7 +133,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
     context "given an active data set" do
       setup do
         @data_set = @service.data_sets.create!(version: 2)
-        @place = FactoryGirl.create(:place, service_slug: @service.slug, data_set_version: @data_set.version)
+        @place = FactoryBot.create(:place, service_slug: @service.slug, data_set_version: @data_set.version)
         @data_set.activate
       end
 
@@ -158,7 +158,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
     context "given an inactive data set which is not the latest version" do
       setup do
         @data_set = @service.data_sets.create!(version: 2)
-        @place = FactoryGirl.create(:place, service_slug: @service.slug, data_set_version: @data_set.version)
+        @place = FactoryBot.create(:place, service_slug: @service.slug, data_set_version: @data_set.version)
 
         @subsequent_data_set = @service.data_sets.create!(version: 3)
         @subsequent_data_set.activate

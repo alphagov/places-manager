@@ -3,7 +3,7 @@ require 'test_helper'
 class ServiceTest < ActiveSupport::TestCase
   context "validations" do
     setup do
-      @service = FactoryGirl.build(:service)
+      @service = FactoryBot.build(:service)
     end
 
     should "have a valid factory" do
@@ -24,14 +24,14 @@ class ServiceTest < ActiveSupport::TestCase
       end
 
       should "be unique" do
-        FactoryGirl.create(:service, slug: 'a-service')
+        FactoryBot.create(:service, slug: 'a-service')
         @service.slug = 'a-service'
         refute @service.valid?
         assert_equal 1, @service.errors[:slug].count
       end
 
       should "have database level uniqueness constraint" do
-        FactoryGirl.create(:service, slug: 'a-service')
+        FactoryBot.create(:service, slug: 'a-service')
         @service.slug = 'a-service'
         assert_raises Mongoid::Errors::InvalidPersistenceOption do
           @service.with(safe: true).save validate: false
@@ -114,7 +114,7 @@ class ServiceTest < ActiveSupport::TestCase
     should "create a data_set, store the csv_data and queue a job to process it" do
       Sidekiq::Testing.fake!
 
-      attrs = FactoryGirl.attributes_for(:service)
+      attrs = FactoryBot.attributes_for(:service)
       attrs[:data_file] = File.open(fixture_file_path('good_csv.csv'))
       s = Service.create!(attrs)
 
@@ -132,7 +132,7 @@ class ServiceTest < ActiveSupport::TestCase
 
   context "current scope" do
     setup do
-      @service = FactoryGirl.create(:service)
+      @service = FactoryBot.create(:service)
     end
 
     should "return data_sets which have not been archived" do
@@ -154,10 +154,10 @@ class ServiceTest < ActiveSupport::TestCase
     setup do
       ArchivePlacesWorker.jobs.clear
       Sidekiq::Testing.fake!
-      @service = FactoryGirl.create(:service, active_data_set_version: 3)
+      @service = FactoryBot.create(:service, active_data_set_version: 3)
       @service.data_sets.create!
       @service.data_sets.create!
-      FactoryGirl.create(
+      FactoryBot.create(
         :place,
         service_slug: @service.slug,
         data_set_version: 1
@@ -190,7 +190,7 @@ class ServiceTest < ActiveSupport::TestCase
 
   context "identifying obsolete data sets" do
     setup do
-      @service = FactoryGirl.create(:service)
+      @service = FactoryBot.create(:service)
       @service.data_sets.create!
       @service.data_sets.create!
     end
