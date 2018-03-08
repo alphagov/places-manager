@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :user do
     sequence(:uid) { |n| "uid-#{n}"}
     sequence(:name) { |n| "Joe Bloggs #{n}" }

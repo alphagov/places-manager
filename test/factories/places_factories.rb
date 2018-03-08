@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :service do
     name "Important Government Service"
     sequence(:slug) {|n| "important-government-service-#{n}"}

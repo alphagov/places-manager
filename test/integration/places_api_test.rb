@@ -6,10 +6,10 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
 
   context "Requesting the full dataset" do
     setup do
-      @service = FactoryGirl.create(:service)
+      @service = FactoryBot.create(:service)
       @data_set_1 = @service.active_data_set
       @data_set_2 = @service.data_sets.create
-      @place1_1 = FactoryGirl.create(
+      @place_1a = FactoryBot.create(
         :place,
         service_slug: @service.slug,
         data_set_version: @data_set_1.version,
@@ -17,7 +17,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         longitude: -0.158278,
         name: "Town Hall"
       )
-      @place1_2 = FactoryGirl.create(
+      @place_1b = FactoryBot.create(
         :place,
         service_slug: @service.slug,
         data_set_version: @data_set_1.version,
@@ -25,7 +25,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         longitude: -0.124626,
         name: "Palace of Westminster"
       )
-      @place2_1 = FactoryGirl.create(
+      @place_2a = FactoryBot.create(
         :place,
         service_slug: @service.slug,
         data_set_version: @data_set_2.version,
@@ -33,7 +33,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         longitude: -0.158278,
         name: "Town Hall 2"
       )
-      @place2_2 = FactoryGirl.create(
+      @place_2b = FactoryBot.create(
         :place,
         service_slug: @service.slug,
         data_set_version: @data_set_2.version,
@@ -74,7 +74,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
 
     context "requesting a specific version" do
       should "return requested version when logged in" do
-        GDS::SSO.test_user = FactoryGirl.create(:user)
+        GDS::SSO.test_user = FactoryBot.create(:user)
         visit "/admin" # necessary to setup the login session
 
         visit "/places/#{@service.slug}.json?version=#{@data_set_1.to_param}"
@@ -96,15 +96,15 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
   context "Filtering places by location" do
     context "for a geo-distance service" do
       setup do
-        @service = FactoryGirl.create(:service)
-        @place1 = FactoryGirl.create(
+        @service = FactoryBot.create(:service)
+        @place1 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
           latitude: 51.613314,
           longitude: -0.158278,
           name: "Town Hall"
         )
-        @place2 = FactoryGirl.create(
+        @place2 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
           latitude: 51.500728,
@@ -157,8 +157,8 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
 
     context "for an authority-bounded service" do
       setup do
-        @service = FactoryGirl.create(:service, location_match_type: 'local_authority')
-        @place1 = FactoryGirl.create(
+        @service = FactoryBot.create(:service, location_match_type: 'local_authority')
+        @place1 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
           snac: "18UK",
@@ -166,7 +166,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
           longitude: -4.1907002,
           name: "John's Of Appledore"
         )
-        @place2 = FactoryGirl.create(
+        @place2 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
           snac: "18UK",
@@ -174,7 +174,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
           longitude: -4.191422,
           name: "Susie's Tea Rooms"
         )
-        @place3 = FactoryGirl.create(
+        @place3 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
           snac: "00AG",
@@ -182,7 +182,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
           longitude: -0.124626,
           name: "Palace of Westminster"
         )
-        @place4 = FactoryGirl.create(
+        @place4 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
           snac: "00AG",
@@ -190,7 +190,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
           longitude: -0.12133586354538765,
           name: "FreeState Coffee"
         )
-        @place5 = FactoryGirl.create(
+        @place5 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
           snac: "18",
@@ -198,7 +198,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
           longitude: -4.19096,
           name: "The Coffee Cabin"
         )
-        @place6 = FactoryGirl.create(
+        @place6 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
           snac: "18",
