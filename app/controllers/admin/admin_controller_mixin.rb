@@ -3,7 +3,6 @@ module Admin::AdminControllerMixin
     base.send :include, GDS::SSO::ControllerMethods
 
     base.before_action :authenticate_user!
-    base.before_action :require_signin_permission!
     base.send :defaults, route_prefix: 'admin'
   end
 
