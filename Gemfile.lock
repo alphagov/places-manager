@@ -376,7 +376,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    state_machines (0.4.0)
+    state_machines (0.5.0)
     state_machines-activemodel (0.4.1)
       activemodel (>= 4.1, < 5.2)
       state_machines (>= 0.4.0)
@@ -449,7 +449,7 @@ DEPENDENCIES
   shoulda-context
   simplecov (~> 0.16.1)
   simplecov-rcov (~> 0.2.3)
-  state_machines (~> 0.4.0)
+  state_machines (~> 0.5.0)
   state_machines-mongoid (~> 0.1.1)
   uglifier (= 4.1.9)
   webmock (~> 3.3.0)
