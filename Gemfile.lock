@@ -44,7 +44,7 @@ GEM
     ansi (1.5.0)
     arel (8.0.0)
     ast (2.4.0)
-    autoprefixer-rails (7.2.5)
+    autoprefixer-rails (8.3.0)
       execjs
     backports (3.10.3)
     bootstrap-kaminari-views (0.0.5)
@@ -73,7 +73,7 @@ GEM
     connection_pool (2.2.1)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
-    crass (1.0.3)
+    crass (1.0.4)
     cucumber (3.1.0)
       builder (>= 2.1.2)
       cucumber-core (~> 3.1.0)
@@ -138,9 +138,10 @@ GEM
       rubocop (~> 0.52.0)
       rubocop-rspec (~> 1.19.0)
       scss_lint
-    govuk_admin_template (6.5.0)
+    govuk_admin_template (6.6.0)
       bootstrap-sass (= 3.3.5.1)
       jquery-rails (~> 4.3.1)
+      plek (>= 2.1.0)
       rails (>= 3.2.0)
     govuk_app_config (1.4.2)
       logstasher (~> 1.2.2)
@@ -427,7 +428,7 @@ DEPENDENCIES
   gds-api-adapters (~> 52.5.1)
   gds-sso (~> 13.6.0)
   govuk-lint (= 3.8.0)
-  govuk_admin_template (= 6.5.0)
+  govuk_admin_template (= 6.6.0)
   govuk_app_config (~> 1.4)
   govuk_sidekiq (~> 3.0.0)
   inherited_resources
