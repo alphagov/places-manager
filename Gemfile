@@ -7,7 +7,7 @@ gem 'rails', '5.1.6'
 gem "mongoid"
 gem "mongoid_rails_migrations"
 
-gem 'govuk_admin_template', '6.5.0'
+gem 'govuk_admin_template', '6.6.0'
 gem 'formtastic'
 gem 'formtastic-bootstrap'
 
