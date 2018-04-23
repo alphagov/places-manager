@@ -32,7 +32,7 @@ gem 'state_machines', '~> 0.4.0'
 gem 'state_machines-mongoid', '~> 0.1.1'
 
 gem 'sass-rails', '~> 5.0'
-gem 'uglifier', '4.1.9'
+gem 'uglifier', '4.1.10'
 
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 1.0.0', group: :doc
