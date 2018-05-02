@@ -54,7 +54,7 @@ group :test do
   gem 'launchy'
   gem 'shoulda-context'
   gem 'mocha', '~> 1.5.0', require: false
-  gem 'poltergeist', '~> 1.17.0'
+  gem 'poltergeist', '~> 1.18.0'
   gem 'webmock', '~> 3.4.1', require: false
   gem 'rails-controller-testing'
 end
