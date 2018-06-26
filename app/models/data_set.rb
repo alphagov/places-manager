@@ -21,6 +21,10 @@ class DataSet
   after_save :schedule_csv_processing
 
   state_machine initial: :unarchived do
+    event :duplicated do
+      transition duplicating: :unarchived
+    end
+
     event :archive do
       transition unarchived: :archiving
     end
@@ -69,14 +73,21 @@ class DataSet
     end
   end
 
+  def duplicating?
+    self.state == "duplicating"
+  end
+
   def duplicate
-    duplicated_data_set = self.service.data_sets.create(change_notes: "Created from Version #{self.version}")
+    duplicated_data_set = self.service.data_sets.create(
+      change_notes: "Created from Version #{self.version}",
+      state: "duplicating"
+    )
     self.places.each do |place|
       duplicated_place = place.dup
       duplicated_place.data_set_version = duplicated_data_set.version
       duplicated_place.save
     end
-
+    duplicated_data_set.duplicated
     duplicated_data_set
   end
 

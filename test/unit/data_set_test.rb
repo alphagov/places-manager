@@ -422,5 +422,30 @@ class DataSetTest < ActiveSupport::TestCase
         assert_equal [], @data_set.places_for_postcode("BT1 5GS").to_a
       end
     end
+
+    context "duplicating a data set" do
+      setup do
+        DataSet.any_instance.stubs(duplicated: nil)
+        service = FactoryBot.create(:service)
+        data_set = service.latest_data_set
+        @dupe = data_set.duplicate
+      end
+
+      should "mark the state of the duplicate data set as 'duplicating'" do
+        assert_equal "duplicating", @dupe.state
+      end
+    end
+
+    context "duplicated data set" do
+      setup do
+        service = FactoryBot.create(:service)
+        data_set = service.latest_data_set
+        @dupe = data_set.duplicate
+      end
+
+      should "transition from 'duplicating' to 'unarchived' once finished" do
+        assert_equal %w(duplicating unarchived), @dupe.previous_changes["state"]
+      end
+    end
   end
 end
