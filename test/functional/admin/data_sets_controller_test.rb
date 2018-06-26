@@ -112,5 +112,19 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
         end
       end
     end
+
+    context "when duplicating a data set" do
+      should "create a background job for duplicating the dataset" do
+        as_logged_in_user do
+          FactoryBot.create(:place)
+          post :duplicate, params: { service_id: @service.id, id: @service.latest_data_set.id }
+          job = DuplicateDataSetWorker.jobs.last
+          assert_equal @service.id.to_s, job['args'].first
+          assert_equal @service.latest_data_set.id.to_s, job['args'].second
+          assert_equal 1, DuplicateDataSetWorker.jobs.count
+          assert_redirected_to admin_service_path(@service)
+        end
+      end
+    end
   end
 end

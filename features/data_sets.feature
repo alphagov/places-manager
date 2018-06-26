@@ -45,8 +45,8 @@ Feature: Managing data sets
       And I visit the history tab
       And I duplicate the most recent data set
 
-    Then I should be on the page for the latest data set for the "Register Offices" service
-      And I should see that there are now 3 data sets
+    Then I should be on the page for the "Register Offices" service
+      And I should see that a duplicating job was enqueued for data set version 2
 
   Scenario: Editing an inactive data set
     Given I have previously created the "Register Offices" service

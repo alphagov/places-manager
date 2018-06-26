@@ -94,11 +94,6 @@ Then /^show me the page$/ do
   save_and_open_page
 end
 
-Then /^I should be on the page for the latest data set for the "(.*?)" service$/ do |name|
-  current_path = URI.parse(current_url).path
-  assert_equal path_for_latest_data_set_for_service(name), current_path
-end
-
 Then /^I should see an indication that my data set is awaiting processing$/ do
   assert page.has_content?("Places data is currently being processed")
 end
@@ -109,6 +104,10 @@ end
 
 Then /^I should see an indication that my data set is empty$/ do
   assert page.has_content?("No places are associated with this set. The imported data could be in the wrong format.")
+end
+
+Then /^I should be on the page for the latest data set for the "(.*?)" service$/ do |name|
+  assert_equal path_for_latest_data_set_for_service(name), current_path
 end
 
 Then /^I should see that there are now (\d+) data sets$/ do |count|
@@ -160,4 +159,8 @@ end
 
 Then /^I should not see the first data set$/ do
   assert ! page.has_content?("Version 1")
+end
+
+Then("I should see that a duplicating job was enqueued for data set version {int}") do |int|
+  assert page.has_content?("Your request for a duplicate data set (version #{int}) is being processed. This can take a few minutes.")
 end

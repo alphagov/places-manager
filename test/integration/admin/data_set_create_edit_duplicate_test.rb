@@ -111,5 +111,20 @@ class DataSetCreateEditTest < ActionDispatch::IntegrationTest
       assert_equal 51.599123456789, place.override_lat
       assert_equal 0.10033123456789, place.override_lng
     end
+
+    should "create a duplicate data_set" do
+      FactoryBot.create(:place)
+
+      visit "/admin/services/#{@service.id}"
+
+      within "#new-data" do
+        click_on "Duplicate most recent data set (Version 1)"
+      end
+
+      @service.reload
+      assert_equal 2, @service.data_sets.count
+      ds = @service.latest_data_set
+      assert_equal 1, ds.places.count
+    end
   end
 end
