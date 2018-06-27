@@ -162,5 +162,5 @@ Then /^I should not see the first data set$/ do
 end
 
 Then("I should see that a duplicating job was enqueued for data set version {int}") do |int|
-  assert page.has_content?("Your request for a duplicate data set (version #{int}) is being processed. This can take a few minutes.")
+  assert page.has_content?("Your request for a duplicate of data set version #{int} is being processed. This can take a few minutes.")
 end

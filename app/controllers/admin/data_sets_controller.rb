@@ -18,7 +18,7 @@ class Admin::DataSetsController < InheritedResources::Base
 
   def duplicate
     DuplicateDataSetWorker.perform_async(resource.service.id.to_s, resource.id.to_s)
-    flash[:success] = "Your request for a duplicate data set (version #{resource.version}) is being processed. This can take a few minutes."
+    flash[:success] = "Your request for a duplicate of data set version #{resource.version} is being processed. This can take a few minutes. Please refresh this page."
     redirect_to "#{admin_service_path(service)}#history"
   end
 
