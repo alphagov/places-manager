@@ -122,7 +122,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
           assert_equal @service.id.to_s, job['args'].first
           assert_equal @service.latest_data_set.id.to_s, job['args'].second
           assert_equal 1, DuplicateDataSetWorker.jobs.count
-          assert_redirected_to admin_service_path(@service)
+          assert_redirected_to "#{admin_service_path(@service)}#history"
         end
       end
     end
