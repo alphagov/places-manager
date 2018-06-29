@@ -14,6 +14,8 @@
             <span class="label label-default">Archiving</span>
           <% elsif set.active? %>
             <span class="label label-success">Active</span>
+          <% elsif set.duplicating? %>
+            <span class="label label-info">Duplicating</span>
           <% else %>
             <span class="label label-default">Inactive</span>
           <% end %>

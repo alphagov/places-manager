@@ -17,9 +17,9 @@ class Admin::DataSetsController < InheritedResources::Base
   end
 
   def duplicate
-    duplicated_data_set = resource.duplicate
-    flash[:success] = "Version #{duplicated_data_set.version} has been created."
-    redirect_to admin_service_data_set_path(service, duplicated_data_set)
+    DuplicateDataSetWorker.perform_async(resource.service.id.to_s, resource.id.to_s)
+    flash[:success] = "Your request for a duplicate of data set version #{resource.version} is being processed. This can take a few minutes. Please refresh this page."
+    redirect_to "#{admin_service_path(service)}#history"
   end
 
   def activate
