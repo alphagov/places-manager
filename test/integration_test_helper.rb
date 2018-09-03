@@ -26,5 +26,4 @@ class ActionDispatch::IntegrationTest
   end
 end
 
-require 'capybara/poltergeist'
-Capybara.javascript_driver = :poltergeist
+GovukTest.configure

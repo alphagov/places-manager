@@ -46,6 +46,7 @@ group :test do
   gem 'cucumber-rails', require: false
   gem 'capybara'
   gem 'database_cleaner'
+  gem 'govuk_test'
   gem 'simplecov', '~> 0.16.1', require: false
   gem 'simplecov-rcov', '~> 0.2.3', require: false
   gem 'factory_bot_rails', '~> 4.11.0'
@@ -54,7 +55,6 @@ group :test do
   gem 'launchy'
   gem 'shoulda-context'
   gem 'mocha', '~> 1.7.0', require: false
-  gem 'poltergeist', '~> 1.18.1'
   gem 'webmock', '~> 3.4.2', require: false
   gem 'rails-controller-testing'
 end
