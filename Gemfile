@@ -44,7 +44,6 @@ end
 
 group :test do
   gem 'cucumber-rails', require: false
-  gem 'capybara'
   gem 'database_cleaner'
   gem 'govuk_test'
   gem 'simplecov', '~> 0.16.1', require: false
