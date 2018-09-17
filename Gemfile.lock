@@ -437,7 +437,6 @@ PLATFORMS
 
 DEPENDENCIES
   bootstrap-kaminari-views (~> 0.0.3)
-  capybara
   ci_reporter_minitest
   cucumber-rails
   database_cleaner
