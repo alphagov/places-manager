@@ -11,7 +11,7 @@ gem 'govuk_admin_template', '6.6.0'
 gem 'formtastic'
 gem 'formtastic-bootstrap'
 
-gem 'gds-api-adapters', '~> 53.2.0'
+gem 'gds-api-adapters', '~> 54.0.0'
 
 if ENV['BUNDLE_DEV']
   gem 'gds-sso', path: '../gds-sso'
