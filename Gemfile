@@ -1,5 +1,7 @@
 source 'http://rubygems.org'
 
+ruby File.read(".ruby-version").chomp
+
 gem 'plek', '~> 2.1.1'
 
 gem 'rails', '5.2.2'
