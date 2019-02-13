@@ -53,7 +53,7 @@ group :test do
   gem 'minitest-reporters'
   gem 'launchy'
   gem 'shoulda-context'
-  gem 'mocha', '~> 1.7.0', require: false
+  gem 'mocha', '~> 1.8.0', require: false
   gem 'webmock', '~> 3.5.1', require: false
   gem 'rails-controller-testing'
 end
