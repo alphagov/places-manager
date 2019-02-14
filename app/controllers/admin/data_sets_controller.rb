@@ -49,8 +49,9 @@ protected
       file = get_file_from_param(params[:data_set][:data_file])
       fv = Imminence::FileVerifier.new(file)
       unless fv.type == 'text'
-        Rails.logger.info "Rejecting file with content type: #{fv.mime_type}"
-        raise CSV::MalformedCSVError
+        message = "Rejecting file with content type: #{fv.mime_type}"
+        Rails.logger.info(message)
+        raise CSV::MalformedCSVError.new(message, 0)
       end
     end
   end
