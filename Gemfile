@@ -20,7 +20,7 @@ else
 end
 
 gem 'govuk_app_config', '~> 1.11'
-gem "govuk_sidekiq", "~> 3.0.2"
+gem "govuk_sidekiq", "~> 3.0.3"
 
 gem 'responders', '~> 2.0'
 gem 'inherited_resources'
