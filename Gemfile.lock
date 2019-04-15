@@ -115,10 +115,10 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     erubi (1.8.0)
     execjs (2.7.0)
-    factory_bot (5.0.0)
+    factory_bot (5.0.2)
       activesupport (>= 4.2.0)
-    factory_bot_rails (5.0.1)
-      factory_bot (~> 5.0.0)
+    factory_bot_rails (5.0.2)
+      factory_bot (~> 5.0.2)
       railties (>= 4.2.0)
     faraday (0.15.4)
       multipart-post (>= 1.2, < 3)
@@ -451,7 +451,7 @@ DEPENDENCIES
   ci_reporter_minitest
   cucumber-rails
   database_cleaner
-  factory_bot_rails (~> 5.0.1)
+  factory_bot_rails (~> 5.0.2)
   formtastic
   formtastic-bootstrap
   gds-api-adapters (~> 59.0.0)
