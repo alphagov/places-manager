@@ -170,7 +170,7 @@ GEM
     has_scope (0.7.2)
       actionpack (>= 4.1)
       activesupport (>= 4.1)
-    hashdiff (0.3.7)
+    hashdiff (0.4.0)
     hashie (3.6.0)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
@@ -278,7 +278,7 @@ GEM
     pry (0.12.2)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
-    public_suffix (3.0.3)
+    public_suffix (3.1.0)
     puma (3.12.1)
     rack (2.0.7)
     rack-cache (1.9.0)
@@ -346,7 +346,7 @@ GEM
       rubocop (>= 0.60.0)
     ruby-progressbar (1.10.0)
     rubyzip (1.2.2)
-    safe_yaml (1.0.4)
+    safe_yaml (1.0.5)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -427,10 +427,10 @@ GEM
       nokogiri (~> 1.6)
       rubyzip (~> 1.0)
       selenium-webdriver (~> 3.0)
-    webmock (3.5.1)
+    webmock (3.6.0)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
-      hashdiff
+      hashdiff (>= 0.4.0, < 2.0.0)
     websocket-driver (0.7.0)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.3)
@@ -476,7 +476,7 @@ DEPENDENCIES
   state_machines (~> 0.4.0)
   state_machines-mongoid (~> 0.1.1)
   uglifier (= 4.1.20)
-  webmock (~> 3.5.1)
+  webmock (~> 3.6.0)
 
 BUNDLED WITH
    1.16.2
