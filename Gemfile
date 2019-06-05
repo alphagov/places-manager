@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'plek', '~> 2.1.1'
+gem 'plek', '~> 3.0.0'
 
 gem 'rails', '5.2.3'
 
