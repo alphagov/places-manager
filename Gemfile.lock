@@ -233,7 +233,7 @@ GEM
       builder
       minitest (>= 5.0)
       ruby-progressbar
-    mocha (1.8.0)
+    mocha (1.9.0)
       metaclass (~> 0.0.1)
     mongo (2.4.3)
       bson (>= 4.2.1, < 5.0.0)
@@ -460,7 +460,7 @@ DEPENDENCIES
   kaminari-mongoid
   launchy
   minitest-reporters
-  mocha (~> 1.8.0)
+  mocha (~> 1.9.0)
   mongoid
   mongoid_rails_migrations
   plek (~> 3.0.0)
