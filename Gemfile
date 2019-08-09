@@ -22,7 +22,7 @@ end
 gem 'govuk_app_config', '~> 1.20'
 gem "govuk_sidekiq", "~> 3.0.3"
 
-gem 'responders', '~> 2.4'
+gem 'responders', '~> 3.0'
 gem 'inherited_resources'
 gem 'kaminari-mongoid'
 gem 'kaminari-actionview'
