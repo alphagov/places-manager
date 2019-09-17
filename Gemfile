@@ -54,6 +54,6 @@ group :test do
   gem 'launchy'
   gem 'shoulda-context'
   gem 'mocha', '~> 1.9.0', require: false
-  gem 'webmock', '~> 3.7.3', require: false
+  gem 'webmock', '~> 3.7.4', require: false
   gem 'rails-controller-testing'
 end
