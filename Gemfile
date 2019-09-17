@@ -46,7 +46,7 @@ group :test do
   gem 'cucumber-rails', require: false
   gem 'database_cleaner'
   gem 'govuk_test'
-  gem 'simplecov', '~> 0.17.0', require: false
+  gem 'simplecov', '~> 0.17.1', require: false
   gem 'simplecov-rcov', '~> 0.2.3', require: false
   gem 'factory_bot_rails', '~> 5.0.2'
   gem 'ci_reporter_minitest'
