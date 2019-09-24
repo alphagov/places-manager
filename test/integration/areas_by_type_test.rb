@@ -6,9 +6,9 @@ class AreasByTypeTest < ActionDispatch::IntegrationTest
 
   setup do
     mapit_has_areas("EUR", 
-      "123" => { "id" => 123, "name" => "London", "country_name" => "England", "type" => "EUR" },
-      "234" => { "id" => 234, "name" => "Yorkshire and the Humber", "country_name" => "England", "type" => "EUR" },
-      "345" => { "id" => 345, "name" => "Scotland", "country_name" => "Scotland", "type" => "EUR" },
+                    "123" => { "id" => 123, "name" => "London", "country_name" => "England", "type" => "EUR" },
+                    "234" => { "id" => 234, "name" => "Yorkshire and the Humber", "country_name" => "England", "type" => "EUR" },
+                    "345" => { "id" => 345, "name" => "Scotland", "country_name" => "Scotland", "type" => "EUR" },
     )
   end
 
