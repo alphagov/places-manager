@@ -63,9 +63,9 @@ class MapitApiTest < ActiveSupport::TestCase
         should "return the ons code of the first area with a type of #{district_type}" do
           location_data = GdsApi::Mapit::Location.new({
             "areas" => {
-              "1" => { "codes" => {"ons" => "do-not-pick-me"}, "type" => "WMC" },
-              "2" => { "codes" => {"ons" => "pick-me"}, "type" => district_type },
-              "3" => { "codes" => {"ons" => "do-not-pick-me"}, "type" => "DIS" },
+              "1" => { "codes" => { "ons" => "do-not-pick-me" }, "type" => "WMC" },
+              "2" => { "codes" => { "ons" => "pick-me" }, "type" => district_type },
+              "3" => { "codes" => { "ons" => "do-not-pick-me" }, "type" => "DIS" },
             },
           })
 
@@ -76,7 +76,7 @@ class MapitApiTest < ActiveSupport::TestCase
       should "not return the ons code of an area with a type of CTY" do
         location_data = GdsApi::Mapit::Location.new({
           "areas" => {
-            "1" => { "codes" => {"ons" => "do-not-pick-me"}, "type" => "CTY" },
+            "1" => { "codes" => { "ons" => "do-not-pick-me" }, "type" => "CTY" },
           },
         })
 
@@ -95,9 +95,9 @@ class MapitApiTest < ActiveSupport::TestCase
         should "return the ons code of the first area with a type of #{county_type}" do
           location_data = GdsApi::Mapit::Location.new({
             "areas" => {
-              "1" => { "codes" => {"ons" => "do-not-pick-me"}, "type" => "WMC" },
-              "2" => { "codes" => {"ons" => "pick-me"}, "type" => county_type },
-              "3" => { "codes" => {"ons" => "do-not-pick-me"}, "type" => "CTY" },
+              "1" => { "codes" => { "ons" => "do-not-pick-me" }, "type" => "WMC" },
+              "2" => { "codes" => { "ons" => "pick-me" }, "type" => county_type },
+              "3" => { "codes" => { "ons" => "do-not-pick-me" }, "type" => "CTY" },
             },
           })
 
@@ -108,7 +108,7 @@ class MapitApiTest < ActiveSupport::TestCase
       should "not return the ons code of an area with a type of DIS" do
         location_data = GdsApi::Mapit::Location.new({
           "areas" => {
-            "1" => { "codes" => {"ons" => "do-not-pick-me"}, "type" => "DIS" },
+            "1" => { "codes" => { "ons" => "do-not-pick-me" }, "type" => "DIS" },
           },
         })
 

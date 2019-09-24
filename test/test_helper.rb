@@ -61,6 +61,6 @@ class ActiveSupport::TestCase
     fixture_file = fixture_file_path("mapit_responses/#{postcode.tr(' ', '_')}.json")
 
     stub_request(:get, "#{GdsApi::TestHelpers::Mapit::MAPIT_ENDPOINT}/postcode/#{postcode.tr(' ', '+')}.json").
-      to_return(body: File.open(fixture_file), status: 200, headers: {"Content-Type" => "application/json"})
+      to_return(body: File.open(fixture_file), status: 200, headers: { "Content-Type" => "application/json" })
   end
 end
