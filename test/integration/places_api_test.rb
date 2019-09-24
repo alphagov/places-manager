@@ -50,7 +50,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
       assert_equal "application/json; charset=utf-8", last_response.content_type
 
       data = JSON.parse(last_response.body)
-      assert_equal ["Palace of Westminster 2", "Town Hall 2"], data.map { |p| p["name"] }
+      assert_equal ["Palace of Westminster 2", "Town Hall 2"], (data.map { |p| p["name"] })
     end
 
     should "return all places as CSV" do
@@ -59,7 +59,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
       assert_equal "text/csv", last_response.content_type
 
       data = CSV.new(last_response.body, headers: true).read
-      assert_equal ["Palace of Westminster 2", "Town Hall 2"], data.map { |p| p["name"] }
+      assert_equal ["Palace of Westminster 2", "Town Hall 2"], (data.map { |p| p["name"] })
     end
 
     should "return all places as KML" do
@@ -80,7 +80,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         visit "/places/#{@service.slug}.json?version=#{@data_set_1.to_param}"
 
         data = JSON.parse(page.source)
-        assert_equal ["Palace of Westminster", "Town Hall"], data.map { |p| p["name"] }
+        assert_equal ["Palace of Westminster", "Town Hall"], (data.map { |p| p["name"] })
       end
 
       should "ignore requested version and return active version when not logged in" do
@@ -88,7 +88,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
 
         data = JSON.parse(page.source)
         # Titles from @data_set_2
-        assert_equal ["Palace of Westminster 2", "Town Hall 2"], data.map { |p| p["name"] }
+        assert_equal ["Palace of Westminster 2", "Town Hall 2"], (data.map { |p| p["name"] })
       end
     end
   end
