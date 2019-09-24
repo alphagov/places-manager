@@ -56,7 +56,7 @@ class Place
   validate :has_both_lat_lng_overrides
   validates_with CannotEditPlaceDetailsUnlessNewestInactiveDataset, on: :update
 
-  index({ location: "2d", service_slug: 1, data_set_version: 1 }, { background: true })
+  index({ location: "2d", service_slug: 1, data_set_version: 1 }, background: true)
   index({service_slug: 1, data_set_version: 1})
 
   # Index to speed up the `needs_geocoding` and `with_geocoding_errors` scopes

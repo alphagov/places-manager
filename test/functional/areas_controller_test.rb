@@ -5,7 +5,7 @@ class AreasControllerTest < ActionController::TestCase
   include GdsApi::TestHelpers::Mapit
 
   test "the index action responds successfully" do
-    mapit_has_areas("CTY", {
+    mapit_has_areas("CTY", 
       '2217': {
         'id': 2217,
         'codes': { 'ons': "11", 'gss': "E10000002", 'govuk_slug': "buckinghamshire" },
@@ -15,7 +15,7 @@ class AreasControllerTest < ActionController::TestCase
         'country_name': "England",
         'type': "CTY",
       },
-    })
+    )
 
     get :index, params: { area_type: "CTY" }, format: :json
 

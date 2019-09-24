@@ -84,7 +84,7 @@ class MapitApiTest < ActiveSupport::TestCase
       end
 
       should "return nil if no area types match" do
-        location_data = GdsApi::Mapit::Location.new({ "areas" => [] })
+        location_data = GdsApi::Mapit::Location.new("areas" => [])
 
         assert_nil MapitApi.extract_snac_from_mapit_response(location_data, "district")
       end
@@ -116,7 +116,7 @@ class MapitApiTest < ActiveSupport::TestCase
       end
 
       should "return nil if no area types match" do
-        location_data = GdsApi::Mapit::Location.new({ "areas" => [] })
+        location_data = GdsApi::Mapit::Location.new("areas" => [])
 
         assert_nil MapitApi.extract_snac_from_mapit_response(location_data, "county")
       end
@@ -125,7 +125,7 @@ class MapitApiTest < ActiveSupport::TestCase
     context "when asked to extract any other type of snac code" do
       should "raise a InvalidLocationHierarchyType exception" do
         assert_raises(MapitApi::InvalidLocationHierarchyType) do
-          MapitApi.extract_snac_from_mapit_response(GdsApi::Mapit::Location.new({ "areas" => [] }), "super output area")
+          MapitApi.extract_snac_from_mapit_response(GdsApi::Mapit::Location.new("areas" => []), "super output area")
         end
       end
     end
