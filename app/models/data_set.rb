@@ -1,4 +1,4 @@
-require 'csv'
+require "csv"
 
 class DataSet
   include Mongoid::Document
@@ -61,7 +61,7 @@ class DataSet
   def places_for_postcode(postcode, distance = nil, limit = nil)
     location_data = MapitApi.location_for_postcode(postcode)
     location = Point.new(latitude: location_data.lat, longitude: location_data.lon)
-    if service.location_match_type == 'local_authority'
+    if service.location_match_type == "local_authority"
       snac = MapitApi.extract_snac_from_mapit_response(location_data, service.local_authority_hierarchy_match_type)
       if snac
         places_near(location, distance, limit, snac)
@@ -80,7 +80,7 @@ class DataSet
   def duplicate
     duplicated_data_set = self.service.data_sets.create(
       change_notes: "Created from Version #{self.version}",
-      state: "duplicating"
+      state: "duplicating",
     )
     self.places.each do |place|
       duplicated_place = place.dup
@@ -200,15 +200,15 @@ class DataSet
 private
 
   def read_as_utf8(file)
-    string = file.read.force_encoding('utf-8')
+    string = file.read.force_encoding("utf-8")
     unless string.valid_encoding?
       # Try windows-1252 (which is a superset of iso-8859-1)
-      string.force_encoding('windows-1252')
+      string.force_encoding("windows-1252")
       # Any stream of bytes should be a vaild Windows-1252 string, so we use the presence of any
       # ASCII control chars (except for \r and \n) as a good heuristic to determine if this is
       # likely to be the correct charset
       if string.valid_encoding? && ! string.match(/[\x00-\x09\x0b\x0c\x0e-\x1f]/)
-        return string.encode('utf-8')
+        return string.encode("utf-8")
       end
 
       raise InvalidCharacterEncodingError, "Unknown character encoding"

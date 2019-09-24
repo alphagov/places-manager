@@ -1,5 +1,5 @@
-require 'test_helper'
-require 'data_set_csv_presenter'
+require "test_helper"
+require "data_set_csv_presenter"
 
 class DataSetCsvPresenterTest < ActiveSupport::TestCase
   setup do
@@ -48,7 +48,7 @@ class DataSetCsvPresenterTest < ActiveSupport::TestCase
         email: "camden@example.com",
         snac: "00AG",
         override_lng: 0.0,
-        override_lat: 1.0
+        override_lat: 1.0,
       )
       @result = @presenter.to_array_for_csv
     end

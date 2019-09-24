@@ -1,15 +1,15 @@
-require_relative '../../integration_test_helper'
-require 'gds_api/test_helpers/mapit'
+require_relative "../../integration_test_helper"
+require "gds_api/test_helpers/mapit"
 
 class PlaceCreateEditTest < ActionDispatch::IntegrationTest
   include GdsApi::TestHelpers::Mapit
 
   setup do
     GDS::SSO.test_user = FactoryBot.create(:user)
-    mapit_does_not_have_a_postcode('WC2B 6NH')
+    mapit_does_not_have_a_postcode("WC2B 6NH")
     @service = FactoryBot.create(:service)
     @data_set = @service.data_sets.create!(version: 2)
-    @place = FactoryBot.create(:place, service_slug: @service.slug, data_set_version: @data_set.version, postcode: 'WC2B 6NH')
+    @place = FactoryBot.create(:place, service_slug: @service.slug, data_set_version: @data_set.version, postcode: "WC2B 6NH")
   end
 
   test "Editing a place to override location coordinates" do
@@ -20,7 +20,7 @@ class PlaceCreateEditTest < ActionDispatch::IntegrationTest
 
     click_on "Update Place"
 
-    within('table.table-places') do
+    within("table.table-places") do
       assert page.has_css?("td", text: "54.9949, -1.4274")
     end
   end
@@ -56,7 +56,7 @@ class PlaceCreateEditTest < ActionDispatch::IntegrationTest
 
     click_on "Update Place"
 
-    within('table.table-places') do
+    within("table.table-places") do
       assert page.has_css?("td", text: "53.1055, -2.0175")
     end
   end

@@ -23,7 +23,7 @@ class User
 
   def activate_data_set(data_set)
     data_set.activate
-    record_action(data_set, 'activated')
+    record_action(data_set, "activated")
   end
 
   def to_s

@@ -1,12 +1,12 @@
-require 'test_helper'
-require 'gds_api/test_helpers/mapit'
+require "test_helper"
+require "gds_api/test_helpers/mapit"
 
 class Admin::PlacesControllerTest < ActionController::TestCase
   include GdsApi::TestHelpers::Mapit
 
   setup do
     @service = FactoryBot.create(:service)
-    mapit_does_not_have_a_postcode('FY4 1AZ')
+    mapit_does_not_have_a_postcode("FY4 1AZ")
   end
 
   context "adding a place" do
@@ -29,7 +29,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
           place_attributes = {
             name: "Plaice Inc.",
             postcode: "FY4 1AZ",
-            town: "Blackpool"
+            town: "Blackpool",
           }
 
           post :create, params: { service_id: @service.id, data_set_id: @data_set.id, place: place_attributes }
@@ -61,7 +61,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
           place_attributes = {
             name: "The Original Plaice Co.",
             postcode: "FY4 1AZ",
-            town: "Blackpool"
+            town: "Blackpool",
           }
           post :create, params: { service_id: @service.id, data_set_id: @data_set.id, place: place_attributes }
 

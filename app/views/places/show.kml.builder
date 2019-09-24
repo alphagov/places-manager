@@ -1,5 +1,5 @@
 xml.instruct!
-xml.kml("xmlns" => "http://www.opengis.net/kml/2.2", 'xmlns:atom' => "http://www.w3.org/2005/Atom") do
+xml.kml("xmlns" => "http://www.opengis.net/kml/2.2", "xmlns:atom" => "http://www.w3.org/2005/Atom") do
   xml.Document do
     xml.name @service.name
     @places.each do |place|

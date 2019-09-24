@@ -8,14 +8,14 @@ class AreasPresenter
     {
       "_response_info" => {
         "status" => response_status,
-        "links" => []
+        "links" => [],
       },
       "total" => @areas.size,
       "start_index" => 1,
       "page_size" => @areas.size,
       "current_page" => 1,
       "pages" => 1,
-      "results" => @areas.map { |a| area_attrs(a) }
+      "results" => @areas.map { |a| area_attrs(a) },
     }
   end
 

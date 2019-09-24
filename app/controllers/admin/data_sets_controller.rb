@@ -12,7 +12,7 @@ class Admin::DataSetsController < InheritedResources::Base
   def create
     prohibit_non_csv_uploads
     create! do |_success, failure|
-      failure.html { render 'new_data' }
+      failure.html { render "new_data" }
     end
   end
 
@@ -48,7 +48,7 @@ protected
     if params[:data_set] && params[:data_set][:data_file]
       file = get_file_from_param(params[:data_set][:data_file])
       fv = Imminence::FileVerifier.new(file)
-      unless fv.type == 'text'
+      unless fv.type == "text"
         message = "Rejecting file with content type: #{fv.mime_type}"
         Rails.logger.info(message)
         raise CSV::MalformedCSVError.new(message, 0)
@@ -61,7 +61,7 @@ protected
       require(:data_set).
       permit(
         :data_file,
-        :change_notes
+        :change_notes,
       )
   end
 

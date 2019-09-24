@@ -1,4 +1,4 @@
-require 'gds_api/exceptions'
+require "gds_api/exceptions"
 
 class CannotEditPlaceDetailsUnlessNewestInactiveDataset < ActiveModel::Validator
   def validate(record)
@@ -56,7 +56,7 @@ class Place
   validate :has_both_lat_lng_overrides
   validates_with CannotEditPlaceDetailsUnlessNewestInactiveDataset, on: :update
 
-  index({location: '2d', service_slug: 1, data_set_version: 1}, {background: true})
+  index({ location: "2d", service_slug: 1, data_set_version: 1 }, background: true)
   index({service_slug: 1, data_set_version: 1})
 
   # Index to speed up the `needs_geocoding` and `with_geocoding_errors` scopes
@@ -111,7 +111,7 @@ class Place
       result = Imminence.mapit_api.location_for_postcode(self.postcode)
       self.location = Point.new(
         latitude: result.lat,
-        longitude: result.lon
+        longitude: result.lon,
       )
     end
   rescue GdsApi::HTTPClientError
@@ -132,15 +132,15 @@ class Place
   end
 
   def address
-    [address1, address2].select(&:present?).map(&:strip).join(', ')
+    [address1, address2].select(&:present?).map(&:strip).join(", ")
   end
 
   def full_address
-    [address, town, postcode, 'UK'].select(&:present?).map(&:strip).join(', ')
+    [address, town, postcode, "UK"].select(&:present?).map(&:strip).join(", ")
   end
 
   def to_s
-    [name, full_address, url].select(&:present?).join(', ')
+    [name, full_address, url].select(&:present?).join(", ")
   end
 
   def lat
@@ -156,7 +156,7 @@ class Place
   end
 
   def build_source_address
-    new_source_address = [address1, address2, town, postcode].compact.join(', ')
+    new_source_address = [address1, address2, town, postcode].compact.join(", ")
 
     if self.new_record? && self.source_address.blank?
       self.source_address = new_source_address
@@ -168,23 +168,23 @@ class Place
     base_parameters = {
       service_slug: data_set.service.slug,
       data_set_version: data_set.version,
-      name: row['name'],
-      address1: row['address1'],
-      address2: row['address2'],
-      town: row['town'],
-      postcode: row['postcode'],
-      access_notes: row['access_notes'],
-      general_notes: row['general_notes'],
-      url: row['url'],
-      email: row['email'],
-      phone: row['phone'],
-      fax: row['fax'],
-      text_phone: row['text_phone'],
-      source_address: row['source_address'] || "#{row['address1']} #{row['address2']} #{row['town']} #{row['postcode']}",
-      snac: row['snac'],
+      name: row["name"],
+      address1: row["address1"],
+      address2: row["address2"],
+      town: row["town"],
+      postcode: row["postcode"],
+      access_notes: row["access_notes"],
+      general_notes: row["general_notes"],
+      url: row["url"],
+      email: row["email"],
+      phone: row["phone"],
+      fax: row["fax"],
+      text_phone: row["text_phone"],
+      source_address: row["source_address"] || "#{row['address1']} #{row['address2']} #{row['town']} #{row['postcode']}",
+      snac: row["snac"],
     }
-    location_parameters = if row['lng'] && row['lat']
-                            {override_lng: row['lng'], override_lat: row['lat']}
+    location_parameters = if row["lng"] && row["lat"]
+                            { override_lng: row["lng"], override_lat: row["lat"] }
                           else
                             {}
                           end

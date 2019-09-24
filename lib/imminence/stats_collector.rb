@@ -1,7 +1,7 @@
 class Imminence::StatsCollector
   def self.statsd
     @statsd ||= Statsd.new("localhost").tap do |c|
-      c.namespace = ENV['GOVUK_STATSD_PREFIX'].to_s
+      c.namespace = ENV["GOVUK_STATSD_PREFIX"].to_s
     end
   end
 

@@ -1,5 +1,5 @@
-require 'imminence/file_verifier'
-require 'csv'
+require "imminence/file_verifier"
+require "csv"
 
 class Admin::ServicesController < InheritedResources::Base
   include Admin::AdminControllerMixin
@@ -10,11 +10,11 @@ class Admin::ServicesController < InheritedResources::Base
   rescue CSV::MalformedCSVError
     flash.now[:danger] = "Could not process CSV file. Please check the format."
     @service = Service.new(service_params)
-    render action: 'new'
+    render action: "new"
   rescue InvalidCharacterEncodingError
     flash.now[:danger] = "Could not process CSV file because of the file encoding. Please check the format."
     @service = Service.new(service_params)
-    render action: 'new'
+    render action: "new"
   end
 
 protected
@@ -23,7 +23,7 @@ protected
     if params[:service][:data_file]
       file = get_file_from_param(params[:service][:data_file])
       fv = Imminence::FileVerifier.new(file)
-      unless fv.type == 'text'
+      unless fv.type == "text"
         message = "Rejecting file with content type: #{fv.mime_type}"
         Rails.logger.info(message)
         params[:service].delete(:data_file)

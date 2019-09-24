@@ -7,14 +7,14 @@ class Admin::PlacesController < InheritedResources::Base
   def new
     @place = parent.places.build
     unless @place.can_edit?
-      flash[:danger] = 'You cannot create a new place as ' + (data_set.active? ? 'this data set is currently active.' : "there is a more recent data set available.")
+      flash[:danger] = "You cannot create a new place as " + (data_set.active? ? "this data set is currently active." : "there is a more recent data set available.")
       redirect_to admin_service_data_set_path(@service, @data_set)
     end
   end
 
   def edit
-    unless resource.can_edit?
-      flash[:danger] = 'You cannot edit this place as ' + (data_set.active? ? 'this data set is currently active.' : "there is a more recent data set available.")
+    unless place.can_edit?
+      flash[:danger] = "You cannot edit this place as " + (data_set.active? ? "this data set is currently active." : "there is a more recent data set available.")
       redirect_to admin_service_data_set_path(@service, @data_set)
     end
   end
@@ -26,22 +26,22 @@ class Admin::PlacesController < InheritedResources::Base
   end
 
   def update
-    head(:unprocessable_entity) && return unless resource.can_edit?
+    head(:unprocessable_entity) && return unless place.can_edit?
     update!
   end
 
 protected
 
   def service
-    @service ||= Service.find(params['service_id'])
+    @service ||= Service.find(params["service_id"])
   end
 
   def data_set
-    @data_set ||= service.data_sets.find(params['data_set_id'])
+    @data_set ||= service.data_sets.find(params["data_set_id"])
   end
 
-  def resource
-    @place ||= Place.where(data_set_version: data_set.version, service_slug: service.slug).find(params['id'])
+  def place
+    @place ||= Place.where(data_set_version: data_set.version, service_slug: service.slug).find(params["id"])
   end
 
   def place_params
@@ -62,7 +62,7 @@ protected
         :fax,
         :text_phone,
         :access_notes,
-        :general_notes
+        :general_notes,
       )
   end
 end
