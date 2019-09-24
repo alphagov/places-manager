@@ -1,5 +1,5 @@
-require_relative 'test_helper'
-require 'capybara/rails'
+require_relative "test_helper"
+require "capybara/rails"
 
 DatabaseCleaner.strategy = :truncation
 

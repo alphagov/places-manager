@@ -1,5 +1,5 @@
-require 'mapit_api'
-require 'gds_api/exceptions'
+require "mapit_api"
+require "gds_api/exceptions"
 
 class AreasController < ApplicationController
   def index

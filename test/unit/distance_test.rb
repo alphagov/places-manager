@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class DistanceTest < ActiveSupport::TestCase
   test "can create a distance" do

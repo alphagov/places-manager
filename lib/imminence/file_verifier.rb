@@ -11,11 +11,11 @@ module Imminence
     end
 
     def type
-      mime_type.split('/').first
+      mime_type.split("/").first
     end
 
     def sub_type
-      mime_type.split('/').last
+      mime_type.split("/").last
     end
 
     def mime_type

@@ -1,16 +1,16 @@
-require 'test_helper'
-require 'gds_api/test_helpers/mapit'
+require "test_helper"
+require "gds_api/test_helpers/mapit"
 
 class PlaceTest < ActiveSupport::TestCase
   include GdsApi::TestHelpers::Mapit
 
   setup do
-    mapit_does_not_have_a_postcode('SE1 7DU')
+    mapit_does_not_have_a_postcode("SE1 7DU")
   end
 
   test "responds to full_address with a compiled address" do
-    p = Place.new(name: 'Hercules House', address1: '1 Hercules Road', town: 'London', postcode: 'SE1 7DU')
-    assert_equal '1 Hercules Road, London, SE1 7DU, UK', p.full_address
+    p = Place.new(name: "Hercules House", address1: "1 Hercules Road", town: "London", postcode: "SE1 7DU")
+    assert_equal "1 Hercules Road, London, SE1 7DU, UK", p.full_address
   end
 
   test "can look up a data set from a place" do
@@ -22,7 +22,7 @@ class PlaceTest < ActiveSupport::TestCase
       source_address: "Blah",
       postcode: "SE1 7DU",
       service_slug: "chickens",
-      data_set_version: 2
+      data_set_version: 2,
     )
     assert_equal s.data_sets[1], p.data_set
   end
@@ -36,7 +36,7 @@ class PlaceTest < ActiveSupport::TestCase
       source_address: "Blah",
       postcode: "SE1 7DU",
       service_slug: "chickens",
-      data_set_version: 2
+      data_set_version: 2,
     )
 
     data_set.activate
@@ -56,7 +56,7 @@ class PlaceTest < ActiveSupport::TestCase
       source_address: "Blah",
       postcode: "SE1 7DU",
       service_slug: "chickens",
-      data_set_version: 2
+      data_set_version: 2,
     )
 
     service.data_sets.create! version: 3
@@ -75,7 +75,7 @@ class PlaceTest < ActiveSupport::TestCase
       source_address: "Blah",
       postcode: "SE1 7DU",
       service_slug: "chickens",
-      data_set_version: 2
+      data_set_version: 2,
     )
 
     service.data_sets.create! version: 3
@@ -100,7 +100,7 @@ class PlaceTest < ActiveSupport::TestCase
         source_address: "Blah",
         postcode: "WC2B 6NH",
         service_slug: @service.slug,
-        data_set_version: 2
+        data_set_version: 2,
       )
 
       assert_equal 51.51695975170424, place.location.latitude
@@ -115,7 +115,7 @@ class PlaceTest < ActiveSupport::TestCase
         override_lat: 51.501,
         override_lng: -0.123,
         service_slug: @service.slug,
-        data_set_version: 2
+        data_set_version: 2,
       )
 
       assert_equal 51.501, place.location.latitude
@@ -131,7 +131,7 @@ class PlaceTest < ActiveSupport::TestCase
         postcode: "WC2B 6NH",
         location: Point.new(latitude: 51.501, longitude: -0.123),
         service_slug: @service.slug,
-        data_set_version: 2
+        data_set_version: 2,
       )
 
       assert_equal 51.501, place.location.latitude
@@ -149,7 +149,7 @@ class PlaceTest < ActiveSupport::TestCase
         source_address: "Blah",
         postcode: "SE1 7DU",
         service_slug: @service.slug,
-        data_set_version: 2
+        data_set_version: 2,
       )
 
       assert_equal 51.498241853641055, place.location.latitude

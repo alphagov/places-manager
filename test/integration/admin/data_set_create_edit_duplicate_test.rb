@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-require_relative '../../integration_test_helper'
-require 'gds_api/test_helpers/mapit'
+require_relative "../../integration_test_helper"
+require "gds_api/test_helpers/mapit"
 
 class DataSetCreateEditTest < ActionDispatch::IntegrationTest
   include GdsApi::TestHelpers::Mapit

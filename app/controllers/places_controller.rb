@@ -1,13 +1,13 @@
-require 'mapit_api'
+require "mapit_api"
 
 ActionController::Renderers.add :csv do |places, _options|
   if places.first.is_a?(Place)
     filename = "#{places.first.data_set.service.slug}.csv"
 
-    headers['Cache-Control']             = 'must-revalidate, post-check=0, pre-check=0'
-    headers['Content-Disposition']       = "attachment; filename=#{filename}"
-    headers['Content-Type']              = 'text/csv'
-    headers['Content-Transfer-Encoding'] = 'binary'
+    headers["Cache-Control"]             = "must-revalidate, post-check=0, pre-check=0"
+    headers["Content-Disposition"]       = "attachment; filename=#{filename}"
+    headers["Content-Type"]              = "text/csv"
+    headers["Content-Transfer-Encoding"] = "binary"
 
     self.response_body = DataSetCsvPresenter.new(places.first.data_set).to_csv
   end

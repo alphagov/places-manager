@@ -3,7 +3,7 @@ module Admin::AdminControllerMixin
     base.send :include, GDS::SSO::ControllerMethods
 
     base.before_action :authenticate_user!
-    base.send :defaults, route_prefix: 'admin'
+    base.send :defaults, route_prefix: "admin"
   end
 
   def get_file_from_param(param)

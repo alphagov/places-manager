@@ -1,4 +1,4 @@
-require 'gds_api/exceptions'
+require "gds_api/exceptions"
 
 module MapitApi
   class InvalidPostcodeError < StandardError; end
@@ -22,20 +22,20 @@ module MapitApi
 
   def self.district_snac_for_postcode(postcode)
     location_data = location_for_postcode(postcode)
-    extract_snac_from_mapit_response(location_data, 'district')
+    extract_snac_from_mapit_response(location_data, "district")
   end
 
   def self.extract_snac_from_mapit_response(location_data, location_hiearachy_type)
     area_types_to_check = area_types(location_hiearachy_type)
-    found_area = location_data.areas.detect { |area| area_types_to_check.include?(area['type']) }
-    found_area['codes']['ons'] if found_area
+    found_area = location_data.areas.detect { |area| area_types_to_check.include?(area["type"]) }
+    found_area["codes"]["ons"] if found_area
   end
 
   def self.area_types(location_hiearachy_type)
     case location_hiearachy_type
-    when 'district'
+    when "district"
       DISTRICT_TYPES
-    when 'county'
+    when "county"
       COUNTY_TYPES
     else
       raise InvalidLocationHierarchyType.new(location_hiearachy_type)
@@ -52,7 +52,7 @@ module MapitApi
       if @response
         {
           code: @response.code,
-          areas: @response.to_hash.values
+          areas: @response.to_hash.values,
         }
       else
         { code: 404, areas: [] }
@@ -70,7 +70,7 @@ module MapitApi
       if @location
         {
           code: @location.response.code,
-          areas: @location.response.to_hash.fetch("areas", {}).values
+          areas: @location.response.to_hash.fetch("areas", {}).values,
         }
       else
         { code: 404, areas: [] }

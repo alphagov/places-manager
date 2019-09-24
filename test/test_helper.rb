@@ -1,25 +1,25 @@
 if ENV["COVERAGE"]
-  require 'simplecov'
-  require 'simplecov-rcov'
+  require "simplecov"
+  require "simplecov-rcov"
 
-  SimpleCov.start 'rails'
+  SimpleCov.start "rails"
   SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter
 end
 
-require 'database_cleaner'
+require "database_cleaner"
 
 ENV["RAILS_ENV"] ||= "test"
-require File.expand_path('../../config/environment', __FILE__)
-require 'rails/test_help'
-require 'mocha/setup'
-require 'gds_api/test_helpers/json_client_helper'
-require 'gds_api/test_helpers/mapit'
-require 'webmock/minitest'
-require 'govuk_sidekiq/testing'
+require File.expand_path("../../config/environment", __FILE__)
+require "rails/test_help"
+require "mocha/setup"
+require "gds_api/test_helpers/json_client_helper"
+require "gds_api/test_helpers/mapit"
+require "webmock/minitest"
+require "govuk_sidekiq/testing"
 # Poltergeist requires access to localhost.
 WebMock.disable_net_connect!(allow_localhost: true)
 
-require 'minitest/reporters'
+require "minitest/reporters"
 reporter_options = { color: true }
 Minitest::Reporters.use! [Minitest::Reporters::DefaultReporter.new(reporter_options)]
 
@@ -61,6 +61,6 @@ class ActiveSupport::TestCase
     fixture_file = fixture_file_path("mapit_responses/#{postcode.tr(' ', '_')}.json")
 
     stub_request(:get, "#{GdsApi::TestHelpers::Mapit::MAPIT_ENDPOINT}/postcode/#{postcode.tr(' ', '+')}.json").
-      to_return(body: File.open(fixture_file), status: 200, headers: {'Content-Type' => 'application/json'})
+      to_return(body: File.open(fixture_file), status: 200, headers: {"Content-Type" => "application/json"})
   end
 end

@@ -1,5 +1,5 @@
-require 'test_helper'
-require 'gds_api/test_helpers/mapit'
+require "test_helper"
+require "gds_api/test_helpers/mapit"
 
 class PlacesControllerTest < ActionController::TestCase
   include GdsApi::TestHelpers::Mapit
@@ -7,37 +7,37 @@ class PlacesControllerTest < ActionController::TestCase
   setup do
     @service = Service.create!(
       name: "Important Government Service",
-      slug: "important-government-service"
+      slug: "important-government-service",
     )
 
     @buckingham_palace = Place.create!(
-      service_slug: 'important-government-service',
+      service_slug: "important-government-service",
       data_set_version: @service.data_sets.last.version,
-      postcode: 'SW1A 1AA',
-      source_address: 'Buckingham Palace, Westminster',
-      override_lat: '51.501009611553926', override_lng: '-0.141587067110009'
+      postcode: "SW1A 1AA",
+      source_address: "Buckingham Palace, Westminster",
+      override_lat: "51.501009611553926", override_lng: "-0.141587067110009"
     )
     @aviation_house = Place.create!(
-      service_slug: 'important-government-service',
+      service_slug: "important-government-service",
       data_set_version: @service.data_sets.last.version,
-      postcode: 'WC2B 6SE',
-      source_address: 'Aviation House',
-      override_lat: '51.516960431', override_lng: '-0.120586400134'
+      postcode: "WC2B 6SE",
+      source_address: "Aviation House",
+      override_lat: "51.516960431", override_lng: "-0.120586400134"
     )
     @scottish_parliament = Place.create!(
-      service_slug: 'important-government-service',
+      service_slug: "important-government-service",
       data_set_version: @service.data_sets.last.version,
-      postcode: 'EH99 1SP',
-      source_address: 'Scottish Parliament',
-      override_lat: '55.95439', override_lng: '-3.174706'
+      postcode: "EH99 1SP",
+      source_address: "Scottish Parliament",
+      override_lat: "55.95439", override_lng: "-3.174706"
     )
 
-    mapit_does_not_have_a_postcode('AB11 2CD')
+    mapit_does_not_have_a_postcode("AB11 2CD")
     @utopia = Place.create!(
-      service_slug: 'important-government-service',
+      service_slug: "important-government-service",
       data_set_version: @service.data_sets.last.version,
-      postcode: 'AB11 2CD',
-      source_address: 'Nowhere'
+      postcode: "AB11 2CD",
+      source_address: "Nowhere",
     )
   end
 
@@ -59,7 +59,7 @@ class PlacesControllerTest < ActionController::TestCase
       assert_equal "WC2B 6SE", place["postcode"]
       location_hash = {
         "latitude" => 51.516960431,
-        "longitude" => -0.120586400134
+        "longitude" => -0.120586400134,
       }
       assert_equal location_hash, place["location"]
     end
@@ -91,13 +91,13 @@ class PlacesControllerTest < ActionController::TestCase
         nil,
         Point.new(longitude: -3.174706, latitude: 55.95439),
         Point.new(longitude: -0.141587067110009, latitude: 51.501009611553926),
-        Point.new(longitude: -0.120586400134, latitude: 51.516960431)
+        Point.new(longitude: -0.120586400134, latitude: 51.516960431),
       ]
       sorted_places.zip(location_points) do |placemark, point|
         if point
           assert_equal(
             "#{point.longitude},#{point.latitude},0",
-            placemark["Point"]["coordinates"]
+            placemark["Point"]["coordinates"],
           )
         else
           assert_nil placemark["Point"]
@@ -109,7 +109,7 @@ class PlacesControllerTest < ActionController::TestCase
   test "rescue from MapitApi::ValidPostcodeNoLocation" do
     service = Service.create!(
       name: "Number Plate Supplier",
-      slug: "number-plate-supplier"
+      slug: "number-plate-supplier",
     )
     stub_mapit_postcode_response_from_fixture("JE4 5TP")
     get :show, params: { id: service.slug, postcode: "JE4 5TP" }, format: :json

@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class Admin::ServicesControllerTest < ActionController::TestCase
   test "should create service" do
@@ -7,7 +7,7 @@ class Admin::ServicesControllerTest < ActionController::TestCase
         "name" => "Register Offices",
         "slug" => "register-offices",
         "location_match_type" => "local_authority",
-        "local_authority_hierarchy_match_type" => "county"
+        "local_authority_hierarchy_match_type" => "county",
       }
 
       post :create, params: { service: service_params }

@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 require "imminence/stats_collector"
 
 class StatsCollectorTest < ActiveSupport::TestCase
@@ -14,7 +14,7 @@ class StatsCollectorTest < ActiveSupport::TestCase
 
   test "sends the correct message to statsd" do
     statsd = stub
-    statsd.expects(:timing).with('response_time.api.foo.show', 3)
+    statsd.expects(:timing).with("response_time.api.foo.show", 3)
     Imminence::StatsCollector.stubs(:statsd).returns(statsd)
     Imminence::StatsCollector.timing(3, "foo", "show")
   end

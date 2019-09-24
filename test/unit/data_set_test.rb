@@ -1,6 +1,6 @@
-require 'test_helper'
-require 'gds_api/test_helpers/mapit'
-require 'mapit_api'
+require "test_helper"
+require "gds_api/test_helpers/mapit"
+require "mapit_api"
 
 class DataSetTest < ActiveSupport::TestCase
   include GdsApi::TestHelpers::Mapit
@@ -60,7 +60,7 @@ class DataSetTest < ActiveSupport::TestCase
       FactoryBot.create(
         :place,
         service_slug: @service.slug,
-        data_set_version: 1
+        data_set_version: 1,
       )
     end
 
@@ -99,12 +99,12 @@ class DataSetTest < ActiveSupport::TestCase
     end
 
     should "create a data_set, store the csv_data and queue a job to process it" do
-      ds = @service.data_sets.create!(data_file: File.open(fixture_file_path('good_csv.csv')))
+      ds = @service.data_sets.create!(data_file: File.open(fixture_file_path("good_csv.csv")))
 
-      assert_equal File.read(fixture_file_path('good_csv.csv')), ds.csv_data.data
+      assert_equal File.read(fixture_file_path("good_csv.csv")), ds.csv_data.data
 
       job = ProcessCsvDataWorker.jobs.last
-      service_id_to_process, version_to_process = *job['args']
+      service_id_to_process, version_to_process = *job["args"]
 
       assert_equal @service, Service.find(service_id_to_process)
       assert_equal ds.version, version_to_process
@@ -133,36 +133,36 @@ class DataSetTest < ActiveSupport::TestCase
       end
 
       should "handle ASCII files" do
-        @ds.data_file = File.open(fixture_file_path('encodings/ascii.csv'), encoding: 'ascii-8bit')
+        @ds.data_file = File.open(fixture_file_path("encodings/ascii.csv"), encoding: "ascii-8bit")
         @ds.save!
-        expected = File.read(fixture_file_path('encodings/ascii.csv'))
+        expected = File.read(fixture_file_path("encodings/ascii.csv"))
         assert_equal expected, @ds.csv_data.data
       end
 
       should "handle UTF-8 files" do
-        @ds.data_file = File.open(fixture_file_path('encodings/utf-8.csv'), encoding: 'ascii-8bit')
+        @ds.data_file = File.open(fixture_file_path("encodings/utf-8.csv"), encoding: "ascii-8bit")
         @ds.save!
-        expected = File.read(fixture_file_path('encodings/utf-8.csv'))
+        expected = File.read(fixture_file_path("encodings/utf-8.csv"))
         assert_equal expected, @ds.csv_data.data
       end
 
       should "handle ISO-8859-1 files" do
-        @ds.data_file = File.open(fixture_file_path('encodings/iso-8859-1.csv'), encoding: 'ascii-8bit')
+        @ds.data_file = File.open(fixture_file_path("encodings/iso-8859-1.csv"), encoding: "ascii-8bit")
         @ds.save!
-        expected = File.read(fixture_file_path('encodings/iso-8859-1.csv')).force_encoding('iso-8859-1').encode('utf-8')
+        expected = File.read(fixture_file_path("encodings/iso-8859-1.csv")).force_encoding("iso-8859-1").encode("utf-8")
         assert_equal expected, @ds.csv_data.data
       end
 
       should "handle Windows 1252 files" do
-        @ds.data_file = File.open(fixture_file_path('encodings/windows-1252.csv'), encoding: 'ascii-8bit')
+        @ds.data_file = File.open(fixture_file_path("encodings/windows-1252.csv"), encoding: "ascii-8bit")
         @ds.save!
-        expected = File.read(fixture_file_path('encodings/windows-1252.csv')).force_encoding('windows-1252').encode('utf-8')
+        expected = File.read(fixture_file_path("encodings/windows-1252.csv")).force_encoding("windows-1252").encode("utf-8")
         assert_equal expected, @ds.csv_data.data
       end
 
       should "raise an error with an unknown file encoding" do
         assert_raise InvalidCharacterEncodingError do
-          @ds.data_file = File.open(fixture_file_path('encodings/utf-16le.csv'), encoding: 'ascii-8bit')
+          @ds.data_file = File.open(fixture_file_path("encodings/utf-16le.csv"), encoding: "ascii-8bit")
         end
       end
     end
@@ -171,12 +171,12 @@ class DataSetTest < ActiveSupport::TestCase
   context "processing csv data" do
     setup do
       # NOTE: this is the postcode in good_csv.csv
-      mapit_does_not_have_a_postcode('IG6 3HJ')
+      mapit_does_not_have_a_postcode("IG6 3HJ")
       @service = FactoryBot.create(:service)
     end
 
     should "add all places from the csv_data" do
-      ds = @service.data_sets.create!(data_file: File.open(fixture_file_path('good_csv.csv')))
+      ds = @service.data_sets.create!(data_file: File.open(fixture_file_path("good_csv.csv")))
       ds.process_csv_data
 
       assert_equal 1, ds.places.count
@@ -184,7 +184,7 @@ class DataSetTest < ActiveSupport::TestCase
     end
 
     should "clear the stored csv_data" do
-      ds = @service.data_sets.create!(data_file: File.open(fixture_file_path('good_csv.csv')))
+      ds = @service.data_sets.create!(data_file: File.open(fixture_file_path("good_csv.csv")))
       ds.process_csv_data
 
       ds.reload
@@ -192,7 +192,7 @@ class DataSetTest < ActiveSupport::TestCase
     end
 
     should "store an error message, and clear the csv_data with an invalid csv" do
-      ds = @service.data_sets.create!(data_file: File.open(fixture_file_path('bad_csv.csv')))
+      ds = @service.data_sets.create!(data_file: File.open(fixture_file_path("bad_csv.csv")))
       ds.process_csv_data
 
       ds.reload
@@ -224,23 +224,23 @@ class DataSetTest < ActiveSupport::TestCase
       @buckingham_palace = Place.create(
         service_slug: @service.slug,
         data_set_version: @service.latest_data_set.version,
-        postcode: 'SW1A 1AA',
-        source_address: 'Buckingham Palace, Westminster',
-        override_lat: '51.501009611553926', override_lng: '-0.141587067110009'
+        postcode: "SW1A 1AA",
+        source_address: "Buckingham Palace, Westminster",
+        override_lat: "51.501009611553926", override_lng: "-0.141587067110009"
       )
       @aviation_house = Place.create(
         service_slug: @service.slug,
         data_set_version: @service.latest_data_set.version,
-        postcode: 'WC2B 6SE',
-        source_address: 'Aviation House',
-        override_lat: '51.516960431', override_lng: '-0.120586400134'
+        postcode: "WC2B 6SE",
+        source_address: "Aviation House",
+        override_lat: "51.516960431", override_lng: "-0.120586400134"
       )
       @scottish_parliament = Place.create(
         service_slug: @service.slug,
         data_set_version: @service.latest_data_set.version,
-        postcode: 'EH99 1SP',
-        source_address: 'Scottish Parliament',
-        override_lat: '55.95439', override_lng: '-3.174706'
+        postcode: "EH99 1SP",
+        source_address: "Scottish Parliament",
+        override_lat: "55.95439", override_lng: "-3.174706"
       )
     end
 
@@ -321,23 +321,23 @@ class DataSetTest < ActiveSupport::TestCase
         @buckingham_palace = Place.create(
           service_slug: @service.slug,
           data_set_version: @data_set.version,
-          postcode: 'SW1A 1AA',
-          source_address: 'Buckingham Palace, Westminster',
-          override_lat: '51.501009611553926', override_lng: '-0.141587067110009'
+          postcode: "SW1A 1AA",
+          source_address: "Buckingham Palace, Westminster",
+          override_lat: "51.501009611553926", override_lng: "-0.141587067110009"
         )
         @aviation_house = Place.create(
           service_slug: @service.slug,
           data_set_version: @data_set.version,
-          postcode: 'WC2B 6SE',
-          source_address: 'Aviation House',
-          override_lat: '51.516960431', override_lng: '-0.120586400134'
+          postcode: "WC2B 6SE",
+          source_address: "Aviation House",
+          override_lat: "51.516960431", override_lng: "-0.120586400134"
         )
         @scottish_parliament = Place.create(
           service_slug: @service.slug,
           data_set_version: @data_set.version,
-          postcode: 'EH99 1SP',
-          source_address: 'Scottish Parliament',
-          override_lat: '55.95439', override_lng: '-3.174706'
+          postcode: "EH99 1SP",
+          source_address: "Scottish Parliament",
+          override_lat: "55.95439", override_lng: "-3.174706"
         )
       end
 
@@ -361,7 +361,7 @@ class DataSetTest < ActiveSupport::TestCase
 
     context "for a 'local_authority' service" do
       setup do
-        @service = FactoryBot.create(:service, location_match_type: 'local_authority')
+        @service = FactoryBot.create(:service, location_match_type: "local_authority")
         @data_set = @service.latest_data_set
 
         @place1 = FactoryBot.create(
@@ -371,7 +371,7 @@ class DataSetTest < ActiveSupport::TestCase
           postcode: "EX39 1QS",
           latitude: 51.05318361810428,
           longitude: -4.191071523498792,
-          name: "John's Of Appledore"
+          name: "John's Of Appledore",
         )
         @place2 = FactoryBot.create(
           :place,
@@ -380,7 +380,7 @@ class DataSetTest < ActiveSupport::TestCase
           postcode: "EX39 1PP",
           latitude: 51.053834,
           longitude: -4.191422,
-          name: "Susie's Tea Rooms"
+          name: "Susie's Tea Rooms",
         )
         @place3 = FactoryBot.create(
           :place,
@@ -389,7 +389,7 @@ class DataSetTest < ActiveSupport::TestCase
           postcode: "WC2B 6NH",
           latitude: 51.51695975170424,
           longitude: -0.12058693935709164,
-          name: "Aviation House"
+          name: "Aviation House",
         )
         @place4 = FactoryBot.create(
           :place,
@@ -398,7 +398,7 @@ class DataSetTest < ActiveSupport::TestCase
           postcode: "WC1B 5HA",
           latitude: 51.51837458322272,
           longitude: -0.12133586354538765,
-          name: "FreeState Coffee"
+          name: "FreeState Coffee",
         )
       end
 

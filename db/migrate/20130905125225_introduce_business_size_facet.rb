@@ -9,8 +9,8 @@ class IntroduceBusinessSizeFacet < Mongoid::Migration
           "up-to-249",
           "between-250-and-500",
           "between-501-and-1000",
-          "over-1000"
-        ]
+          "over-1000",
+        ],
       )
     end
   end

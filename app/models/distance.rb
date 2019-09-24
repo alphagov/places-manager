@@ -14,7 +14,7 @@ class Distance
   EQUIVALENTS = {
     miles: EARTH_RADIUS_IN_MILES,
     degrees: 360 / (2 * Math::PI),
-    radians: 1
+    radians: 1,
   }
 
   def initialize(magnitude, unit)
