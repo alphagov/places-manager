@@ -39,7 +39,7 @@ gem 'sdoc', '~> 1.0.0', group: :doc
 
 group :development, :test do
   gem 'pry'
-  gem 'govuk-lint', '3.11.5'
+  gem 'govuk-lint', '4.0.0'
 end
 
 group :test do
