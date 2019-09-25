@@ -48,7 +48,7 @@ group :test do
   gem 'govuk_test'
   gem 'simplecov', '~> 0.17.1', require: false
   gem 'simplecov-rcov', '~> 0.2.3', require: false
-  gem 'factory_bot_rails', '~> 5.0.2'
+  gem 'factory_bot_rails', '~> 5.1.0'
   gem 'ci_reporter_minitest'
   gem 'minitest-reporters'
   gem 'launchy'
