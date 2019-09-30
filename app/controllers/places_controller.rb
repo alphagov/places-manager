@@ -57,7 +57,7 @@ protected
 
   def error_400(e)
     error_message = e.message.gsub("MapitApi::", "").camelize(:lower)
-    render status: :bad_request, json: { error: "#{error_message}" }
+    render status: :bad_request, json: { error: error_message.to_s }
   end
 
   def select_data_set(service, version = nil)
