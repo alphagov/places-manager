@@ -7,6 +7,7 @@ class Imminence::StatsCollector
 
   def self.prefix_controller(name)
     return name.gsub("admin/", "admin.") if name.start_with?("admin/")
+
     "api.#{name}"
   end
 

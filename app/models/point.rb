@@ -63,6 +63,7 @@ class Point
     # into a database friendly form.
     def evolve(value)
       return value.mongoize if value.is_a?(Point)
+
       value
     end
 

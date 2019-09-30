@@ -131,6 +131,7 @@ class DataSet
 
   def csv_data_is_valid
     return if @csv_data.nil? || @csv_data.destroyed?
+
     @csv_data.service_slug = service.slug
     @csv_data.data_set_version = self.version
     unless @csv_data.valid?
@@ -171,6 +172,7 @@ class DataSet
 
   def activate
     return false unless self.processing_complete?
+
     service.active_data_set_version = self.version
     service.save
   end

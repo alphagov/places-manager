@@ -20,6 +20,7 @@ class Distance
   def initialize(magnitude, unit)
     raise "Invalid unit #{unit.inspect}" unless UNITS.include? unit
     raise "#{magnitude.inspect} is not a number" unless magnitude.is_a? Numeric
+
     @magnitude = magnitude
     @unit = unit
   end
