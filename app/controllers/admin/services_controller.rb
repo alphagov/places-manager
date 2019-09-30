@@ -33,7 +33,7 @@ protected
   end
 
   def service_params
-    permitted_params = [:name, :slug, :source_of_data, :location_match_type, :local_authority_hierarchy_match_type]
+    permitted_params = %i[name slug source_of_data location_match_type local_authority_hierarchy_match_type]
     permitted_params << :data_file if %w(create new).include? action_name.to_s
     params.
       require(:service).

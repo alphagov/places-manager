@@ -33,7 +33,7 @@ unless ARGV.any? {|a| a =~ /^gems/} # Don't load anything when running the gems:
       end
 
       desc "Run all features"
-      task all: [:ok, :wip]
+      task all: %i[ok wip]
 
       task :statsetup do
         require "rails/code_statistics"

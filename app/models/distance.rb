@@ -8,7 +8,7 @@ class Distance
   # of longitude at any point other than the Equator, you will get incorrect
   # results.
   EARTH_RADIUS_IN_MILES = 3963.19
-  UNITS = [:miles, :degrees, :radians]
+  UNITS = %i[miles degrees radians]
 
   # <value> in units of <key> is equal for each pair here
   EQUIVALENTS = {

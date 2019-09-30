@@ -1,10 +1,10 @@
 Rails.application.routes.draw do
   namespace :admin do
     resources :services do
-      resources :data_sets, except: [:index, :destroy] do
+      resources :data_sets, except: %i[index destroy] do
         post :activate, :on => :member
         post :duplicate, :on => :member
-        resources :places, except: [:index, :show]
+        resources :places, except: %i[index show]
       end
     end
     root to: "services#index"

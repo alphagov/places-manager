@@ -15,7 +15,7 @@ class DataSet
 
   validates_presence_of :version
 
-  default_scope -> { order_by([:version, :asc]) }
+  default_scope -> { order_by(%i[version asc]) }
   before_validation :set_version, on: :create
   validate :csv_data_is_valid
   after_save :schedule_csv_processing

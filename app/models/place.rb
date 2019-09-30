@@ -21,7 +21,7 @@ class Place
   # We use "not null" here instead of "exists", because it works with the index
   scope :with_geocoding_errors, -> { where(:geocode_error.ne => nil) }
   scope :geocoded, -> { where(:location.with_size => 2) }
-  default_scope -> { order_by([:name, :asc]) }
+  default_scope -> { order_by(%i[name asc]) }
 
   scope :missing_snacs, -> { where(snac: nil) }
 
