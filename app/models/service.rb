@@ -72,17 +72,17 @@ class Service
   end
 
   def schedule_archive_places
-    obsolete_data_sets.each {|ds| ds.archive! if ds.places.any? }
+    obsolete_data_sets.each { |ds| ds.archive! if ds.places.any? }
     ArchivePlacesWorker.perform_async(self.id.to_s)
   end
 
   def archive_places
-    obsolete_data_sets.each {|ds| ds.archive_places if ds.places.any? }
+    obsolete_data_sets.each { |ds| ds.archive_places if ds.places.any? }
   end
 
   # returns all data sets up to but not including the data set before the active set
   def obsolete_data_sets
-    data_sets.take_while {|ds| ds != active_data_set }.slice(0...-1)
+    data_sets.take_while { |ds| ds != active_data_set }.slice(0...-1)
   end
 
   def uses_local_authority_lookup?
