@@ -19,7 +19,7 @@ class Service
     end
   end
 
-  index({ slug: 1 }, { unique: true })
+  index({ slug: 1 }, unique: true)
 
   validates_presence_of :name
 
