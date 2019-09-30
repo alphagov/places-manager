@@ -35,7 +35,7 @@ private
       "country_name" => area["country_name"],
       "type" => area["type"],
       "codes" => {
-        "gss"  => area.fetch("codes", {})["gss"],
+        "gss" => area.fetch("codes", {})["gss"],
       },
     }
   end
