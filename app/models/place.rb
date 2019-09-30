@@ -103,7 +103,7 @@ class Place
       self.location = Point.new(latitude: override_lat, longitude: override_lng)
     end
 
-    return unless location.blank?
+    return if location.present?
 
     if postcode.blank?
       self.geocode_error = "Can't geocode without postcode"
