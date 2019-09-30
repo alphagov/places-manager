@@ -54,6 +54,7 @@ class PlacesController < ApplicationController
   end
 
 protected
+
   def error_400(e)
     error_message = e.message.gsub("MapitApi::", "").camelize(:lower)
     render status: 400, json: { error: "#{error_message}" }
