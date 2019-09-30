@@ -49,9 +49,9 @@ class ServiceTest < ActiveSupport::TestCase
           assert_equal 1, @service.errors[:slug].count
         end
 
-        [
-          "dashed-with-numbers-123",
-          "under_score",
+        %w[
+          dashed-with-numbers-123
+          under_score
         ].each do |slug|
           @service.slug = slug
           assert @service.valid?
