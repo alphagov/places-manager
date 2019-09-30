@@ -19,14 +19,14 @@ class Service
     end
   end
 
-  index({slug: 1}, {unique: true})
+  index({ slug: 1 }, { unique: true })
 
   validates_presence_of :name
 
   # underscore allowed because one of the existing services uses them in its slug.
-  validates :slug, presence: true, uniqueness: true, format: {with: /\A[a-z0-9_-]*\z/ }
-  validates :location_match_type, inclusion: {in: LOCATION_MATCH_TYPES}
-  validates :local_authority_hierarchy_match_type, inclusion: {in: LOCAL_AUTHORITY_HIERARCHY_MATCH_TYPES}
+  validates :slug, presence: true, uniqueness: true, format: { with: /\A[a-z0-9_-]*\z/ }
+  validates :location_match_type, inclusion: { in: LOCATION_MATCH_TYPES }
+  validates :local_authority_hierarchy_match_type, inclusion: { in: LOCAL_AUTHORITY_HIERARCHY_MATCH_TYPES }
 
   before_validation :create_first_data_set, on: :create
   after_save :schedule_csv_processing

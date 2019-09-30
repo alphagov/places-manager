@@ -23,7 +23,7 @@ class PointTest < ActiveSupport::TestCase
 
   test "equality checks return false for non-points" do
     point = Point.new(latitude: 56.2, longitude: -1.0)
-    refute point == {"longitude" => -1.0, "latitude" => 56.2}
+    refute point == { "longitude" => -1.0, "latitude" => 56.2 }
     refute point == 12
   end
 
@@ -32,8 +32,8 @@ class PointTest < ActiveSupport::TestCase
       should "serialise a Point instance to a hash" do
         p = Point.new(latitude: 56.2, longitude: -1.0)
 
-        assert_equal({"latitude" => 56.2, "longitude" => -1.0}, p.mongoize)
-        assert_equal({"latitude" => 56.2, "longitude" => -1.0}, Point.mongoize(p))
+        assert_equal({ "latitude" => 56.2, "longitude" => -1.0 }, p.mongoize)
+        assert_equal({ "latitude" => 56.2, "longitude" => -1.0 }, Point.mongoize(p))
       end
 
       should "serialise the fields in the required order" do
@@ -42,16 +42,16 @@ class PointTest < ActiveSupport::TestCase
         p = Point.new(latitude: 56.2, longitude: -1.0)
 
         # Note: hashes in ruby 1.9 keep order
-        expected = {"longitude" => -1.0, "latitude" => 56.2}
+        expected = { "longitude" => -1.0, "latitude" => 56.2 }
         assert_equal expected.to_a, p.mongoize.to_a
       end
 
       should "serialise a hash back to a hash" do
-        assert_equal({"latitude" => 56.2, "longitude" => -1.0}, Point.mongoize(latitude: 56.2, longitude: -1.0))
+        assert_equal({ "latitude" => 56.2, "longitude" => -1.0 }, Point.mongoize(latitude: 56.2, longitude: -1.0))
       end
 
       should "serialise a hash with string keys back to a hash" do
-        assert_equal({"latitude" => 56.2, "longitude" => -1.0}, Point.mongoize("latitude" => 56.2, "longitude" => -1.0))
+        assert_equal({ "latitude" => 56.2, "longitude" => -1.0 }, Point.mongoize("latitude" => 56.2, "longitude" => -1.0))
       end
 
       should "serialise nil as nil" do

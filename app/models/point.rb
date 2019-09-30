@@ -31,7 +31,7 @@ class Point
 
   # Converts an object of this instance into a database friendly value.
   def mongoize
-    {"longitude" => longitude, "latitude" => latitude}
+    { "longitude" => longitude, "latitude" => latitude }
   end
 
   class << self

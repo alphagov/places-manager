@@ -403,14 +403,14 @@ class DataSetTest < ActiveSupport::TestCase
       end
 
       should "return places in the same district as the postcode" do
-        mapit_has_a_postcode_and_areas("EX39 1LH", [51.0413792674, -4.23640704632], [{ "type" => "DIS", "ons" => "18UK"}])
+        mapit_has_a_postcode_and_areas("EX39 1LH", [51.0413792674, -4.23640704632], [{ "type" => "DIS", "ons" => "18UK" }])
 
         place_names = @data_set.places_for_postcode("EX39 1LH").map(&:name)
         assert_equal ["Susie's Tea Rooms", "John's Of Appledore"], place_names
       end
 
       should "return multiple places in order of nearness if there are more than one in the district" do
-        mapit_has_a_postcode_and_areas("WC2B 6NH", [51.51695975170424, -0.12058693935709164], [{"type" => "DIS", "ons" => "00AG"}])
+        mapit_has_a_postcode_and_areas("WC2B 6NH", [51.51695975170424, -0.12058693935709164], [{ "type" => "DIS", "ons" => "00AG" }])
 
         place_names = @data_set.places_for_postcode("WC2B 6NH").map(&:name)
         assert_equal ["Aviation House", "FreeState Coffee"], place_names
