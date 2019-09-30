@@ -33,11 +33,11 @@ class PlacesController < ApplicationController
     data_set = select_data_set(@service, params[:version])
     head 404 && return if data_set.nil?
 
-    if params[:max_distance].present?
-      max_distance = Distance.new(Float(params[:max_distance]), :miles)
+    max_distance = if params[:max_distance].present?
+      Distance.new(Float(params[:max_distance]), :miles)
     else
-      max_distance = nil
-    end
+      nil
+                   end
 
     if params[:postcode].present?
       @places = data_set.places_for_postcode(params[:postcode], max_distance, params[:limit])

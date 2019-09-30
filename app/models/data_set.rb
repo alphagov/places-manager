@@ -95,11 +95,11 @@ class DataSet
     if self.version.blank?
       other_data_sets = service.data_sets.to_a - [self]
       highest_version = other_data_sets.map(&:version).max
-      if highest_version
-        self.version = highest_version + 1
+      self.version = if highest_version
+        highest_version + 1
       else
-        self.version = 1
-      end
+        1
+                     end
     end
   end
 
