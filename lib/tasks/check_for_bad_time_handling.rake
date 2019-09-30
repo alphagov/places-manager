@@ -20,6 +20,6 @@ in preference to methods like:
 Files that contain bad Time handling:
   #{matching_files.join("\n  ")}
 
-MSG
+    MSG
   end
 end
