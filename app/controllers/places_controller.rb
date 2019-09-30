@@ -53,8 +53,8 @@ class PlacesController < ApplicationController
 
 protected
 
-  def error_400(e)
-    error_message = e.message.gsub("MapitApi::", "").camelize(:lower)
+  def error_400(error)
+    error_message = error.message.gsub("MapitApi::", "").camelize(:lower)
     render status: :bad_request, json: { error: error_message.to_s }
   end
 
