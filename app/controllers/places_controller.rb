@@ -34,9 +34,7 @@ class PlacesController < ApplicationController
     head 404 && return if data_set.nil?
 
     max_distance = if params[:max_distance].present?
-      Distance.new(Float(params[:max_distance]), :miles)
-    else
-      nil
+                     Distance.new(Float(params[:max_distance]), :miles)
                    end
 
     if params[:postcode].present?

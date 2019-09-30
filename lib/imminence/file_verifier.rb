@@ -4,9 +4,9 @@ module Imminence
 
     def initialize(file)
       @filename = if file.respond_to?(:path)
-        file.path
-      else
-        file.to_s
+                    file.path
+                  else
+                    file.to_s
                   end
     end
 
