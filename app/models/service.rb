@@ -1,10 +1,10 @@
 class Service
   include Mongoid::Document
 
-  LOCATION_MATCH_TYPES = %w(nearest local_authority)
+  LOCATION_MATCH_TYPES = %w(nearest local_authority).freeze
   LOCAL_AUTHORITY_DISTRICT_MATCH = "district".freeze
   LOCAL_AUTHORITY_COUNTY_MATCH = "county".freeze
-  LOCAL_AUTHORITY_HIERARCHY_MATCH_TYPES = [LOCAL_AUTHORITY_DISTRICT_MATCH, LOCAL_AUTHORITY_COUNTY_MATCH]
+  LOCAL_AUTHORITY_HIERARCHY_MATCH_TYPES = [LOCAL_AUTHORITY_DISTRICT_MATCH, LOCAL_AUTHORITY_COUNTY_MATCH].freeze
 
   field :name,                    type: String
   field :slug,                    type: String
