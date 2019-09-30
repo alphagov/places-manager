@@ -225,7 +225,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
 
       context "when the service is bounded to districts" do
         setup do
-          @service.update_attributes(local_authority_hierarchy_match_type: Service::LOCAL_AUTHORITY_DISTRICT_MATCH)
+          @service.update(local_authority_hierarchy_match_type: Service::LOCAL_AUTHORITY_DISTRICT_MATCH)
         end
 
         should "return the district places in order of nearness, not the county ones for postcodes in a county+district council hierarchy" do
@@ -251,7 +251,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
 
       context "when the service is bounded to counties" do
         setup do
-          @service.update_attributes(local_authority_hierarchy_match_type: Service::LOCAL_AUTHORITY_COUNTY_MATCH)
+          @service.update(local_authority_hierarchy_match_type: Service::LOCAL_AUTHORITY_COUNTY_MATCH)
         end
 
         should "only return the county results in order of nearness, not the district ones for postcodes in a county+district council hierarchy" do

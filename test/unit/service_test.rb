@@ -200,12 +200,12 @@ class ServiceTest < ActiveSupport::TestCase
     end
 
     should "not return any sets if the second oldest set is the active set" do
-      @service.update_attributes(active_data_set_version: 2)
+      @service.update(active_data_set_version: 2)
       assert_empty @service.obsolete_data_sets
     end
 
     should "return sets up to but not including the set before the active set" do
-      @service.update_attributes(active_data_set_version: 3)
+      @service.update(active_data_set_version: 3)
       assert_includes @service.obsolete_data_sets, @service.data_sets.first
       assert_equal 1, @service.obsolete_data_sets.count
     end
