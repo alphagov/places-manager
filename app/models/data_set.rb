@@ -184,7 +184,7 @@ class DataSet
       end
       places.delete_all
       self.archived
-    rescue => e
+    rescue StandardError => e
       self.set(archiving_error: "Failed to archive place information: '#{e.message}'")
     end
   end
