@@ -97,7 +97,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
         assert_response :redirect
         assert_equal "Couldn't activate data set", flash[:danger]
         @service.reload
-        refute_equal set, @service.active_data_set
+        assert_not_equal set, @service.active_data_set
       end
     end
 

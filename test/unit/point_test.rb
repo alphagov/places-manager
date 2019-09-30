@@ -17,14 +17,14 @@ class PointTest < ActiveSupport::TestCase
       Point.new(latitude: lat, longitude: lng)
     }
     # Not using refute_equals as we're not testing for a value
-    refute point_a == point_b
-    refute point_b == point_a
+    assert_not point_a == point_b
+    assert_not point_b == point_a
   end
 
   test "equality checks return false for non-points" do
     point = Point.new(latitude: 56.2, longitude: -1.0)
-    refute point == { "longitude" => -1.0, "latitude" => 56.2 }
-    refute point == 12
+    assert_not point == { "longitude" => -1.0, "latitude" => 56.2 }
+    assert_not point == 12
   end
 
   context "serialising for mongoid" do

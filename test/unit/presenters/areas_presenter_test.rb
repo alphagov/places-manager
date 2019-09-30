@@ -46,7 +46,7 @@ class AreasPresenterTest < ActiveSupport::TestCase
         assert_equal "LBO", @result["type"]
         assert_equal "E09000033", @result["codes"]["gss"]
 
-        refute @result.has_key?("parent_area")
+        assert_not @result.has_key?("parent_area")
       end
     end
 
