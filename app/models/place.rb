@@ -74,8 +74,8 @@ class Place
   before_save :geocode
 
   def data_set
-    service = Service.where(slug: service_slug).first
-    service.data_sets.where(version: data_set_version).first if service
+    service = Service.find_by(slug: service_slug)
+    service.data_sets.find_by(version: data_set_version) if service
   end
 
   # Convert mongoid's geo_near_distance attribute to a Distance object

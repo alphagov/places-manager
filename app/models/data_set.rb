@@ -126,7 +126,7 @@ class DataSet
   end
 
   def csv_data
-    @csv_data ||= CsvData.where(service_slug: service.slug, data_set_version: self.version).first
+    @csv_data ||= CsvData.find_by(service_slug: service.slug, data_set_version: self.version)
   end
 
   def csv_data_is_valid

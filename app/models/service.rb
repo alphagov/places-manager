@@ -56,7 +56,7 @@ class Service
   end
 
   def process_csv_data(data_set_version)
-    self.data_sets.where(version: data_set_version).first.process_csv_data
+    self.data_sets.find_by(version: data_set_version).process_csv_data
   end
 
   def active_data_set
