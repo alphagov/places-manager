@@ -196,7 +196,7 @@ class DataSet
   end
 
   def has_places_with_missing_snacs?
-    service.uses_local_authority_lookup? && places.missing_snacs.count > 0
+    service.uses_local_authority_lookup? && places.missing_snacs.count > 0 # rubocop:disable Style/NumericPredicate
   end
 
 private
