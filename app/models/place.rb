@@ -116,12 +116,12 @@ class Place
     end
   rescue GdsApi::HTTPClientError
     self.geocode_error = "#{self.postcode} not found for #{self.full_address}"
-  rescue StandardError => e
-    error = "Error geocoding place #{self.postcode} : #{e.message}"
-    Rails.logger.warn error
-    self.geocode_error = error
   rescue Encoding::CompatibilityError
     error = "Encoding error in place #{self.id}"
+    Rails.logger.warn error
+    self.geocode_error = error
+  rescue StandardError => e
+    error = "Error geocoding place #{self.postcode} : #{e.message}"
     Rails.logger.warn error
     self.geocode_error = error
   end
