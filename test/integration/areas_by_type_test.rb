@@ -20,7 +20,7 @@ class AreasByTypeTest < ActionDispatch::IntegrationTest
     assert_equal 3, parsed_response["total"]
     results = parsed_response["results"]
 
-    assert results.none? { |r| r.key?("slug") }
+    assert(results.none? { |r| r.key?("slug") })
 
     assert_equal "London", results.first["name"]
     assert_equal "England", results.first["country_name"]

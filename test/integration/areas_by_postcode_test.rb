@@ -24,7 +24,7 @@ class AreasByPostcodeTest < ActionDispatch::IntegrationTest
     assert_equal 2, parsed_response["total"]
     results = parsed_response["results"]
 
-    assert results.none? { |r| r.key?("slug") }
+    assert(results.none? { |r| r.key?("slug") })
 
     assert_equal "Westminster City Council", results.first["name"]
     assert_equal "LBO", results.first["type"]
