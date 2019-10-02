@@ -1,6 +1,6 @@
 class Admin::PlacesController < InheritedResources::Base
   include Admin::AdminControllerMixin
-  actions :all, except: [:show, :index]
+  actions :all, except: %i[show index]
   belongs_to :service
   belongs_to :data_set
 

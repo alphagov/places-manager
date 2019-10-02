@@ -47,7 +47,7 @@ class DataSetTest < ActiveSupport::TestCase
       previous_active_set = @service.active_data_set
 
       ds = @service.data_sets.create!(data_file: StringIO.new("something"))
-      refute ds.activate
+      assert_not ds.activate
 
       @service.reload
       assert_equal previous_active_set.version, @service.active_data_set_version
@@ -66,7 +66,7 @@ class DataSetTest < ActiveSupport::TestCase
 
     should "archive its place information" do
       @service.data_sets.first.archive_places
-      refute_empty PlaceArchive.all
+      assert_not_empty PlaceArchive.all
     end
 
     should "remove its place information" do
@@ -122,7 +122,7 @@ class DataSetTest < ActiveSupport::TestCase
 
       should "be invalid with a file over 15M" do
         @ds.data_file = StringIO.new("x" * (15.megabytes + 1))
-        refute @ds.valid?
+        assert_not @ds.valid?
         assert_equal 1, @ds.errors[:data_file].size
       end
     end
@@ -208,12 +208,12 @@ class DataSetTest < ActiveSupport::TestCase
 
       should "not be processing_complete with csv_data" do
         ds = @service.data_sets.build(data_file: StringIO.new("anything"), processing_error: nil)
-        refute ds.processing_complete?
+        assert_not ds.processing_complete?
       end
 
       should "not be processing_complete with processing_error" do
         ds = @service.data_sets.build(data_file: nil, processing_error: "something went wrong")
-        refute ds.processing_complete?
+        assert_not ds.processing_complete?
       end
     end
   end
@@ -403,14 +403,14 @@ class DataSetTest < ActiveSupport::TestCase
       end
 
       should "return places in the same district as the postcode" do
-        mapit_has_a_postcode_and_areas("EX39 1LH", [51.0413792674, -4.23640704632], [{ "type" => "DIS", "ons" => "18UK"}])
+        mapit_has_a_postcode_and_areas("EX39 1LH", [51.0413792674, -4.23640704632], [{ "type" => "DIS", "ons" => "18UK" }])
 
         place_names = @data_set.places_for_postcode("EX39 1LH").map(&:name)
         assert_equal ["Susie's Tea Rooms", "John's Of Appledore"], place_names
       end
 
       should "return multiple places in order of nearness if there are more than one in the district" do
-        mapit_has_a_postcode_and_areas("WC2B 6NH", [51.51695975170424, -0.12058693935709164], [{"type" => "DIS", "ons" => "00AG"}])
+        mapit_has_a_postcode_and_areas("WC2B 6NH", [51.51695975170424, -0.12058693935709164], [{ "type" => "DIS", "ons" => "00AG" }])
 
         place_names = @data_set.places_for_postcode("WC2B 6NH").map(&:name)
         assert_equal ["Aviation House", "FreeState Coffee"], place_names

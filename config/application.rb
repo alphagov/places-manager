@@ -27,7 +27,7 @@ module Imminence
     config.generators do |g|
       g.orm :mongoid
       g.template_engine :erb # this could be :haml or whatever
-      g.test_framework :test_unit, :fixture => false # this could be :rpsec or whatever
+      g.test_framework :test_unit, fixture: false # this could be :rpsec or whatever
     end
 
     # Disable Rack::Cache

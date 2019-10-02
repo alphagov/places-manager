@@ -4,7 +4,7 @@ class CannotEditPlaceDetailsUnlessNewestInactiveDataset < ActiveModel::Validator
   def validate(record)
     if record.changes.except("location", "geocode_error").any?
       unless !record.data_set || record.can_edit?
-        record.errors[:base] << ("Can only edit the most recent inactive dataset.")
+        record.errors[:base] << "Can only edit the most recent inactive dataset."
       end
     end
   end
@@ -21,7 +21,7 @@ class Place
   # We use "not null" here instead of "exists", because it works with the index
   scope :with_geocoding_errors, -> { where(:geocode_error.ne => nil) }
   scope :geocoded, -> { where(:location.with_size => 2) }
-  default_scope -> { order_by([:name, :asc]) }
+  default_scope -> { order_by(%i[name asc]) }
 
   scope :missing_snacs, -> { where(snac: nil) }
 
@@ -57,25 +57,25 @@ class Place
   validates_with CannotEditPlaceDetailsUnlessNewestInactiveDataset, on: :update
 
   index({ location: "2d", service_slug: 1, data_set_version: 1 }, background: true)
-  index({service_slug: 1, data_set_version: 1})
+  index(service_slug: 1, data_set_version: 1)
 
   # Index to speed up the `needs_geocoding` and `with_geocoding_errors` scopes
-  index({
+  index(
     service_slug: 1,
     data_set_version: 1,
     geocode_error: 1,
     location: 1,
-  })
+  )
 
-  index({name: 1}, {background: true})
+  index({ name: 1 }, background: true)
 
   before_validation :build_source_address
   before_validation :clear_location, if: :postcode_changed?, on: :update
   before_save :geocode
 
   def data_set
-    service = Service.where(slug: service_slug).first
-    service.data_sets.where(version: data_set_version).first if service
+    service = Service.find_by(slug: service_slug)
+    service.data_sets.find_by(version: data_set_version) if service
   end
 
   # Convert mongoid's geo_near_distance attribute to a Distance object
@@ -103,7 +103,7 @@ class Place
       self.location = Point.new(latitude: override_lat, longitude: override_lng)
     end
 
-    return unless location.blank?
+    return if location.present?
 
     if postcode.blank?
       self.geocode_error = "Can't geocode without postcode"
@@ -116,12 +116,12 @@ class Place
     end
   rescue GdsApi::HTTPClientError
     self.geocode_error = "#{self.postcode} not found for #{self.full_address}"
-  rescue => e
-    error = "Error geocoding place #{self.postcode} : #{e.message}"
-    Rails.logger.warn error
-    self.geocode_error = error
   rescue Encoding::CompatibilityError
     error = "Encoding error in place #{self.id}"
+    Rails.logger.warn error
+    self.geocode_error = error
+  rescue StandardError => e
+    error = "Error geocoding place #{self.postcode} : #{e.message}"
     Rails.logger.warn error
     self.geocode_error = error
   end
@@ -203,8 +203,8 @@ private
 
   def has_both_lat_lng_overrides
     unless override_lat_lng? || (override_lat.blank? && override_lng.blank?)
-      errors.add(:override_lat, "latitude must be a valid coordinate") unless override_lat.present?
-      errors.add(:override_lng, "longitude must be a valid coordinate") unless override_lng.present?
+      errors.add(:override_lat, "latitude must be a valid coordinate") if override_lat.blank?
+      errors.add(:override_lng, "longitude must be a valid coordinate") if override_lng.blank?
     end
   end
 end

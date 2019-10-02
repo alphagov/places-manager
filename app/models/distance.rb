@@ -8,18 +8,19 @@ class Distance
   # of longitude at any point other than the Equator, you will get incorrect
   # results.
   EARTH_RADIUS_IN_MILES = 3963.19
-  UNITS = [:miles, :degrees, :radians]
+  UNITS = %i[miles degrees radians].freeze
 
   # <value> in units of <key> is equal for each pair here
   EQUIVALENTS = {
     miles: EARTH_RADIUS_IN_MILES,
     degrees: 360 / (2 * Math::PI),
     radians: 1,
-  }
+  }.freeze
 
   def initialize(magnitude, unit)
     raise "Invalid unit #{unit.inspect}" unless UNITS.include? unit
     raise "#{magnitude.inspect} is not a number" unless magnitude.is_a? Numeric
+
     @magnitude = magnitude
     @unit = unit
   end

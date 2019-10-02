@@ -1,10 +1,10 @@
 class Service
   include Mongoid::Document
 
-  LOCATION_MATCH_TYPES = %w(nearest local_authority)
+  LOCATION_MATCH_TYPES = %w(nearest local_authority).freeze
   LOCAL_AUTHORITY_DISTRICT_MATCH = "district".freeze
   LOCAL_AUTHORITY_COUNTY_MATCH = "county".freeze
-  LOCAL_AUTHORITY_HIERARCHY_MATCH_TYPES = [LOCAL_AUTHORITY_DISTRICT_MATCH, LOCAL_AUTHORITY_COUNTY_MATCH]
+  LOCAL_AUTHORITY_HIERARCHY_MATCH_TYPES = [LOCAL_AUTHORITY_DISTRICT_MATCH, LOCAL_AUTHORITY_COUNTY_MATCH].freeze
 
   field :name,                    type: String
   field :slug,                    type: String
@@ -19,14 +19,14 @@ class Service
     end
   end
 
-  index({slug: 1}, {unique: true})
+  index({ slug: 1 }, unique: true)
 
   validates_presence_of :name
 
   # underscore allowed because one of the existing services uses them in its slug.
-  validates :slug, presence: true, uniqueness: true, format: {with: /\A[a-z0-9_-]*\z/ }
-  validates :location_match_type, inclusion: {in: LOCATION_MATCH_TYPES}
-  validates :local_authority_hierarchy_match_type, inclusion: {in: LOCAL_AUTHORITY_HIERARCHY_MATCH_TYPES}
+  validates :slug, presence: true, uniqueness: true, format: { with: /\A[a-z0-9_-]*\z/ }
+  validates :location_match_type, inclusion: { in: LOCATION_MATCH_TYPES }
+  validates :local_authority_hierarchy_match_type, inclusion: { in: LOCAL_AUTHORITY_HIERARCHY_MATCH_TYPES }
 
   before_validation :create_first_data_set, on: :create
   after_save :schedule_csv_processing
@@ -56,7 +56,7 @@ class Service
   end
 
   def process_csv_data(data_set_version)
-    self.data_sets.where(version: data_set_version).first.process_csv_data
+    self.data_sets.find_by(version: data_set_version).process_csv_data
   end
 
   def active_data_set
@@ -72,17 +72,17 @@ class Service
   end
 
   def schedule_archive_places
-    obsolete_data_sets.each {|ds| ds.archive! if ds.places.any? }
+    obsolete_data_sets.each { |ds| ds.archive! if ds.places.any? }
     ArchivePlacesWorker.perform_async(self.id.to_s)
   end
 
   def archive_places
-    obsolete_data_sets.each {|ds| ds.archive_places if ds.places.any? }
+    obsolete_data_sets.each { |ds| ds.archive_places if ds.places.any? }
   end
 
   # returns all data sets up to but not including the data set before the active set
   def obsolete_data_sets
-    data_sets.take_while {|ds| ds != active_data_set }.slice(0...-1)
+    data_sets.take_while { |ds| ds != active_data_set }.slice(0...-1)
   end
 
   def uses_local_authority_lookup?

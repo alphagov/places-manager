@@ -22,6 +22,6 @@ class DistanceTest < ActiveSupport::TestCase
   end
 
   test "distances are not equal to numbers" do
-    refute_equal 500, Distance.new(500, :miles)
+    assert_not_equal 500, Distance.new(500, :miles)
   end
 end

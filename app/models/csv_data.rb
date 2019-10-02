@@ -14,11 +14,11 @@ class CsvData
   validates_presence_of :data
 
   def service
-    @_service ||= Service.where(slug: service_slug).first
+    @service ||= Service.find_by(slug: service_slug)
   end
 
   def data_set
-    @_data_set ||= service.data_sets.where(version: data_set_version).first if service
+    @data_set ||= service.data_sets.find_by(version: data_set_version) if service
   end
 
   def data_file=(file)

@@ -7,6 +7,9 @@ development:
           w: 1
         read:
           mode: :primary
+  options:
+    # This is more consistent with ActiveRecord
+    raise_not_found_error: false
 
 test:
   clients:
@@ -21,6 +24,9 @@ test:
         # low amounts for fast failures.
         max_retries: 1
         retry_interval: 0
+  options:
+    # This is more consistent with ActiveRecord
+    raise_not_found_error: false
 
 production:
   clients:
@@ -32,3 +38,6 @@ production:
         read:
           mode: :primary
         retry_interval: 120
+  options:
+    # This is more consistent with ActiveRecord
+    raise_not_found_error: false

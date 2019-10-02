@@ -43,7 +43,7 @@ class PlaceTest < ActiveSupport::TestCase
 
     place.name = "Aviation House"
 
-    assert !place.valid?
+    assert_not place.valid?
     assert place.errors.keys.include?(:base)
   end
 
@@ -62,7 +62,7 @@ class PlaceTest < ActiveSupport::TestCase
     service.data_sets.create! version: 3
     place.name = "Aviation House"
 
-    assert !place.valid?
+    assert_not place.valid?
     assert place.errors.keys.include?(:base)
   end
 

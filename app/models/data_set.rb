@@ -15,7 +15,7 @@ class DataSet
 
   validates_presence_of :version
 
-  default_scope -> { order_by([:version, :asc]) }
+  default_scope -> { order_by(%i[version asc]) }
   before_validation :set_version, on: :create
   validate :csv_data_is_valid
   after_save :schedule_csv_processing
@@ -95,11 +95,11 @@ class DataSet
     if self.version.blank?
       other_data_sets = service.data_sets.to_a - [self]
       highest_version = other_data_sets.map(&:version).max
-      if highest_version
-        self.version = highest_version + 1
-      else
-        self.version = 1
-      end
+      self.version = if highest_version
+                       highest_version + 1
+                     else
+                       1
+                     end
     end
   end
 
@@ -126,11 +126,12 @@ class DataSet
   end
 
   def csv_data
-    @csv_data ||= CsvData.where(service_slug: service.slug, data_set_version: self.version).first
+    @csv_data ||= CsvData.find_by(service_slug: service.slug, data_set_version: self.version)
   end
 
   def csv_data_is_valid
     return if @csv_data.nil? || @csv_data.destroyed?
+
     @csv_data.service_slug = service.slug
     @csv_data.data_set_version = self.version
     unless @csv_data.valid?
@@ -171,6 +172,7 @@ class DataSet
 
   def activate
     return false unless self.processing_complete?
+
     service.active_data_set_version = self.version
     service.save
   end
@@ -182,7 +184,7 @@ class DataSet
       end
       places.delete_all
       self.archived
-    rescue => e
+    rescue StandardError => e
       self.set(archiving_error: "Failed to archive place information: '#{e.message}'")
     end
   end
@@ -194,7 +196,7 @@ class DataSet
   end
 
   def has_places_with_missing_snacs?
-    service.uses_local_authority_lookup? && places.missing_snacs.count > 0
+    service.uses_local_authority_lookup? && places.missing_snacs.count > 0 # rubocop:disable Style/NumericPredicate
   end
 
 private

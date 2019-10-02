@@ -12,21 +12,21 @@ class ServiceTest < ActiveSupport::TestCase
 
     should "require a name" do
       @service.name = ""
-      refute @service.valid?
+      assert_not @service.valid?
       assert_equal 1, @service.errors[:name].count
     end
 
     context "on slug" do
       should "be required" do
         @service.slug = ""
-        refute @service.valid?
+        assert_not @service.valid?
         assert_equal 1, @service.errors[:slug].count
       end
 
       should "be unique" do
         FactoryBot.create(:service, slug: "a-service")
         @service.slug = "a-service"
-        refute @service.valid?
+        assert_not @service.valid?
         assert_equal 1, @service.errors[:slug].count
       end
 
@@ -45,13 +45,13 @@ class ServiceTest < ActiveSupport::TestCase
           "this&that",
         ].each do |slug|
           @service.slug = slug
-          refute @service.valid?
+          assert_not @service.valid?
           assert_equal 1, @service.errors[:slug].count
         end
 
-        [
-          "dashed-with-numbers-123",
-          "under_score",
+        %w[
+          dashed-with-numbers-123
+          under_score
         ].each do |slug|
           @service.slug = slug
           assert @service.valid?
@@ -70,7 +70,7 @@ class ServiceTest < ActiveSupport::TestCase
         "fooey",
       ].each do |match_type|
         @service.location_match_type = match_type
-        refute @service.valid?, "Expected service to be invalid with location_match_type: '#{match_type}'"
+        assert_not @service.valid?, "Expected service to be invalid with location_match_type: '#{match_type}'"
         assert_equal 1, @service.errors[:location_match_type].count
       end
     end
@@ -86,7 +86,7 @@ class ServiceTest < ActiveSupport::TestCase
         "fooey",
       ].each do |match_type|
         @service.local_authority_hierarchy_match_type = match_type
-        refute @service.valid?, "Expected service to be invalid with local_authority_hierarchy_match_type: '#{match_type}'"
+        assert_not @service.valid?, "Expected service to be invalid with local_authority_hierarchy_match_type: '#{match_type}'"
         assert_equal 1, @service.errors[:local_authority_hierarchy_match_type].count
       end
     end
@@ -136,12 +136,12 @@ class ServiceTest < ActiveSupport::TestCase
     end
 
     should "return data_sets which have not been archived" do
-      refute_empty @service.data_sets.current
+      assert_not_empty @service.data_sets.current
     end
 
     should "return data_sets which are being archived" do
       @service.data_sets.first.set(state: "archiving")
-      refute_empty @service.data_sets.current
+      assert_not_empty @service.data_sets.current
     end
 
     should "not return archived data_sets" do
@@ -168,7 +168,7 @@ class ServiceTest < ActiveSupport::TestCase
       ds = @service.data_sets.first
       ds.places.delete_all
       @service.schedule_archive_places
-      refute ds.archiving?
+      assert_not ds.archiving?
     end
 
     should "schedule the archiving of obsolete data_sets with places" do
@@ -200,12 +200,12 @@ class ServiceTest < ActiveSupport::TestCase
     end
 
     should "not return any sets if the second oldest set is the active set" do
-      @service.update_attributes(active_data_set_version: 2)
+      @service.update(active_data_set_version: 2)
       assert_empty @service.obsolete_data_sets
     end
 
     should "return sets up to but not including the set before the active set" do
-      @service.update_attributes(active_data_set_version: 3)
+      @service.update(active_data_set_version: 3)
       assert_includes @service.obsolete_data_sets, @service.data_sets.first
       assert_equal 1, @service.obsolete_data_sets.count
     end

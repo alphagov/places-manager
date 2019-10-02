@@ -7,12 +7,12 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
   context "Requesting the full dataset" do
     setup do
       @service = FactoryBot.create(:service)
-      @data_set_1 = @service.active_data_set
-      @data_set_2 = @service.data_sets.create
+      @data_set1 = @service.active_data_set
+      @data_set2 = @service.data_sets.create
       @place_1a = FactoryBot.create(
         :place,
         service_slug: @service.slug,
-        data_set_version: @data_set_1.version,
+        data_set_version: @data_set1.version,
         latitude: 51.613314,
         longitude: -0.158278,
         name: "Town Hall",
@@ -20,7 +20,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
       @place_1b = FactoryBot.create(
         :place,
         service_slug: @service.slug,
-        data_set_version: @data_set_1.version,
+        data_set_version: @data_set1.version,
         latitude: 51.500728,
         longitude: -0.124626,
         name: "Palace of Westminster",
@@ -28,7 +28,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
       @place_2a = FactoryBot.create(
         :place,
         service_slug: @service.slug,
-        data_set_version: @data_set_2.version,
+        data_set_version: @data_set2.version,
         latitude: 51.613314,
         longitude: -0.158278,
         name: "Town Hall 2",
@@ -36,12 +36,12 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
       @place_2b = FactoryBot.create(
         :place,
         service_slug: @service.slug,
-        data_set_version: @data_set_2.version,
+        data_set_version: @data_set2.version,
         latitude: 51.500728,
         longitude: -0.124626,
         name: "Palace of Westminster 2",
       )
-      @data_set_2.activate
+      @data_set2.activate
     end
 
     should "return all places for the current dataset as JSON" do
@@ -77,17 +77,17 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         GDS::SSO.test_user = FactoryBot.create(:user)
         visit "/admin" # necessary to setup the login session
 
-        visit "/places/#{@service.slug}.json?version=#{@data_set_1.to_param}"
+        visit "/places/#{@service.slug}.json?version=#{@data_set1.to_param}"
 
         data = JSON.parse(page.source)
         assert_equal ["Palace of Westminster", "Town Hall"], (data.map { |p| p["name"] })
       end
 
       should "ignore requested version and return active version when not logged in" do
-        visit "/places/#{@service.slug}.json?version=#{@data_set_1.to_param}"
+        visit "/places/#{@service.slug}.json?version=#{@data_set1.to_param}"
 
         data = JSON.parse(page.source)
-        # Titles from @data_set_2
+        # Titles from @data_set2
         assert_equal ["Palace of Westminster 2", "Town Hall 2"], (data.map { |p| p["name"] })
       end
     end
@@ -225,7 +225,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
 
       context "when the service is bounded to districts" do
         setup do
-          @service.update_attributes(local_authority_hierarchy_match_type: Service::LOCAL_AUTHORITY_DISTRICT_MATCH)
+          @service.update(local_authority_hierarchy_match_type: Service::LOCAL_AUTHORITY_DISTRICT_MATCH)
         end
 
         should "return the district places in order of nearness, not the county ones for postcodes in a county+district council hierarchy" do
@@ -251,7 +251,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
 
       context "when the service is bounded to counties" do
         setup do
-          @service.update_attributes(local_authority_hierarchy_match_type: Service::LOCAL_AUTHORITY_COUNTY_MATCH)
+          @service.update(local_authority_hierarchy_match_type: Service::LOCAL_AUTHORITY_COUNTY_MATCH)
         end
 
         should "only return the county results in order of nearness, not the district ones for postcodes in a county+district council hierarchy" do

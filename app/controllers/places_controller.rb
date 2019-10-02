@@ -33,11 +33,9 @@ class PlacesController < ApplicationController
     data_set = select_data_set(@service, params[:version])
     head 404 && return if data_set.nil?
 
-    if params[:max_distance].present?
-      max_distance = Distance.new(Float(params[:max_distance]), :miles)
-    else
-      max_distance = nil
-    end
+    max_distance = if params[:max_distance].present?
+                     Distance.new(Float(params[:max_distance]), :miles)
+                   end
 
     if params[:postcode].present?
       @places = data_set.places_for_postcode(params[:postcode], max_distance, params[:limit])
@@ -54,9 +52,10 @@ class PlacesController < ApplicationController
   end
 
 protected
-  def error_400(e)
-    error_message = e.message.gsub("MapitApi::", "").camelize(:lower)
-    render status: 400, json: { error: "#{error_message}" }
+
+  def error_400(error)
+    error_message = error.message.gsub("MapitApi::", "").camelize(:lower)
+    render status: :bad_request, json: { error: error_message.to_s }
   end
 
   def select_data_set(service, version = nil)

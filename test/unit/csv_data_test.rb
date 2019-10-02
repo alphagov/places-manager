@@ -27,19 +27,19 @@ class CsvDataTest < ActiveSupport::TestCase
   context "validations" do
     should "be invalid without a service slug" do
       csv_data = CsvData.create(service_slug: nil, data_set_version: 2, data: "1,2,3")
-      refute csv_data.valid?
+      assert_not csv_data.valid?
       assert_equal 1, csv_data.errors[:service_slug].size
     end
 
     should "be invalid without a data set version" do
       csv_data = CsvData.create(service_slug: "foo", data_set_version: nil, data: "1,2,3")
-      refute csv_data.valid?
+      assert_not csv_data.valid?
       assert_equal 1, csv_data.errors[:data_set_version].size
     end
 
     should "be invalid without data" do
       csv_data = CsvData.create(service_slug: "foo", data_set_version: 2, data: nil)
-      refute csv_data.valid?
+      assert_not csv_data.valid?
       assert_equal 1, csv_data.errors[:data].size
     end
 
@@ -56,7 +56,7 @@ class CsvDataTest < ActiveSupport::TestCase
 
       should "be invalid with a file over 15M" do
         csv_data = CsvData.create(service_slug: "chickens", data_set_version: 2, data: "x" * (15.megabytes + 1))
-        refute csv_data.valid?
+        assert_not csv_data.valid?
         assert_equal 1, csv_data.errors[:data].size
       end
     end

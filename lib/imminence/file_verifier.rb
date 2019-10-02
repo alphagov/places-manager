@@ -3,11 +3,11 @@ module Imminence
     attr_accessor :filename
 
     def initialize(file)
-      if file.respond_to?(:path)
-        @filename = file.path
-      else
-        @filename = file.to_s
-      end
+      @filename = if file.respond_to?(:path)
+                    file.path
+                  else
+                    file.to_s
+                  end
     end
 
     def type
