@@ -55,5 +55,5 @@ group :test do
   gem "shoulda-context"
   gem "simplecov", "~> 0.17.1", require: false
   gem "simplecov-rcov", "~> 0.2.3", require: false
-  gem "webmock", "~> 3.7.5", require: false
+  gem "webmock", "~> 3.7.6", require: false
 end
