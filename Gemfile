@@ -38,7 +38,7 @@ gem "uglifier", "4.2.0"
 gem "sdoc", "~> 1.0.0", group: :doc
 
 group :development, :test do
-  gem "govuk-lint", "4.0.1"
+  gem "govuk-lint", "4.1.0"
   gem "pry"
 end
 
