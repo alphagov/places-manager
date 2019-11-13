@@ -16,7 +16,7 @@ gem "gds-api-adapters", "~> 61.0.0"
 if ENV["BUNDLE_DEV"]
   gem "gds-sso", path: "../gds-sso"
 else
-  gem "gds-sso", "~> 14.1.1"
+  gem "gds-sso", "~> 14.2.0"
 end
 
 gem "govuk_app_config", "~> 2.0"
