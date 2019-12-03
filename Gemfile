@@ -50,7 +50,7 @@ group :test do
   gem "govuk_test"
   gem "launchy"
   gem "minitest-reporters"
-  gem "mocha", "~> 1.9.0", require: false
+  gem "mocha", "~> 1.10.0", require: false
   gem "rails-controller-testing"
   gem "shoulda-context"
   gem "simplecov", "~> 0.17.1", require: false
