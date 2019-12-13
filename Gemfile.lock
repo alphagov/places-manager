@@ -232,7 +232,7 @@ GEM
       builder
       minitest (>= 5.0)
       ruby-progressbar
-    mocha (1.10.1)
+    mocha (1.10.2)
     mongo (2.4.3)
       bson (>= 4.2.1, < 5.0.0)
     mongoid (6.1.1)
@@ -463,7 +463,7 @@ DEPENDENCIES
   kaminari-mongoid
   launchy
   minitest-reporters
-  mocha (~> 1.10.1)
+  mocha (~> 1.10.2)
   mongoid
   mongoid_rails_migrations
   plek (~> 3.0.0)
