@@ -120,7 +120,7 @@ GEM
       actionpack (>= 3.2.13)
     formtastic-bootstrap (3.1.1)
       formtastic (>= 3.0)
-    gds-api-adapters (63.0.0)
+    gds-api-adapters (63.1.1)
       addressable
       link_header
       null_logger
@@ -278,7 +278,7 @@ GEM
     public_suffix (4.0.1)
     puma (4.3.1)
       nio4r (~> 2.0)
-    rack (2.0.7)
+    rack (2.0.8)
     rack-cache (1.10.0)
       rack (>= 0.4)
     rack-protection (2.0.5)
@@ -451,7 +451,7 @@ DEPENDENCIES
   factory_bot_rails (~> 5.1.1)
   formtastic
   formtastic-bootstrap
-  gds-api-adapters (~> 63.0.0)
+  gds-api-adapters (~> 63.1.1)
   gds-sso (~> 14.2.0)
   govuk-lint (= 4.3.0)
   govuk_admin_template (= 6.7.0)
