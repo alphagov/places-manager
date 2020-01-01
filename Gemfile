@@ -20,7 +20,7 @@ else
 end
 
 gem "govuk_app_config", "~> 2.0"
-gem "govuk_sidekiq", "~> 3.0.3"
+gem "govuk_sidekiq", "~> 3.0.4"
 
 gem "bootstrap-kaminari-views", "~> 0.0.3"
 gem "inherited_resources"
