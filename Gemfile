@@ -53,7 +53,7 @@ group :test do
   gem "mocha", "~> 1.11.2", require: false
   gem "rails-controller-testing"
   gem "shoulda-context"
-  gem "simplecov", "~> 0.17.1", require: false
+  gem "simplecov", "~> 0.18.0", require: false
   gem "simplecov-rcov", "~> 0.2.3", require: false
   gem "webmock", "~> 3.8.0", require: false
 end
