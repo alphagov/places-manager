@@ -1,2 +1,7 @@
-Rails:
-  Enabled: true
+inherit_gem:
+  rubocop-govuk:
+    - config/default.yml
+    - config/rails.yml
+
+Rails/RakeEnvironment:
+  Enabled: false

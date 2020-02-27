@@ -6,6 +6,5 @@ if Rails.env.development? || Rails.env.test?
   require 'ci/reporter/rake/minitest'
 end
 
-task default: [:lint]
 Rails.application.load_tasks
 task test: :check_for_bad_time_handling

@@ -18,7 +18,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
 
     should "successfully import a CSV file" do
       as_logged_in_user do
-        csv_file = fixture_file_upload(Rails.root.join("test", "fixtures", "good_csv.csv"), "text/csv")
+        csv_file = fixture_file_upload(Rails.root.join("test/fixtures/good_csv.csv"), "text/csv")
         post :create, params: { service_id: @service.id, data_set: { data_file: csv_file } }
         assert_response :redirect
 
@@ -46,7 +46,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
       DataSet.any_instance.stubs(:data_file=).raises(InvalidCharacterEncodingError)
 
       as_logged_in_user do
-        csv_file = fixture_file_upload(Rails.root.join("test", "fixtures", "good_csv.csv"), "text/csv")
+        csv_file = fixture_file_upload(Rails.root.join("test/fixtures/good_csv.csv"), "text/csv")
         post :create, params: { service_id: @service.id, data_set: { data_file: csv_file } }
         assert_response :redirect
         assert_equal "Could not process CSV file because of the file encoding. Please check the format.", flash[:danger]
