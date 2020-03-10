@@ -143,7 +143,7 @@ GEM
       jquery-rails (~> 4.3.1)
       plek (>= 2.1.0)
       rails (>= 3.2.0)
-    govuk_app_config (2.0.3)
+    govuk_app_config (2.1.0)
       logstasher (>= 1.2.2, < 1.4.0)
       sentry-raven (>= 2.7.1, < 2.14.0)
       statsd-ruby (~> 1.4.0)
@@ -442,7 +442,7 @@ DEPENDENCIES
   gds-api-adapters (~> 63.5.1)
   gds-sso (~> 14.3.0)
   govuk_admin_template (= 6.7.0)
-  govuk_app_config (~> 2.0)
+  govuk_app_config (~> 2.1)
   govuk_sidekiq (~> 3.0.5)
   govuk_test
   inherited_resources
