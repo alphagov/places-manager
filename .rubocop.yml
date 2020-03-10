@@ -3,5 +3,9 @@ inherit_gem:
     - config/default.yml
     - config/rails.yml
 
+inherit_mode:
+  merge:
+    - Exclude
+
 Rails/RakeEnvironment:
   Enabled: false
