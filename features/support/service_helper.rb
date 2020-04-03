@@ -123,7 +123,7 @@ module ServiceHelper
 
   def mapit_knows_nothing_about_any_postcodes
     stub_request(:get, %r{#{GdsApi::TestHelpers::Mapit::MAPIT_ENDPOINT}/postcode/[^\.]+\.json})
-      .to_return(:body => { "code" => 404, "error" => "No Postcode matches the given query." }.to_json, :status => 404)
+      .to_return(body: { "code" => 404, "error" => "No Postcode matches the given query." }.to_json, status: 404)
   end
 end
 
