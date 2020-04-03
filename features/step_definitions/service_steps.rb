@@ -10,7 +10,7 @@ Given(/^I have previously created a service with the following attributes:$/) do
 
   params = { 
     slug: params[:name].parameterize,
-    csv_path: csv_path_for_data(params[:name])
+    csv_path: csv_path_for_data(params[:name]),
   }.merge(params)
 
   @service = create_service(params)
@@ -36,7 +36,7 @@ When(/^I fill in the form to create the "(.*?)" service with a bad CSV$/) do |na
   params = {
     name: name,
     slug: name.parameterize,
-    csv_path: Rails.root.join("features/support/data/bad.csv")
+    csv_path: Rails.root.join("features/support/data/bad.csv"),
   }
 
   fill_in_form_with(params)
@@ -46,7 +46,7 @@ When(/^I fill in the form to create the "(.*?)" service with a PNG claiming to b
   params = {
     name: name,
     slug: name.parameterize,
-    csv_path: Rails.root.join("features/support/data/rails.csv")
+    csv_path: Rails.root.join("features/support/data/rails.csv"),
   }
 
   fill_in_form_with(params)
@@ -56,7 +56,7 @@ When(/^I fill in the form to create the "(.*?)" service with a PNG$/) do |name|
   params = {
     name: name,
     slug: name.parameterize,
-    csv_path: Rails.root.join("features/support/data/rails.png")
+    csv_path: Rails.root.join("features/support/data/rails.png"),
   }
 
   fill_in_form_with(params)
@@ -68,7 +68,7 @@ When(/^I fill out the form with the following attributes to create a service:$/)
 
   params = {
     slug: params[:name].parameterize,
-    csv_path: csv_path_for_data(params[:name])
+    csv_path: csv_path_for_data(params[:name]),
   }.merge(params)
 
   fill_in_form_with(params)

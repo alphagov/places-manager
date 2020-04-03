@@ -96,7 +96,7 @@ module ServiceHelper
       source_of_data: "test source of data",
       location_match_type: "Local authority",
       local_authority_hierarchy_match_type: "District",
-      csv_path: csv_path_for_data("Register Offices")
+      csv_path: csv_path_for_data("Register Offices"),
     }
   end
 
