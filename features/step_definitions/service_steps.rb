@@ -8,7 +8,7 @@ Given(/^I have previously created a service with the following attributes:$/) do
   params = table.rows_hash.symbolize_keys!
   raise ArgumentError, "name cannot be nil" if params[:name].nil?
 
-  params = { 
+  params = {
     slug: params[:name].parameterize,
     csv_path: csv_path_for_data(params[:name]),
   }.merge(params)
