@@ -38,8 +38,8 @@ gem "uglifier", "4.2.0"
 gem "sdoc", "~> 1.0.0", group: :doc
 
 group :development, :test do
-  gem "rubocop-govuk"
   gem "pry"
+  gem "rubocop-govuk"
 end
 
 group :test do
