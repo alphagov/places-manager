@@ -35,7 +35,7 @@ gem "sass-rails", "~> 6.0"
 gem "uglifier", "4.2.0"
 
 # bundle exec rake doc:rails generates the API under doc/api.
-gem "sdoc", "~> 1.0.0", group: :doc
+gem "sdoc", "~> 1.1.0", group: :doc
 
 group :development, :test do
   gem "pry"
