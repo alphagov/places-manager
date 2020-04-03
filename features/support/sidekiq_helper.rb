@@ -1,4 +1,4 @@
-require 'govuk_sidekiq/testing'
+require "govuk_sidekiq/testing"
 
 module SidekiqHelper
   def run_all_delayed_jobs
