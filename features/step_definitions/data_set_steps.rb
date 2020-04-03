@@ -90,10 +90,6 @@ Then(/^I should see an indication that my data set import failed$/) do
   assert page.has_content?("This may well mean the imported data was in the wrong format")
 end
 
-Then(/^show me the page$/) do
-  save_and_open_page
-end
-
 Then(/^I should see an indication that my data set is awaiting processing$/) do
   assert page.has_content?("Places data is currently being processed")
 end
