@@ -1,4 +1,4 @@
-Given /^I have uploaded a (second|third) data set$/ do |ordinal|
+Given /^I have uploaded a (second|third) data set$/ do |_ordinal|
   upload_extra_data_set(@service)
 end
 
