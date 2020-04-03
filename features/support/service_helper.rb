@@ -1,4 +1,4 @@
-require 'gds_api/test_helpers/mapit'
+require "gds_api/test_helpers/mapit"
 
 module ServiceHelper
   def path_for_service(name)
@@ -25,7 +25,7 @@ module ServiceHelper
   end
 
   def csv_path_for_data(name)
-    File.expand_path('../../support/data/' + name.parameterize + '.csv', __FILE__)
+    File.expand_path("../../support/data/" + name.parameterize + ".csv", __FILE__)
   end
 
   def upload_extra_data_set(service)
@@ -76,17 +76,17 @@ module ServiceHelper
 
     params = service_defaults.merge(params)
 
-    fill_in 'Name', with: params[:name]
-    fill_in 'Slug', with: params[:slug]
-    fill_in 'Source of data', with: (params[:source_of_data])
+    fill_in "Name", with: params[:name]
+    fill_in "Slug", with: params[:slug]
+    fill_in "Source of data", with: (params[:source_of_data])
 
-    select (params[:location_match_type]), from: 'Location match type'
+    select (params[:location_match_type]), from: "Location match type"
     if params[:location_match_type] == "Local authority"
-      select (params[:local_authority_hierarchy_match_type]), from: 'Local authority hierarchy match type'
+      select (params[:local_authority_hierarchy_match_type]), from: "Local authority hierarchy match type"
     end
 
-    attach_file 'Data file', params[:csv_path]
-    click_button 'Create Service'
+    attach_file "Data file", params[:csv_path]
+    click_button "Create Service"
   end
 
   def service_defaults
@@ -101,12 +101,12 @@ module ServiceHelper
   end
 
   def fill_in_place_form_with(name)
-    fill_in 'Name', with: name
+    fill_in "Name", with: name
     click_button "Update Place"
   end
 
   def upload_csv_data(csv_data)
-    csv_file = Tempfile.new('exported_data_set.csv')
+    csv_file = Tempfile.new("exported_data_set.csv")
     begin
       csv_file.write(csv_data)
       csv_file.rewind

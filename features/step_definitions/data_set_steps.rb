@@ -15,31 +15,31 @@ end
 
 When /^I upload a new data set with a CSV in the wrong format$/ do
   within "#new-data" do
-    attach_file "Data file", Rails.root.join('features/support/data/wrong_format.csv')
+    attach_file "Data file", Rails.root.join("features/support/data/wrong_format.csv")
     click_button "Create Data set"
   end
 end
 
 When /^I upload a new data set with a PNG claiming to be a CSV$/ do
   within "#new-data" do
-    attach_file "Data file", Rails.root.join('features/support/data/rails.csv')
+    attach_file "Data file", Rails.root.join("features/support/data/rails.csv")
     click_button "Create Data set"
   end
 end
 
 When /^I upload a new data set with a CSV with missing SNAC codes$/ do
   within "#new-data" do
-    attach_file "Data file", Rails.root.join('features/support/data/register-offices-with-missing-snac-codes.csv')
+    attach_file "Data file", Rails.root.join("features/support/data/register-offices-with-missing-snac-codes.csv")
     click_button "Create Data set"
   end
 end
 
 When /^I click "Activate"$/ do
-  click_button 'Activate'
+  click_button "Activate"
 end
 
 When /^I click "Duplicate"$/ do
-  click_button 'Duplicate'
+  click_button "Duplicate"
 end
 
 When /^I go to the page for the latest data set for the "(.*?)" service$/ do |name|
@@ -61,7 +61,7 @@ When /^I click "Edit" on a record$/ do
 end
 
 When /^I (activate|duplicate) the most recent data set$/ do |button_choice|
-  within '#history .row:first .data-set:first' do
+  within "#history .row:first .data-set:first" do
     click_on button_choice.titleize
   end
 end
@@ -72,7 +72,7 @@ end
 
 When /^I export the latest "(.*?)" data set to CSV$/ do |name|
   visit path_for_latest_data_set_for_service(name)
-  click_link 'CSV'
+  click_link "CSV"
   @exported_csv_data = page.source
 end
 
@@ -141,7 +141,7 @@ Then /^the places should be identical between the datasets in the "(.*?)" servic
   place_1 = data_set_1.places.first
   place_2 = data_set_2.places.first
 
-  expected_identical_attributes = Place.attribute_names - ['_id', 'data_set_version']
+  expected_identical_attributes = Place.attribute_names - ["_id", "data_set_version"]
   expected_identical_attributes.each do |attribute|
     assert_equal place_1.send(attribute.to_sym), place_2.send(attribute.to_sym)
   end

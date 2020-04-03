@@ -25,18 +25,18 @@ When /^I go to the page for the "(.*?)" service$/ do |name|
 end
 
 When /^I visit the details tab$/ do
-  click_link 'Service details'
+  click_link "Service details"
 end
 
 When /^I visit the history tab$/ do
-  click_link 'Version history'
+  click_link "Version history"
 end
 
 When /^I fill in the form to create the "(.*?)" service with a bad CSV$/ do |name|
   params = {
     name: name,
     slug: name.parameterize,
-    csv_path: Rails.root.join('features/support/data/bad.csv')
+    csv_path: Rails.root.join("features/support/data/bad.csv")
   }
 
   fill_in_form_with(params)
@@ -46,7 +46,7 @@ When /^I fill in the form to create the "(.*?)" service with a PNG claiming to b
   params = {
     name: name,
     slug: name.parameterize,
-    csv_path: Rails.root.join('features/support/data/rails.csv')
+    csv_path: Rails.root.join("features/support/data/rails.csv")
   }
 
   fill_in_form_with(params)
@@ -56,7 +56,7 @@ When /^I fill in the form to create the "(.*?)" service with a PNG$/ do |name|
   params = {
     name: name,
     slug: name.parameterize,
-    csv_path: Rails.root.join('features/support/data/rails.png')
+    csv_path: Rails.root.join("features/support/data/rails.png")
   }
 
   fill_in_form_with(params)
@@ -101,7 +101,7 @@ When /^I activate the most recent data set for the "(.*?)" service$/ do |name|
 end
 
 When /^I should see (\d+) version panels?$/ do |count|
-  version_panels = page.all(:css, 'div .data-set')
+  version_panels = page.all(:css, "div .data-set")
   assert_equal version_panels.size, count.to_i
 end
 
