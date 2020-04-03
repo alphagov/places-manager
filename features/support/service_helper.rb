@@ -30,7 +30,7 @@ module ServiceHelper
 
   def upload_extra_data_set(service)
     service.data_sets.create!(
-      data_file: File.open(csv_path_for_data(service.name))
+      data_file: File.open(csv_path_for_data(service.name)),
     )
     run_all_delayed_jobs
   end
@@ -46,7 +46,7 @@ module ServiceHelper
       source_of_data: params[:source_of_data],
       location_match_type: location_match_type(params[:location_match_type]),
       local_authority_hierarchy_match_type: local_authority_hierarchy_match_type(params[:local_authority_hierarchy_match_type]),
-      data_file: File.open(params[:csv_path])
+      data_file: File.open(params[:csv_path]),
     )
     s.save!
     run_all_delayed_jobs
