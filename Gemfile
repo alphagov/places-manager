@@ -2,7 +2,7 @@ source "http://rubygems.org"
 
 gem "plek", "~> 3.0.0"
 
-gem "rails", "5.2.4.1"
+gem "rails", "5.2.4.2"
 
 gem "mongoid"
 gem "mongoid_rails_migrations"
