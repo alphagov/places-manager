@@ -1,7 +1,7 @@
 development:
   clients:
     default:
-      uri: mongodb://localhost/imminence_development
+      uri: <%= ENV['MONGODB_URI'] || "mongodb://localhost/imminence_development" %>
       options:
         write:
           w: 1
@@ -14,7 +14,7 @@ development:
 test:
   clients:
     default:
-      uri: mongodb://localhost/imminence_test
+      uri: <%= ENV['TEST_MONGODB_URI'] || "mongodb://localhost/imminence_test" %>
       options:
         write:
           w: 1
