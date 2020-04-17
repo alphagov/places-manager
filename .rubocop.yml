@@ -6,6 +6,3 @@ inherit_gem:
 inherit_mode:
   merge:
     - Exclude
-
-Rails/RakeEnvironment:
-  Enabled: false
