@@ -7,4 +7,3 @@ if Rails.env.development? || Rails.env.test?
 end
 
 Rails.application.load_tasks
-task test: :check_for_bad_time_handling
