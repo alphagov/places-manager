@@ -1,7 +1,7 @@
 class Service
   include Mongoid::Document
 
-  LOCATION_MATCH_TYPES = %w(nearest local_authority).freeze
+  LOCATION_MATCH_TYPES = %w[nearest local_authority].freeze
   LOCAL_AUTHORITY_DISTRICT_MATCH = "district".freeze
   LOCAL_AUTHORITY_COUNTY_MATCH = "county".freeze
   LOCAL_AUTHORITY_HIERARCHY_MATCH_TYPES = [LOCAL_AUTHORITY_DISTRICT_MATCH, LOCAL_AUTHORITY_COUNTY_MATCH].freeze
@@ -21,7 +21,7 @@ class Service
 
   index({ slug: 1 }, unique: true)
 
-  validates_presence_of :name
+  validates :name, presence: true
 
   # underscore allowed because one of the existing services uses them in its slug.
   validates :slug, presence: true, uniqueness: true, format: { with: /\A[a-z0-9_-]*\z/ }
@@ -37,7 +37,7 @@ class Service
   end
 
   def data_file=(file)
-    @need_csv_processing = self.data_sets.build(data_file: file)
+    @need_csv_processing = data_sets.build(data_file: file)
   end
 
   def schedule_csv_processing
@@ -56,11 +56,11 @@ class Service
   end
 
   def process_csv_data(data_set_version)
-    self.data_sets.find_by(version: data_set_version).process_csv_data
+    data_sets.find_by(version: data_set_version).process_csv_data
   end
 
   def active_data_set
-    @active_data_set ||= data_sets.detect { |ds| ds.version == self.active_data_set_version }
+    @active_data_set ||= data_sets.detect { |ds| ds.version == active_data_set_version }
   end
 
   def latest_data_set
@@ -68,12 +68,12 @@ class Service
   end
 
   def create_first_data_set
-    self.data_sets.build unless self.data_sets.any?
+    data_sets.build unless data_sets.any?
   end
 
   def schedule_archive_places
     obsolete_data_sets.each { |ds| ds.archive! if ds.places.any? }
-    ArchivePlacesWorker.perform_async(self.id.to_s)
+    ArchivePlacesWorker.perform_async(id.to_s)
   end
 
   def archive_places

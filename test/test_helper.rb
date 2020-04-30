@@ -60,7 +60,7 @@ class ActiveSupport::TestCase
   def stub_mapit_postcode_response_from_fixture(postcode)
     fixture_file = fixture_file_path("mapit_responses/#{postcode.tr(' ', '_')}.json")
 
-    stub_request(:get, "#{GdsApi::TestHelpers::Mapit::MAPIT_ENDPOINT}/postcode/#{postcode.tr(' ', '+')}.json").
-      to_return(body: File.open(fixture_file), status: 200, headers: { "Content-Type" => "application/json" })
+    stub_request(:get, "#{GdsApi::TestHelpers::Mapit::MAPIT_ENDPOINT}/postcode/#{postcode.tr(' ', '+')}.json")
+      .to_return(body: File.open(fixture_file), status: 200, headers: { "Content-Type" => "application/json" })
   end
 end

@@ -145,7 +145,7 @@ end
 
 Then(/^I should not see an "edit" action for a record$/) do
   within "table.table-places" do
-    assert ! page.has_link?("edit")
+    assert !page.has_link?("edit")
   end
 end
 
@@ -154,7 +154,7 @@ Then(/^I should see an indication that the first data set is being archived$/) d
 end
 
 Then(/^I should not see the first data set$/) do
-  assert ! page.has_content?("Version 1")
+  assert !page.has_content?("Version 1")
 end
 
 Then("I should see that a duplicating job was enqueued for data set version {int}") do |int|

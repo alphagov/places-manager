@@ -32,14 +32,14 @@ private
   # override fields or set from MapIt's data using the postcode.
   # Also exclude the id from the CSV since it isn't needed by the import.
   def non_location_headers
-    @non_location_headers ||= Place.attribute_names - %w(_id location override_lng override_lat)
+    @non_location_headers ||= Place.attribute_names - %w[_id location override_lng override_lat]
   end
 
   # The fields called 'lng' and 'lat' are used as the override values by
   # Place.parameters_from_hash so we need to name them accordingly in the
   # CSV to avoid them being lost if a CSV is exported and then imported.
   def location_headers
-    %w(lng lat)
+    %w[lng lat]
   end
 
   def all_headers

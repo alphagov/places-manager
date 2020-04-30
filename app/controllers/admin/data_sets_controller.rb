@@ -57,9 +57,9 @@ protected
   end
 
   def data_set_params
-    params.
-      require(:data_set).
-      permit(
+    params
+      .require(:data_set)
+      .permit(
         :data_file,
         :change_notes,
       )
