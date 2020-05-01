@@ -18,8 +18,8 @@ module MapitApi
   #
   # See http://mapit.mysociety.org/#api-multiple_areas for details
   # of the various area types.
-  DISTRICT_TYPES = %w(DIS LBO MTD UTA COI).freeze
-  COUNTY_TYPES = %w(CTY LBO MTD UTA COI).freeze
+  DISTRICT_TYPES = %w[DIS LBO MTD UTA COI].freeze
+  COUNTY_TYPES = %w[CTY LBO MTD UTA COI].freeze
 
   def self.district_snac_for_postcode(postcode)
     location_data = location_for_postcode(postcode)

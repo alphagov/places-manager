@@ -9,9 +9,9 @@ class CsvData
   # Mongoid has a 16M limit on document size.  Set this to
   # 15M to leave some headroom for storing the rest of the document.
   validates :data, length: { maximum: 15.megabytes, message: "CSV file is too big (max is 15MB)" }
-  validates_presence_of :service_slug
-  validates_presence_of :data_set_version
-  validates_presence_of :data
+  validates :service_slug, presence: true
+  validates :data_set_version, presence: true
+  validates :data, presence: true
 
   def service
     @service ||= Service.find_by(slug: service_slug)
@@ -40,7 +40,7 @@ private
       # Any stream of bytes should be a vaild Windows-1252 string, so we use the presence of any
       # ASCII control chars (except for \r and \n) as a good heuristic to determine if this is
       # likely to be the correct charset
-      if string.valid_encoding? && ! string.match(/[\x00-\x09\x0b\x0c\x0e-\x1f]/)
+      if string.valid_encoding? && !string.match(/[\x00-\x09\x0b\x0c\x0e-\x1f]/)
         return string.encode("utf-8")
       end
 

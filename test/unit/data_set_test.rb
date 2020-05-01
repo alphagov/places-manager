@@ -250,7 +250,7 @@ class DataSetTest < ActiveSupport::TestCase
       expected_places = [@buckingham_palace, @aviation_house, @scottish_parliament]
       assert_equal expected_places, places.to_a
 
-      # Check that the distances are reported correctly
+      # Check that the distances are reported correctly
       distances_in_miles = [0, 1.82, 373]
       places.to_a.zip(distances_in_miles).each do |place, expected_distance|
         assert_in_epsilon expected_distance, place.dis.in(:miles), 0.01
@@ -444,7 +444,7 @@ class DataSetTest < ActiveSupport::TestCase
       end
 
       should "transition from 'duplicating' to 'unarchived' once finished" do
-        assert_equal %w(duplicating unarchived), @dupe.previous_changes["state"]
+        assert_equal %w[duplicating unarchived], @dupe.previous_changes["state"]
       end
     end
   end

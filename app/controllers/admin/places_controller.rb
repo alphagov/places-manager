@@ -47,9 +47,9 @@ protected
   end
 
   def place_params
-    params.
-      require(:place).
-      permit(
+    params
+      .require(:place)
+      .permit(
         :name,
         :address1,
         :address2,

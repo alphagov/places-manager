@@ -13,7 +13,7 @@ class DataSet
   field :state, type: String
   field :archiving_error, type: String
 
-  validates_presence_of :version
+  validates :version, presence: true
 
   default_scope -> { order_by(%i[version asc]) }
   before_validation :set_version, on: :create
@@ -74,15 +74,15 @@ class DataSet
   end
 
   def duplicating?
-    self.state == "duplicating"
+    state == "duplicating"
   end
 
   def duplicate
-    duplicated_data_set = self.service.data_sets.create(
-      change_notes: "Created from Version #{self.version}",
+    duplicated_data_set = service.data_sets.create(
+      change_notes: "Created from Version #{version}",
       state: "duplicating",
     )
-    self.places.each do |place|
+    places.each do |place|
       duplicated_place = place.dup
       duplicated_place.data_set_version = duplicated_data_set.version
       duplicated_place.save
@@ -92,7 +92,7 @@ class DataSet
   end
 
   def set_version
-    if self.version.blank?
+    if version.blank?
       other_data_sets = service.data_sets.to_a - [self]
       highest_version = other_data_sets.map(&:version).max
       self.version = if highest_version
@@ -104,7 +104,7 @@ class DataSet
   end
 
   def processing_complete?
-    self.csv_data.blank? && self.processing_error.blank?
+    csv_data.blank? && processing_error.blank?
   end
 
   def data_file=(file)
@@ -120,20 +120,20 @@ class DataSet
   def schedule_csv_processing
     if @need_csv_processing
       @csv_data.save!
-      ProcessCsvDataWorker.perform_async(service.id.to_s, self.version)
+      ProcessCsvDataWorker.perform_async(service.id.to_s, version)
       @need_csv_processing = false
     end
   end
 
   def csv_data
-    @csv_data ||= CsvData.find_by(service_slug: service.slug, data_set_version: self.version)
+    @csv_data ||= CsvData.find_by(service_slug: service.slug, data_set_version: version)
   end
 
   def csv_data_is_valid
     return if @csv_data.nil? || @csv_data.destroyed?
 
     @csv_data.service_slug = service.slug
-    @csv_data.data_set_version = self.version
+    @csv_data.data_set_version = version
     unless @csv_data.valid?
       @csv_data.errors[:data].each do |message|
         errors.add(:data_file, message)
@@ -154,44 +154,42 @@ class DataSet
       end
       Place.create(places_data)
       reset_csv_data
-      self.save!
+      save!
     end
   rescue CSV::MalformedCSVError
     self.processing_error = "Could not process CSV file. Please check the format."
     reset_csv_data
-    self.save!
+    save!
   end
 
   def active?
-    self.version == service.active_data_set_version
+    version == service.active_data_set_version
   end
 
   def latest_data_set?
-    self.id.to_s == service.latest_data_set.id.to_s
+    id.to_s == service.latest_data_set.id.to_s
   end
 
   def activate
-    return false unless self.processing_complete?
+    return false unless processing_complete?
 
-    service.active_data_set_version = self.version
+    service.active_data_set_version = version
     service.save
   end
 
   def archive_places
-    begin
-      places.each do |place|
-        PlaceArchive.create!(place.attributes)
-      end
-      places.delete_all
-      self.archived
-    rescue StandardError => e
-      self.set(archiving_error: "Failed to archive place information: '#{e.message}'")
+    places.each do |place|
+      PlaceArchive.create!(place.attributes)
     end
+    places.delete_all
+    archived
+  rescue StandardError => e
+    set(archiving_error: "Failed to archive place information: '#{e.message}'")
   end
 
   def new_action(user, type, comment)
     action = Action.new(requester_id: user.id, request_type: type, comment: comment)
-    self.actions << action
+    actions << action
     action
   end
 
@@ -209,7 +207,7 @@ private
       # Any stream of bytes should be a vaild Windows-1252 string, so we use the presence of any
       # ASCII control chars (except for \r and \n) as a good heuristic to determine if this is
       # likely to be the correct charset
-      if string.valid_encoding? && ! string.match(/[\x00-\x09\x0b\x0c\x0e-\x1f]/)
+      if string.valid_encoding? && !string.match(/[\x00-\x09\x0b\x0c\x0e-\x1f]/)
         return string.encode("utf-8")
       end
 

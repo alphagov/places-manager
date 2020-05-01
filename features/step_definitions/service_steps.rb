@@ -93,11 +93,11 @@ Then(/^I should not see any text about missing SNAC codes$/) do
 end
 
 When(/^I activate the most recent data set for the "(.*?)" service$/) do |name|
-  steps %{
+  steps %(
     And I go to the page for the "#{name}" service
     And I visit the history tab
     And I activate the most recent data set
-  }
+  )
 end
 
 When(/^I should see (\d+) version panels?$/) do |count|

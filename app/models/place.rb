@@ -47,12 +47,12 @@ class Place
   field :geocode_error,  type: String
   field :snac,           type: String
 
-  validates_presence_of :service_slug
-  validates_presence_of :data_set_version
-  validates_presence_of :source_address
-  validates_presence_of :postcode
-  validates_numericality_of :override_lat, allow_blank: true
-  validates_numericality_of :override_lng, allow_blank: true
+  validates :service_slug, presence: true
+  validates :data_set_version, presence: true
+  validates :source_address, presence: true
+  validates :postcode, presence: true
+  validates :override_lat, numericality: { allow_blank: true }
+  validates :override_lng, numericality: { allow_blank: true }
   validate :has_both_lat_lng_overrides
   validates_with CannotEditPlaceDetailsUnlessNewestInactiveDataset, on: :update
 
@@ -108,20 +108,20 @@ class Place
     if postcode.blank?
       self.geocode_error = "Can't geocode without postcode"
     else
-      result = Imminence.mapit_api.location_for_postcode(self.postcode)
+      result = Imminence.mapit_api.location_for_postcode(postcode)
       self.location = Point.new(
         latitude: result.lat,
         longitude: result.lon,
       )
     end
   rescue GdsApi::HTTPClientError
-    self.geocode_error = "#{self.postcode} not found for #{self.full_address}"
+    self.geocode_error = "#{postcode} not found for #{full_address}"
   rescue Encoding::CompatibilityError
-    error = "Encoding error in place #{self.id}"
+    error = "Encoding error in place #{id}"
     Rails.logger.warn error
     self.geocode_error = error
   rescue StandardError => e
-    error = "Error geocoding place #{self.postcode} : #{e.message}"
+    error = "Error geocoding place #{postcode} : #{e.message}"
     Rails.logger.warn error
     self.geocode_error = error
   end
@@ -158,7 +158,7 @@ class Place
   def build_source_address
     new_source_address = [address1, address2, town, postcode].compact.join(", ")
 
-    if self.new_record? && self.source_address.blank?
+    if new_record? && source_address.blank?
       self.source_address = new_source_address
     end
   end

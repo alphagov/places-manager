@@ -93,7 +93,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
       should "persist changes" do
         as_logged_in_user do
           put :update, params: { service_id: @service.id, data_set_id: @data_set.id, id: @place.id,
-            place: { name: "Updated Place Name" } }
+                                 place: { name: "Updated Place Name" } }
 
           @place.reload
 
@@ -105,7 +105,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
       should "ignore nil or blank overridden latitude and longitude params" do
         as_logged_in_user do
           put :update, params: { service_id: @service.id, data_set_id: @data_set.id, id: @place.id,
-            place: { name: "Updated Place Name", override_lat: "", override_lng: "" } }
+                                 place: { name: "Updated Place Name", override_lat: "", override_lng: "" } }
 
           @place.reload
 
@@ -119,7 +119,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
       should "create a location from overridden latitude and longitude params" do
         as_logged_in_user do
           put :update, params: { service_id: @service.id, data_set_id: @data_set.id, id: @place.id,
-            place: { override_lat: "55.198765", override_lng: "-1.182934" } }
+                                 place: { override_lat: "55.198765", override_lng: "-1.182934" } }
 
           @place.reload
 
@@ -148,7 +148,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
       should "not persist changes" do
         as_logged_in_user do
           put :update, params: { service_id: @service.id, data_set_id: @data_set.id, id: @place.id,
-            place: { name: "Updated Place Name" } }
+                                 place: { name: "Updated Place Name" } }
 
           assert_response(:unprocessable_entity)
         end
@@ -175,7 +175,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
       should "not persist changes" do
         as_logged_in_user do
           put :update, params: { service_id: @service.id, data_set_id: @data_set.id, id: @place.id,
-            place: { name: "Updated Place Name" } }
+                                 place: { name: "Updated Place Name" } }
 
           assert_response(:unprocessable_entity)
         end

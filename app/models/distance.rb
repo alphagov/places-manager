@@ -35,7 +35,7 @@ class Distance
   class << self
     UNITS.each do |unit|
       define_method unit do |magnitude|
-        self.new magnitude, unit
+        new magnitude, unit
       end
     end
   end

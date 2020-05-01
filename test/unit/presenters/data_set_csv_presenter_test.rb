@@ -10,7 +10,7 @@ class DataSetCsvPresenterTest < ActiveSupport::TestCase
   end
 
   def expected_header_row
-    %w(
+    %w[
       service_slug
       data_set_version
       name
@@ -30,7 +30,7 @@ class DataSetCsvPresenterTest < ActiveSupport::TestCase
       snac
       lng
       lat
-    )
+    ]
   end
 
   context "presenting an empty dataset" do
