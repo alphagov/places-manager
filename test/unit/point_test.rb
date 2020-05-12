@@ -8,8 +8,8 @@ class PointTest < ActiveSupport::TestCase
   end
 
   test "require both coordinates for a point" do
-    assert_raises ArgumentError do Point.new(latitude: 12.5) end
-    assert_raises ArgumentError do Point.new(longitude: 12.5) end
+    assert_raises(ArgumentError) { Point.new(latitude: 12.5) }
+    assert_raises(ArgumentError) { Point.new(longitude: 12.5) }
   end
 
   test "points can be compared for equality" do
