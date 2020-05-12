@@ -1,17 +1,17 @@
 class Point
   attr_reader :longitude, :latitude
-  alias :lat :latitude
-  alias :lng :longitude
+  alias_method :lat, :latitude
+  alias_method :lng, :longitude
 
   def initialize(coordinates)
     %i[longitude latitude].each do |key|
       # The Float method would fail with a TypeError, but this is more useful
-      raise ArgumentError, "Missing #{key}" unless coordinates.has_key? key
+      raise ArgumentError, "Missing #{key}" unless coordinates.key? key
     end
 
-    @longitude, @latitude = %i[longitude latitude].map { |key|
+    @longitude, @latitude = %i[longitude latitude].map do |key|
       Float(coordinates[key])
-    }
+    end
     unless (-90..90).include? @latitude # [-90, 90]
       raise "Invalid latitude #{@latitude.inspect}"
     end
