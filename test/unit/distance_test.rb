@@ -8,7 +8,7 @@ class DistanceTest < ActiveSupport::TestCase
   end
 
   test "cannot create a distance with unknown units" do
-    assert_raise RuntimeError do Distance.new(40, :rods) end
+    assert_raise(RuntimeError) { Distance.new(40, :rods) }
   end
 
   test "distances report themselves as strings" do

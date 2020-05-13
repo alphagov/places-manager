@@ -84,9 +84,9 @@ class PlacesControllerTest < ActionController::TestCase
       assert_equal 4, kml_data["kml"]["Document"]["Placemark"].size
 
       # Sort the places by their address field (effectively, by postcode)
-      sorted_places = kml_data["kml"]["Document"]["Placemark"].sort { |a, b|
+      sorted_places = kml_data["kml"]["Document"]["Placemark"].sort do |a, b|
         a["address"] <=> b["address"]
-      }
+      end
       location_points = [
         nil,
         Point.new(longitude: -3.174706, latitude: 55.95439),

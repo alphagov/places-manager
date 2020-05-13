@@ -8,14 +8,14 @@ class PointTest < ActiveSupport::TestCase
   end
 
   test "require both coordinates for a point" do
-    assert_raises ArgumentError do Point.new(latitude: 12.5) end
-    assert_raises ArgumentError do Point.new(longitude: 12.5) end
+    assert_raises(ArgumentError) { Point.new(latitude: 12.5) }
+    assert_raises(ArgumentError) { Point.new(longitude: 12.5) }
   end
 
   test "points can be compared for equality" do
-    point_a, point_b = [[56, 0.1], [-20, 95]].map { |lat, lng|
+    point_a, point_b = [[56, 0.1], [-20, 95]].map do |lat, lng|
       Point.new(latitude: lat, longitude: lng)
-    }
+    end
     # Not using refute_equals as we're not testing for a value
     assert_not point_a == point_b
     assert_not point_b == point_a
