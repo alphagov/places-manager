@@ -5,10 +5,14 @@ class AreasByPostcodeTest < ActionDispatch::IntegrationTest
   include GdsApi::TestHelpers::Mapit
 
   setup do
-    mapit_has_a_postcode_and_areas("WC2B 6SE", [51.516, -0.121], [
-      { "name" => "Westminster City Council", "type" => "LBO" },
-      { "name" => "London", "type" => "EUR" },
-    ])
+    mapit_has_a_postcode_and_areas(
+      "WC2B 6SE",
+      [51.516, -0.121],
+      [
+        { "name" => "Westminster City Council", "type" => "LBO" },
+        { "name" => "London", "type" => "EUR" },
+      ],
+    )
 
     mapit_does_not_have_a_postcode("MISSING_POSTCODE")
 

@@ -226,21 +226,24 @@ class DataSetTest < ActiveSupport::TestCase
         data_set_version: @service.latest_data_set.version,
         postcode: "SW1A 1AA",
         source_address: "Buckingham Palace, Westminster",
-        override_lat: "51.501009611553926", override_lng: "-0.141587067110009"
+        override_lat: "51.501009611553926",
+        override_lng: "-0.141587067110009",
       )
       @aviation_house = Place.create(
         service_slug: @service.slug,
         data_set_version: @service.latest_data_set.version,
         postcode: "WC2B 6SE",
         source_address: "Aviation House",
-        override_lat: "51.516960431", override_lng: "-0.120586400134"
+        override_lat: "51.516960431",
+        override_lng: "-0.120586400134",
       )
       @scottish_parliament = Place.create(
         service_slug: @service.slug,
         data_set_version: @service.latest_data_set.version,
         postcode: "EH99 1SP",
         source_address: "Scottish Parliament",
-        override_lat: "55.95439", override_lng: "-3.174706"
+        override_lat: "55.95439",
+        override_lng: "-3.174706",
       )
     end
 
@@ -323,21 +326,24 @@ class DataSetTest < ActiveSupport::TestCase
           data_set_version: @data_set.version,
           postcode: "SW1A 1AA",
           source_address: "Buckingham Palace, Westminster",
-          override_lat: "51.501009611553926", override_lng: "-0.141587067110009"
+          override_lat: "51.501009611553926",
+          override_lng: "-0.141587067110009",
         )
         @aviation_house = Place.create(
           service_slug: @service.slug,
           data_set_version: @data_set.version,
           postcode: "WC2B 6SE",
           source_address: "Aviation House",
-          override_lat: "51.516960431", override_lng: "-0.120586400134"
+          override_lat: "51.516960431",
+          override_lng: "-0.120586400134",
         )
         @scottish_parliament = Place.create(
           service_slug: @service.slug,
           data_set_version: @data_set.version,
           postcode: "EH99 1SP",
           source_address: "Scottish Parliament",
-          override_lat: "55.95439", override_lng: "-3.174706"
+          override_lat: "55.95439",
+          override_lng: "-3.174706",
         )
       end
 

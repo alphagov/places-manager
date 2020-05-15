@@ -39,7 +39,7 @@ module MapitApi
     when "county"
       COUNTY_TYPES
     else
-      raise InvalidLocationHierarchyType.new(location_hiearachy_type)
+      raise InvalidLocationHierarchyType, location_hiearachy_type
     end
   end
   private_class_method :area_types
