@@ -19,7 +19,7 @@ else
   gem "gds-sso", "~> 14.3.0"
 end
 
-gem "govuk_app_config", "~> 2.1"
+gem "govuk_app_config", "~> 2.2"
 gem "govuk_sidekiq", "~> 3.0.5"
 
 gem "bootstrap-kaminari-views", "~> 0.0.3"
