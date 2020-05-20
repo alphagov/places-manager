@@ -1,41 +1,26 @@
 source "http://rubygems.org"
 
-gem "plek", "~> 3.0.0"
-
-gem "rails", "5.2.4.3"
-
-gem "mongoid"
-gem "mongoid_rails_migrations"
-
+gem "bootstrap-kaminari-views", "~> 0.0.3"
 gem "formtastic"
 gem "formtastic-bootstrap"
-gem "govuk_admin_template", "6.7.0"
-
 gem "gds-api-adapters", "~> 63.6.0"
-
-if ENV["BUNDLE_DEV"]
-  gem "gds-sso", path: "../gds-sso"
-else
-  gem "gds-sso", "~> 14.3.0"
-end
-
+gem "gds-sso", "~> 14.3.0"
+gem "govuk_admin_template", "6.7.0"
 gem "govuk_app_config", "~> 2.2"
 gem "govuk_sidekiq", "~> 3.0.5"
-
-gem "bootstrap-kaminari-views", "~> 0.0.3"
 gem "inherited_resources"
 gem "kaminari-actionview"
 gem "kaminari-mongoid"
+gem "mongoid"
+gem "mongoid_rails_migrations"
+gem "plek", "~> 3.0.0"
+gem "rails", "5.2.4.3"
 gem "responders", "~> 3.0"
-
+gem "sass-rails", "~> 6.0"
+gem "sdoc", "~> 1.1.0", group: :doc
 gem "state_machines", "~> 0.4.0"
 gem "state_machines-mongoid", "~> 0.1.1"
-
-gem "sass-rails", "~> 6.0"
 gem "uglifier", "4.2.0"
-
-# bundle exec rake doc:rails generates the API under doc/api.
-gem "sdoc", "~> 1.1.0", group: :doc
 
 group :development, :test do
   gem "pry"
