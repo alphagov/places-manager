@@ -1,25 +1,26 @@
 source "http://rubygems.org"
 
-gem "bootstrap-kaminari-views", "~> 0.0.3"
+gem "bootstrap-kaminari-views"
 gem "formtastic"
 gem "formtastic-bootstrap"
-gem "gds-api-adapters", "~> 67.0.1"
-gem "gds-sso", "~> 15.0.1"
-gem "govuk_admin_template", "6.7.0"
-gem "govuk_app_config", "~> 2.2"
-gem "govuk_sidekiq", "~> 4.0.0"
+gem "gds-api-adapters"
+gem "gds-sso"
+gem "govuk_admin_template"
+gem "govuk_app_config"
+gem "govuk_sidekiq"
 gem "inherited_resources"
 gem "kaminari-actionview"
 gem "kaminari-mongoid"
 gem "mongoid"
-gem "plek", "~> 4.0.0"
+gem "mongoid_rails_migrations"
+gem "plek"
 gem "rails", "5.2.4.3"
-gem "responders", "~> 3.0"
-gem "sass-rails", "~> 6.0"
-gem "sdoc", "~> 1.1.0", group: :doc
-gem "state_machines", "~> 0.4.0"
-gem "state_machines-mongoid", "~> 0.1.1"
-gem "uglifier", "4.2.0"
+gem "responders"
+gem "sass-rails"
+gem "sdoc", group: :doc
+gem "state_machines"
+gem "state_machines-mongoid"
+gem "uglifier"
 
 group :development, :test do
   gem "pry"
@@ -30,14 +31,14 @@ group :test do
   gem "ci_reporter_minitest"
   gem "cucumber-rails", require: false
   gem "database_cleaner"
-  gem "factory_bot_rails", "~> 6.1.0"
+  gem "factory_bot_rails"
   gem "govuk_test"
   gem "launchy"
   gem "minitest-reporters"
-  gem "mocha", "~> 1.11.2", require: false
+  gem "mocha", require: false
   gem "rails-controller-testing"
   gem "shoulda-context"
-  gem "simplecov", "~> 0.18.5", require: false
-  gem "simplecov-rcov", "~> 0.2.3", require: false
-  gem "webmock", "~> 3.8.3", require: false
+  gem "simplecov", require: false
+  gem "simplecov-rcov", require: false
+  gem "webmock", require: false
 end

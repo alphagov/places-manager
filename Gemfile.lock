@@ -429,41 +429,42 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bootstrap-kaminari-views (~> 0.0.3)
+  bootstrap-kaminari-views
   ci_reporter_minitest
   cucumber-rails
   database_cleaner
-  factory_bot_rails (~> 6.1.0)
+  factory_bot_rails
   formtastic
   formtastic-bootstrap
-  gds-api-adapters (~> 67.0.1)
-  gds-sso (~> 15.0.1)
-  govuk_admin_template (= 6.7.0)
-  govuk_app_config (~> 2.2)
-  govuk_sidekiq (~> 4.0.0)
+  gds-api-adapters
+  gds-sso
+  govuk_admin_template
+  govuk_app_config
+  govuk_sidekiq
   govuk_test
   inherited_resources
   kaminari-actionview
   kaminari-mongoid
   launchy
   minitest-reporters
-  mocha (~> 1.11.2)
+  mocha
   mongoid
-  plek (~> 4.0.0)
+  mongoid_rails_migrations
+  plek
   pry
   rails (= 5.2.4.3)
   rails-controller-testing
-  responders (~> 3.0)
+  responders
   rubocop-govuk
-  sass-rails (~> 6.0)
-  sdoc (~> 1.1.0)
+  sass-rails
+  sdoc
   shoulda-context
-  simplecov (~> 0.18.5)
-  simplecov-rcov (~> 0.2.3)
-  state_machines (~> 0.4.0)
-  state_machines-mongoid (~> 0.1.1)
-  uglifier (= 4.2.0)
-  webmock (~> 3.8.3)
+  simplecov
+  simplecov-rcov
+  state_machines
+  state_machines-mongoid
+  uglifier
+  webmock
 
 BUNDLED WITH
    1.17.2
