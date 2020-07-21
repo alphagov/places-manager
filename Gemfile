@@ -31,7 +31,7 @@ group :test do
   gem "ci_reporter_minitest"
   gem "cucumber-rails", require: false
   gem "database_cleaner"
-  gem "factory_bot_rails", "~> 6.0.0"
+  gem "factory_bot_rails", "~> 6.1.0"
   gem "govuk_test"
   gem "launchy"
   gem "minitest-reporters"
