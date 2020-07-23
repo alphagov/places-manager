@@ -171,7 +171,7 @@ class DataSetTest < ActiveSupport::TestCase
   context "processing csv data" do
     setup do
       # NOTE: this is the postcode in good_csv.csv
-      mapit_does_not_have_a_postcode("IG6 3HJ")
+      stub_mapit_does_not_have_a_postcode("IG6 3HJ")
       @service = FactoryBot.create(:service)
     end
 
@@ -348,7 +348,7 @@ class DataSetTest < ActiveSupport::TestCase
       end
 
       should "return places near the postcode's location" do
-        mapit_has_a_postcode("WC2B 6NH", [51.51695975170424, -0.12058693935709164])
+        stub_mapit_has_a_postcode("WC2B 6NH", [51.51695975170424, -0.12058693935709164])
 
         expected_location = Point.new(latitude: 51.51695975170424, longitude: -0.12058693935709164)
         @data_set.expects(:places_near).with(expected_location, nil, nil).returns(:some_places)
@@ -357,7 +357,7 @@ class DataSetTest < ActiveSupport::TestCase
       end
 
       should "pass distance and limit params through to places_near" do
-        mapit_has_a_postcode("WC2B 6NH", [51.51695975170424, -0.12058693935709164])
+        stub_mapit_has_a_postcode("WC2B 6NH", [51.51695975170424, -0.12058693935709164])
 
         @data_set.expects(:places_near).with(anything, 14, 5).returns(:some_places)
 
@@ -409,21 +409,21 @@ class DataSetTest < ActiveSupport::TestCase
       end
 
       should "return places in the same district as the postcode" do
-        mapit_has_a_postcode_and_areas("EX39 1LH", [51.0413792674, -4.23640704632], [{ "type" => "DIS", "ons" => "18UK" }])
+        stub_mapit_has_a_postcode_and_areas("EX39 1LH", [51.0413792674, -4.23640704632], [{ "type" => "DIS", "ons" => "18UK" }])
 
         place_names = @data_set.places_for_postcode("EX39 1LH").map(&:name)
         assert_equal ["Susie's Tea Rooms", "John's Of Appledore"], place_names
       end
 
       should "return multiple places in order of nearness if there are more than one in the district" do
-        mapit_has_a_postcode_and_areas("WC2B 6NH", [51.51695975170424, -0.12058693935709164], [{ "type" => "DIS", "ons" => "00AG" }])
+        stub_mapit_has_a_postcode_and_areas("WC2B 6NH", [51.51695975170424, -0.12058693935709164], [{ "type" => "DIS", "ons" => "00AG" }])
 
         place_names = @data_set.places_for_postcode("WC2B 6NH").map(&:name)
         assert_equal ["Aviation House", "FreeState Coffee"], place_names
       end
 
       should "return empty array if no SNAC can be found for the postcode" do
-        mapit_has_a_postcode_and_areas("BT1 5GS", [21.54, -5.93], [])
+        stub_mapit_has_a_postcode_and_areas("BT1 5GS", [21.54, -5.93], [])
 
         assert_equal [], @data_set.places_for_postcode("BT1 5GS").to_a
       end

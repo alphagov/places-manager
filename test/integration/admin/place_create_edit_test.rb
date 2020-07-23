@@ -6,7 +6,7 @@ class PlaceCreateEditTest < ActionDispatch::IntegrationTest
 
   setup do
     GDS::SSO.test_user = FactoryBot.create(:user)
-    mapit_does_not_have_a_postcode("WC2B 6NH")
+    stub_mapit_does_not_have_a_postcode("WC2B 6NH")
     @service = FactoryBot.create(:service)
     @data_set = @service.data_sets.create!(version: 2)
     @place = FactoryBot.create(:place, service_slug: @service.slug, data_set_version: @data_set.version, postcode: "WC2B 6NH")

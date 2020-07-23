@@ -5,7 +5,7 @@ class PlaceTest < ActiveSupport::TestCase
   include GdsApi::TestHelpers::Mapit
 
   setup do
-    mapit_does_not_have_a_postcode("SE1 7DU")
+    stub_mapit_does_not_have_a_postcode("SE1 7DU")
   end
 
   test "responds to full_address with a compiled address" do
@@ -93,7 +93,7 @@ class PlaceTest < ActiveSupport::TestCase
     end
 
     should "gecode a new place on create" do
-      mapit_has_a_postcode("WC2B 6NH", [51.51695975170424, -0.12058693935709164])
+      stub_mapit_has_a_postcode("WC2B 6NH", [51.51695975170424, -0.12058693935709164])
 
       place = Place.create!(
         name: "Aviation House",
@@ -141,8 +141,8 @@ class PlaceTest < ActiveSupport::TestCase
     end
 
     should "gecode postcode when postcode is changed" do
-      mapit_has_a_postcode("SE1 7DU", [51.498241853641055, -0.11354773400359928])
-      mapit_has_a_postcode("WC2B 6NH", [51.51695975170424, -0.12058693935709164])
+      stub_mapit_has_a_postcode("SE1 7DU", [51.498241853641055, -0.11354773400359928])
+      stub_mapit_has_a_postcode("WC2B 6NH", [51.51695975170424, -0.12058693935709164])
 
       place = Place.create!(
         name: "Hercules House",

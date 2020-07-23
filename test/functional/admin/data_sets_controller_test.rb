@@ -7,7 +7,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
   setup do
     clean_db
     @service = FactoryBot.create(:service)
-    mapit_does_not_have_a_postcode("IG6 3HJ")
+    stub_mapit_does_not_have_a_postcode("IG6 3HJ")
     Sidekiq::Testing.inline!
   end
 

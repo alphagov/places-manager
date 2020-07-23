@@ -12,7 +12,7 @@ class DataSetCreateEditTest < ActionDispatch::IntegrationTest
     end
 
     should "create a data_set from csv and geocode postcodes" do
-      mapit_has_a_postcode("IG6 3HJ", [51.59918278577261, 0.10033740198112132])
+      stub_mapit_has_a_postcode("IG6 3HJ", [51.59918278577261, 0.10033740198112132])
 
       visit "/admin/services/#{@service.id}"
 
@@ -34,7 +34,7 @@ class DataSetCreateEditTest < ActionDispatch::IntegrationTest
     end
 
     should "handle a CSV in a different file encoding" do
-      mapit_has_a_postcode("IG6 3HJ", [51.59918278577261, 0.10033740198112132])
+      stub_mapit_has_a_postcode("IG6 3HJ", [51.59918278577261, 0.10033740198112132])
 
       visit "/admin/services/#{@service.id}"
 
@@ -57,7 +57,7 @@ class DataSetCreateEditTest < ActionDispatch::IntegrationTest
     end
 
     should "take override lat/lon from csv if present" do
-      mapit_has_a_postcode("IG6 3HJ", [51.59918278577261, 0.10033740198112132])
+      stub_mapit_has_a_postcode("IG6 3HJ", [51.59918278577261, 0.10033740198112132])
 
       visit "/admin/services/#{@service.id}"
 
@@ -81,8 +81,8 @@ class DataSetCreateEditTest < ActionDispatch::IntegrationTest
     end
 
     should "use postcode if lat/lng in csv is blank" do
-      mapit_has_a_postcode("MK45 4RF", [51.96876977095302, -0.4343681877525634])
-      mapit_has_a_postcode("IG6 3HJ", [51.59918278577261, 0.10033740198112132])
+      stub_mapit_has_a_postcode("MK45 4RF", [51.96876977095302, -0.4343681877525634])
+      stub_mapit_has_a_postcode("IG6 3HJ", [51.59918278577261, 0.10033740198112132])
 
       visit "/admin/services/#{@service.id}"
 

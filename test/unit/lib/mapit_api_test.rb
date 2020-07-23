@@ -51,7 +51,7 @@ class MapitApiTest < ActiveSupport::TestCase
     end
 
     should "raise InvalidPostcodeError for a missing postcode" do
-      mapit_does_not_have_a_postcode("AB1 2CD")
+      stub_mapit_does_not_have_a_postcode("AB1 2CD")
 
       assert_raises(MapitApi::InvalidPostcodeError) { MapitApi.district_snac_for_postcode("AB1 2CD") }
     end

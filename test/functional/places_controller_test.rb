@@ -35,7 +35,7 @@ class PlacesControllerTest < ActionController::TestCase
       override_lng: "-3.174706",
     )
 
-    mapit_does_not_have_a_postcode("AB11 2CD")
+    stub_mapit_does_not_have_a_postcode("AB11 2CD")
     @utopia = Place.create!(
       service_slug: "important-government-service",
       data_set_version: @service.data_sets.last.version,

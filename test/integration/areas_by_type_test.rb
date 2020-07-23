@@ -5,7 +5,7 @@ class AreasByTypeTest < ActionDispatch::IntegrationTest
   include GdsApi::TestHelpers::Mapit
 
   setup do
-    mapit_has_areas(
+    stub_mapit_has_areas(
       "EUR",
       "123" => { "id" => 123, "name" => "London", "country_name" => "England", "type" => "EUR" },
       "234" => { "id" => 234, "name" => "Yorkshire and the Humber", "country_name" => "England", "type" => "EUR" },
