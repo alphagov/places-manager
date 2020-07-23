@@ -5,7 +5,7 @@ class AreasControllerTest < ActionController::TestCase
   include GdsApi::TestHelpers::Mapit
 
   test "the index action responds successfully" do
-    mapit_has_areas(
+    stub_mapit_has_areas(
       "CTY",
       '2217': {
         'id': 2217,
@@ -26,7 +26,7 @@ class AreasControllerTest < ActionController::TestCase
   end
 
   test "search is successful" do
-    mapit_has_a_postcode("WC2B 6SE", [51.516, -0.121])
+    stub_mapit_has_a_postcode("WC2B 6SE", [51.516, -0.121])
 
     get :search, params: { postcode: "WC2B 6SE" }, format: :json
 

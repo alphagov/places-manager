@@ -5,7 +5,7 @@ class AreasByPostcodeTest < ActionDispatch::IntegrationTest
   include GdsApi::TestHelpers::Mapit
 
   setup do
-    mapit_has_a_postcode_and_areas(
+    stub_mapit_has_a_postcode_and_areas(
       "WC2B 6SE",
       [51.516, -0.121],
       [
@@ -14,9 +14,8 @@ class AreasByPostcodeTest < ActionDispatch::IntegrationTest
       ],
     )
 
-    mapit_does_not_have_a_postcode("MISSING_POSTCODE")
-
-    mapit_does_not_have_a_bad_postcode("NOT_A_POSTCODE")
+    stub_mapit_does_not_have_a_postcode("MISSING_POSTCODE")
+    stub_mapit_does_not_have_a_bad_postcode("NOT_A_POSTCODE")
   end
 
   test "areas are returned for valid types" do

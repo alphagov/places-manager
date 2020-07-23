@@ -6,7 +6,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
 
   setup do
     @service = FactoryBot.create(:service)
-    mapit_does_not_have_a_postcode("FY4 1AZ")
+    stub_mapit_does_not_have_a_postcode("FY4 1AZ")
   end
 
   context "adding a place" do
