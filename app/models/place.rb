@@ -86,12 +86,6 @@ class Place
     end
   end
 
-  def self.create_from_hash(data_set, row, options = {})
-    place = new(parameters_from_hash(data_set, row))
-    place.save(options)
-    place
-  end
-
   def self.create_from_hash!(data_set, row, options = {})
     place = new(parameters_from_hash(data_set, row))
     place.save!(options)

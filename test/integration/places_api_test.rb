@@ -8,7 +8,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
     setup do
       @service = FactoryBot.create(:service)
       @data_set1 = @service.active_data_set
-      @data_set2 = @service.data_sets.create
+      @data_set2 = @service.data_sets.create!
       @place_1a = FactoryBot.create(
         :place,
         service_slug: @service.slug,
