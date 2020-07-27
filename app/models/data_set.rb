@@ -152,12 +152,15 @@ class DataSet
       CSV.parse(csv_data.data, headers: true) do |row|
         places_data << Place.parameters_from_hash(self, row)
       end
-      Place.create(places_data)
+      Place.create!(places_data)
       reset_csv_data
       save!
     end
   rescue CSV::MalformedCSVError
     self.processing_error = "Could not process CSV file. Please check the format."
+    reset_csv_data
+    save!
+  rescue Mongoid::Errors::MongoidError
     reset_csv_data
     save!
   end
