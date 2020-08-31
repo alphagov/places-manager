@@ -13,7 +13,7 @@ gem "kaminari-actionview"
 gem "kaminari-mongoid"
 gem "mongoid"
 gem "plek", "~> 4.0.0"
-gem "rails", "5.2.4.3"
+gem "rails", "6.0.3.2"
 gem "responders", "~> 3.0"
 gem "sass-rails", "~> 6.0"
 gem "sdoc", "~> 1.1.0", group: :doc
