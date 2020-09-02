@@ -78,14 +78,14 @@ class DataSet
   end
 
   def duplicate
-    duplicated_data_set = service.data_sets.create(
+    duplicated_data_set = service.data_sets.create!(
       change_notes: "Created from Version #{version}",
       state: "duplicating",
     )
     places.each do |place|
       duplicated_place = place.dup
       duplicated_place.data_set_version = duplicated_data_set.version
-      duplicated_place.save
+      duplicated_place.save!
     end
     duplicated_data_set.duplicated
     duplicated_data_set
@@ -142,7 +142,7 @@ class DataSet
   end
 
   def reset_csv_data
-    @csv_data.destroy
+    @csv_data.destroy!
     @csv_data = nil
   end
 
@@ -152,12 +152,15 @@ class DataSet
       CSV.parse(csv_data.data, headers: true) do |row|
         places_data << Place.parameters_from_hash(self, row)
       end
-      Place.create(places_data)
+      Place.create!(places_data)
       reset_csv_data
       save!
     end
   rescue CSV::MalformedCSVError
     self.processing_error = "Could not process CSV file. Please check the format."
+    reset_csv_data
+    save!
+  rescue Mongoid::Errors::MongoidError
     reset_csv_data
     save!
   end
@@ -174,7 +177,7 @@ class DataSet
     return false unless processing_complete?
 
     service.active_data_set_version = version
-    service.save
+    service.save!
   end
 
   def archive_places

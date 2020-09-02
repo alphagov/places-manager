@@ -16,15 +16,15 @@ class DataSetTest < ActiveSupport::TestCase
     end
 
     should "set versions on subsequent versions" do
-      @service.data_sets.create
-      @service.data_sets.create
+      @service.data_sets.create!
+      @service.data_sets.create!
 
       assert_equal [1, 2, 3], Service.first.data_sets.map(&:version)
     end
 
     should "cope with non-contiguous existing versions" do
-      @service.data_sets.create(version: 3)
-      @service.data_sets.create
+      @service.data_sets.create!(version: 3)
+      @service.data_sets.create!
 
       assert_equal [1, 3, 4], Service.first.data_sets.map(&:version)
     end
@@ -221,7 +221,7 @@ class DataSetTest < ActiveSupport::TestCase
   context "places near a point" do
     setup do
       @service = FactoryBot.create(:service)
-      @buckingham_palace = Place.create(
+      @buckingham_palace = Place.create!(
         service_slug: @service.slug,
         data_set_version: @service.latest_data_set.version,
         postcode: "SW1A 1AA",
@@ -229,7 +229,7 @@ class DataSetTest < ActiveSupport::TestCase
         override_lat: "51.501009611553926",
         override_lng: "-0.141587067110009",
       )
-      @aviation_house = Place.create(
+      @aviation_house = Place.create!(
         service_slug: @service.slug,
         data_set_version: @service.latest_data_set.version,
         postcode: "WC2B 6SE",
@@ -237,7 +237,7 @@ class DataSetTest < ActiveSupport::TestCase
         override_lat: "51.516960431",
         override_lng: "-0.120586400134",
       )
-      @scottish_parliament = Place.create(
+      @scottish_parliament = Place.create!(
         service_slug: @service.slug,
         data_set_version: @service.latest_data_set.version,
         postcode: "EH99 1SP",
@@ -303,7 +303,7 @@ class DataSetTest < ActiveSupport::TestCase
 
     should "constrain results to places belonging to the relevant data_set" do
       ds = @service.latest_data_set
-      ds2 = @service.data_sets.create
+      ds2 = @service.data_sets.create!
       service2 = FactoryBot.create(:service)
       FactoryBot.create(:place, service_slug: @service.slug, data_set_version: ds2.version)
       FactoryBot.create(:place, service_slug: service2.slug, data_set_version: service2.latest_data_set.version)
@@ -321,7 +321,7 @@ class DataSetTest < ActiveSupport::TestCase
       setup do
         @service = FactoryBot.create(:service)
         @data_set = @service.latest_data_set
-        @buckingham_palace = Place.create(
+        @buckingham_palace = Place.create!(
           service_slug: @service.slug,
           data_set_version: @data_set.version,
           postcode: "SW1A 1AA",
@@ -329,7 +329,7 @@ class DataSetTest < ActiveSupport::TestCase
           override_lat: "51.501009611553926",
           override_lng: "-0.141587067110009",
         )
-        @aviation_house = Place.create(
+        @aviation_house = Place.create!(
           service_slug: @service.slug,
           data_set_version: @data_set.version,
           postcode: "WC2B 6SE",
@@ -337,7 +337,7 @@ class DataSetTest < ActiveSupport::TestCase
           override_lat: "51.516960431",
           override_lng: "-0.120586400134",
         )
-        @scottish_parliament = Place.create(
+        @scottish_parliament = Place.create!(
           service_slug: @service.slug,
           data_set_version: @data_set.version,
           postcode: "EH99 1SP",
