@@ -5,6 +5,6 @@
 
 <%= render '/admin/data_sets/file_help' %>
 
-<%= semantic_form_for(@service, :url => admin_services_path, :html => {:multipart => true, class: 'well'}) do |f| %>
-  <%= render :partial => 'form_fields', :locals => {:f => f} %>
+<%= form_for(@service, url: admin_services_path, html: {class: 'well'}) do |f| %>
+  <%= render partial: 'form_fields', locals: { f: f } %>
 <% end %>

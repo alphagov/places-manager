@@ -1,27 +1,64 @@
-<%= f.inputs do %>
-  <%= f.input :name, input_html: { class: 'input-md-6' } %>
-  <%= f.input :slug, input_html: { class: 'input-md-6' } %>
-  <% if f.object.new_record? %>
-    <%= f.input :data_file, :as => :file, :accept => 'text/csv' %>
-  <% end %>
-  <%= f.input :source_of_data, as: :text, hint: "Use to store relevant contact names, email addresses, etc." %>
-  <%= f.input :location_match_type, as: :select, input_html: {class: 'input-md-2'},
-    collection: service_location_match_type_options, include_blank: false,
-    hint: "How places are matched for a given location."
-  %>
-  <%= f.input :local_authority_hierarchy_match_type, as: :select, input_html: {class: 'input-md-2'},
-    collection: service_local_authority_hierarchy_match_type_options, include_blank: false,
-    hint: "For services that use 'Local authority' location matching which council should be used for those areas that have a County and District hierarchy.",
-    wrapper_html: {
-      data: {
-        module: 'form-value-dependent',
-        'form-value-dependent-elem': 'service_location_match_type',
-        'form-value-dependent-value': 'local_authority'
-      }
-    }
-  %>
-<% end %>
+<fieldset class="inputs">
+  <div class="form-group">
+    <span class="form-label">
+      <%= f.label :name %>
+    </span>
+    <span class="form-wrapper">
+      <%= f.text_field :name, class: 'input-md-6 form-control' %>
+    </span>
+  </div>
 
-<%= f.actions do %>
-  <%= f.submit class: 'btn btn-success' %>
-<% end %>
+  <div class="form-group">
+    <span class="form-label">
+      <%= f.label :slug %>
+    </span>
+    <span class="form-wrapper">
+      <%= f.text_field :slug, class: 'input-md-6 form-control' %>
+    </span>
+  </div>
+
+  <% if f.object.new_record? %>
+    <div class="form-group">
+      <span class="form-label">
+        <%= f.label :data_file %>
+      </span>
+      <span class="form-wrapper">
+        <%= f.file_field :data_file, accept: 'text/csv' %>
+      </span>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <span class="form-label">
+      <%= f.label :source_of_data %>
+    </span>
+    <span class="form-wrapper">
+      <%= f.text_area :source_of_data, rows: 10, class: 'form-control' %>
+    </span>
+    <p class="hint-text">Use to store relevant contact names, email addresses, etc.</p>
+  </div>
+
+  <div class="form-group">
+    <span class="form-label">
+      <%= f.label :location_match_type %>
+    </span>
+    <span class="form-wrapper">
+      <%= f.select :location_match_type, service_location_match_type_options, {}, { class: 'input-md-2 form-control' } %>
+    </span>
+    <p class="hint-text">How places are matched for a given location.</p>
+  </div>
+
+  <div class="form-group">
+    <span class="form-label">
+      <%= f.label :local_authority_hierarchy_match_type %>
+    </span>
+    <span class="form-wrapper">
+      <%= f.select :local_authority_hierarchy_match_type, service_local_authority_hierarchy_match_type_options, {},
+          { 'module': 'form-value-dependent', 'form-value-dependent-elem': 'service_location_match_type', 'form-value-dependent-value': 'local_authority', class: 'input-md-2 form-control'}
+      %>
+    </span>
+    <p class="hint-text">For services that use 'Local authority' location matching which council should be used for those areas that have a County and District hierarchy.</p>
+  </div>
+</fieldset>
+
+<%= f.submit class: 'btn btn-success' %>

@@ -3,8 +3,6 @@ source "http://rubygems.org"
 gem "rails", "6.0.3.3"
 
 gem "bootstrap-kaminari-views"
-gem "formtastic"
-gem "formtastic-bootstrap"
 gem "gds-api-adapters"
 gem "gds-sso"
 gem "govuk_admin_template"

@@ -20,14 +20,27 @@
   </header>
   <div class="panel-body">
     <%= render '/admin/data_sets/file_help' %>
-    <%= semantic_form_for(@service.data_sets.build, :url => admin_service_data_sets_path(@service), :html => {:multipart => true}) do |f| %>
-      <%= f.inputs do %>
-        <%= f.input :data_file, :as => :file, :accept => 'text/csv' %>
-        <%= f.input :change_notes, :as => :text, :label => "Change note",  input_html: {class: 'input-md-6'}%>
-      <% end %>
-      <%= f.actions do %>
-        <%= f.submit "Create Data set", class: 'btn btn-primary' %>
-      <% end %>
+    <%= form_for(@service.data_sets.build, url: admin_service_data_sets_path(@service)) do |f| %>
+      <fieldset>
+        <div class="form-group">
+          <span class="form-label">
+            <%= f.label :data_file %>
+          </span>
+          <span class="form-wrapper">
+            <%= f.file_field :data_file, accept: 'text/csv' %>
+          </span>
+        </div>
+
+        <div class="form-group">
+          <span class="form-label">
+            <%= f.label :change_notes, "Change note" %>
+          </span>
+          <span class="form-wrapper">
+            <%= f.text_area :change_notes, rows: 10, class: 'input-md-6 form-control' %>
+          </span>
+        </div>
+      </fieldset>
+      <%= f.submit "Create Data set", class: 'btn btn-primary' %>
     <% end %>
   </div>
 </section>
