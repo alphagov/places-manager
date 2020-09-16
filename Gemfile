@@ -37,6 +37,5 @@ group :test do
   gem "rails-controller-testing"
   gem "shoulda-context"
   gem "simplecov", require: false
-  gem "simplecov-rcov", require: false
   gem "webmock", require: false
 end
