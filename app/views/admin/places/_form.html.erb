@@ -1,37 +1,173 @@
 <%= render :partial => 'admin/services/overview' %>
 
-<%= semantic_form_for [:admin, @service, @data_set, @place], html: {class: 'well'} do |f| %>
+<%= form_for [:admin, @service, @data_set, @place], html: { class: 'well' } do |f| %>
 
-  <%= f.semantic_errors :source_address, :class => "alert alert-danger" %>
+  <div class="form-group">
+    <span class="form-label">
+      <%= f.label :name %>
+    </span>
+    <span class="form-wrapper">
+      <%= f.text_field :name, class: 'input-md-6 form-control' %>
+    </span>
+  </div>
 
-  <%= f.input :name, :input_html => { :size => 60, :class => 'input-md-6' } %>
+  <fieldset class="inputs">
+    <legend>
+      <span>Address</span>
+    </legend>
+    <div class="form-group">
+      <span class="form-label">
+        <%= f.label :address1 %>
+      </span>
+      <span class="form-wrapper">
+        <%= f.text_field :address1, class: 'input-md-6 form-control' %>
+      </span>
+    </div>
 
-  <%= f.inputs "Address" do %>
-    <%= f.input :address1, :label => "Address 1", input_html: {class: 'input-md-6'} %>
-    <%= f.input :address2, :label => "Address 2", input_html: {class: 'input-md-6'} %>
-    <%= f.input :town, input_html: {class: 'input-md-6'} %>
-    <%= f.input :postcode, input_html: {class: 'input-md-2'} %>
-    <%= f.input :override_lng, :label => "Override longitude", :placeholder => "Leave blank to use postcode coords", input_html: {class: 'input-md-4'}%>
-    <%= f.input :override_lat, :label => "Override latitude", :placeholder => "Leave blank to use postcode coords", input_html: {class: 'input-md-4'} %>
-    <%= f.input :snac, :label => "SNAC code", input_html: {class: 'input-md-2'} %>
-  <% end %>
+    <div class="form-group">
+      <span class="form-label">
+        <%= f.label :address2 %>
+      </span>
+      <span class="form-wrapper">
+        <%= f.text_field :address2, class: 'input-md-6 form-control' %>
+      </span>
+    </div>
 
-  <%= f.inputs "Contact Details" do %>
-    <%= f.input :url, :label => "Website", :input_html => { :class => 'input-md-6' } %>
-    <%= f.input :email, :input_html => { :class => 'input-md-6' } %>
-    <%= f.input :phone, :input_html => { :class => 'input-md-6' } %>
-    <%= f.input :fax, :input_html => { :class => 'input-md-6' } %>
-    <%= f.input :text_phone, :input_html => { :class => 'input-md-6' } %>
-  <% end %>
+    <div class="form-group">
+      <span class="form-label">
+        <%= f.label :town %>
+      </span>
+      <span class="form-wrapper">
+        <%= f.text_field :town, class: 'input-md-6 form-control' %>
+      </span>
+    </div>
 
-  <%= f.inputs "Access Notes" do %>
-    <%= f.input :access_notes, :as => :text, :input_html => { :rows => 3, :class => 'input-md-6' } %>
-    <%= f.input :general_notes, :as => :text, :input_html => { :rows => 3, :class => 'input-md-6' } %>
-  <% end %>
+    <div class="form-group">
+      <span class="form-label">
+        <%= f.label :postcode %>
+      </span>
+      <span class="form-wrapper">
+        <%= f.text_field :postcode, class: 'input-md-2 form-control' %>
+        <% if f.object.errors[:postcode].any? %>
+          <div class="text-danger" id="place_override_postcode_input">
+            <%= f.object.errors[:postcode].to_sentence %>
+          </div>
+        <% end %>
+      </span>
+    </div>
 
-  <%= f.actions do %>
-    <%= f.action :submit, :as => :button, :button_html => { :class => "btn btn-primary" } %>
-    <%= link_to 'Cancel', admin_service_data_set_path(@service, @data_set), class: 'btn btn-default add-left-margin' %>
-  <% end %>
+    <div class="form-group">
+      <span class="form-label">
+        <%= f.label :override_lng, "Override longitude" %>
+      </span>
+      <span class="form-wrapper">
+        <%= f.text_field :override_lng, placeholder: "Leave blank to use postcode coords", required: true, class: 'input-md-4 form-control' %>
+        <% if f.object.errors[:override_lng].any? %>
+          <div class="text-danger" id="place_override_lng_input">
+            <%= f.object.errors[:override_lng].to_sentence %>
+          </div>
+        <% end %>
+      </span>
+    </div>
+
+    <div class="form-group">
+      <span class="form-label">
+        <%= f.label :override_lat, "Override latitude" %>
+      </span>
+      <span class="form-wrapper">
+        <%= f.text_field :override_lat, placeholder: "Leave blank to use postcode coords", required: true, class: 'input-md-4 form-control' %>
+        <% if f.object.errors[:override_lat].any? %>
+          <div class="text-danger" id="place_override_lat_input">
+            <%= f.object.errors[:override_lat].to_sentence %>
+          </div>
+        <% end %>
+      </span>
+    </div>
+
+    <div class="form-group">
+      <span class="form-label">
+        <%= f.label :snac, "SNAC code" %>
+      </span>
+      <span class="form-wrapper">
+        <%= f.text_field :snac, class: 'input-md-2 form-control' %>
+      </span>
+    </div>
+  </fieldset>
+
+  <fieldset class="inputs">
+    <legend>
+      <span>Contact Details</span>
+    </legend>
+    <div class="form-group">
+      <span class="form-label">
+        <%= f.label :url, "Website" %>
+      </span>
+      <span class="form-wrapper">
+        <%= f.text_field :url, class: 'input-md-6 form-control' %>
+      </span>
+    </div>
+
+    <div class="form-group">
+      <span class="form-label">
+        <%= f.label :email %>
+      </span>
+      <span class="form-wrapper">
+        <%= f.text_field :email, class: 'input-md-6 form-control' %>
+      </span>
+    </div>
+
+    <div class="form-group">
+      <span class="form-label">
+        <%= f.label :phone %>
+      </span>
+      <span class="form-wrapper">
+        <%= f.text_field :phone, class: 'input-md-6 form-control' %>
+      </span>
+    </div>
+
+    <div class="form-group">
+      <span class="form-label">
+        <%= f.label :fax %>
+      </span>
+      <span class="form-wrapper">
+        <%= f.text_field :fax, class: 'input-md-6 form-control' %>
+      </span>
+    </div>
+
+    <div class="form-group">
+      <span class="form-label">
+        <%= f.label :text_phone %>
+      </span>
+      <span class="form-wrapper">
+        <%= f.text_field :text_phone, class: 'input-md-6 form-control' %>
+      </span>
+    </div>
+  </fieldset>
+
+  <fieldset class="inputs">
+    <legend>
+      <span>Access Notes</span>
+    </legend>
+    <div class="form-group">
+      <span class="form-label">
+        <%= f.label :access_notes %>
+      </span>
+      <span class="form-wrapper">
+        <%= f.text_area :access_notes, rows: 3, class: 'input-md-6 form-control' %>
+      </span>
+    </div>
+
+    <div class="form-group">
+      <span class="form-label">
+        <%= f.label :general_notes %>
+      </span>
+      <span class="form-wrapper">
+        <%= f.text_area :general_notes, rows: 3, class: 'input-md-6 form-control' %>
+      </span>
+    </div>
+  </fieldset>
+
+  <%= f.submit "Update Place", class: "btn btn-primary"  %>
+  <%= link_to 'Cancel', admin_service_data_set_path(@service, @data_set), class: 'btn btn-default add-left-margin' %>
 
 <% end %>
