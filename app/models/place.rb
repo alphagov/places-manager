@@ -58,6 +58,7 @@ class Place
 
   index({ location: "2d", service_slug: 1, data_set_version: 1 }, background: true)
   index(service_slug: 1, data_set_version: 1)
+  index(snac: 1, data_set_version: 1)
 
   # Index to speed up the `needs_geocoding` and `with_geocoding_errors` scopes
   index(
