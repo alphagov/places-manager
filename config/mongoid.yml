@@ -19,7 +19,7 @@ test:
         write:
           w: 1
         read:
-          mode: :primary
+          mode: :nearest
         # In the test environment we lower the retries and retry interval to
         # low amounts for fast failures.
         max_retries: 1
@@ -36,7 +36,7 @@ production:
         write:
           w: 1
         read:
-          mode: :primary
+          mode: :nearest
         retry_interval: 120
   options:
     # This is more consistent with ActiveRecord
