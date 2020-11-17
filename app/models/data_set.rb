@@ -53,7 +53,7 @@ class DataSet
     query = places
     query = query.where(snac: snac) if snac
     query = query.limit(limit) if limit
-    query = query.geo_near([location.longitude, location.latitude])
+    query = query.where(location: { "$near" => [location.longitude, location.latitude] })
     query = query.max_distance(distance.in(:degrees)) if distance
     query
   end
