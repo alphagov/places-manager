@@ -36,7 +36,7 @@ production:
         write:
           w: 1
         read:
-          mode: :secondary_preferred
+          mode: :secondary
         retry_interval: 120
   options:
     # This is more consistent with ActiveRecord
