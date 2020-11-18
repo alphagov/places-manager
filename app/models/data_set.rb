@@ -51,10 +51,18 @@ class DataSet
   #   an array of Place objects
   def places_near(location, distance = nil, limit = nil, snac = nil)
     query = places
-    query = query.where(snac: snac) if snac
-    query = query.limit(limit) if limit
-    query = query.geo_near([location.longitude, location.latitude])
-    query = query.max_distance(distance.in(:degrees)) if distance
+
+    # this is a temporary fix while we address poorly performing geo_near queries
+    if snac
+      query = query.where(snac: snac)
+      # currently the max number of places in a local authority is 70
+      query = query.limit(70)
+      query.order_by(name: 1)
+    else
+      query = query.limit(limit) if limit
+      query = query.geo_near([location.longitude, location.latitude])
+      query = query.max_distance(distance.in(:degrees)) if distance
+    end
     query
   end
 
