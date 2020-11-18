@@ -412,7 +412,7 @@ class DataSetTest < ActiveSupport::TestCase
         stub_mapit_has_a_postcode_and_areas("EX39 1LH", [51.0413792674, -4.23640704632], [{ "type" => "DIS", "ons" => "18UK" }])
 
         place_names = @data_set.places_for_postcode("EX39 1LH").map(&:name)
-        assert_equal ["Susie's Tea Rooms", "John's Of Appledore"], place_names
+        assert_equal ["John's Of Appledore", "Susie's Tea Rooms"], place_names
       end
 
       should "return multiple places in order of nearness if there are more than one in the district" do
