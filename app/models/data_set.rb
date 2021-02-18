@@ -38,6 +38,10 @@ class DataSet
     Place.where(service_slug: service.slug, data_set_version: version)
   end
 
+  def number_of_places
+    places.count
+  end
+
   ##
   # Find all the places near a given location
   #
