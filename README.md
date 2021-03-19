@@ -16,27 +16,17 @@ There is a simple JSON API for integrating the data with other applications.
 
 ## Technical documentation
 
-Imminence is a Ruby on Rails application backed by a MongoDB database.
+This is a Ruby on Rails app, and should follow [our Rails app conventions](https://docs.publishing.service.gov.uk/manual/conventions-for-rails-applications.html).
 
-### Running the application
+You can use the [GOV.UK Docker environment](https://github.com/alphagov/govuk-docker) to run the application and its tests with all the necessary dependencies. Follow [the usage instructions](https://github.com/alphagov/govuk-docker#usage) to get started.
 
-From within the app root directory:
-
-`./startup.sh`
-
-Note that you will have to have GOV.UK Mapit running locally.
-
-In the GOV.UK DEV VM from the 'development' directory:
-
-`bowl imminence`
-
-Note that the app uses a local version of [GOV.UK Mapit](https://github.com/alphagov/mapit), therefore a valid dataset will have to be loaded for Mapit, otherwise postcode lookups will not succeed. This is part of the standard GOV.UK data replication steps.
+**Use GOV.UK Docker to run any commands that follow.**
 
 ### Running the test suite
 
-`bundle exec rake`
-
-`bundle exec govuk-lint-ruby app test lib`
+```sh
+bundle exec rake
+```
 
 ## Licence
 
