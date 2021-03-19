@@ -24,10 +24,6 @@ There is a simple JSON API for integrating the data with other applications.
 
 Imminence is a Ruby on Rails application backed by a MongoDB database.
 
-### Dependencies
-
-- [alphagov/mapit](https://github.com/alphagov/mapit) - provides postcode lookups
-
 ### Running the application
 
 From within the app root directory:
