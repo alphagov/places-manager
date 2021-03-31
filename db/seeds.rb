@@ -6,6 +6,4 @@
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Mayor.create(:name => 'Daley', :city => cities.first)
 
-Dir[File.join(File.dirname(__FILE__), "seeds", "*.rb")].each do |f|
-  load f
-end
+User.find_or_create_by!(name: "publisher")
