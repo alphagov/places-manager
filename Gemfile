@@ -15,7 +15,6 @@ gem "mongoid"
 gem "plek"
 gem "responders"
 gem "sass-rails"
-gem "sdoc", group: :doc
 gem "state_machines"
 gem "state_machines-mongoid"
 gem "uglifier"
