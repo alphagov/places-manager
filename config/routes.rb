@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get "/healthcheck/live", to: proc { [200, {}, %w[OK]] }
+  get "/healthcheck/ready", to: GovukHealthcheck.rack_response
+
   namespace :admin do
     resources :services do
       resources :data_sets, except: %i[index destroy] do
