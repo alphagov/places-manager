@@ -1,4 +1,4 @@
-<% if @service.data_sets.any? %>
+<% if @service.data_sets.count.positive? %>
   <section class="panel panel-default">
     <header class="panel-heading">
       <h4 class="panel-title">Create new version</h4>

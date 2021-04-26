@@ -1,4 +1,4 @@
-<% if @service.data_sets.any? %>
+<% if @service.data_sets.count.positive? %>
   <% if @service.active_data_set %>
     <% if @service.source_of_data.present? %>
       <h2>Source of data</h2>

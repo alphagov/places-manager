@@ -68,16 +68,16 @@ class Service
   end
 
   def create_first_data_set
-    data_sets.build unless data_sets.any?
+    data_sets.build unless data_sets.count.positive?
   end
 
   def schedule_archive_places
-    obsolete_data_sets.each { |ds| ds.archive! if ds.places.any? }
+    obsolete_data_sets.each { |ds| ds.archive! if ds.number_of_places.positive? }
     ArchivePlacesWorker.perform_async(id.to_s)
   end
 
   def archive_places
-    obsolete_data_sets.each { |ds| ds.archive_places if ds.places.any? }
+    obsolete_data_sets.each { |ds| ds.archive_places if ds.number_of_places.positive? }
   end
 
   # returns all data sets up to but not including the data set before the active set
