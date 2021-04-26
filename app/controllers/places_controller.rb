@@ -35,6 +35,8 @@ class PlacesController < ApplicationController
 
     max_distance = if params[:max_distance].present?
                      Distance.new(Float(params[:max_distance]), :miles)
+                   else
+                     Distance.new(1000.0, :miles)
                    end
 
     if params[:postcode].present?
