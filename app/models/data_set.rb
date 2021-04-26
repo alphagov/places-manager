@@ -63,7 +63,7 @@ class DataSet
       query = query.limit(70)
       query.order_by(name: 1)
     else
-      query = query.limit(limit) if limit
+      query = query.limit(7) # if limit
       query = query.geo_near([location.longitude, location.latitude])
       query = query.max_distance(distance.in(:degrees)) if distance
     end
