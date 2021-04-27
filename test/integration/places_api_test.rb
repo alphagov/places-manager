@@ -228,14 +228,14 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
           @service.update(local_authority_hierarchy_match_type: Service::LOCAL_AUTHORITY_DISTRICT_MATCH)
         end
 
-        should "return the district places in alphabetical order, not the county ones when in a county+district council hierarchy" do
+        should "return the district places in order of nearness, not the county ones for postcodes in a county+district council hierarchy" do
           stub_mapit_postcode_response_from_fixture("EX39 1QS")
 
           get "/places/#{@service.slug}.json?postcode=EX39+1QS"
           data = JSON.parse(last_response.body)
           assert_equal 2, data.length
-          assert_equal @place1.name, data[0]["name"]
-          assert_equal @place2.name, data[1]["name"]
+          assert_equal @place2.name, data[0]["name"]
+          assert_equal @place1.name, data[1]["name"]
         end
 
         should "return all the places in order of nearness for postcodes not in a county+district council hierarchy" do
@@ -254,14 +254,14 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
           @service.update(local_authority_hierarchy_match_type: Service::LOCAL_AUTHORITY_COUNTY_MATCH)
         end
 
-        should "only return the county results in alphabetical order, and not the district ones when in a county+district council hierarchy" do
+        should "only return the county results in order of nearness, not the district ones for postcodes in a county+district council hierarchy" do
           stub_mapit_postcode_response_from_fixture("EX39 1QS")
 
           get "/places/#{@service.slug}.json?postcode=EX39+1QS"
           data = JSON.parse(last_response.body)
           assert_equal 2, data.length
-          assert_equal @place5.name, data[0]["name"]
-          assert_equal @place6.name, data[1]["name"]
+          assert_equal @place6.name, data[0]["name"]
+          assert_equal @place5.name, data[1]["name"]
         end
 
         should "return all the places in order of nearness for postcodes not in a county+district council hierarchy" do
