@@ -20,6 +20,7 @@ gem "state_machines-mongoid"
 gem "uglifier"
 
 group :development, :test do
+  gem "database_cleaner"
   gem "pact", require: false
   gem "pact_broker-client"
   gem "pry"
@@ -29,7 +30,6 @@ end
 group :test do
   gem "ci_reporter_minitest"
   gem "cucumber-rails", require: false
-  gem "database_cleaner"
   gem "factory_bot_rails"
   gem "govuk_test"
   gem "launchy"
