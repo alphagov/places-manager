@@ -6,3 +6,4 @@ tmp/
 coverage
 test/reports
 features/reports
+spec/reports/pacts
