@@ -83,48 +83,48 @@ When(/^I upload the exported CSV to the "(.*?)" service$/) do |name|
 end
 
 Then(/^I should see an indication that my file was not accepted$/) do
-  assert page.has_content?("Could not process CSV file. Please check the format.")
+  expect(page).to have_content("Could not process CSV file. Please check the format.")
 end
 
 Then(/^I should see an indication that my data set import failed$/) do
-  assert page.has_content?("This may well mean the imported data was in the wrong format")
+  expect(page).to have_content("This may well mean the imported data was in the wrong format")
 end
 
 Then(/^I should see an indication that my data set is awaiting processing$/) do
-  assert page.has_content?("Places data is currently being processed")
+  expect(page).to have_content("Places data is currently being processed")
 end
 
 Then(/^I should see an indication that my data set contained (\d+) items$/) do |count|
-  assert page.has_content?("#{count} places")
+  expect(page).to have_content("#{count} places")
 end
 
 Then(/^I should see an indication that my data set is empty$/) do
-  assert page.has_content?("No places are associated with this set. The imported data could be in the wrong format.")
+  expect(page).to have_content("No places are associated with this set. The imported data could be in the wrong format.")
 end
 
 Then(/^I should be on the page for the latest data set for the "(.*?)" service$/) do |name|
-  assert_equal path_for_latest_data_set_for_service(name), current_path
+  expect(path_for_latest_data_set_for_service(name)).to eq(current_path)
 end
 
 Then(/^I should see that there are now (\d+) data sets$/) do |count|
-  assert page.has_content?("Version #{count}")
+  expect(page).to have_content("Version #{count}")
 end
 
 Then(/^I should see that the second data set is active$/) do
-  assert page.has_content?("Version 2 active")
+  expect(page).to have_content("Version 2 active")
 end
 
 Then(/^there should still just be one data set$/) do
-  assert_equal 1, Service.first.data_sets.count
+  expect(Service.first.data_sets.count).to eq(1) # assert_equal 1, Service.first.data_sets.count
 end
 
 Then(/^the "(.*?)" service should have two data sets$/) do |name|
-  assert_equal 2, Service.where(name: name).first.data_sets.count
+  expect(Service.where(name: name).first.data_sets.count).to eq(2) # assert_equal 2, Service.where(name: name).first.data_sets.count
 end
 
 Then(/^there should be a place named "(.*?)"$/) do |name|
   within "table.table-places" do
-    assert page.has_content?(name)
+    expect(page).to have_content(name)
   end
 end
 
@@ -132,31 +132,31 @@ Then(/^the places should be identical between the datasets in the "(.*?)" servic
   service = Service.where(name: name).first
   data_set1 = service.data_sets.first
   data_set2 = service.data_sets.last
-  [data_set1, data_set2].each { |data_set| assert_equal 1, data_set.places.count }
+  [data_set1, data_set2].each { |data_set| expect(data_set.places.count).to eq(1) }
 
   place1 = data_set1.places.first
   place2 = data_set2.places.first
 
   expected_identical_attributes = Place.attribute_names - %w[_id data_set_version]
   expected_identical_attributes.each do |attribute|
-    assert_equal place1.send(attribute.to_sym), place2.send(attribute.to_sym)
+    expect(place1.send(attribute.to_sym)).to eq(place2.send(attribute.to_sym))
   end
 end
 
 Then(/^I should not see an "edit" action for a record$/) do
   within "table.table-places" do
-    assert !page.has_link?("edit")
+    expect(page).not_to have_link("edit")
   end
 end
 
 Then(/^I should see an indication that the first data set is being archived$/) do
-  assert page.has_content?("Version 1 Archiving")
+  expect(page).to have_content("Version 1 Archiving")
 end
 
 Then(/^I should not see the first data set$/) do
-  assert !page.has_content?("Version 1")
+  expect(page).not_to have_content("Version 1")
 end
 
 Then("I should see that a duplicating job was enqueued for data set version {int}") do |int|
-  assert page.has_content?("Your request for a duplicate of data set version #{int} is being processed. This can take a few minutes.")
+  expect(page).to have_content("Your request for a duplicate of data set version #{int} is being processed. This can take a few minutes.")
 end
