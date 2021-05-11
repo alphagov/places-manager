@@ -20,6 +20,8 @@ gem "state_machines-mongoid"
 gem "uglifier"
 
 group :development, :test do
+  gem "pact", require: false
+  gem "pact_broker-client"
   gem "pry"
   gem "rubocop-govuk"
 end
