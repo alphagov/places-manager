@@ -20,6 +20,7 @@ gem "state_machines-mongoid"
 gem "uglifier"
 
 group :development, :test do
+  gem "pact", require: false
   gem "pry"
   gem "rubocop-govuk"
 end
