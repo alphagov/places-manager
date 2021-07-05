@@ -76,20 +76,20 @@ end
 
 Then(/^I should be on the page for the "(.*?)" service$/) do |name|
   current_path = URI.parse(current_url).path
-  assert_equal path_for_service(name), current_path
+  expect(path_for_service(name)).to eq(current_path)
 end
 
 Then(/^there should not be a "(.*?)" service$/) do |name|
-  assert_equal 0, Service.where(name: name).count
+  expect(Service.where(name: name).count).to eq(0)
 end
 
 Then(/^I should see that the current service has (\d+) missing SNAC codes$/) do |count|
   content = "#{count} places with missing SNAC codes."
-  assert page.has_content?(content)
+  expect(page).to have_content(content)
 end
 
 Then(/^I should not see any text about missing SNAC codes$/) do
-  assert !page.has_content?("places with missing SNAC codes.")
+  expect(page).to_not have_content("places with missing SNAC codes.")
 end
 
 When(/^I activate the most recent data set for the "(.*?)" service$/) do |name|
@@ -102,25 +102,25 @@ end
 
 When(/^I should see (\d+) version panels?$/) do |count|
   version_panels = page.all(:css, "div .data-set")
-  assert_equal version_panels.size, count.to_i
+  expect(version_panels.size).to eq(count.to_i)
 end
 
 Then(/^the first version panel has the title "(.*?)"$/) do |title|
   within "div.data-set:nth-child(1)" do
     within "h3.panel-title" do
-      assert page.has_content?(title)
+      expect(page).to have_content(title)
     end
   end
 end
 
 Then(/^the first version panel has the text "(.*?)"$/) do |text|
   within "div.data-set:nth-child(1)" do
-    assert page.has_content?(text)
+    expect(page).to have_content(text)
   end
 end
 
 Then(/^the first version panel shows a warning about missing SNAC codes$/) do
   within "div.data-set:nth-child(1)" do
-    assert page.has_css?("p.missing-snac-warning")
+    expect(page).to have_css("p.missing-snac-warning")
   end
 end
