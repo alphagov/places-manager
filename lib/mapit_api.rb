@@ -1,3 +1,8 @@
+API_KEY = "xx"
+API_SECRET = "xx"
+
+require "oauth2"
+
 require "gds_api/exceptions"
 
 module MapitApi
@@ -6,12 +11,13 @@ module MapitApi
   class InvalidLocationHierarchyType < ArgumentError; end
 
   def self.location_for_postcode(postcode)
-    location_data = Imminence.mapit_api.location_for_postcode(postcode)
-    raise ValidPostcodeNoLocation if location_data.lat.nil? || location_data.lon.nil?
+    client = OAuth2::Client.new(API_KEY, API_SECRET, site: "https://api.os.uk", token_url: "/oauth2/token/v1")
 
-    location_data
-  rescue GdsApi::HTTPClientError
-    raise InvalidPostcodeError
+    token = client.client_credentials.get_token
+
+    response = token.get("/search/places/v1/postcode", params: {postcode: postcode, dataset: "DPA"}) # DPA = Delivery Point Addresses, i.e. postal addresses
+
+    JSON.parse(response.body)["results"]
   end
 
   # The subset of Mapit area types that correspond to districts.
@@ -27,55 +33,29 @@ module MapitApi
   end
 
   def self.extract_snac_from_mapit_response(location_data, location_hiearachy_type)
-    area_types_to_check = area_types(location_hiearachy_type)
-    found_area = location_data.areas.detect { |area| area_types_to_check.include?(area["type"]) }
-    found_area["codes"]["ons"] if found_area
-  end
+    address = location_data.first
 
-  def self.area_types(location_hiearachy_type)
-    case location_hiearachy_type
-    when "district"
-      DISTRICT_TYPES
-    when "county"
-      COUNTY_TYPES
+    ## TODO: Can we get the GSS code without needing to make another 2 queries??
+    coordinates = [address.dig("DPA", "X_COORDINATE"), address.dig("DPA", "Y_COORDINATE")].join(",")
+
+    response = token.get("/search/names/v1/nearest", params: {point: coordinates})
+
+    utla_url = JSON.parse(response.body).dig("results", 0, "GAZETTEER_ENTRY", "COUNTY_UNITARY_URI")
+    ltla_url = JSON.parse(response.body).dig("results", 0, "GAZETTEER_ENTRY", "DISTRICT_BOROUGH_URI")
+
+    ## We need to return the lowest level of local authority, i.e. the LTLA, unless it is a Unitary Authority, then the UTLA
+    if location_hiearachy_type == "district"
+      gss_code_from_authority_url(ltla_url)  ## TODO: need to get the SNAC code
+    elsif location_hiearachy_type == "county"
+      gss_code_from_authority_url(utla_url)  ## TODO: need to get the SNAC code
     else
       raise InvalidLocationHierarchyType, location_hiearachy_type
     end
   end
-  private_class_method :area_types
 
-  class AreasByTypeResponse
-    def initialize(response)
-      @response = response
-    end
-
-    def payload
-      if @response
-        {
-          code: @response.code,
-          areas: @response.to_hash.values,
-        }
-      else
-        { code: 404, areas: [] }
-      end
-    end
-  end
-
-  class AreasByPostcodeResponse
-    def initialize(location)
-      @location = location
-    end
-
-    def payload
-      # Invalid postcodes return a nil response
-      if @location
-        {
-          code: @location.response.code,
-          areas: @location.response.to_hash.fetch("areas", {}).values,
-        }
-      else
-        { code: 404, areas: [] }
-      end
-    end
+  def self.gss_code_from_authority_url(url)
+    uri = URI.parse("#{url.gsub('id', 'doc')}.json") # The gsub is a hack as Net::HTTP doesn't follow redirects
+    response = Net::HTTP.get_response(uri)
+    JSON.parse(response.body).dig(url, "http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode", 0, "value")
   end
 end

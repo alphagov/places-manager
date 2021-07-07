@@ -550,6 +550,7 @@ DEPENDENCIES
   minitest-reporters
   mocha
   mongoid
+  oauth2
   pact
   pact_broker-client
   plek

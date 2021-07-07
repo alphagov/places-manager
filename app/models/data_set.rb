@@ -1,3 +1,8 @@
+API_KEY = "xx"
+API_SECRET = "xx"
+
+require "oauth2"
+
 require "csv"
 
 class DataSet
@@ -63,8 +68,16 @@ class DataSet
   end
 
   def places_for_postcode(postcode, distance = nil, limit = nil)
-    location_data = MapitApi.location_for_postcode(postcode)
-    location = Point.new(latitude: location_data.lat, longitude: location_data.lon)
+    client = OAuth2::Client.new(API_KEY, API_SECRET, site: "https://api.os.uk", token_url: "/oauth2/token/v1")
+
+    token = client.client_credentials.get_token
+
+    response = token.get("/search/places/v1/postcode", params: {postcode: postcode, dataset: "DPA"}) # DPA = Delivery Point Addresses, i.e. postal addresses
+
+    location_data = JSON.parse(response.body)["results"]
+
+    location = Point.new(latitude: address.dig(0, "DPA", "Y_COORDINATE"), longitude: address.dig(0, "DPA", "X_COORDINATE"))  ## TODO: check the coordinate system is the same; OS Places can return a number of different systems
+
     if service.location_match_type == "local_authority"
       snac = MapitApi.extract_snac_from_mapit_response(location_data, service.local_authority_hierarchy_match_type)
       if snac
