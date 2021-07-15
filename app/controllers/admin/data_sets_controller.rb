@@ -8,6 +8,7 @@ class Admin::DataSetsController < InheritedResources::Base
   belongs_to :service
   rescue_from CSV::MalformedCSVError, with: :bad_csv
   rescue_from InvalidCharacterEncodingError, with: :bad_encoding
+  rescue_from Encoding::UndefinedConversionError, with: :bad_encoding
 
   def create
     prohibit_non_csv_uploads
