@@ -59,7 +59,6 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  config.hosts += [
-    "imminence.dev.gov.uk",
-  ]
+  # Allow requests for all domains e.g. <app>.dev.gov.uk
+  config.hosts.clear
 end
