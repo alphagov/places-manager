@@ -50,9 +50,10 @@ class Point
     # Takes any possible object and converts it to how it would be
     # stored in the database.
     def mongoize(value)
-      if value.is_a?(Point)
+      case value
+      when Point
         value.mongoize
-      elsif value.is_a?(Hash)
+      when Hash
         new(value.symbolize_keys).mongoize
       else
         value

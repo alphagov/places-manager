@@ -25,7 +25,7 @@ module ServiceHelper
   end
 
   def csv_path_for_data(name)
-    File.expand_path("../../support/data/" + name.parameterize + ".csv", __FILE__)
+    File.expand_path("../../support/data/#{name.parameterize}.csv", __FILE__)
   end
 
   def upload_extra_data_set(service)
@@ -122,7 +122,7 @@ module ServiceHelper
   end
 
   def mapit_knows_nothing_about_any_postcodes
-    stub_request(:get, %r{#{GdsApi::TestHelpers::Mapit::MAPIT_ENDPOINT}/postcode/[^\.]+\.json})
+    stub_request(:get, %r{#{GdsApi::TestHelpers::Mapit::MAPIT_ENDPOINT}/postcode/[^.]+\.json})
       .to_return(body: { "code" => 404, "error" => "No Postcode matches the given query." }.to_json, status: 404)
   end
 end

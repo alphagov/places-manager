@@ -7,14 +7,14 @@ class Admin::PlacesController < InheritedResources::Base
   def new
     @place = parent.places.build
     unless @place.can_edit?
-      flash[:danger] = "You cannot create a new place as " + (data_set.active? ? "this data set is currently active." : "there is a more recent data set available.")
+      flash[:danger] = "You cannot create a new place as #{data_set.active? ? 'this data set is currently active.' : 'there is a more recent data set available.'}"
       redirect_to admin_service_data_set_path(@service, @data_set)
     end
   end
 
   def edit
     unless place.can_edit?
-      flash[:danger] = "You cannot edit this place as " + (data_set.active? ? "this data set is currently active." : "there is a more recent data set available.")
+      flash[:danger] = "You cannot edit this place as #{data_set.active? ? 'this data set is currently active.' : 'there is a more recent data set available.'}"
       redirect_to admin_service_data_set_path(@service, @data_set)
     end
   end

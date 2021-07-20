@@ -2,10 +2,8 @@ require "gds_api/exceptions"
 
 class CannotEditPlaceDetailsUnlessNewestInactiveDataset < ActiveModel::Validator
   def validate(record)
-    if record.changes.except("location", "geocode_error").any?
-      unless !record.data_set || record.can_edit?
-        record.errors[:base] << "Can only edit the most recent inactive dataset."
-      end
+    if record.changes.except("location", "geocode_error").any? && !(!record.data_set || record.can_edit?)
+      record.errors[:base] << "Can only edit the most recent inactive dataset."
     end
   end
 end
