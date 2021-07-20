@@ -4,6 +4,7 @@ require "gds_api/test_helpers/mapit"
 
 class MockResponse
   attr_reader :code, :to_hash
+
   def initialize(code, data)
     @code = code
     @to_hash = data

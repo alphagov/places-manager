@@ -41,7 +41,6 @@ class PointTest < ActiveSupport::TestCase
         # in order for the geospatial indes to work.
         p = Point.new(latitude: 56.2, longitude: -1.0)
 
-        # Note: hashes in ruby 1.9 keep order
         expected = { "longitude" => -1.0, "latitude" => 56.2 }
         assert_equal expected.to_a, p.mongoize.to_a
       end

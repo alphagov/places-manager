@@ -2,7 +2,9 @@ require "gds_api/exceptions"
 
 module MapitApi
   class InvalidPostcodeError < StandardError; end
+
   class ValidPostcodeNoLocation < StandardError; end
+
   class InvalidLocationHierarchyType < ArgumentError; end
 
   def self.location_for_postcode(postcode)
