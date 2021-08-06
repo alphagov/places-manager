@@ -14,6 +14,8 @@ end
 
 WebMock.allow_net_connect!
 
+MAPIT_ENDPOINT = Plek.current.find("mapit")
+
 def url_encode(str)
   ERB::Util.url_encode(str)
 end
@@ -42,6 +44,43 @@ Pact.provider_states_for "GDS API Adapters" do
     set_up do
       service = create(:service, slug: "number-plate-supplier")
       create(:place, service_slug: service.slug, latitude: 50.742754933617285, longitude: -1.9552618901330387)
+    end
+  end
+
+  provider_state "a place exists with a postcode and areas" do
+    set_up do
+      postcode = "WC2B 6SE"
+
+      service = create(:service, slug: "local-authority")
+      create(:place, service_slug: service.slug, postcode: postcode)
+
+      areas = [
+        { "name" => "Westminster City Council", "country_name" => "England", "type" => "LBO", "gss" => "E12000008" },
+        { "name" => "London", "country_name" => "England", "type" => "EUR", "gss" => "E12000009" },
+      ]
+
+      response = {
+        "wgs84_lat" => 51.516,
+        "wgs84_lon" => -0.121,
+        "postcode" => postcode,
+      }
+
+      area_response = Hash[areas.map.with_index do |area, i|
+        [i,
+         {
+           "codes" => {
+             "ons" => area["ons"],
+             "gss" => area["gss"],
+             "govuk_slug" => area["govuk_slug"],
+           },
+           "name" => area["name"],
+           "type" => area["type"],
+           "country_name" => area["country_name"],
+         }]
+      end]
+
+      stub_request(:get, "#{MAPIT_ENDPOINT}/postcode/#{postcode.sub(' ', '+')}.json")
+        .to_return(body: response.merge("areas" => area_response).to_json, status: 200)
     end
   end
 end
