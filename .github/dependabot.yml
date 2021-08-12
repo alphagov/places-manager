@@ -26,3 +26,8 @@ updates:
         dependency-type: direct
       - dependency-name: rails-controller-testing
         dependency-type: direct
+      # Gems with framework dependencies
+      - dependency-name: inherited_resources
+        dependency-type: direct
+      - dependency-name: mongoid
+        dependency-type: direct
