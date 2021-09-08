@@ -114,19 +114,18 @@ class DataSet
   def data_file=(file)
     if file.nil?
       @csv_data = nil
-      @need_csv_processing = false
+      self.processing_error = "Could not process CSV file. File is empty."
     else
-      @csv_data = CsvData.new(data_file: file)
-      @need_csv_processing = true
+      @csv_data = CsvData.new(
+        data_file: file,
+      )
     end
   end
 
   def schedule_csv_processing
-    if @need_csv_processing
-      @csv_data.save!
-      ProcessCsvDataWorker.perform_async(service.id.to_s, version)
-      @need_csv_processing = false
-    end
+    return if processing_complete? || csv_data.blank?
+
+    ProcessCsvDataWorker.perform_async(service.id.to_s, version)
   end
 
   def csv_data
@@ -138,6 +137,8 @@ class DataSet
 
     @csv_data.service_slug = service.slug
     @csv_data.data_set_version = version
+    @csv_data.save!
+
     unless @csv_data.valid?
       @csv_data.errors[:data].each do |message|
         errors.add(:data_file, message)
@@ -151,20 +152,25 @@ class DataSet
   end
 
   def process_csv_data
-    if csv_data.present?
-      places_data = []
-      CSV.parse(csv_data.data, headers: true) do |row|
-        places_data << Place.parameters_from_hash(self, row)
-      end
-      Place.create!(places_data)
-      reset_csv_data
+    unless csv_data.present?
+      self.processing_error = "Could not process CSV file. CSV data not available."
       save!
+      return
     end
+
+    places_data = []
+    CSV.parse(csv_data.data, headers: true) do |row|
+      places_data << Place.parameters_from_hash(self, row)
+    end
+    Place.create!(places_data)
+    reset_csv_data
+    save!
   rescue CSV::MalformedCSVError
     self.processing_error = "Could not process CSV file. Please check the format."
     reset_csv_data
     save!
   rescue Mongoid::Errors::MongoidError
+    self.processing_error = "Database error."
     reset_csv_data
     save!
   end
