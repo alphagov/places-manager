@@ -1,3 +1,4 @@
 ---
 :verbose: true
 :concurrency: 2
+:logfile: ./log/sidekiq.json.log
