@@ -18,7 +18,6 @@ class DataSet
   default_scope -> { order_by(%i[version asc]) }
   before_validation :set_version, on: :create
   validate :csv_data_is_valid
-  after_save :schedule_csv_processing
 
   state_machine initial: :unarchived do
     event :duplicated do
@@ -112,22 +111,9 @@ class DataSet
   end
 
   def data_file=(file)
-    if file.nil?
-      @csv_data = nil
-      @need_csv_processing = false
-    else
-      @csv_data = CsvData.new(data_file: file)
-      @need_csv_processing = true
-    end
-  end
+    return if file.nil?
 
-  def schedule_csv_processing
-    if @need_csv_processing
-      @csv_data.save!
-      sleep 2
-      ProcessCsvDataWorker.perform_async(service.id.to_s, version)
-      @need_csv_processing = false
-    end
+    @csv_data = CsvData.new(data_file: file)
   end
 
   def csv_data
@@ -139,6 +125,7 @@ class DataSet
 
     @csv_data.service_slug = service.slug
     @csv_data.data_set_version = version
+    @csv_data.save!
     unless @csv_data.valid?
       @csv_data.errors[:data].each do |message|
         errors.add(:data_file, message)

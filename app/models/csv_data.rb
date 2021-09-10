@@ -13,6 +13,8 @@ class CsvData
   validates :data_set_version, presence: true
   validates :data, presence: true
 
+  after_create :schedule_csv_processing
+
   def service
     @service ||= Service.find_by(slug: service_slug)
   end
@@ -28,6 +30,10 @@ class CsvData
       else
         read_as_utf8(file)
       end
+  end
+
+  def schedule_csv_processing
+    ProcessCsvDataWorker.perform_async(service.id.to_s, data_set_version)
   end
 
 private
