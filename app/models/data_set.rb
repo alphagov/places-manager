@@ -124,6 +124,7 @@ class DataSet
   def schedule_csv_processing
     if @need_csv_processing
       @csv_data.save!
+      sleep 2
       ProcessCsvDataWorker.perform_async(service.id.to_s, version)
       @need_csv_processing = false
     end
