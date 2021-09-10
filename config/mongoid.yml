@@ -34,7 +34,7 @@ production:
       uri: <%= ENV['MONGODB_URI'] %>
       options:
         write:
-          w: 1
+          w: 3 # prevents race conditions
         read:
           mode: :secondary_preferred
         retry_interval: 120
