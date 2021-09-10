@@ -158,13 +158,16 @@ class DataSet
       end
       Place.create!(places_data)
       reset_csv_data
-      save!
+    else
+      self.processing_error = "CSV file empty. Try again or contact support."
     end
+    save!
   rescue CSV::MalformedCSVError
     self.processing_error = "Could not process CSV file. Please check the format."
     reset_csv_data
     save!
   rescue Mongoid::Errors::MongoidError
+    self.processing_error = "Database error occurred. Please try re-importing."
     reset_csv_data
     save!
   end
