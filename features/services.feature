@@ -64,6 +64,7 @@ Feature: Managing services
       And I fill out the form with the following attributes to create a service:
         | name                | Register Offices With Missing Snac Codes |
         | location_match_type | Local authority                          |
+      Then I should be on the page for the "Register Offices With Missing Snac Codes" service
 
     When background processing has completed
       And I go to the page for the "Register Offices With Missing Snac Codes" service

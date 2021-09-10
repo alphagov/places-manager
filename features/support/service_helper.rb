@@ -2,7 +2,7 @@ require "gds_api/test_helpers/mapit"
 
 module ServiceHelper
   def path_for_service(name)
-    service = Service.where(name: name).first
+    service = Service.find_by(name: name)
     admin_service_path(service)
   end
 
