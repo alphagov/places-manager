@@ -44,7 +44,7 @@ class PlaceTest < ActiveSupport::TestCase
     place.name = "Aviation House"
 
     assert_not place.valid?
-    assert place.errors.keys.include?(:base)
+    assert place.errors[:base].present?
   end
 
   test "cannot be edited if the data set is inactive and not the latest version" do
@@ -63,7 +63,7 @@ class PlaceTest < ActiveSupport::TestCase
     place.name = "Aviation House"
 
     assert_not place.valid?
-    assert place.errors.keys.include?(:base)
+    assert place.errors[:base].present?
   end
 
   test "can be edited if the data set is active but the only changed fields are 'location' or 'geocode_error'" do
