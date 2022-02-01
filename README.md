@@ -31,3 +31,7 @@ bundle exec rake
 ## Licence
 
 [MIT License](LICENCE)
+
+### Further documentation
+
+- [Adding a new service](docs/adding-a-new-service.md)
