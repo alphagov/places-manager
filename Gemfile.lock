@@ -601,6 +601,7 @@ DEPENDENCIES
   sass-rails
   shoulda-context
   simplecov
+  sprockets-rails
   state_machines
   state_machines-mongoid
   uglifier
