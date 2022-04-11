@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 
-gem "rails", "6.1.5"
+gem "rails", "7.0.2.3"
 
 gem "bootstrap-kaminari-views"
 gem "gds-api-adapters"
@@ -11,6 +11,7 @@ gem "govuk_sidekiq"
 gem "inherited_resources"
 gem "kaminari-actionview"
 gem "kaminari-mongoid"
+gem "mongo", "2.15.1"
 gem "mongoid"
 gem "plek"
 gem "responders"
