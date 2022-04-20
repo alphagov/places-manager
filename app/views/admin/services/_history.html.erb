@@ -34,7 +34,7 @@
 
         <dl>
           <dt>Uploaded</dt>
-          <dd><%= set.created_at ? set.created_at.to_date.to_s(:govuk_date) : "the beginning of time" %></dd>
+          <dd><%= set.created_at ? set.created_at.to_date.to_fs(:govuk_date) : "the beginning of time" %></dd>
           <% unless set.change_notes.blank? %>
             <dt>Change notes</dt>
             <dd><%= set.change_notes %></dd>
