@@ -2,12 +2,22 @@ module Imminence
   class FileVerifier
     attr_accessor :filename
 
+    CSV_TYPES = [
+      "text/csv",         # Ideal, per RFC4180
+      "text/plain",       # Current per remote system
+      "application/csv",  # Current per docker
+    ].freeze
+
     def initialize(file)
       @filename = if file.respond_to?(:path)
                     file.path
                   else
                     file.to_s
                   end
+    end
+
+    def csv?
+      CSV_TYPES.include?(mime_type)
     end
 
     def type
