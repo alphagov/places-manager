@@ -49,7 +49,7 @@ protected
     if params[:data_set] && params[:data_set][:data_file]
       file = get_file_from_param(params[:data_set][:data_file])
       fv = Imminence::FileVerifier.new(file)
-      unless fv.type == "text"
+      unless fv.csv?
         message = "Rejecting file with content type: #{fv.mime_type}"
         Rails.logger.info(message)
         raise CSV::MalformedCSVError.new(message, 0)
