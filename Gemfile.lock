@@ -80,7 +80,7 @@ GEM
       autoprefixer-rails (>= 5.2.1)
       sassc (>= 2.0.0)
     brakeman (5.2.2)
-    bson (4.14.1)
+    bson (4.15.0)
     builder (3.2.4)
     capybara (3.36.0)
       addressable
@@ -274,7 +274,7 @@ GEM
     mocha (1.13.0)
     mongo (2.15.1)
       bson (>= 4.8.2, < 5.0.0)
-    mongoid (7.4.0)
+    mongoid (7.5.0)
       activemodel (>= 5.1, < 7.1, != 7.0.0)
       mongo (>= 2.10.5, < 3.0.0)
       ruby2_keywords (~> 0.0.5)
