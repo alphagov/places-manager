@@ -5,6 +5,7 @@ require "rails"
 require "action_controller/railtie"
 require "action_mailer/railtie"
 require "action_view/railtie"
+require "active_record/railtie"
 require "sprockets/railtie"
 require "rails/test_unit/railtie"
 
@@ -27,7 +28,6 @@ module Imminence
     config.time_zone = "London"
 
     config.generators do |g|
-      g.orm :mongoid
       g.template_engine :erb # this could be :haml or whatever
       g.test_framework :test_unit, fixture: false # this could be :rpsec or whatever
     end

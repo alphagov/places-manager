@@ -54,6 +54,9 @@ GEM
     activerecord (7.0.3.1)
       activemodel (= 7.0.3.1)
       activesupport (= 7.0.3.1)
+    activerecord-postgis-adapter (8.0.1)
+      activerecord (~> 7.0.0)
+      rgeo-activerecord (~> 7.0.0)
     activestorage (7.0.3.1)
       actionpack (= 7.0.3.1)
       activejob (= 7.0.3.1)
@@ -80,7 +83,6 @@ GEM
       autoprefixer-rails (>= 5.2.1)
       sassc (>= 2.0.0)
     brakeman (5.2.2)
-    bson (4.15.0)
     builder (3.2.4)
     capybara (3.36.0)
       addressable
@@ -141,7 +143,10 @@ GEM
     cucumber-wire (6.2.1)
       cucumber-core (~> 10.1, >= 10.1.0)
       cucumber-cucumber-expressions (~> 14.0, >= 14.0.0)
-    database_cleaner (1.8.5)
+    database_cleaner-active_record (2.0.1)
+      activerecord (>= 5.a)
+      database_cleaner-core (~> 2.0.0)
+    database_cleaner-core (2.0.1)
     diff-lcs (1.5.0)
     dig_rb (1.0.1)
     digest (3.1.0)
@@ -242,9 +247,6 @@ GEM
       activerecord
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
-    kaminari-mongoid (1.0.2)
-      kaminari-core (~> 1.0)
-      mongoid
     kgio (2.11.4)
     launchy (2.5.0)
       addressable (~> 2.7)
@@ -272,12 +274,6 @@ GEM
       minitest (>= 5.0)
       ruby-progressbar
     mocha (1.13.0)
-    mongo (2.15.1)
-      bson (>= 4.8.2, < 5.0.0)
-    mongoid (7.5.1)
-      activemodel (>= 5.1, < 7.1, != 7.0.0)
-      mongo (>= 2.10.5, < 3.0.0)
-      ruby2_keywords (~> 0.0.5)
     multi_json (1.15.0)
     multi_test (0.1.2)
     multi_xml (0.6.0)
@@ -352,6 +348,7 @@ GEM
     parser (3.1.2.0)
       ast (~> 2.4.1)
     parslet (2.0.0)
+    pg (1.4.3)
     plek (4.0.0)
     prometheus_exporter (2.0.3)
       webrick
@@ -417,6 +414,10 @@ GEM
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
     rexml (3.2.5)
+    rgeo (2.4.0)
+    rgeo-activerecord (7.0.1)
+      activerecord (>= 5.0)
+      rgeo (>= 1.0.0)
     rspec (3.11.0)
       rspec-core (~> 3.11.0)
       rspec-expectations (~> 3.11.0)
@@ -511,9 +512,9 @@ GEM
     state_machines-activemodel (0.8.0)
       activemodel (>= 5.1)
       state_machines (>= 0.5.0)
-    state_machines-mongoid (0.2.0)
-      mongoid (>= 4.0.0)
-      state_machines-activemodel (>= 0.5.0)
+    state_machines-activerecord (0.8.0)
+      activerecord (>= 5.1)
+      state_machines-activemodel (>= 0.8.0)
     statsd-ruby (1.5.0)
     strscan (3.0.4)
     sync (0.5.0)
@@ -559,10 +560,11 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activerecord-postgis-adapter
   bootstrap-kaminari-views
   ci_reporter_minitest
   cucumber-rails
-  database_cleaner (= 1.8.5)
+  database_cleaner-active_record
   factory_bot_rails
   gds-api-adapters
   gds-sso
@@ -571,15 +573,13 @@ DEPENDENCIES
   govuk_sidekiq
   govuk_test
   inherited_resources
-  kaminari-actionview
-  kaminari-mongoid
+  kaminari
   launchy
   minitest-reporters
   mocha
-  mongo (= 2.15.1)
-  mongoid
   pact
   pact_broker-client
+  pg
   plek
   pry
   rails (= 7.0.3.1)
@@ -592,7 +592,7 @@ DEPENDENCIES
   simplecov
   sprockets-rails
   state_machines
-  state_machines-mongoid
+  state_machines-activerecord
   uglifier
   webmock
 

@@ -2,6 +2,6 @@
 
 library("govuk")
 
-node('mongodb-2.4') {
+node('postgresql-9.6') {
   govuk.buildProject(brakeman: true)
 }

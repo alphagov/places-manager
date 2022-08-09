@@ -27,7 +27,9 @@ updates:
       - dependency-name: rails-controller-testing
         dependency-type: direct
       # Gems with framework dependencies
+      - dependency-name: activerecord-postgis-adapter
+        dependency-type: direct
       - dependency-name: inherited_resources
         dependency-type: direct
-      - dependency-name: mongoid
+      - dependency-name: pg
         dependency-type: direct
