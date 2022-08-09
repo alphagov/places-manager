@@ -2,7 +2,8 @@
 
 library("govuk")
 
-node('mongodb-2.4') {
+node {
+  govuk.setEnvar("TEST_DATABASE_URL", "postgis://postgres@127.0.0.1:54414/imminence-test")
   govuk.buildProject(
     brakeman: true,
     // Run rake default tasks except for pact:verify as that is ran via
