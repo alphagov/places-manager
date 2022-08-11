@@ -18,6 +18,6 @@ FactoryBot.define do
     town { "Los Angeles" }
     postcode { "WC2B 6NH" }
     phone { "01234 567890" }
-    location { Point.new(latitude: latitude, longitude: longitude) }
+    location { "POINT(#{longitude} #{latitude})" }
   end
 end

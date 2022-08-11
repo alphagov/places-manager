@@ -19,14 +19,14 @@ class DataSetTest < ActiveSupport::TestCase
       @service.data_sets.create!
       @service.data_sets.create!
 
-      assert_equal [1, 2, 3], Service.first.data_sets.map(&:version)
+      assert_equal [1, 2, 3], Service.last.data_sets.map(&:version)
     end
 
     should "cope with non-contiguous existing versions" do
       @service.data_sets.create!(version: 3)
       @service.data_sets.create!
 
-      assert_equal [1, 3, 4], Service.first.data_sets.map(&:version)
+      assert_equal [1, 3, 4], Service.last.data_sets.map(&:version)
     end
   end
 

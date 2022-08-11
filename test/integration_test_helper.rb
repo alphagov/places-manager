@@ -1,7 +1,8 @@
 require_relative "test_helper"
 require "capybara/rails"
 
-DatabaseCleaner.strategy = :truncation
+DatabaseCleaner.allow_remote_database_url = true
+DatabaseCleaner[:active_record].strategy = [:truncation, { except: %w[spatial_ref_sys] }]
 
 class ActionDispatch::IntegrationTest
   include Capybara::DSL

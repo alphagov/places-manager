@@ -79,7 +79,7 @@ class PlaceTest < ActiveSupport::TestCase
     )
 
     service.data_sets.create! version: 3
-    place.location = Point.new(latitude: 51.517356, longitude: -0.120742)
+    place.location = "POINT(-0.120742 51.517356)"
     place.geocode_error = "Error message"
 
     assert place.valid?
@@ -129,7 +129,7 @@ class PlaceTest < ActiveSupport::TestCase
         name: "Aviation House",
         source_address: "Blah",
         postcode: "WC2B 6NH",
-        location: Point.new(latitude: 51.501, longitude: -0.123),
+        location: "POINT(-0.123 51.501)",
         service_slug: @service.slug,
         data_set_version: 2,
       )

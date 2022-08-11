@@ -33,8 +33,8 @@ class ServiceTest < ActiveSupport::TestCase
       should "have database level uniqueness constraint" do
         FactoryBot.create(:service, slug: "a-service")
         @service.slug = "a-service"
-        assert_raises Mongoid::Errors::InvalidPersistenceOption do
-          @service.with(safe: true).save validate: false
+        assert_raises ActiveRecord::RecordNotUnique do
+          @service.save validate: false
         end
       end
 
@@ -140,12 +140,12 @@ class ServiceTest < ActiveSupport::TestCase
     end
 
     should "return data_sets which are being archived" do
-      @service.data_sets.first.set(state: "archiving")
+      @service.data_sets.first.update!(state: "archiving")
       assert_not_empty @service.data_sets.current
     end
 
     should "not return archived data_sets" do
-      @service.data_sets.first.set(state: "archived")
+      @service.data_sets.first.update!(state: "archived")
       assert_empty @service.data_sets.current
     end
   end
