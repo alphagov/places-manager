@@ -1,26 +1,15 @@
-class Service
-  include Mongoid::Document
-
+class Service < ApplicationRecord
   LOCATION_MATCH_TYPES = %w[nearest local_authority].freeze
   LOCAL_AUTHORITY_DISTRICT_MATCH = "district".freeze
   LOCAL_AUTHORITY_COUNTY_MATCH = "county".freeze
   LOCAL_AUTHORITY_HIERARCHY_MATCH_TYPES = [LOCAL_AUTHORITY_DISTRICT_MATCH, LOCAL_AUTHORITY_COUNTY_MATCH].freeze
   MAX_ARCHIVES_TO_STORE = 3
 
-  field :name,                    type: String
-  field :slug,                    type: String
-  field :active_data_set_version, type: Integer, default: 1
-  field :source_of_data,          type: String
-  field :location_match_type,     type: String, default: LOCATION_MATCH_TYPES.first
-  field :local_authority_hierarchy_match_type, type: String, default: LOCAL_AUTHORITY_DISTRICT_MATCH
-
-  embeds_many :data_sets do
+  has_many :data_sets do
     def current
-      where(:state.ne => "archived")
+      where.not(state: "archived")
     end
   end
-
-  index({ slug: 1 }, unique: true)
 
   validates :name, presence: true
 
@@ -61,7 +50,7 @@ class Service
   end
 
   def latest_data_set
-    data_sets.desc(:version).first
+    data_sets.order(version: :desc).first
   end
 
   def create_first_data_set
@@ -90,7 +79,7 @@ class Service
   end
 
   def delete_historic_records
-    archived_data_sets = data_sets.where(state: "archived").asc(:version)
+    archived_data_sets = data_sets.where(state: "archived").order(:version)
 
     archived_data_sets_count = archived_data_sets.count
 

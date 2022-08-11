@@ -1,13 +1,6 @@
-class CsvData
-  include Mongoid::Document
-  include Mongoid::Timestamps
-
-  field :service_slug, type: String
-  field :data_set_version, type: Integer
-  field :data, type: String
-
-  # Mongoid has a 16M limit on document size.  Set this to
-  # 15M to leave some headroom for storing the rest of the document.
+class CsvData < ApplicationRecord
+  # NOTE: We could increase this (pg text size is infinite), but for the
+  # moment probably worthwhile limiting it (until we get complaints?)
   validates :data, length: { maximum: 15.megabytes, message: "CSV file is too big (max is 15MB)" }
   validates :service_slug, presence: true
   validates :data_set_version, presence: true
