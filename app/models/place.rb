@@ -8,8 +8,8 @@ class CannotEditPlaceDetailsUnlessNewestInactiveDataset < ActiveModel::Validator
   end
 end
 
-class Place
-  include Mongoid::Document
+class Place < ApplicationRecord
+  # set_rgeo_factory_for_column(:location, RGeo::Geographic.spherical_factory(srid: 4326))
 
   # Match documents with either no geocode error or a null value. Changed so
   # that anything without a location (or with a null location) is either
@@ -17,33 +17,11 @@ class Place
   scope :needs_geocoding, -> { where(location: nil, geocode_error: nil) }
 
   # We use "not null" here instead of "exists", because it works with the index
-  scope :with_geocoding_errors, -> { where(:geocode_error.ne => nil) }
+  scope :with_geocoding_errors, -> { where.not(geocode_error: nil) }
   scope :geocoded, -> { where(:location.with_size => 2) }
-  default_scope -> { order_by(%i[name asc]) }
+  default_scope -> { order(name: :asc) }
 
   scope :missing_snacs, -> { where(snac: nil) }
-
-  field :service_slug, type: String
-  field :data_set_version, type: Integer
-
-  field :name,           type: String
-  field :source_address, type: String
-  field :address1,       type: String
-  field :address2,       type: String
-  field :town,           type: String
-  field :postcode,       type: String
-  field :access_notes,   type: String
-  field :general_notes,  type: String
-  field :url,            type: String
-  field :email,          type: String
-  field :phone,          type: String
-  field :fax,            type: String
-  field :text_phone,     type: String
-  field :location,       type: Point
-  field :override_lat,   type: Float
-  field :override_lng,   type: Float
-  field :geocode_error,  type: String
-  field :snac,           type: String
 
   validates :service_slug, presence: true
   validates :data_set_version, presence: true
@@ -54,18 +32,18 @@ class Place
   validate :has_both_lat_lng_overrides
   validates_with CannotEditPlaceDetailsUnlessNewestInactiveDataset, on: :update
 
-  index({ location: "2d", snac: 1, service_slug: 1, data_set_version: 1 }, background: true)
-  index(service_slug: 1, data_set_version: 1)
-
-  # Index to speed up the `needs_geocoding` and `with_geocoding_errors` scopes
-  index(
-    service_slug: 1,
-    data_set_version: 1,
-    geocode_error: 1,
-    location: 1,
-  )
-
-  index({ name: 1 }, background: true)
+  # index({ location: "2d", snac: 1, service_slug: 1, data_set_version: 1 }, background: true)
+  # index(service_slug: 1, data_set_version: 1)
+  #
+  # # Index to speed up the `needs_geocoding` and `with_geocoding_errors` scopes
+  # index(
+  #   service_slug: 1,
+  #   data_set_version: 1,
+  #   geocode_error: 1,
+  #   location: 1,
+  # )
+  #
+  # index({ name: 1 }, background: true)
 
   before_validation :build_source_address
   before_validation :clear_location, if: :postcode_changed?, on: :update
@@ -92,7 +70,7 @@ class Place
 
   def geocode
     if override_lat_lng?
-      self.location = Point.new(latitude: override_lat, longitude: override_lng)
+      self.location = "POINT (#{override_lng} #{override_lat})"
     end
 
     return if location.present?
@@ -101,10 +79,7 @@ class Place
       self.geocode_error = "Can't geocode without postcode"
     else
       result = Imminence.mapit_api.location_for_postcode(postcode)
-      self.location = Point.new(
-        latitude: result.lat,
-        longitude: result.lon,
-      )
+      self.location = "POINT (#{result.lon} #{result.lat})"
     end
   rescue GdsApi::HTTPClientError
     self.geocode_error = "#{postcode} not found for #{full_address}"

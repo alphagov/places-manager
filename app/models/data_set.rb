@@ -1,21 +1,12 @@
 require "csv"
 
-class DataSet
-  include Mongoid::Document
-  include Mongoid::Timestamps
-
-  embedded_in :service
-  embeds_many :actions
-
-  field :version,       type: Integer
-  field :change_notes,  type: String
-  field :processing_error, type: String
-  field :state, type: String
-  field :archiving_error, type: String
+class DataSet < ApplicationRecord
+  belongs_to :service
+  has_many :actions
 
   validates :version, presence: true
 
-  default_scope -> { order_by(%i[version asc]) }
+  default_scope -> { order(version: :asc) }
   before_validation :set_version, on: :create
   validate :csv_data_is_valid
   after_save :schedule_csv_processing
@@ -54,17 +45,21 @@ class DataSet
   # Returns:
   #   an array of Place objects
   def places_near(location, distance = nil, limit = nil, snac = nil)
+    pry
+    circle = location.buffer(distance) if distance
     query = places
     query = query.where(snac: snac) if snac
     query = query.limit(limit) if limit
-    query = query.geo_near([location.longitude, location.latitude])
-    query = query.max_distance(distance.in(:degrees)) if distance
+    query = query.where(Place.arel_table[:location].st_within(circle)) if distance
+    query.order(Arel.sql("ST_Distance(location, ST_GeographyFromText('#{location}'))"))
+    # query = query.geo_near([location.longitude, location.latitude])
+    # query = query.max_distance(distance.in(:degrees)) if distance
     query
   end
 
   def places_for_postcode(postcode, distance = nil, limit = nil)
     location_data = MapitApi.location_for_postcode(postcode)
-    location = Point.new(latitude: location_data.lat, longitude: location_data.lon)
+    location = RGeo::Geographic.spherical_factory.point(location_data.lon, location_data.lat)
     if service.location_match_type == "local_authority"
       snac = MapitApi.extract_snac_from_mapit_response(location_data, service.local_authority_hierarchy_match_type)
       if snac
@@ -166,7 +161,7 @@ class DataSet
     self.processing_error = "Could not process CSV file. Please check the format."
     reset_csv_data
     save!
-  rescue Mongoid::Errors::MongoidError
+  rescue ActiveRecord::ActiveRecordError
     self.processing_error = "Database error occurred. Please try re-importing."
     reset_csv_data
     save!
@@ -194,7 +189,7 @@ class DataSet
     places.delete_all
     archived
   rescue StandardError => e
-    set(archiving_error: "Failed to archive place information: '#{e.message}'")
+    update(archiving_error: "Failed to archive place information: '#{e.message}'")
   end
 
   def new_action(user, type, comment)
