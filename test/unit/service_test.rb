@@ -33,8 +33,8 @@ class ServiceTest < ActiveSupport::TestCase
       should "have database level uniqueness constraint" do
         FactoryBot.create(:service, slug: "a-service")
         @service.slug = "a-service"
-        assert_raises Mongoid::Errors::InvalidPersistenceOption do
-          @service.with(safe: true).save validate: false
+        assert_raises ActiveRecord::RecordNotUnique do
+          @service.save validate: false
         end
       end
 
@@ -140,12 +140,12 @@ class ServiceTest < ActiveSupport::TestCase
     end
 
     should "return data_sets which are being archived" do
-      @service.data_sets.first.set(state: "archiving")
+      @service.data_sets.first.update!(state: "archiving")
       assert_not_empty @service.data_sets.current
     end
 
     should "not return archived data_sets" do
-      @service.data_sets.first.set(state: "archived")
+      @service.data_sets.first.update!(state: "archived")
       assert_empty @service.data_sets.current
     end
   end
@@ -210,17 +210,15 @@ class ServiceTest < ActiveSupport::TestCase
     end
 
     should "deletes oldest records if there are more than 3 data sets archived" do
-      FactoryBot.create_list(:archived_data_set, 4, service: @service)
-      @unarchived_data_set = FactoryBot.create(:data_set, state: :unarchived, service: @service)
+      FactoryBot.create_list(:archived_data_set, 4, service_id: @service.id)
+      FactoryBot.create(:data_set, state: :unarchived, service_id: @service.id)
 
-      @service.data_sets.asc(:version).first.expects(:delete_records)
-
-      @unarchived_data_set.expects(:delete_historic_records).never
-      @service.data_sets.where(state: "archived").asc(:version).last(3).each do |data_set|
-        data_set.expects(:delete_historic_records).never
-      end
+      data_set_ids = @service.data_sets.order(:version).pluck(:id)
+      undeleted_data_sets = data_set_ids.drop(1)
 
       @service.delete_historic_records
+
+      assert_equal(undeleted_data_sets, @service.data_sets.order(:version).map(&:id))
     end
 
     should "doesn't delete oldest records if there are less than 4 data sets archived" do
