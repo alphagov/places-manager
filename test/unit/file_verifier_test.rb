@@ -12,12 +12,6 @@ class FileVerifierTest < ActiveSupport::TestCase
     assert_equal true, Imminence::FileVerifier.new(f).csv?
   end
 
-  test "it correctly identifies a PNG masquerading as a CSV" do
-    f = Rails.root.join("features/support/data/rails.csv")
-    assert_equal false, Imminence::FileVerifier.new(f).csv?
-    assert_equal "image/png", Imminence::FileVerifier.new(f).mime_type
-  end
-
   test "it can provide just the main type of a file" do
     f = Rails.root.join("features/support/data/rails.csv")
     assert_equal "image", Imminence::FileVerifier.new(f).type

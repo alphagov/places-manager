@@ -49,7 +49,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
         csv_file = fixture_file_upload(Rails.root.join("test/fixtures/good_csv.csv"), "text/csv")
         post :create, params: { service_id: @service.id, data_set: { data_file: csv_file } }
         assert_response :redirect
-        assert_equal "Could not process CSV file because of the file encoding. Please check the format.", flash[:danger]
+        assert_equal "Could not process CSV file. Please check the format.", flash[:danger]
         # There is always an initial data set
         assert_equal 1, Service.first.data_sets.count
         assert_equal 0, Place.count
