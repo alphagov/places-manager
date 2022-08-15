@@ -44,16 +44,13 @@ class DataSet < ApplicationRecord
   # Returns:
   #   an array of Place objects
   def places_near(location, distance = nil, limit = nil, snac = nil)
-    pry
-    circle = location.buffer(distance) if distance
+    loc_string = "'SRID=4326;POINT(#{location.longitude} #{location.latitude})'::geometry"
     query = places
     query = query.where(snac: snac) if snac
     query = query.limit(limit) if limit
-    query = query.where(Place.arel_table[:location].st_within(circle)) if distance
-    query.order(Arel.sql("ST_Distance(location, ST_GeographyFromText('#{location}'))"))
-    # query = query.geo_near([location.longitude, location.latitude])
-    # query = query.max_distance(distance.in(:degrees)) if distance
-    query
+    query = query.where(Place.arel_table[:location].st_distance(location).lt(distance.in(:meters))) if distance
+    query = query.reorder(Arel.sql("location <-> #{loc_string}"))
+    query.select(Arel.sql("places.*, ST_Distance(location, #{loc_string}) as distance"))
   end
 
   def places_for_postcode(postcode, distance = nil, limit = nil)
@@ -204,7 +201,7 @@ class DataSet < ApplicationRecord
     places.delete_all
     archived
   rescue StandardError => e
-    update(archiving_error: "Failed to archive place information: '#{e.message}'")
+    update!(archiving_error: "Failed to archive place information: '#{e.message}'")
   end
 
   def delete_records

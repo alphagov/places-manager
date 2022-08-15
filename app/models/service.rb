@@ -50,7 +50,7 @@ class Service < ApplicationRecord
   end
 
   def latest_data_set
-    data_sets.order(version: :desc).first
+    data_sets.reorder(version: :desc).first
   end
 
   def create_first_data_set

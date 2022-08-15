@@ -42,8 +42,8 @@ class Place < ApplicationRecord
   # additional 'distance' attribute in meters from the search point. Convert
   # to a Distance object so that we can easily convert it to other units.
   def dis
-    if attributes["geo_near_distance"]
-      @dis ||= Distance.new(attributes["geo_near_distance"], :degrees)
+    if attributes["distance"]
+      @dis ||= Distance.new(attributes["distance"], :meters)
     end
   end
 
