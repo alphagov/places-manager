@@ -278,12 +278,11 @@ class DataSetTest < ActiveSupport::TestCase
 
     should "find places near a point in distance order" do
       places = @service.latest_data_set.places_near(@buckingham_palace.location)
-
       expected_places = [@buckingham_palace, @aviation_house, @scottish_parliament]
       assert_equal expected_places, places.to_a
 
       # Check that the distances are reported correctly
-      distances_in_miles = [0, 1.82, 373]
+      distances_in_miles = [0, 1.42, 332.08]
       places.to_a.zip(distances_in_miles).each do |place, expected_distance|
         assert_in_epsilon expected_distance, place.dis.in(:miles), 0.01
       end
@@ -293,41 +292,41 @@ class DataSetTest < ActiveSupport::TestCase
       # Buckingham Palace and Aviation House are 1.4252962055598721 miles apart
       centre = @buckingham_palace.location
 
-      places = @service.latest_data_set.places_near(centre, Distance.miles(1.82))
-      assert_equal 1, places.count
+      places = @service.latest_data_set.places_near(centre, Distance.miles(1.40))
+      assert_equal 1, places.unscope(:select).count
 
-      places = @service.latest_data_set.places_near(centre, Distance.miles(1.83))
-      assert_equal 2, places.count
+      places = @service.latest_data_set.places_near(centre, Distance.miles(1.45))
+      assert_equal 2, places.unscope(:select).count
     end
 
     should "work when constraining points by a large distance" do
       # Buckingham Palace and the Scottish Parliament are approximately 331 miles apart
       centre = @buckingham_palace.location
 
-      places = @service.latest_data_set.places_near(centre, Distance.miles(370))
-      assert_equal 2, places.count
+      places = @service.latest_data_set.places_near(centre, Distance.miles(330))
+      assert_equal 2, places.unscope(:select).count
 
-      places = @service.latest_data_set.places_near(centre, Distance.miles(373))
-      assert_equal 3, places.count
+      places = @service.latest_data_set.places_near(centre, Distance.miles(333))
+      assert_equal 3, places.unscope(:select).count
     end
 
     should "limit number of results" do
       places = @service.latest_data_set.places_near(@buckingham_palace.location, nil, 2)
-      assert_equal 2, places.count
+      assert_equal 2, places.unscope(:select).count
       assert_equal [@buckingham_palace, @aviation_house], places.to_a
     end
 
     should "limit on both distance and number of results" do
       centre = @buckingham_palace.location
 
-      places = @service.latest_data_set.places_near(centre, Distance.miles(1.82), 2)
-      assert_equal 1, places.count
+      places = @service.latest_data_set.places_near(centre, Distance.miles(1.40), 2)
+      assert_equal 1, places.unscope(:select).count
 
-      places = @service.latest_data_set.places_near(centre, Distance.miles(1.83), 2)
-      assert_equal 2, places.count
+      places = @service.latest_data_set.places_near(centre, Distance.miles(1.45), 2)
+      assert_equal 2, places.unscope(:select).count
 
       places = @service.latest_data_set.places_near(centre, Distance.miles(400), 2)
-      assert_equal 2, places.count
+      assert_equal 2, places.unscope(:select).count
     end
 
     should "constrain results to places belonging to the relevant data_set" do
@@ -337,11 +336,11 @@ class DataSetTest < ActiveSupport::TestCase
       FactoryBot.create(:place, service_slug: @service.slug, data_set_version: ds2.version)
       FactoryBot.create(:place, service_slug: service2.slug, data_set_version: service2.latest_data_set.version)
 
-      assert_equal 3, ds.places_near(@buckingham_palace.location).count
-      assert_equal 2, ds.places_near(@buckingham_palace.location, Distance.miles(1.83)).count
-      assert_equal 2, ds.places_near(@buckingham_palace.location, nil, 2).count
-      assert_equal 1, ds.places_near(@buckingham_palace.location, Distance.miles(1.82), 2).count
-      assert_equal 2, ds.places_near(@buckingham_palace.location, Distance.miles(400), 2).count
+      assert_equal 3, ds.places_near(@buckingham_palace.location).unscope(:select).count
+      assert_equal 2, ds.places_near(@buckingham_palace.location, Distance.miles(1.45)).unscope(:select).count
+      assert_equal 2, ds.places_near(@buckingham_palace.location, nil, 2).unscope(:select).count
+      assert_equal 1, ds.places_near(@buckingham_palace.location, Distance.miles(1.40), 2).unscope(:select).count
+      assert_equal 2, ds.places_near(@buckingham_palace.location, Distance.miles(400), 2).unscope(:select).count
     end
   end
 
@@ -441,7 +440,7 @@ class DataSetTest < ActiveSupport::TestCase
         stub_locations_api_has_location("EX39 1LH", [{ "latitude" => 51.0413792674, "longitude" => -4.23640704632, "local_custodian_code" => 1234 }])
         stub_local_links_manager_has_a_local_authority("county1", country_name: "England", snac: "18UK", local_custodian_code: 1234)
         place_names = @data_set.places_for_postcode("EX39 1LH").map(&:name)
-        assert_equal ["Susie's Tea Rooms", "John's Of Appledore"], place_names
+        assert_equal ["John's Of Appledore", "Susie's Tea Rooms"], place_names
       end
 
       should "return multiple places in order of nearness if there are more than one in the district" do
