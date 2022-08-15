@@ -22,10 +22,10 @@ gem "state_machines-activerecord"
 gem "uglifier"
 
 group :development, :test do
+  gem "byebug"
   gem "database_cleaner-active_record"
   gem "pact", require: false
   gem "pact_broker-client"
-  gem "pry"
   gem "rubocop-govuk"
 end
 
