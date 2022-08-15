@@ -17,6 +17,8 @@ module Imminence
     end
 
     def csv?
+      return true if File.extname(@filename) == ".csv"
+
       CSV_TYPES.include?(mime_type)
     end
 
