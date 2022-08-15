@@ -7,11 +7,13 @@ class Distance
   # a great circle between two points on a sphere: if you use them with degrees
   # of longitude at any point other than the Equator, you will get incorrect
   # results.
+  EARTH_RADIUS_IN_METERS = 6_378_137
   EARTH_RADIUS_IN_MILES = 3963.19
-  UNITS = %i[miles degrees radians].freeze
+  UNITS = %i[meters miles degrees radians].freeze
 
   # <value> in units of <key> is equal for each pair here
   EQUIVALENTS = {
+    meters: EARTH_RADIUS_IN_METERS,
     miles: EARTH_RADIUS_IN_MILES,
     degrees: 360 / (2 * Math::PI),
     radians: 1,
