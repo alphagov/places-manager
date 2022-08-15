@@ -162,6 +162,16 @@ class Place < ApplicationRecord
     override_lat.present? && override_lng.present?
   end
 
+  def as_json(_options)
+    super.merge(location: location_to_hash)
+  end
+
+  def location_to_hash
+    return nil if location.nil?
+
+    { latitude: location.latitude, longitude: location.longitude }
+  end
+
 private
 
   def clear_location
