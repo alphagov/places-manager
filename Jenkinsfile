@@ -2,6 +2,7 @@
 
 library("govuk")
 
-node('postgresql-9.6') {
+node {
+  govuk.setEnvar("TEST_DATABASE_URL", "postgresql://postgres@127.0.0.1:54313/imminence-test")
   govuk.buildProject(brakeman: true)
 }
