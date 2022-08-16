@@ -28,22 +28,26 @@ jobs:
       RAILS_ENV: test
       TEST_DATABASE_URL: postgis://postgres:postgres@postgres/imminence-test
 
-     steps:
-       - name: Checkout repository
-         uses: actions/checkout@v3
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-       - name: Install additional system dependencies
-         if: ${{ inputs.extraSystemDependencies }}
-         run: |
-           sudo apt-get update
-           sudo apt-get install -y --no-install-recommends ${{ inputs.extraSystemDependencies }}
+      - name: Install additional system dependencies
+        if: ${{ inputs.extraSystemDependencies }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ${{ inputs.extraSystemDependencies }}
 
-       - name: Setup Ruby
-         uses: ruby/setup-ruby@v1
-         with:
-           bundler-cache: true
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
 
-       - name: Run Brakeman
-         run: bundle exec brakeman . --except CheckRenderInline
+      - name: Run Brakeman
+        run: bundle exec brakeman . --except CheckRenderInline
 
-    PGUSER
+      - name: Setup Rails database
+        run: bundle exec rails db:setup
+
+      - name: Run tests
+        run: bundle exec rake
