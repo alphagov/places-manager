@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    name: Test Rails
+    runs-on: ubuntu-18.04
+
+    services:
+      postgres:
+        image: postgis/postgis:13-3.2
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      RAILS_ENV: test
+      TEST_DATABASE_URL: postgis://postgres:postgres@postgres/imminence-test
+
+     steps:
+       - name: Checkout repository
+         uses: actions/checkout@v3
+
+       - name: Install additional system dependencies
+         if: ${{ inputs.extraSystemDependencies }}
+         run: |
+           sudo apt-get update
+           sudo apt-get install -y --no-install-recommends ${{ inputs.extraSystemDependencies }}
+
+       - name: Setup Ruby
+         uses: ruby/setup-ruby@v1
+         with:
+           bundler-cache: true
+
+       - name: Run Brakeman
+         run: bundle exec brakeman . --except CheckRenderInline
+
+    PGUSER
