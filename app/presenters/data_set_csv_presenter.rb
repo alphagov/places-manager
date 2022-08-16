@@ -1,10 +1,8 @@
 require "csv"
 
 class DataSetCsvPresenter
-  attr_accessor :places
-
   def initialize(data_set)
-    @places = data_set.places
+    @data_set = data_set
   end
 
   def to_csv
@@ -18,7 +16,7 @@ class DataSetCsvPresenter
   def to_array_for_csv
     [].tap do |csv|
       csv << all_headers
-      places.each do |place|
+      @data_set.places.each do |place|
         csv << build_row(place)
       end
     end
@@ -32,7 +30,7 @@ private
   # override fields or set from MapIt's data using the postcode.
   # Also exclude the id from the CSV since it isn't needed by the import.
   def non_location_headers
-    @non_location_headers ||= Place.attribute_names - %w[_id location override_lng override_lat]
+    @non_location_headers ||= Place.attribute_names - %w[_id location override_lng override_lat id created_at updated_at]
   end
 
   # The fields called 'lng' and 'lat' are used as the override values by
