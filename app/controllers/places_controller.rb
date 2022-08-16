@@ -41,7 +41,7 @@ class PlacesController < ApplicationController
       @places = data_set.places_for_postcode(params[:postcode], max_distance, params[:limit])
     elsif params[:lat].present? && params[:lng].present?
       # TODO: should we handle parsing errors here?
-      location = Point.new(latitude: params[:lat], longitude: params[:lng])
+      location = RGeo::Geographic.spherical_factory.point(params[:lng], params[:lat])
 
       @places = data_set.places_near(location, max_distance, params[:limit])
     else
