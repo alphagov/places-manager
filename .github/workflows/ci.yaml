@@ -46,8 +46,10 @@ jobs:
       - name: Run Brakeman
         run: bundle exec brakeman . --except CheckRenderInline
 
-      - name: Setup Rails database
+      - name: Create DB
         run: bundle exec rails db:create
+
+      - name: Setup Rails database
         run: bundle exec rails db:setup
 
       - name: Run tests
