@@ -12,7 +12,7 @@ class Admin::ServicesController < InheritedResources::Base
     @service = Service.new(service_params)
     render action: "new"
   rescue InvalidCharacterEncodingError
-    flash.now[:danger] = "Could not process CSV file because of the file encoding. Please check the format."
+    flash.now[:danger] = "Could not process CSV file. Please check the format."
     @service = Service.new(service_params)
     render action: "new"
   end
