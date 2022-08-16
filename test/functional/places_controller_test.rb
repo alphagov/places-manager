@@ -92,9 +92,9 @@ class PlacesControllerTest < ActionController::TestCase
       end
       location_points = [
         nil,
-        Point.new(longitude: -3.174706, latitude: 55.95439),
-        Point.new(longitude: -0.141587067110009, latitude: 51.501009611553926),
-        Point.new(longitude: -0.120586400134, latitude: 51.516960431),
+        RGeo::Geographic.spherical_factory.point(-3.174706, 55.95439),
+        RGeo::Geographic.spherical_factory.point(-0.141587067110009, 51.501009611553926),
+        RGeo::Geographic.spherical_factory.point(-0.120586400134, 51.516960431),
       ]
       sorted_places.zip(location_points) do |placemark, point|
         if point

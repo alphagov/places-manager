@@ -349,7 +349,7 @@ class DataSetTest < ActiveSupport::TestCase
       should "return places near the postcode's location" do
         stub_mapit_has_a_postcode("WC2B 6NH", [51.51695975170424, -0.12058693935709164])
 
-        expected_location = Point.new(latitude: 51.51695975170424, longitude: -0.12058693935709164)
+        expected_location = RGeo::Geographic.spherical_factory.point(-0.12058693935709164, 51.51695975170424)
         @data_set.expects(:places_near).with(expected_location, nil, nil).returns(:some_places)
 
         assert_equal :some_places, @data_set.places_for_postcode("WC2B 6NH")
