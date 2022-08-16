@@ -163,7 +163,7 @@ class Place < ApplicationRecord
   end
 
   def as_json(_options)
-    super.merge(location: location_to_hash)
+    super(except: :id).merge(location: location_to_hash, _id: { "$oid": "dummy-oid" })
   end
 
   def location_to_hash
