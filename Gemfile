@@ -26,7 +26,7 @@ group :development, :test do
   gem "database_cleaner", "1.8.5"
   gem "pact", require: false
   gem "pact_broker-client"
-  gem "pry"
+  gem "pry-byebug"
   gem "rubocop-govuk"
 end
 
