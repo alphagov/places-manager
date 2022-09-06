@@ -278,7 +278,7 @@ GEM
       minitest (>= 5.0)
       ruby-progressbar
     mocha (1.14.0)
-    mongo (2.15.1)
+    mongo (2.16.3)
       bson (>= 4.8.2, < 5.0.0)
     mongoid (7.5.1)
       activemodel (>= 5.1, < 7.1, != 7.0.0)
@@ -585,7 +585,7 @@ DEPENDENCIES
   launchy
   minitest-reporters
   mocha
-  mongo (= 2.15.1)
+  mongo (= 2.16.3)
   mongoid
   pact
   pact_broker-client
