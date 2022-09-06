@@ -1,7 +1,7 @@
 require_relative "test_helper"
 require "capybara/rails"
 
-DatabaseCleaner.strategy = :truncation
+DatabaseCleaner.strategy = :deletion
 
 class ActionDispatch::IntegrationTest
   include Capybara::DSL

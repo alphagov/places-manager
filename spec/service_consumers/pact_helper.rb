@@ -1,7 +1,7 @@
 require "pact/provider/rspec"
 require "webmock/rspec"
 require "factory_bot_rails"
-require "database_cleaner"
+require "database_cleaner-mongoid"
 
 require ::File.expand_path("../../config/environment", __dir__)
 
@@ -36,7 +36,7 @@ end
 
 Pact.provider_states_for "GDS API Adapters" do
   set_up do
-    DatabaseCleaner.clean_with :truncation
+    DatabaseCleaner.clean_with :deletion
     GDS::SSO.test_user = create(:user, permissions: %w[signin])
   end
 

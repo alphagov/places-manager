@@ -1,7 +1,7 @@
 require "simplecov"
 SimpleCov.start "rails"
 
-require "database_cleaner"
+require "database_cleaner-mongoid"
 
 ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../config/environment", __dir__)
