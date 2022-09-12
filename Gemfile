@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 
-gem "rails", "7.0.3.1"
+gem "rails", "7.0.4"
 
 gem "bootstrap-kaminari-views"
 gem "gds-api-adapters"
