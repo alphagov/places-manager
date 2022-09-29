@@ -81,6 +81,10 @@ class Service
     obsolete_data_sets.each { |ds| ds.archive_places if ds.places.count.positive? }
   end
 
+  def schedule_delete_historic_records
+    DeleteHistoricRecordsWorker.perform_async(id)
+  end
+
   def delete_historic_records
     archived_data_sets = data_sets.where(state: "archived").asc(:version)
 

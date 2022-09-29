@@ -111,6 +111,16 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
           assert_equal 1, ArchivePlacesWorker.jobs.count
         end
       end
+
+      should "create a background job for deleting historic records" do
+        as_logged_in_user do
+          post :activate, params: { service_id: @service.id, id: @service.latest_data_set.id }
+          job = DeleteHistoricRecordsWorker.jobs.last
+          service_id_to_process = job["args"].first
+          assert_equal @service, Service.find(service_id_to_process)
+          assert_equal 1, DeleteHistoricRecordsWorker.jobs.count
+        end
+      end
     end
 
     context "when duplicating a data set" do

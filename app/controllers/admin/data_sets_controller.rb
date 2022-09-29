@@ -26,7 +26,11 @@ class Admin::DataSetsController < InheritedResources::Base
   def activate
     if resource.activate
       flash[:success] = "Data Set #{resource.version} successfully activated"
-      resource.service.schedule_archive_places if resource.latest_data_set?
+
+      if resource.latest_data_set?
+        resource.service.schedule_archive_places
+        resource.service.schedule_delete_historic_records
+      end
     else
       flash[:danger] = "Couldn't activate data set"
     end
