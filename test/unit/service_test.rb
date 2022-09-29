@@ -180,11 +180,17 @@ class ServiceTest < ActiveSupport::TestCase
       assert @service.data_sets.first.archiving?
     end
 
-    should "not archive obsolete data_sets without places" do
+    should "delete archive obsolete data_sets without places" do
       ds = @service.data_sets.first
       ds.places.delete_all
       @service.archive_places
-      assert ds.unarchived?
+      assert_not ds.persisted?
+    end
+
+    should "doesn't action already archived data_sets" do
+      archived_ds = FactoryBot.create(:archived_data_set, service: @service)
+      @service.archive_places
+      assert archived_ds.persisted?
     end
   end
 

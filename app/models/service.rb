@@ -78,7 +78,15 @@ class Service
   end
 
   def archive_places
-    obsolete_data_sets.each { |ds| ds.archive_places if ds.places.count.positive? }
+    obsolete_data_sets.each do |ds|
+      next if ds.archived?
+
+      if ds.places.count.positive?
+        ds.archive_places
+      else
+        ds.delete
+      end
+    end
   end
 
   def schedule_delete_historic_records
