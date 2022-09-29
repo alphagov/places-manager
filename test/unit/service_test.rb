@@ -188,6 +188,45 @@ class ServiceTest < ActiveSupport::TestCase
     end
   end
 
+  context "scheduling deletion of historic records" do
+    should "schedule deletion" do
+      service = FactoryBot.create(:service)
+
+      DeleteHistoricRecordsWorker.expects(:perform_async).with(service.id)
+      service.schedule_delete_historic_records
+    end
+  end
+
+  context "deleting historic records" do
+    setup do
+      @service = FactoryBot.create(:service)
+      @service.data_sets.delete_all
+    end
+
+    should "deletes oldest records if there are more than 3 data sets archived" do
+      FactoryBot.create_list(:archived_data_set, 4, service: @service)
+      @unarchived_data_set = FactoryBot.create(:data_set, state: :unarchived, service: @service)
+
+      @service.data_sets.asc(:version).first.expects(:delete_records)
+
+      @unarchived_data_set.expects(:delete_historic_records).never
+      @service.data_sets.where(state: "archived").asc(:version).last(3).each do |data_set|
+        data_set.expects(:delete_historic_records).never
+      end
+
+      @service.delete_historic_records
+    end
+
+    should "doesn't delete oldest records if there are less than 4 data sets archived" do
+      FactoryBot.create_list(:archived_data_set, 3, service: @service)
+      @unarchived_data_set = FactoryBot.create(:data_set, state: :unarchived, service: @service)
+
+      @service.data_sets.each do |data_set|
+        data_set.expects(:delete_historic_records).never
+      end
+    end
+  end
+
   context "identifying obsolete data sets" do
     setup do
       @service = FactoryBot.create(:service)

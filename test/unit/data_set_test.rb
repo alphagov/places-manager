@@ -57,16 +57,13 @@ class DataSetTest < ActiveSupport::TestCase
   context "archiving a data_set" do
     setup do
       @service = FactoryBot.create(:service)
-      FactoryBot.create(
-        :place,
-        service_slug: @service.slug,
-        data_set_version: 1,
-      )
+      FactoryBot.create_list(:place, 5, service_slug: @service.slug)
     end
 
     should "archive its place information" do
+      assert_empty PlaceArchive.all
       @service.data_sets.first.archive_places
-      assert_not_empty PlaceArchive.all
+      assert_equal 5, PlaceArchive.all.count
     end
 
     should "remove its place information" do
@@ -89,6 +86,28 @@ class DataSetTest < ActiveSupport::TestCase
       assert_match(/Failed/, ds.archiving_error)
       assert_match(/'A problem occurred'/, ds.archiving_error)
       assert ds.unarchived?
+    end
+  end
+
+  context "deleting records" do
+    setup do
+      @service = FactoryBot.create(:service)
+      @service.data_sets.delete_all
+      @data_set_version = FactoryBot.create(:archived_data_set, service: @service).version
+    end
+
+    should "delete data sets and associated place archives" do
+      place_archives = PlaceArchive.where(
+        service_slug: @service.slug, data_set_version: @data_set_version,
+      )
+
+      assert_equal 3, place_archives.count
+      assert_equal 1, @service.data_sets.count
+
+      @service.data_sets.last.delete_records
+
+      assert_equal 0, place_archives.count
+      assert_equal 0, @service.data_sets.count
     end
   end
 

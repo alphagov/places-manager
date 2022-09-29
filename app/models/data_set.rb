@@ -197,6 +197,11 @@ class DataSet
     set(archiving_error: "Failed to archive place information: '#{e.message}'")
   end
 
+  def delete_records
+    PlaceArchive.where(service_slug: service.slug, data_set_version: version).delete_all
+    delete
+  end
+
   def new_action(user, type, comment)
     action = Action.new(requester_id: user.id, request_type: type, comment: comment)
     actions << action
