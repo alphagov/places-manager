@@ -9,6 +9,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
     @service = FactoryBot.create(:service)
     stub_mapit_does_not_have_a_postcode("IG6 3HJ")
     Sidekiq::Testing.inline!
+    Sidekiq::Worker.clear_all
   end
 
   context "POST create" do
