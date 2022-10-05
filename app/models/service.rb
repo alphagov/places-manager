@@ -5,6 +5,7 @@ class Service
   LOCAL_AUTHORITY_DISTRICT_MATCH = "district".freeze
   LOCAL_AUTHORITY_COUNTY_MATCH = "county".freeze
   LOCAL_AUTHORITY_HIERARCHY_MATCH_TYPES = [LOCAL_AUTHORITY_DISTRICT_MATCH, LOCAL_AUTHORITY_COUNTY_MATCH].freeze
+  MAX_ARCHIVES_TO_STORE = 3
 
   field :name,                    type: String
   field :slug,                    type: String
@@ -77,7 +78,33 @@ class Service
   end
 
   def archive_places
-    obsolete_data_sets.each { |ds| ds.archive_places if ds.places.count.positive? }
+    obsolete_data_sets.each do |ds|
+      next if ds.archived?
+
+      if ds.places.count.positive?
+        ds.archive_places
+      else
+        ds.delete
+      end
+    end
+  end
+
+  def schedule_delete_historic_records
+    DeleteHistoricRecordsWorker.perform_async(id)
+  end
+
+  def delete_historic_records
+    archived_data_sets = data_sets.where(state: "archived").asc(:version)
+
+    archived_data_sets_count = archived_data_sets.count
+
+    return if archived_data_sets_count <= MAX_ARCHIVES_TO_STORE
+
+    deletable_data_sets = archived_data_sets.first(
+      archived_data_sets_count - MAX_ARCHIVES_TO_STORE,
+    )
+
+    deletable_data_sets.each(&:delete_records)
   end
 
   # returns all data sets up to but not including the data set before the active set

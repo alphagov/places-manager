@@ -9,6 +9,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
     @service = FactoryBot.create(:service)
     stub_mapit_does_not_have_a_postcode("IG6 3HJ")
     Sidekiq::Testing.inline!
+    Sidekiq::Worker.clear_all
   end
 
   context "POST create" do
@@ -109,6 +110,16 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
           service_id_to_process = job["args"].first
           assert_equal @service, Service.find(service_id_to_process)
           assert_equal 1, ArchivePlacesWorker.jobs.count
+        end
+      end
+
+      should "create a background job for deleting historic records" do
+        as_logged_in_user do
+          post :activate, params: { service_id: @service.id, id: @service.latest_data_set.id }
+          job = DeleteHistoricRecordsWorker.jobs.last
+          service_id_to_process = job["args"].first
+          assert_equal @service, Service.find(service_id_to_process)
+          assert_equal 1, DeleteHistoricRecordsWorker.jobs.count
         end
       end
     end
