@@ -40,22 +40,4 @@ module MapitApi
     end
   end
   private_class_method :area_types
-
-  class AreasByPostcodeResponse
-    def initialize(location)
-      @location = location
-    end
-
-    def payload
-      # Invalid postcodes return a nil response
-      if @location
-        {
-          code: @location.response.code,
-          areas: @location.response.to_hash.fetch("areas", {}).values,
-        }
-      else
-        { code: 404, areas: [] }
-      end
-    end
-  end
 end

@@ -13,8 +13,6 @@ Rails.application.routes.draw do
     root to: "services#index"
   end
 
-  get "/areas/:postcode", to: "areas#search", constraints: { postcode: /[\w% ]+/ }
-
   resources :places, only: :show
   root to: redirect("/admin")
 
