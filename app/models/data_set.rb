@@ -62,18 +62,34 @@ class DataSet
   end
 
   def places_for_postcode(postcode, distance = nil, limit = nil)
-    location_data = MapitApi.location_for_postcode(postcode)
-    location = Point.new(latitude: location_data.lat, longitude: location_data.lon)
-    if service.location_match_type == "local_authority"
-      snac = MapitApi.extract_snac_from_mapit_response(location_data, service.local_authority_hierarchy_match_type)
-      if snac
-        places_near(location, distance, limit, snac)
-      else
-        []
-      end
-    else
-      places_near(location, distance, limit)
+    location_data = GdsApi.locations_api.coordinates_for_postcode(postcode)
+    raise GdsApi::HTTPNotFound, "Postcode exists, but has no location info" unless location_data
+
+    location = Point.new(latitude: location_data["latitude"], longitude: location_data["longitude"])
+    return places_near(location, distance, limit) if service.location_match_type == "nearest"
+
+    # TODO: This needs to be able to take into account an exact
+    # address so that we can handle split postcodes. This will
+    # involve some frontend work though. For now, do this to
+    # match the existing (not totally correct) behaviour
+    snac = appropriate_snac_for_postcode(postcode)
+    return [] unless snac
+
+    places_near(location, distance, limit, snac)
+  end
+
+  def appropriate_snac_for_postcode(postcode)
+    local_custodian_codes = GdsApi.locations_api.local_custodian_code_for_postcode(postcode)
+    return nil if local_custodian_codes.compact.empty?
+
+    local_authorities_response = GdsApi.local_links_manager.local_authority_by_custodian_code(local_custodian_codes.first)
+    filtered_authorities = local_authorities_response.to_hash["local_authorities"].select do |la|
+      [service.local_authority_hierarchy_match_type, "unitary"].include?(la["tier"])
     end
+
+    filtered_authorities.first&.dig("snac") # there should be 0-1, return nil or first snac
+  rescue GdsApi::HTTPNotFound
+    nil
   end
 
   def duplicating?

@@ -94,13 +94,13 @@ class Place
     if postcode.blank?
       self.geocode_error = "Can't geocode without postcode"
     else
-      result = Imminence.mapit_api.location_for_postcode(postcode)
+      result = GdsApi.locations_api.coordinates_for_postcode(postcode)
       self.location = Point.new(
-        latitude: result.lat,
-        longitude: result.lon,
+        latitude: result["latitude"],
+        longitude: result["longitude"],
       )
     end
-  rescue GdsApi::HTTPClientError
+  rescue GdsApi::HTTPNotFound
     self.geocode_error = "#{postcode} not found for #{full_address}"
   rescue Encoding::CompatibilityError
     error = "Encoding error in place #{id}"

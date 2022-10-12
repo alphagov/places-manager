@@ -1,4 +1,4 @@
-require "mapit_api"
+require "gds_api/exceptions"
 
 ActionController::Renderers.add :csv do |places, _options|
   if places.first.is_a?(Place)
@@ -16,8 +16,8 @@ end
 class PlacesController < ApplicationController
   respond_to :json, :kml, :csv
 
-  rescue_from MapitApi::InvalidPostcodeError, with: :error_400
-  rescue_from MapitApi::ValidPostcodeNoLocation, with: :error_400
+  rescue_from GdsApi::HTTPBadRequest, with: :error_400_invalid_postcode
+  rescue_from GdsApi::HTTPNotFound, with: :error_400_valid_postcode
 
   def show
     # Show a set of places in relation to a service
@@ -53,9 +53,12 @@ class PlacesController < ApplicationController
 
 protected
 
-  def error_400(error)
-    error_message = error.message.gsub("MapitApi::", "").camelize(:lower)
-    render status: :bad_request, json: { error: error_message.to_s }
+  def error_400_invalid_postcode
+    render status: :bad_request, json: { error: "invalidPostcodeError" }
+  end
+
+  def error_400_valid_postcode
+    render status: :bad_request, json: { error: "validPostcodeNoLocation" }
   end
 
   def select_data_set(service, version = nil)
