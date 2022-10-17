@@ -80,6 +80,13 @@ class CsvDataTest < ActiveSupport::TestCase
         assert_equal expected, @csv_data.data
       end
 
+      should "handle UTF-8 file with BOM" do
+        @csv_data.data_file = File.open(fixture_file_path("encodings/utf-8-bom.csv"))
+        @csv_data.save!
+        expected = File.read(fixture_file_path("encodings/utf-8.csv"))
+        assert_equal expected, @csv_data.data
+      end
+
       should "handle ISO-8859-1 files" do
         @csv_data.data_file = File.open(fixture_file_path("encodings/iso-8859-1.csv"), encoding: "ascii-8bit")
         @csv_data.save!

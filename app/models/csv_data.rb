@@ -33,7 +33,7 @@ class CsvData
 private
 
   def read_as_utf8(file)
-    string = file.read.force_encoding("utf-8")
+    string = File.read(file, mode: "r:bom|utf-8")
     unless string.valid_encoding?
       # Try windows-1252 (which is a superset of iso-8859-1)
       string.force_encoding("windows-1252")
