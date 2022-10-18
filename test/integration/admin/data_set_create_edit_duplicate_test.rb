@@ -1,8 +1,8 @@
 require_relative "../../integration_test_helper"
-require "gds_api/test_helpers/mapit"
+require "gds_api/test_helpers/locations_api"
 
 class DataSetCreateEditTest < ActionDispatch::IntegrationTest
-  include GdsApi::TestHelpers::Mapit
+  include GdsApi::TestHelpers::LocationsApi
 
   context "adding a data_set to a service" do
     setup do
@@ -12,7 +12,7 @@ class DataSetCreateEditTest < ActionDispatch::IntegrationTest
     end
 
     should "create a data_set from csv and geocode postcodes" do
-      stub_mapit_has_a_postcode("IG6 3HJ", [51.59918278577261, 0.10033740198112132])
+      stub_locations_api_has_location("IG6 3HJ", [{ "latitude" => 51.59918278577261, "longitude" => 0.10033740198112132 }])
 
       visit "/admin/services/#{@service.id}"
 
@@ -34,7 +34,7 @@ class DataSetCreateEditTest < ActionDispatch::IntegrationTest
     end
 
     should "handle a CSV in a different file encoding" do
-      stub_mapit_has_a_postcode("IG6 3HJ", [51.59918278577261, 0.10033740198112132])
+      stub_locations_api_has_location("IG6 3HJ", [{ "latitude" => 51.59918278577261, "longitude" => 0.10033740198112132 }])
 
       visit "/admin/services/#{@service.id}"
 
@@ -57,7 +57,7 @@ class DataSetCreateEditTest < ActionDispatch::IntegrationTest
     end
 
     should "take override lat/lon from csv if present" do
-      stub_mapit_has_a_postcode("IG6 3HJ", [51.59918278577261, 0.10033740198112132])
+      stub_locations_api_has_location("IG6 3HJ", [{ "latitude" => 51.59918278577261, "longitude" => 0.10033740198112132 }])
 
       visit "/admin/services/#{@service.id}"
 
@@ -81,8 +81,8 @@ class DataSetCreateEditTest < ActionDispatch::IntegrationTest
     end
 
     should "use postcode if lat/lng in csv is blank" do
-      stub_mapit_has_a_postcode("MK45 4RF", [51.96876977095302, -0.4343681877525634])
-      stub_mapit_has_a_postcode("IG6 3HJ", [51.59918278577261, 0.10033740198112132])
+      stub_locations_api_has_location("MK45 4RF", [{ "latitude" => 51.96876977095302, "longitude" => -0.4343681877525634 }])
+      stub_locations_api_has_location("IG6 3HJ", [{ "latitude" => 51.59918278577261, "longitude" => 0.10033740198112132 }])
 
       visit "/admin/services/#{@service.id}"
 

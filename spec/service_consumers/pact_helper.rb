@@ -14,8 +14,6 @@ end
 
 WebMock.allow_net_connect!
 
-MAPIT_ENDPOINT = Plek.new.find("mapit")
-
 def url_encode(str)
   ERB::Util.url_encode(str)
 end
