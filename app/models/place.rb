@@ -84,12 +84,6 @@ class Place
     end
   end
 
-  def self.create_from_hash!(data_set, row, options = {})
-    place = new(parameters_from_hash(data_set, row))
-    place.save!(options)
-    place
-  end
-
   def geocode
     if override_lat_lng?
       self.location = Point.new(latitude: override_lat, longitude: override_lng)

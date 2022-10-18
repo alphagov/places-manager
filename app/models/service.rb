@@ -33,10 +33,6 @@ class Service
   after_save :schedule_csv_processing
   after_validation :promote_data_file_errors
 
-  def reconcile_place_locations
-    data_sets.first.places.map(&:reconcile_location)
-  end
-
   def data_file=(file)
     @need_csv_processing = data_sets.build(data_file: file)
   end
