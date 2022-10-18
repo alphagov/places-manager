@@ -5,7 +5,6 @@ class DataSet
   include Mongoid::Timestamps
 
   embedded_in :service
-  embeds_many :actions
 
   field :version,       type: Integer
   field :change_notes,  type: String
@@ -200,12 +199,6 @@ class DataSet
   def delete_records
     PlaceArchive.where(service_slug: service.slug, data_set_version: version).delete_all
     delete
-  end
-
-  def new_action(user, type, comment)
-    action = Action.new(requester_id: user.id, request_type: type, comment: comment)
-    actions << action
-    action
   end
 
   def has_places_with_missing_snacs?
