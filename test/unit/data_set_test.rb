@@ -46,11 +46,13 @@ class DataSetTest < ActiveSupport::TestCase
     should "do nothing and return false if the data_set hasn't completed processing" do
       previous_active_set = @service.active_data_set
 
-      ds = @service.data_sets.create!(data_file: StringIO.new("something"))
-      assert_not ds.activate
+      create_uploaded_file("anything") do |file|
+        ds = @service.data_sets.create!(data_file: file)
+        assert_not ds.activate
 
-      @service.reload
-      assert_equal previous_active_set.version, @service.active_data_set_version
+        @service.reload
+        assert_equal previous_active_set.version, @service.active_data_set_version
+      end
     end
   end
 
@@ -135,14 +137,18 @@ class DataSetTest < ActiveSupport::TestCase
       end
 
       should "be valid with a file up to 15M" do
-        @ds.data_file = StringIO.new("x" * (15.megabytes - 1))
-        assert @ds.valid?
+        create_uploaded_file("x" * (15.megabytes - 1)) do |file|
+          @ds.data_file = file
+          assert @ds.valid?
+        end
       end
 
       should "be invalid with a file over 15M" do
-        @ds.data_file = StringIO.new("x" * (15.megabytes + 1))
-        assert_not @ds.valid?
-        assert_equal 1, @ds.errors[:data_file].size
+        create_uploaded_file("x" * (15.megabytes + 1)) do |file|
+          @ds.data_file = file
+          assert_not @ds.valid?
+          assert_equal 1, @ds.errors[:data_file].size
+        end
       end
     end
 
@@ -226,8 +232,10 @@ class DataSetTest < ActiveSupport::TestCase
       end
 
       should "not be processing_complete with csv_data" do
-        ds = @service.data_sets.build(data_file: StringIO.new("anything"), processing_error: nil)
-        assert_not ds.processing_complete?
+        create_uploaded_file("anything") do |file|
+          ds = @service.data_sets.build(data_file: file, processing_error: nil)
+          assert_not ds.processing_complete?
+        end
       end
 
       should "not be processing_complete with processing_error" do
@@ -471,6 +479,20 @@ class DataSetTest < ActiveSupport::TestCase
       should "transition from 'duplicating' to 'unarchived' once finished" do
         assert_equal %w[duplicating unarchived], @dupe.previous_changes["state"]
       end
+    end
+  end
+
+  def create_uploaded_file(contents)
+    Tempfile.create do |temp_file|
+      temp_file << contents
+      temp_file.rewind
+      file = ActionDispatch::Http::UploadedFile.new({
+        filename: "new.csv",
+        type: "text/csv",
+        tempfile: temp_file,
+      })
+
+      yield file
     end
   end
 end

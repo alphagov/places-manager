@@ -13,7 +13,7 @@ class Admin::ServicesController < InheritedResources::Base
     render action: "new"
   rescue InvalidCharacterEncodingError
     flash.now[:danger] = "Could not process CSV file. Please check the format."
-    @service = Service.new(service_params)
+    @service = Service.new(service_params(correct_encoding: false))
     render action: "new"
   end
 
@@ -32,9 +32,11 @@ protected
     end
   end
 
-  def service_params
+  def service_params(correct_encoding: true)
     permitted_params = %i[name slug source_of_data location_match_type local_authority_hierarchy_match_type]
-    permitted_params << :data_file if %w[create new].include? action_name.to_s
+    if correct_encoding && (%w[create new].include? action_name.to_s)
+      permitted_params << :data_file
+    end
     params
       .require(:service)
       .permit(*permitted_params)
