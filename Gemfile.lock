@@ -271,7 +271,7 @@ GEM
       builder
       minitest (>= 5.0)
       ruby-progressbar
-    mocha (1.15.0)
+    mocha (1.16.0)
     mongo (2.15.1)
       bson (>= 4.8.2, < 5.0.0)
     mongoid (7.5.1)
