@@ -29,7 +29,7 @@ private
   # We need to handle the location fields separately from the others.
   # location is a Point object (so doesn't serialize well to CSV by default)
   # and doesn't need to be exported because it's either overridden from the
-  # override fields or set from MapIt's data using the postcode.
+  # override fields or set from Location-API's data using the postcode.
   # Also exclude the id from the CSV since it isn't needed by the import.
   def non_location_headers
     @non_location_headers ||= Place.attribute_names - %w[_id location override_lng override_lat]

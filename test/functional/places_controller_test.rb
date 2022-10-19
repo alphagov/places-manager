@@ -1,8 +1,8 @@
 require "test_helper"
-require "gds_api/test_helpers/mapit"
+require "gds_api/test_helpers/locations_api"
 
 class PlacesControllerTest < ActionController::TestCase
-  include GdsApi::TestHelpers::Mapit
+  include GdsApi::TestHelpers::LocationsApi
 
   setup do
     @service = Service.create!(
@@ -35,7 +35,7 @@ class PlacesControllerTest < ActionController::TestCase
       override_lng: "-3.174706",
     )
 
-    stub_mapit_does_not_have_a_postcode("AB11 2CD")
+    stub_locations_api_does_not_have_a_postcode("AB11 2CD")
     @utopia = Place.create!(
       service_slug: "important-government-service",
       data_set_version: @service.data_sets.last.version,
@@ -109,15 +109,15 @@ class PlacesControllerTest < ActionController::TestCase
     end
   end
 
-  test "rescue from MapitApi::ValidPostcodeNoLocation" do
+  test "rescue from GdsApi::HTTPNotFound when no locations for postcode" do
     service = Service.create!(
       name: "Number Plate Supplier",
       slug: "number-plate-supplier",
     )
-    stub_mapit_postcode_response_from_fixture("JE4 5TP")
+    stub_locations_api_has_no_location("JE4 5TP")
     get :show, params: { id: service.slug, postcode: "JE4 5TP" }, format: :json
 
     assert_response 400
-    assert_equal(JSON.parse(response.body)["error"], "validPostcodeNoLocation")
+    assert_equal("validPostcodeNoLocation", JSON.parse(response.body)["error"])
   end
 end

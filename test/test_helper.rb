@@ -8,7 +8,7 @@ require File.expand_path("../config/environment", __dir__)
 require "rails/test_help"
 require "mocha/minitest"
 require "gds_api/test_helpers/json_client_helper"
-require "gds_api/test_helpers/mapit"
+require "gds_api/test_helpers/locations_api"
 require "webmock/minitest"
 require "govuk_sidekiq/testing"
 # Poltergeist requires access to localhost.
@@ -52,10 +52,13 @@ class ActiveSupport::TestCase
     Rails.root.join("test", "fixtures", basename)
   end
 
-  def stub_mapit_postcode_response_from_fixture(postcode)
-    fixture_file = fixture_file_path("mapit_responses/#{postcode.tr(' ', '_')}.json")
+  def stub_locations_api_postcode_is_invalid(postcode)
+    stub_request(:get, "#{GdsApi::TestHelpers::LocationsApi::LOCATIONS_API_ENDPOINT}/v1/locations?postcode=#{postcode}")
+      .to_return(body: { "errors" => { "postcode" => ["This postcode is invalid"] } }.to_json, status: 400)
+  end
 
-    stub_request(:get, "#{GdsApi::TestHelpers::Mapit::MAPIT_ENDPOINT}/postcode/#{postcode.tr(' ', '+')}.json")
-      .to_return(body: File.open(fixture_file), status: 200, headers: { "Content-Type" => "application/json" })
+  def stub_locations_api_does_not_have_a_postcode(postcode)
+    stub_request(:get, "#{GdsApi::TestHelpers::LocationsApi::LOCATIONS_API_ENDPOINT}/v1/locations?postcode=#{postcode}")
+      .to_return(body: { "errors" => { "postcode" => ["No results found for given postcode"] } }.to_json, status: 404)
   end
 end

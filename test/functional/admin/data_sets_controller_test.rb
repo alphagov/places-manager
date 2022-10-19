@@ -1,13 +1,10 @@
 require "test_helper"
-require "gds_api/test_helpers/mapit"
 
 class Admin::DataSetsControllerTest < ActionController::TestCase
-  include GdsApi::TestHelpers::Mapit
-
   setup do
     clean_db
     @service = FactoryBot.create(:service)
-    stub_mapit_does_not_have_a_postcode("IG6 3HJ")
+    stub_locations_api_does_not_have_a_postcode("IG6 3HJ")
     Sidekiq::Testing.inline!
     Sidekiq::Worker.clear_all
   end

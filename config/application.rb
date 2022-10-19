@@ -33,5 +33,3 @@ module Imminence
     end
   end
 end
-
-require "imminence"

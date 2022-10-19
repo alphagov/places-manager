@@ -1,8 +1,11 @@
 require_relative "../integration_test_helper"
 require "csv"
+require "gds_api/test_helpers/local_links_manager"
+require "gds_api/test_helpers/locations_api"
 
 class PlacesAPITest < ActionDispatch::IntegrationTest
-  include GdsApi::TestHelpers::Mapit
+  include GdsApi::TestHelpers::LocalLinksManager
+  include GdsApi::TestHelpers::LocationsApi
 
   context "Requesting the full dataset" do
     setup do
@@ -114,8 +117,8 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
       end
 
       should "return places near the given postcode" do
-        stub_mapit_postcode_response_from_fixture("N11 3HD")
-        stub_mapit_postcode_response_from_fixture("WC2B 6NH")
+        stub_locations_api_has_location("N11 3HD", [{ "latitude" => 51.61727978727051, "longitude" => -0.14946662305980687 }])
+        stub_locations_api_has_location("WC2B 6NH", [{ "latitude" => 51.51695975170424, "longitude" => -0.12058693935709164 }])
 
         get "/places/#{@service.slug}.json?postcode=N11+3HD"
         data = JSON.parse(last_response.body)
@@ -141,14 +144,14 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
       end
 
       should "return a 400 for a missing postcode" do
-        stub_mapit_does_not_have_a_postcode("N11 3QQ")
+        stub_locations_api_does_not_have_a_postcode("N11 3QQ")
 
         get "/places/#{@service.slug}.json?postcode=N11+3QQ"
         assert_equal 400, last_response.status
       end
 
       should "return a 400 for an invalid postcode" do
-        stub_mapit_does_not_have_a_bad_postcode("N1")
+        stub_locations_api_does_not_have_a_postcode("N1")
 
         get "/places/#{@service.slug}.json?postcode=N1"
         assert_equal 400, last_response.status
@@ -209,7 +212,8 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
       end
 
       should "return empty array if there are no places in the corresponding authority" do
-        stub_mapit_postcode_response_from_fixture("N11 3HD")
+        stub_locations_api_has_location("N11 3HD", [{ "latitude" => 51.61727978727051, "longitude" => -0.14946662305980687, "local_custodian_code" => 1234 }])
+        stub_local_links_manager_does_not_have_a_custodian_code(1234)
 
         get "/places/#{@service.slug}.json?postcode=N11+3HD"
         data = JSON.parse(last_response.body)
@@ -217,7 +221,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
       end
 
       should "return a 400 for an invalid postcode" do
-        stub_mapit_does_not_have_a_postcode("N11 3QQ")
+        stub_locations_api_does_not_have_a_postcode("N11 3QQ")
 
         get "/places/#{@service.slug}.json?postcode=N11+3QQ"
         assert_equal 400, last_response.status
@@ -229,7 +233,8 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         end
 
         should "return the district places in order of nearness, not the county ones for postcodes in a county+district council hierarchy" do
-          stub_mapit_postcode_response_from_fixture("EX39 1QS")
+          stub_locations_api_has_location("EX39 1QS", [{ "latitude" => 51.05318361810428, "longitude" => -4.191071523498792, "local_custodian_code" => 1234 }])
+          stub_local_links_manager_has_a_district_and_county_local_authority("my-district", "my-county", district_snac: "18UK", county_snac: "18", local_custodian_code: 1234)
 
           get "/places/#{@service.slug}.json?postcode=EX39+1QS"
           data = JSON.parse(last_response.body)
@@ -239,7 +244,8 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         end
 
         should "return all the places in order of nearness for postcodes not in a county+district council hierarchy" do
-          stub_mapit_postcode_response_from_fixture("WC2B 6NH")
+          stub_locations_api_has_location("WC2B 6NH", [{ "latitude" => 51.51695975170424, "longitude" => -0.12058693935709164, "local_custodian_code" => 1234 }])
+          stub_local_links_manager_has_a_local_authority("county1", country_name: "England", snac: "00AG", local_custodian_code: 1234)
 
           get "/places/#{@service.slug}.json?postcode=WC2B+6NH"
           data = JSON.parse(last_response.body)
@@ -255,7 +261,8 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         end
 
         should "only return the county results in order of nearness, not the district ones for postcodes in a county+district council hierarchy" do
-          stub_mapit_postcode_response_from_fixture("EX39 1QS")
+          stub_locations_api_has_location("EX39 1QS", [{ "latitude" => 51.05318361810428, "longitude" => -4.191071523498792, "local_custodian_code" => 1234 }])
+          stub_local_links_manager_has_a_district_and_county_local_authority("my-district", "my-county", district_snac: "18UK", county_snac: "18", local_custodian_code: 1234)
 
           get "/places/#{@service.slug}.json?postcode=EX39+1QS"
           data = JSON.parse(last_response.body)
@@ -265,7 +272,8 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         end
 
         should "return all the places in order of nearness for postcodes not in a county+district council hierarchy" do
-          stub_mapit_postcode_response_from_fixture("WC2B 6NH")
+          stub_locations_api_has_location("WC2B 6NH", [{ "latitude" => 51.51695975170424, "longitude" => -0.12058693935709164, "local_custodian_code" => 1234 }])
+          stub_local_links_manager_has_a_local_authority("county1", country_name: "England", snac: "00AG", local_custodian_code: 1234)
 
           get "/places/#{@service.slug}.json?postcode=WC2B+6NH"
           data = JSON.parse(last_response.body)

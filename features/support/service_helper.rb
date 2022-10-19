@@ -1,4 +1,4 @@
-require "gds_api/test_helpers/mapit"
+require "gds_api/test_helpers/locations_api"
 
 module ServiceHelper
   def path_for_service(name)
@@ -36,7 +36,7 @@ module ServiceHelper
   end
 
   def create_service(params)
-    mapit_knows_nothing_about_any_postcodes
+    locations_api_knows_nothing_about_any_postcodes
 
     params = service_defaults.merge(params)
 
@@ -72,7 +72,7 @@ module ServiceHelper
   end
 
   def fill_in_form_with(params)
-    mapit_knows_nothing_about_any_postcodes
+    locations_api_knows_nothing_about_any_postcodes
 
     params = service_defaults.merge(params)
 
@@ -121,8 +121,8 @@ module ServiceHelper
     end
   end
 
-  def mapit_knows_nothing_about_any_postcodes
-    stub_request(:get, %r{#{GdsApi::TestHelpers::Mapit::MAPIT_ENDPOINT}/postcode/[^.]+\.json})
+  def locations_api_knows_nothing_about_any_postcodes
+    stub_request(:get, %r{#{GdsApi::TestHelpers::LocationsApi::LOCATIONS_API_ENDPOINT}/v1/locations})
       .to_return(body: { "code" => 404, "error" => "No Postcode matches the given query." }.to_json, status: 404)
   end
 end

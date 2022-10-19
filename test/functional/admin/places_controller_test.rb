@@ -1,12 +1,9 @@
 require "test_helper"
-require "gds_api/test_helpers/mapit"
 
 class Admin::PlacesControllerTest < ActionController::TestCase
-  include GdsApi::TestHelpers::Mapit
-
   setup do
     @service = FactoryBot.create(:service)
-    stub_mapit_does_not_have_a_postcode("FY4 1AZ")
+    stub_locations_api_does_not_have_a_postcode("FY4 1AZ")
   end
 
   context "adding a place" do
