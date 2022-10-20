@@ -1,4 +1,6 @@
 ---
 :verbose: true
 :concurrency: 2
-:logfile: ./log/sidekiq.json.log
+<% if ENV.key?('SIDEKIQ_LOGFILE') %>
+:logfile: <%= ENV['SIDEKIQ_LOGFILE'] %>
+<% end %>
