@@ -271,7 +271,7 @@ GEM
       builder
       minitest (>= 5.0)
       ruby-progressbar
-    mocha (1.16.0)
+    mocha (2.0.0)
     mongo (2.15.1)
       bson (>= 4.8.2, < 5.0.0)
     mongoid (7.5.1)
@@ -299,6 +299,12 @@ GEM
     nio4r (2.5.8)
     nokogiri (1.13.9)
       mini_portile2 (~> 2.8.0)
+      racc (~> 1.4)
+    nokogiri (1.13.9-aarch64-linux)
+      racc (~> 1.4)
+    nokogiri (1.13.9-arm64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.13.9-x86_64-linux)
       racc (~> 1.4)
     null_logger (0.0.1)
     oauth2 (2.0.9)
