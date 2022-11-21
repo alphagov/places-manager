@@ -7,4 +7,3 @@ coverage
 test/reports
 features/reports
 spec/reports/pacts
-exports/
