@@ -575,6 +575,7 @@ DEPENDENCIES
   kaminari-actionview
   kaminari-mongoid
   launchy
+  mail (~> 2.7.1)
   minitest-reporters
   mocha
   mongo (= 2.15.1)
@@ -598,4 +599,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   2.1.4
+   2.3.6

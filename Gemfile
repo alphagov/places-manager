@@ -11,6 +11,7 @@ gem "govuk_sidekiq"
 gem "inherited_resources"
 gem "kaminari-actionview"
 gem "kaminari-mongoid"
+gem "mail", "~> 2.7.1"  # TODO: remove once https://github.com/mikel/mail/issues/1489 is fixed.
 gem "mongo", "2.15.1"
 gem "mongoid"
 gem "plek"
