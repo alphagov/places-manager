@@ -38,7 +38,9 @@ class PlacesController < ApplicationController
                    end
 
     if params[:postcode].present?
-      @places = data_set.places_for_postcode(params[:postcode], max_distance, params[:limit])
+      GovukStatsd.time("data_set.places_for_postcode") do
+        @places = data_set.places_for_postcode(params[:postcode], max_distance, params[:limit])
+      end
     elsif params[:lat].present? && params[:lng].present?
       # TODO: should we handle parsing errors here?
       location = Point.new(latitude: params[:lat], longitude: params[:lng])
