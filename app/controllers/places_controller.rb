@@ -48,7 +48,9 @@ class PlacesController < ApplicationController
       @places = data_set.places
     end
 
-    respond_with(@places)
+    respond_with(@places) do |format|
+      format.json { render json: @places.map(&:api_safe_hash) }
+    end
   end
 
 protected

@@ -141,8 +141,8 @@ class Place < ApplicationRecord
     override_lat.present? && override_lng.present?
   end
 
-  def as_json(_options)
-    super(except: :id).merge(location: location_to_hash)
+  def api_safe_hash
+    serializable_hash(except: :id).merge(location: location_to_hash)
   end
 
   def location_to_hash
