@@ -181,6 +181,10 @@ class Place
     override_lat.present? && override_lng.present?
   end
 
+  def as_json(_options)
+    super(except: [:_id])
+  end
+
 private
 
   def clear_location
