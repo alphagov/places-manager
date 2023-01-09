@@ -73,6 +73,8 @@ GEM
     autoprefixer-rails (10.4.7.0)
       execjs (~> 2)
     awesome_print (1.9.2)
+    bootsnap (1.15.0)
+      msgpack (~> 1.2)
     bootstrap-kaminari-views (0.0.5)
       kaminari (>= 0.13)
       rails (>= 3.1)
@@ -277,6 +279,7 @@ GEM
       activemodel (>= 5.1, < 7.1, != 7.0.0)
       mongo (>= 2.10.5, < 3.0.0)
       ruby2_keywords (~> 0.0.5)
+    msgpack (1.6.0)
     multi_test (1.1.0)
     multi_xml (0.6.0)
     net-imap (0.3.1)
@@ -560,6 +563,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  bootsnap
   bootstrap-kaminari-views
   ci_reporter_minitest
   cucumber-rails
@@ -598,4 +602,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   2.1.4
+   2.3.6
