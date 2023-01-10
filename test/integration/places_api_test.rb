@@ -282,6 +282,36 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
           assert_equal @place3.name, data[1]["name"]
         end
       end
+
+      context "when the service is bounded to either districts or counties" do
+        setup do
+          @service.update(local_authority_hierarchy_match_type: Service::LOCAL_AUTHORITY_EITHER_MATCH)
+        end
+
+        should "return all places in order of nearness for postcodes in a county+district council hierarchy" do
+          stub_locations_api_has_location("EX39 1QS", [{ "latitude" => 51.05318361810428, "longitude" => -4.191071523498792, "local_custodian_code" => 1234 }])
+          stub_local_links_manager_has_a_district_and_county_local_authority("my-district", "my-county", district_snac: "18UK", county_snac: "18", local_custodian_code: 1234)
+
+          get "/places/#{@service.slug}.json?postcode=EX39+1QS"
+          data = JSON.parse(last_response.body)
+          assert_equal 4, data.length
+          assert_equal @place6.name, data[0]["name"]
+          assert_equal @place2.name, data[1]["name"]
+          assert_equal @place5.name, data[2]["name"]
+          assert_equal @place1.name, data[3]["name"]
+        end
+
+        should "return all places in order of nearness for postcodes not in a county+district council hierarchy" do
+          stub_locations_api_has_location("WC2B 6NH", [{ "latitude" => 51.51695975170424, "longitude" => -0.12058693935709164, "local_custodian_code" => 1234 }])
+          stub_local_links_manager_has_a_local_authority("county1", country_name: "England", snac: "00AG", local_custodian_code: 1234)
+
+          get "/places/#{@service.slug}.json?postcode=WC2B+6NH"
+          data = JSON.parse(last_response.body)
+          assert_equal 2, data.length
+          assert_equal @place4.name, data[0]["name"]
+          assert_equal @place3.name, data[1]["name"]
+        end
+      end
     end
   end
 end

@@ -43,10 +43,10 @@ class DataSet < ApplicationRecord
   #
   # Returns:
   #   an array of Place objects
-  def places_near(location, distance = nil, limit = nil, snac = nil)
+  def places_near(location, distance = nil, limit = nil, snac = [])
     loc_string = "'SRID=4326;POINT(#{location.longitude} #{location.latitude})'::geometry"
     query = places
-    query = query.where(snac: snac) if snac
+    query = query.where(snac: snac) if snac.any?
     query = query.limit(limit) if limit
     query = query.where(Place.arel_table[:location].st_distance(location).lt(distance.in(:meters))) if distance
     query = query.reorder(Arel.sql("location <-> #{loc_string}"))
@@ -65,23 +65,23 @@ class DataSet < ApplicationRecord
     # involve some frontend work though. For now, do this to
     # match the existing (not totally correct) behaviour
     snac = appropriate_snac_for_postcode(postcode)
-    return [] unless snac
+    return [] unless snac.any?
 
     places_near(location, distance, limit, snac)
   end
 
   def appropriate_snac_for_postcode(postcode)
     local_custodian_codes = GdsApi.locations_api.local_custodian_code_for_postcode(postcode)
-    return nil if local_custodian_codes.compact.empty?
+    return [] if local_custodian_codes.compact.empty?
 
     local_authorities_response = GdsApi.local_links_manager.local_authority_by_custodian_code(local_custodian_codes.first)
     filtered_authorities = local_authorities_response.to_hash["local_authorities"].select do |la|
-      [service.local_authority_hierarchy_match_type, "unitary"].include?(la["tier"])
+      service.local_authority_hierarchy_match_type == Service::LOCAL_AUTHORITY_EITHER_MATCH || [service.local_authority_hierarchy_match_type, "unitary"].include?(la["tier"])
     end
 
-    filtered_authorities.first&.dig("snac") # there should be 0-1, return nil or first snac
+    filtered_authorities.map { |a| a["snac"] }
   rescue GdsApi::HTTPNotFound
-    nil
+    []
   end
 
   def duplicating?
