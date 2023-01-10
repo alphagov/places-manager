@@ -137,7 +137,7 @@ Then(/^the places should be identical between the datasets in the "(.*?)" servic
   place1 = data_set1.places.first
   place2 = data_set2.places.first
 
-  expected_identical_attributes = Place.attribute_names - %w[_id data_set_version]
+  expected_identical_attributes = Place.attribute_names - %w[id data_set_version created_at updated_at]
   expected_identical_attributes.each do |attribute|
     expect(place1.send(attribute.to_sym)).to eq(place2.send(attribute.to_sym))
   end

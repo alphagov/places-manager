@@ -4,7 +4,7 @@ ENV["RAILS_ENV"] = "test"
 require "pact/provider/rspec"
 require "webmock/rspec"
 require "factory_bot_rails"
-require "database_cleaner-mongoid"
+require "database_cleaner-active_record"
 
 require ::File.expand_path("../../config/environment", __dir__)
 
@@ -16,6 +16,9 @@ Pact.configure do |config|
 end
 
 WebMock.allow_net_connect!
+
+DatabaseCleaner.allow_remote_database_url = true
+DatabaseCleaner[:active_record].strategy = [:truncation, { except: %w[spatial_ref_sys] }]
 
 def url_encode(str)
   ERB::Util.url_encode(str)
@@ -37,7 +40,7 @@ end
 
 Pact.provider_states_for "GDS API Adapters" do
   set_up do
-    DatabaseCleaner.clean_with :deletion
+    DatabaseCleaner.clean
     GDS::SSO.test_user = create(:user, permissions: %w[signin])
   end
 

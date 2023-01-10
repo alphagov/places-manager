@@ -1,45 +1,46 @@
 {
   "ignored_warnings": [
     {
-      "warning_type": "Cross-Site Request Forgery",
-      "warning_code": 86,
-      "fingerprint": "9e450b4277235e592c083dc95e4902a07537932fa4f1bfb631d7b2438066564d",
-      "check_name": "ForgerySetting",
-      "message": "protect_from_forgery should be configured with 'with: :exception'",
-      "file": "app/controllers/application_controller.rb",
-      "line": 4,
-      "link": "https://brakemanscanner.org/docs/warning_types/cross-site_request_forgery/",
-      "code": "protect_from_forgery(:with => :null_session)",
-      "render_path": null,
-      "location": {
-        "type": "controller",
-        "controller": "ApplicationController"
-      },
-      "user_input": null,
-      "confidence": "Medium",
-      "note": "This an API only so this is fine. We can't use the ActionController::API base class because we use various methods from the Base controller."
-    },
-    {
-      "warning_type": "Command Injection",
-      "warning_code": 14,
-      "fingerprint": "a2a7ef857571eb90720d57971c073bfeafb54517df75349d04ab2ef337c4a6af",
-      "check_name": "Execute",
-      "message": "Possible command injection",
-      "file": "lib/imminence/file_verifier.rb",
-      "line": 22,
-      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
-      "code": "`file --brief --mime-type #{filename.shellescape}`",
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "9b6c6ff75d840f01652e780a0f1f6e5605e42c01ec8446941eca5d1d426739b1",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/data_set.rb",
+      "line": 53,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Arel.sql(\"location <-> #{\"'SRID=4326;POINT(#{location.longitude} #{location.latitude})'::geometry\"}\")",
       "render_path": null,
       "location": {
         "type": "method",
-        "class": "Imminence::FileVerifier",
-        "method": "mime_type"
+        "class": "DataSet",
+        "method": "places_near"
       },
-      "user_input": "filename.shellescape",
+      "user_input": "location.longitude",
       "confidence": "Medium",
-      "note": "We use shellescape to make sure this is safe."
+      "note": "We can't use ? in Arel.sql, and sanitizing this string breaks the calls later on. But the location lat and lon always come from an RGeo object, so guaranteed to be numbers."
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "fcfaca973c8d0a57bde584908afb248c1b9717b7f32c1e874e442ebaeae069e6",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/data_set.rb",
+      "line": 54,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Arel.sql(\"places.*, ST_Distance(location, #{\"'SRID=4326;POINT(#{location.longitude} #{location.latitude})'::geometry\"}) as distance\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "DataSet",
+        "method": "places_near"
+      },
+      "user_input": "location.longitude",
+      "confidence": "Medium",
+      "note": "We can't use ? in Arel.sql, and sanitizing this string breaks the calls later on. But the location lat and lon always come from an RGeo object, so guaranteed to be numbers."
     }
   ],
-  "updated": "2018-08-02 12:48:48 +0100",
-  "brakeman_version": "4.3.1"
+  "updated": "2022-08-16 11:27:58 +0000",
+  "brakeman_version": "5.2.2"
 }

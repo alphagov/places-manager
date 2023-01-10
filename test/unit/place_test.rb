@@ -79,7 +79,7 @@ class PlaceTest < ActiveSupport::TestCase
     )
 
     service.data_sets.create! version: 3
-    place.location = Point.new(latitude: 51.517356, longitude: -0.120742)
+    place.location = "POINT(-0.120742 51.517356)"
     place.geocode_error = "Error message"
 
     assert place.valid?
@@ -129,7 +129,7 @@ class PlaceTest < ActiveSupport::TestCase
         name: "Aviation House",
         source_address: "Blah",
         postcode: "WC2B 6NH",
-        location: Point.new(latitude: 51.501, longitude: -0.123),
+        location: "POINT(-0.123 51.501)",
         service_slug: @service.slug,
         data_set_version: 2,
       )
@@ -169,14 +169,19 @@ class PlaceTest < ActiveSupport::TestCase
       @place = FactoryBot.create(:place, override_lat: 53.105491, override_lng: -2.017493)
     end
 
-    should "return nil when no geo_near_distance available" do
+    should "return nil when no distance available" do
       assert_nil @place.dis
     end
 
-    should "return a distance object for the geo_near_distance if available" do
-      p = Place.geo_near([-2.01, 53.1]).first
+    should "return a distance object for the distance if available" do
+      location = RGeo::Geographic.spherical_factory.point(-2.01, 53.1)
+      loc_string = "'SRID=4326;POINT(#{location.longitude} #{location.latitude})'::geometry"
 
-      assert_in_epsilon 0.642566, p.dis.in(:miles), 0.001
+      query = Place.all.reorder(Arel.sql("location <-> #{loc_string}"))
+      query = query.select(Arel.sql("places.*, ST_Distance(location, #{loc_string}) as distance"))
+      p = query.first
+
+      assert_in_epsilon 0.491351, p.dis.in(:miles), 0.001
     end
   end
 end

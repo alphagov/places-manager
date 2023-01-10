@@ -8,42 +8,17 @@ class CannotEditPlaceDetailsUnlessNewestInactiveDataset < ActiveModel::Validator
   end
 end
 
-class Place
-  include Mongoid::Document
-
+class Place < ApplicationRecord
   # Match documents with either no geocode error or a null value. Changed so
   # that anything without a location (or with a null location) is either
   # matched by `needs_geocoding` or `with_geocoding_errors`.
   scope :needs_geocoding, -> { where(location: nil, geocode_error: nil) }
 
-  # We use "not null" here instead of "exists", because it works with the index
-  scope :with_geocoding_errors, -> { where(:geocode_error.ne => nil) }
+  scope :with_geocoding_errors, -> { where.not(geocode_error: nil) }
   scope :geocoded, -> { where(:location.with_size => 2) }
-  default_scope -> { order_by(%i[name asc]) }
+  default_scope -> { order(name: :asc) }
 
   scope :missing_snacs, -> { where(snac: nil) }
-
-  field :service_slug, type: String
-  field :data_set_version, type: Integer
-
-  field :name,           type: String
-  field :source_address, type: String
-  field :address1,       type: String
-  field :address2,       type: String
-  field :town,           type: String
-  field :postcode,       type: String
-  field :access_notes,   type: String
-  field :general_notes,  type: String
-  field :url,            type: String
-  field :email,          type: String
-  field :phone,          type: String
-  field :fax,            type: String
-  field :text_phone,     type: String
-  field :location,       type: Point
-  field :override_lat,   type: Float
-  field :override_lng,   type: Float
-  field :geocode_error,  type: String
-  field :snac,           type: String
 
   validates :service_slug, presence: true
   validates :data_set_version, presence: true
@@ -54,19 +29,6 @@ class Place
   validate :has_both_lat_lng_overrides
   validates_with CannotEditPlaceDetailsUnlessNewestInactiveDataset, on: :update
 
-  index({ location: "2d", snac: 1, service_slug: 1, data_set_version: 1 }, background: true)
-  index(service_slug: 1, data_set_version: 1)
-
-  # Index to speed up the `needs_geocoding` and `with_geocoding_errors` scopes
-  index(
-    service_slug: 1,
-    data_set_version: 1,
-    geocode_error: 1,
-    location: 1,
-  )
-
-  index({ name: 1 }, background: true)
-
   before_validation :build_source_address
   before_validation :clear_location, if: :postcode_changed?, on: :update
   before_save :geocode
@@ -76,17 +38,18 @@ class Place
     service.data_sets.find_by(version: data_set_version) if service
   end
 
-  # Convert mongoid's geo_near_distance attribute to a Distance object
-  # so that we can easily convert it to other units.
+  # When the place is created from a PostGIS distance search, it'll have an
+  # additional 'distance' attribute in meters from the search point. Convert
+  # to a Distance object so that we can easily convert it to other units.
   def dis
-    if attributes["geo_near_distance"]
-      @dis ||= Distance.new(attributes["geo_near_distance"], :degrees)
+    if attributes["distance"]
+      @dis ||= Distance.new(attributes["distance"], :meters)
     end
   end
 
   def geocode
     if override_lat_lng?
-      self.location = Point.new(latitude: override_lat, longitude: override_lng)
+      self.location = "POINT (#{override_lng} #{override_lat})"
     end
 
     return if location.present?
@@ -95,10 +58,7 @@ class Place
       self.geocode_error = "Can't geocode without postcode"
     else
       result = GdsApi.locations_api.coordinates_for_postcode(postcode)
-      self.location = Point.new(
-        latitude: result["latitude"],
-        longitude: result["longitude"],
-      )
+      self.location = "POINT (#{result['longitude']} #{result['latitude']})"
     end
   rescue GdsApi::HTTPNotFound
     self.geocode_error = "#{postcode} not found for #{full_address}"
@@ -181,8 +141,14 @@ class Place
     override_lat.present? && override_lng.present?
   end
 
-  def as_json(_options)
-    super(except: [:_id])
+  def api_safe_hash
+    serializable_hash(except: :id).merge(location: location_to_hash)
+  end
+
+  def location_to_hash
+    return nil if location.nil?
+
+    { latitude: location.latitude, longitude: location.longitude }
   end
 
 private

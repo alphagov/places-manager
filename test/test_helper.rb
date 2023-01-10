@@ -1,7 +1,7 @@
 require "simplecov"
 SimpleCov.start "rails"
 
-require "database_cleaner-mongoid"
+require "database_cleaner-active_record"
 
 ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../config/environment", __dir__)
@@ -14,6 +14,9 @@ require "govuk_sidekiq/testing"
 # Poltergeist requires access to localhost.
 WebMock.disable_net_connect!(allow_localhost: true)
 
+DatabaseCleaner.allow_remote_database_url = true
+DatabaseCleaner[:active_record].strategy = [:truncation, { except: %w[spatial_ref_sys] }]
+
 require "minitest/reporters"
 reporter_options = { color: true }
 Minitest::Reporters.use! [Minitest::Reporters::DefaultReporter.new(reporter_options)]
@@ -24,10 +27,17 @@ class ActiveSupport::TestCase
 
   # Add more helper methods to be used by all tests here...
 
+  setup do
+    DatabaseCleaner.clean
+  end
+
+  teardown do
+    DatabaseCleaner.clean
+  end
+
   def clean_db
     DatabaseCleaner.clean
   end
-  set_callback :teardown, :before, :clean_db
 
   def reset_sidekiq_testing
     Sidekiq::Testing.fake!

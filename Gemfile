@@ -2,6 +2,7 @@ source "https://rubygems.org"
 
 gem "rails", "7.0.4"
 
+gem "activerecord-postgis-adapter"
 gem "bootsnap", require: false
 gem "bootstrap-kaminari-views"
 gem "gds-api-adapters"
@@ -10,21 +11,19 @@ gem "govuk_admin_template"
 gem "govuk_app_config"
 gem "govuk_sidekiq"
 gem "inherited_resources"
-gem "kaminari-actionview"
-gem "kaminari-mongoid"
-gem "mongo", "2.15.1"
-gem "mongoid"
+gem "kaminari"
+gem "pg"
 gem "plek"
 gem "responders"
 gem "sass-rails"
 gem "sentry-sidekiq"
 gem "sprockets-rails"
 gem "state_machines"
-gem "state_machines-mongoid"
+gem "state_machines-activerecord"
 gem "uglifier"
 
 group :development, :test do
-  gem "database_cleaner-mongoid"
+  gem "database_cleaner-active_record"
   gem "pact", require: false
   gem "pact_broker-client"
   gem "pry-byebug"

@@ -54,6 +54,9 @@ GEM
     activerecord (7.0.4)
       activemodel (= 7.0.4)
       activesupport (= 7.0.4)
+    activerecord-postgis-adapter (8.0.1)
+      activerecord (~> 7.0.0)
+      rgeo-activerecord (~> 7.0.0)
     activestorage (7.0.4)
       actionpack (= 7.0.4)
       activejob (= 7.0.4)
@@ -81,8 +84,7 @@ GEM
     bootstrap-sass (3.4.1)
       autoprefixer-rails (>= 5.2.1)
       sassc (>= 2.0.0)
-    brakeman (5.2.2)
-    bson (4.15.0)
+    brakeman (5.3.1)
     builder (3.2.4)
     byebug (11.1.3)
     capybara (3.38.0)
@@ -94,7 +96,6 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
-    childprocess (4.1.0)
     ci_reporter (2.0.0)
       builder (>= 2.1.2)
     ci_reporter_minitest (1.0.0)
@@ -138,10 +139,10 @@ GEM
       rexml (~> 3.0)
       webrick (~> 1.7)
     cucumber-tag-expressions (4.1.0)
-    database_cleaner-core (2.0.1)
-    database_cleaner-mongoid (2.0.1)
+    database_cleaner-active_record (2.0.1)
+      activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
-      mongoid
+    database_cleaner-core (2.0.1)
     diff-lcs (1.5.0)
     dig_rb (1.0.1)
     docile (1.4.0)
@@ -242,9 +243,6 @@ GEM
       activerecord
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
-    kaminari-mongoid (1.0.2)
-      kaminari-core (~> 1.0)
-      mongoid
     kgio (2.11.4)
     launchy (2.5.2)
       addressable (~> 2.8)
@@ -273,12 +271,6 @@ GEM
       ruby-progressbar
     mocha (2.0.2)
       ruby2_keywords (>= 0.0.5)
-    mongo (2.15.1)
-      bson (>= 4.8.2, < 5.0.0)
-    mongoid (7.5.2)
-      activemodel (>= 5.1, < 7.1, != 7.0.0)
-      mongo (>= 2.10.5, < 3.0.0)
-      ruby2_keywords (~> 0.0.5)
     msgpack (1.6.0)
     multi_test (1.1.0)
     multi_xml (0.6.0)
@@ -350,6 +342,7 @@ GEM
     parser (3.1.2.1)
       ast (~> 2.4.1)
     parslet (2.0.0)
+    pg (1.4.4)
     plek (5.0.0)
     prometheus_exporter (2.0.6)
       webrick
@@ -404,8 +397,8 @@ GEM
     raindrops (0.20.0)
     rake (13.0.6)
     redis (4.5.1)
-    redis-namespace (1.8.2)
-      redis (>= 3.0.4)
+    redis-namespace (1.9.0)
+      redis (>= 4)
     regexp_parser (2.6.1)
     request_store (1.5.1)
       rack (>= 1.4)
@@ -418,6 +411,10 @@ GEM
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
     rexml (3.2.5)
+    rgeo (2.4.0)
+    rgeo-activerecord (7.0.1)
+      activerecord (>= 5.0)
+      rgeo (>= 1.0.0)
     rspec (3.11.0)
       rspec-core (~> 3.11.0)
       rspec-expectations (~> 3.11.0)
@@ -470,10 +467,10 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    selenium-webdriver (4.1.0)
-      childprocess (>= 0.5, < 5.0)
+    selenium-webdriver (4.7.1)
       rexml (~> 3.2, >= 3.2.5)
-      rubyzip (>= 1.2.2)
+      rubyzip (>= 1.2.2, < 3.0)
+      websocket (~> 1.0)
     sentry-rails (5.7.0)
       railties (>= 5.0)
       sentry-ruby (~> 5.7.0)
@@ -513,9 +510,9 @@ GEM
     state_machines-activemodel (0.8.0)
       activemodel (>= 5.1)
       state_machines (>= 0.5.0)
-    state_machines-mongoid (0.2.0)
-      mongoid (>= 4.0.0)
-      state_machines-activemodel (>= 0.5.0)
+    state_machines-activerecord (0.8.0)
+      activerecord (>= 5.1)
+      state_machines-activemodel (>= 0.8.0)
     statsd-ruby (1.5.0)
     sync (0.5.0)
     sys-uname (1.2.2)
@@ -549,6 +546,7 @@ GEM
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
     webrick (1.7.0)
+    websocket (1.2.9)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -563,11 +561,12 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  activerecord-postgis-adapter
   bootsnap
   bootstrap-kaminari-views
   ci_reporter_minitest
   cucumber-rails
-  database_cleaner-mongoid
+  database_cleaner-active_record
   factory_bot_rails
   gds-api-adapters
   gds-sso
@@ -576,15 +575,13 @@ DEPENDENCIES
   govuk_sidekiq
   govuk_test
   inherited_resources
-  kaminari-actionview
-  kaminari-mongoid
+  kaminari
   launchy
   minitest-reporters
   mocha
-  mongo (= 2.15.1)
-  mongoid
   pact
   pact_broker-client
+  pg
   plek
   pry-byebug
   rails (= 7.0.4)
@@ -597,9 +594,9 @@ DEPENDENCIES
   simplecov
   sprockets-rails
   state_machines
-  state_machines-mongoid
+  state_machines-activerecord
   uglifier
   webmock
 
 BUNDLED WITH
-   2.3.6
+   2.3.24

@@ -20,7 +20,7 @@ module ServiceHelper
 
   def path_for_data_set_version_for_service(name, version)
     service = Service.where(name: name).first
-    data_set = service.data_sets(version: version).first
+    data_set = service.data_sets.where(version: version).first
     admin_service_data_set_path(service, data_set)
   end
 
