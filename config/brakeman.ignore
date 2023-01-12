@@ -3,13 +3,13 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
-      "fingerprint": "9b6c6ff75d840f01652e780a0f1f6e5605e42c01ec8446941eca5d1d426739b1",
+      "fingerprint": "098159f3aefaa22e3024512f06ddaff4a80bf8e4532cfa2a80db758eacf1b13c",
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/data_set.rb",
-      "line": 53,
+      "line": 52,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Arel.sql(\"location <-> #{\"'SRID=4326;POINT(#{location.longitude} #{location.latitude})'::geometry\"}\")",
+      "code": "Arel.sql(\"location <-> #{\"'SRID=4326;POINT(#{location.longitude} #{location.latitude})'::geometry\"}, RANDOM()\")",
       "render_path": null,
       "location": {
         "type": "method",
@@ -18,7 +18,10 @@
       },
       "user_input": "location.longitude",
       "confidence": "Medium",
-      "note": "We can't use ? in Arel.sql, and sanitizing this string breaks the calls later on. But the location lat and lon always come from an RGeo object, so guaranteed to be numbers."
+      "cwe_id": [
+        89
+      ],
+      "note": "We can't use ? in Arel.sql, and this is pre-parsed numbers from our database, so unlikely to be a risk"
     },
     {
       "warning_type": "SQL Injection",
@@ -27,7 +30,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/data_set.rb",
-      "line": 54,
+      "line": 53,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "Arel.sql(\"places.*, ST_Distance(location, #{\"'SRID=4326;POINT(#{location.longitude} #{location.latitude})'::geometry\"}) as distance\")",
       "render_path": null,
@@ -38,9 +41,12 @@
       },
       "user_input": "location.longitude",
       "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
       "note": "We can't use ? in Arel.sql, and sanitizing this string breaks the calls later on. But the location lat and lon always come from an RGeo object, so guaranteed to be numbers."
     }
   ],
-  "updated": "2022-08-16 11:27:58 +0000",
-  "brakeman_version": "5.2.2"
+  "updated": "2023-05-24 14:58:21 +0000",
+  "brakeman_version": "5.3.1"
 }

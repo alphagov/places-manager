@@ -403,6 +403,45 @@ class DataSetTest < ActiveSupport::TestCase
       end
     end
 
+    context "for a 'nearest' service with two items in the same place" do
+      setup do
+        @service = FactoryBot.create(:service)
+        @data_set = @service.latest_data_set
+        @buckingham_palace = Place.create!(
+          service_slug: @service.slug,
+          data_set_version: @data_set.version,
+          postcode: "SW1A 1AA",
+          source_address: "Buckingham Palace, Westminster",
+          override_lat: "51.501009611553926",
+          override_lng: "-0.141587067110009",
+          name: "Buckingham Palace",
+        )
+        @buckingham_palace2 = Place.create!(
+          service_slug: @service.slug,
+          data_set_version: @data_set.version,
+          postcode: "SW1A 1AA",
+          source_address: "Buckingham Palace, Westminster",
+          override_lat: "51.501009611553926",
+          override_lng: "-0.141587067110009",
+          name: "Buckingham Palace 2",
+        )
+      end
+
+      should "return the places in original order when the SQL seed is set to 0.5" do
+        ActiveRecord::Base.connection.execute("SELECT SETSEED(0.5);")
+        stub_locations_api_has_location("WC2B 6NH", [{ "latitude" => 51.51695975170424, "longitude" => -0.12058693935709164 }])
+        place_names = @data_set.places_for_postcode("WC2B 6NH").map(&:name)
+        assert_equal ["Buckingham Palace", "Buckingham Palace 2"], place_names
+      end
+
+      should "return the places in reverse order when the SQL seed is set to 0.1" do
+        ActiveRecord::Base.connection.execute("SELECT SETSEED(0.1);")
+        stub_locations_api_has_location("WC2B 6NH", [{ "latitude" => 51.51695975170424, "longitude" => -0.12058693935709164 }])
+        place_names = @data_set.places_for_postcode("WC2B 6NH").map(&:name)
+        assert_equal ["Buckingham Palace 2", "Buckingham Palace"], place_names
+      end
+    end
+
     context "for a 'local_authority' service" do
       setup do
         @service = FactoryBot.create(:service, location_match_type: "local_authority")
