@@ -1,6 +1,3 @@
 ---
 :verbose: true
 :concurrency: 2
-<% if ENV.key?('SIDEKIQ_LOGFILE') %>
-:logfile: <%= ENV['SIDEKIQ_LOGFILE'] %>
-<% end %>
