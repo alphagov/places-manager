@@ -2,25 +2,25 @@ require "gds_api/test_helpers/locations_api"
 
 module ServiceHelper
   def path_for_service(name)
-    service = Service.where(name: name).first
+    service = Service.where(name:).first
     admin_service_path(service)
   end
 
   def path_for_latest_data_set_for_service(name)
-    service = Service.where(name: name).first
+    service = Service.where(name:).first
     data_set = service.latest_data_set
     admin_service_data_set_path(service, data_set)
   end
 
   def path_for_active_data_set_for_service(name)
-    service = Service.where(name: name).first
+    service = Service.where(name:).first
     data_set = service.active_data_set
     admin_service_data_set_path(service, data_set)
   end
 
   def path_for_data_set_version_for_service(name, version)
-    service = Service.where(name: name).first
-    data_set = service.data_sets.where(version: version).first
+    service = Service.where(name:).first
+    data_set = service.data_sets.where(version:).first
     admin_service_data_set_path(service, data_set)
   end
 
