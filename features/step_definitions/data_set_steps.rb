@@ -119,7 +119,7 @@ Then(/^there should still just be one data set$/) do
 end
 
 Then(/^the "(.*?)" service should have two data sets$/) do |name|
-  expect(Service.where(name: name).first.data_sets.count).to eq(2) # assert_equal 2, Service.where(name: name).first.data_sets.count
+  expect(Service.where(name:).first.data_sets.count).to eq(2) # assert_equal 2, Service.where(name: name).first.data_sets.count
 end
 
 Then(/^there should be a place named "(.*?)"$/) do |name|
@@ -129,7 +129,7 @@ Then(/^there should be a place named "(.*?)"$/) do |name|
 end
 
 Then(/^the places should be identical between the datasets in the "(.*?)" service$/) do |name|
-  service = Service.where(name: name).first
+  service = Service.where(name:).first
   data_set1 = service.data_sets.first
   data_set2 = service.data_sets.last
   [data_set1, data_set2].each { |data_set| expect(data_set.places.count).to eq(1) }

@@ -1,5 +1,5 @@
 Given(/^I have previously created the "(.*?)" service$/) do |name|
-  params = { name: name, slug: name.parameterize, csv_path: csv_path_for_data(name) }
+  params = { name:, slug: name.parameterize, csv_path: csv_path_for_data(name) }
 
   @service = create_service(params)
 end
@@ -34,7 +34,7 @@ end
 
 When(/^I fill in the form to create the "(.*?)" service with a bad CSV$/) do |name|
   params = {
-    name: name,
+    name:,
     slug: name.parameterize,
     csv_path: Rails.root.join("features/support/data/bad.csv"),
   }
@@ -44,7 +44,7 @@ end
 
 When(/^I fill in the form to create the "(.*?)" service with a PNG claiming to be a CSV$/) do |name|
   params = {
-    name: name,
+    name:,
     slug: name.parameterize,
     csv_path: Rails.root.join("features/support/data/rails.csv"),
   }
@@ -54,7 +54,7 @@ end
 
 When(/^I fill in the form to create the "(.*?)" service with a PNG$/) do |name|
   params = {
-    name: name,
+    name:,
     slug: name.parameterize,
     csv_path: Rails.root.join("features/support/data/rails.png"),
   }
@@ -80,7 +80,7 @@ Then(/^I should be on the page for the "(.*?)" service$/) do |name|
 end
 
 Then(/^there should not be a "(.*?)" service$/) do |name|
-  expect(Service.where(name: name).count).to eq(0)
+  expect(Service.where(name:).count).to eq(0)
 end
 
 Then(/^I should see that the current service has (\d+) missing SNAC codes$/) do |count|

@@ -46,7 +46,7 @@ class DataSet < ApplicationRecord
   def places_near(location, distance = nil, limit = nil, snac = nil)
     loc_string = "'SRID=4326;POINT(#{location.longitude} #{location.latitude})'::geometry"
     query = places
-    query = query.where(snac: snac) if snac
+    query = query.where(snac:) if snac
     query = query.limit(limit) if limit
     query = query.where(Place.arel_table[:location].st_distance(location).lt(distance.in(:meters))) if distance
     query = query.reorder(Arel.sql("location <-> #{loc_string}"))
