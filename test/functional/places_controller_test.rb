@@ -48,7 +48,11 @@ class PlacesControllerTest < ActionController::TestCase
     as_logged_in_user do
       get :show, params: { id: @service.slug }, format: :json
       assert_response :success
-      assert_equal 4, JSON.parse(response.body).size
+      data = JSON.parse(response.body)
+
+      assert_equal "ok", data["status"]
+      assert_equal "places", data["contents"]
+      assert_equal 4, data["places"].size
     end
   end
 
@@ -58,7 +62,7 @@ class PlacesControllerTest < ActionController::TestCase
       assert_response :success
       json_data = JSON.parse(response.body)
 
-      place = json_data.find { |p| p["source_address"] == "Aviation House" }
+      place = json_data["places"].find { |p| p["source_address"] == "Aviation House" }
       assert_equal "WC2B 6SE", place["postcode"]
       location_hash = {
         "latitude" => 51.516960431,
@@ -74,7 +78,7 @@ class PlacesControllerTest < ActionController::TestCase
       assert_response :success
       json_data = JSON.parse(response.body)
 
-      place = json_data.find { |p| p["source_address"] == "Nowhere" }
+      place = json_data["places"].find { |p| p["source_address"] == "Nowhere" }
       assert_nil place["location"]
     end
   end

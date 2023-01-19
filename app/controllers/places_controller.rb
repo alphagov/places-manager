@@ -23,10 +23,18 @@ class PlacesController < ApplicationController
     # Show a set of places in relation to a service
     # Parameters:
     #   id: the slug for the service
+    #   postcode: postcode to find from
     #   lat, lng: latitude/longitude in decimal degrees to limit the set of
     #             places displayed
+    #   local_authority_slug: local authority slug to search within (only valid
+    #                         for local_authority type searches, used in
+    #                         split-postcode disambiguation)
     #   max_distance: maximum distance in miles from the lat/long given
     #   limit: maximum number of places to show
+    #
+    #   If you specify postcode, it takes precedence over lat/lng.
+    #   You should only specify local_authority_slug if you also specify postcode
+    #
     @service = Service.where(slug: params[:id]).first
     head 404 && return if @service.nil?
 
@@ -38,7 +46,7 @@ class PlacesController < ApplicationController
                    end
 
     if params[:postcode].present?
-      @places = data_set.places_for_postcode(params[:postcode], max_distance, params[:limit])
+      @places = data_set.places_for_postcode(params[:postcode], max_distance, params[:limit], params[:local_authority_slug])
     elsif params[:lat].present? && params[:lng].present?
       # TODO: should we handle parsing errors here?
       location = RGeo::Geographic.spherical_factory.point(params[:lng], params[:lat])
@@ -49,7 +57,15 @@ class PlacesController < ApplicationController
     end
 
     respond_with(@places) do |format|
-      format.json { render json: @places.map(&:api_safe_hash) }
+      format.json do
+        render json: { status: "ok", contents: "places", places: @places.map(&:api_safe_hash) }
+      end
+    end
+  rescue AmbiguousPostcodeError => e
+    respond_to do |format|
+      format.json do
+        render json: { status: "address-information-required", contents: "addresses", addresses: e.addresses }
+      end
     end
   end
 

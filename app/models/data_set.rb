@@ -53,33 +53,59 @@ class DataSet < ApplicationRecord
     query.select(Arel.sql("places.*, ST_Distance(location, #{loc_string}) as distance"))
   end
 
-  def places_for_postcode(postcode, distance = nil, limit = nil)
+  def places_for_postcode(postcode, distance = nil, limit = nil, local_authority_slug = nil)
     location_data = GdsApi.locations_api.coordinates_for_postcode(postcode)
     raise GdsApi::HTTPNotFound, "Postcode exists, but has no location info" unless location_data
 
     location = RGeo::Geographic.spherical_factory.point(location_data["longitude"], location_data["latitude"])
     return places_near(location, distance, limit) if service.location_match_type == "nearest"
 
-    # TODO: This needs to be able to take into account an exact
-    # address so that we can handle split postcodes. This will
-    # involve some frontend work though. For now, do this to
-    # match the existing (not totally correct) behaviour
-    snac = appropriate_snac_for_postcode(postcode)
+    snac = if local_authority_slug
+             snac_for_local_authority_slug(local_authority_slug)
+           else
+             appropriate_snac_for_postcode(postcode)
+           end
     return [] unless snac
 
     places_near(location, distance, limit, snac)
+  end
+
+  def snac_for_local_authority_slug(local_authority_slug)
+    local_authorities_response = GdsApi.local_links_manager.local_authority(local_authority_slug)
+
+    local_authority = local_authorities_response.to_hash["local_authorities"].find do |la|
+      [service.local_authority_hierarchy_match_type, "unitary"].include?(la["tier"])
+    end
+
+    local_authority&.dig("snac")
+  end
+
+  def appropriate_authority_for_local_custodian_code(local_custodian_code)
+    local_authorities_response = GdsApi.local_links_manager.local_authority_by_custodian_code(local_custodian_code)
+    local_authorities_response.to_hash["local_authorities"].find do |la|
+      [service.local_authority_hierarchy_match_type, "unitary"].include?(la["tier"])
+    end
   end
 
   def appropriate_snac_for_postcode(postcode)
     local_custodian_codes = GdsApi.locations_api.local_custodian_code_for_postcode(postcode)
     return nil if local_custodian_codes.compact.empty?
 
-    local_authorities_response = GdsApi.local_links_manager.local_authority_by_custodian_code(local_custodian_codes.first)
-    filtered_authorities = local_authorities_response.to_hash["local_authorities"].select do |la|
-      [service.local_authority_hierarchy_match_type, "unitary"].include?(la["tier"])
+    if local_custodian_codes.count > 1
+      postcode_response = GdsApi.locations_api.results_for_postcode(postcode)
+      authorities = local_custodian_codes.index_with { |lcc| appropriate_authority_for_local_custodian_code(lcc) }
+
+      response = postcode_response["results"].map do |a|
+        {
+          address: a["address"],
+          local_authority_slug: authorities[a["local_custodian_code"]]["slug"],
+        }
+      end
+
+      raise(AmbiguousPostcodeError, response)
     end
 
-    filtered_authorities.first&.dig("snac") # there should be 0-1, return nil or first snac
+    appropriate_authority_for_local_custodian_code(local_custodian_codes.first)&.dig("snac") # there should be 0-1, return nil or first snac
   rescue GdsApi::HTTPNotFound
     nil
   end
