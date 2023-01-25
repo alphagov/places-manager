@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "rails", "7.0.4.1"
+gem "rails", "7.0.4.2"
 
 gem "activerecord-postgis-adapter"
 gem "bootsnap", require: false
