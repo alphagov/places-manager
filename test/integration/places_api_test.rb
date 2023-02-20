@@ -53,7 +53,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
       assert_equal "application/json; charset=utf-8", last_response.content_type
 
       data = JSON.parse(last_response.body)
-      assert_equal ["Palace of Westminster 2", "Town Hall 2"], (data.map { |p| p["name"] })
+      assert_equal ["Palace of Westminster 2", "Town Hall 2"], (data["places"].map { |p| p["name"] })
     end
 
     should "return all places as CSV" do
@@ -83,7 +83,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         visit "/places/#{@service.slug}.json?version=#{@data_set1.to_param}"
 
         data = JSON.parse(page.source)
-        assert_equal ["Palace of Westminster", "Town Hall"], (data.map { |p| p["name"] })
+        assert_equal ["Palace of Westminster", "Town Hall"], (data["places"].map { |p| p["name"] })
       end
 
       should "ignore requested version and return active version when not logged in" do
@@ -91,7 +91,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
 
         data = JSON.parse(page.source)
         # Titles from @data_set2
-        assert_equal ["Palace of Westminster 2", "Town Hall 2"], (data.map { |p| p["name"] })
+        assert_equal ["Palace of Westminster 2", "Town Hall 2"], (data["places"].map { |p| p["name"] })
       end
     end
   end
@@ -122,25 +122,25 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
 
         get "/places/#{@service.slug}.json?postcode=N11+3HD"
         data = JSON.parse(last_response.body)
-        assert_equal 2, data.length
-        assert_equal @place1.name, data[0]["name"]
+        assert_equal 2, data["places"].length
+        assert_equal @place1.name, data["places"][0]["name"]
 
         get "/places/#{@service.slug}.json?postcode=WC2B+6NH"
         data = JSON.parse(last_response.body)
-        assert_equal 2, data.length
-        assert_equal @place2.name, data[0]["name"]
+        assert_equal 2, data["places"].length
+        assert_equal @place2.name, data["places"][0]["name"]
       end
 
       should "return places near the given lat/lng" do
         get "/places/#{@service.slug}.json?lat=51.617&lng=-0.149"
         data = JSON.parse(last_response.body)
-        assert_equal 2, data.length
-        assert_equal @place1.name, data[0]["name"]
+        assert_equal 2, data["places"].length
+        assert_equal @place1.name, data["places"][0]["name"]
 
         get "/places/#{@service.slug}.json?lat=51.517&lng=-0.120"
         data = JSON.parse(last_response.body)
-        assert_equal 2, data.length
-        assert_equal @place2.name, data[0]["name"]
+        assert_equal 2, data["places"].length
+        assert_equal @place2.name, data["places"][0]["name"]
       end
 
       should "return a 400 for a missing postcode" do
@@ -217,7 +217,8 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
 
         get "/places/#{@service.slug}.json?postcode=N11+3HD"
         data = JSON.parse(last_response.body)
-        assert_equal [], data
+        assert_equal "ok", data["status"]
+        assert_equal [], data["places"]
       end
 
       should "return a 400 for an invalid postcode" do
@@ -225,6 +226,50 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
 
         get "/places/#{@service.slug}.json?postcode=N11+3QQ"
         assert_equal 400, last_response.status
+      end
+
+      context "when a postcode covers multiple authorities" do
+        setup do
+          stub_locations_api_has_location(
+            "CH25 9BJ",
+            [
+              { "address" => "House 1", "local_custodian_code" => "1" },
+              { "address" => "House 2", "local_custodian_code" => "2" },
+              { "address" => "House 3", "local_custodian_code" => "3" },
+            ],
+          )
+          stub_local_links_manager_has_a_local_authority("achester", local_custodian_code: 1, snac: "18UK")
+          stub_local_links_manager_has_a_local_authority("beechester", local_custodian_code: 2, snac: "00AG")
+          stub_local_links_manager_has_a_local_authority("ceechester", local_custodian_code: 3, snac: "18")
+          stub_local_links_manager_does_not_have_an_authority("deechester")
+        end
+
+        should "return an address array if the postcode exists in multiple authorities" do
+          get "/places/#{@service.slug}.json?postcode=CH25+9BJ"
+          data = JSON.parse(last_response.body)
+          assert_equal "address-information-required", data["status"]
+          assert_equal "addresses", data["contents"]
+          assert_equal "House 1", data["addresses"][0]["address"]
+          assert_equal "achester", data["addresses"][0]["local_authority_slug"]
+          assert_equal 3, data["addresses"].count
+        end
+
+        should "returns only search results within an authority if the local_authority_slug is specified" do
+          get "/places/#{@service.slug}.json?postcode=CH25+9BJ&local_authority_slug=beechester"
+          data = JSON.parse(last_response.body)
+          assert_equal "ok", data["status"]
+          assert_equal "places", data["contents"]
+          assert_equal 2, data["places"].count
+          assert_equal "Palace of Westminster", data["places"][0]["name"]
+          assert_equal "FreeState Coffee", data["places"][1]["name"]
+        end
+
+        should "returns 400 valid postcode if the local_authority_slug is specified but is not valid" do
+          get "/places/#{@service.slug}.json?postcode=CH25+9BJ&local_authority_slug=deechester"
+          data = JSON.parse(last_response.body)
+          assert_equal 400, last_response.status
+          assert_equal "validPostcodeNoLocation", data["error"]
+        end
       end
 
       context "when the service is bounded to districts" do
@@ -238,9 +283,9 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
 
           get "/places/#{@service.slug}.json?postcode=EX39+1QS"
           data = JSON.parse(last_response.body)
-          assert_equal 2, data.length
-          assert_equal @place2.name, data[0]["name"]
-          assert_equal @place1.name, data[1]["name"]
+          assert_equal 2, data["places"].length
+          assert_equal @place2.name, data["places"][0]["name"]
+          assert_equal @place1.name, data["places"][1]["name"]
         end
 
         should "return all the places in order of nearness for postcodes not in a county+district council hierarchy" do
@@ -249,9 +294,9 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
 
           get "/places/#{@service.slug}.json?postcode=WC2B+6NH"
           data = JSON.parse(last_response.body)
-          assert_equal 2, data.length
-          assert_equal @place4.name, data[0]["name"]
-          assert_equal @place3.name, data[1]["name"]
+          assert_equal 2, data["places"].length
+          assert_equal @place4.name, data["places"][0]["name"]
+          assert_equal @place3.name, data["places"][1]["name"]
         end
       end
 
@@ -266,9 +311,9 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
 
           get "/places/#{@service.slug}.json?postcode=EX39+1QS"
           data = JSON.parse(last_response.body)
-          assert_equal 2, data.length
-          assert_equal @place6.name, data[0]["name"]
-          assert_equal @place5.name, data[1]["name"]
+          assert_equal 2, data["places"].length
+          assert_equal @place6.name, data["places"][0]["name"]
+          assert_equal @place5.name, data["places"][1]["name"]
         end
 
         should "return all the places in order of nearness for postcodes not in a county+district council hierarchy" do
@@ -277,9 +322,9 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
 
           get "/places/#{@service.slug}.json?postcode=WC2B+6NH"
           data = JSON.parse(last_response.body)
-          assert_equal 2, data.length
-          assert_equal @place4.name, data[0]["name"]
-          assert_equal @place3.name, data[1]["name"]
+          assert_equal 2, data["places"].length
+          assert_equal @place4.name, data["places"][0]["name"]
+          assert_equal @place3.name, data["places"][1]["name"]
         end
       end
     end

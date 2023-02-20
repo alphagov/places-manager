@@ -5,6 +5,9 @@ require "pact/provider/rspec"
 require "webmock/rspec"
 require "factory_bot_rails"
 require "database_cleaner-active_record"
+require "plek"
+require "gds_api/test_helpers/local_links_manager"
+require "gds_api/test_helpers/locations_api"
 
 require ::File.expand_path("../../config/environment", __dir__)
 
@@ -13,6 +16,8 @@ Pact.configure do |config|
   config.include WebMock::API
   config.include WebMock::Matchers
   config.include FactoryBot::Syntax::Methods
+  config.include GdsApi::TestHelpers::LocalLinksManager
+  config.include GdsApi::TestHelpers::LocationsApi
 end
 
 WebMock.allow_net_connect!
@@ -48,6 +53,20 @@ Pact.provider_states_for "GDS API Adapters" do
     set_up do
       service = create(:service, slug: "number-plate-supplier")
       create(:place, service_slug: service.slug, latitude: 50.742754933617285, longitude: -1.9552618901330387)
+    end
+  end
+
+  provider_state "a service exists called register office exists with places, and CH25 9BJ is a split postcode" do
+    set_up do
+      create(:service, slug: "register-office", location_match_type: "local_authority")
+      stub_locations_api_has_location("CH25 9BJ", [
+        { "address" => "House 1", "latitude" => 50, "longitude" => -1, "local_custodian_code" => 1 },
+        { "address" => "House 2", "latitude" => 50, "longitude" => -1, "local_custodian_code" => 2 },
+        { "address" => "House 3", "latitude" => 50, "longitude" => -1, "local_custodian_code" => 3 },
+      ])
+      stub_local_links_manager_has_a_local_authority("achester", local_custodian_code: 1)
+      stub_local_links_manager_has_a_local_authority("beechester", local_custodian_code: 2)
+      stub_local_links_manager_has_a_local_authority("ceechester", local_custodian_code: 3)
     end
   end
 end
