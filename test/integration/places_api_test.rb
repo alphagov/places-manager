@@ -209,6 +209,22 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
           longitude: -4.19111,
           name: "The Quay Restaurant and Gallery",
         )
+        @place7 = FactoryBot.create(
+          :place,
+          service_slug: @service.slug,
+          snac: "E060000063",
+          latitude: 51.05420,
+          longitude: -4.19096,
+          name: "Cumbrian Cabin",
+        )
+        @place8 = FactoryBot.create(
+          :place,
+          service_slug: @service.slug,
+          snac: "E060000063",
+          latitude: 51.05289,
+          longitude: -4.19111,
+          name: "Cumbrian Gallery",
+        )
       end
 
       should "return empty array if there are no places in the corresponding authority" do
@@ -325,6 +341,23 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
           assert_equal 2, data["places"].length
           assert_equal @place4.name, data["places"][0]["name"]
           assert_equal @place3.name, data["places"][1]["name"]
+        end
+      end
+
+      context "when the service is missing a SNAC" do
+        setup do
+          @service.update(local_authority_hierarchy_match_type: Service::LOCAL_AUTHORITY_COUNTY_MATCH)
+        end
+
+        should "only return the county results in order of nearness, not the district ones for postcodes in a county+district council hierarchy" do
+          stub_locations_api_has_location("EX39 1QS", [{ "latitude" => 51.05318361810428, "longitude" => -4.191071523498792, "local_custodian_code" => 1234 }])
+          stub_local_links_manager_has_a_local_authority("my-county", snac: nil, gss: "E060000063", local_custodian_code: 1234)
+
+          get "/places/#{@service.slug}.json?postcode=EX39+1QS"
+          data = JSON.parse(last_response.body)
+          assert_equal 2, data["places"].length
+          assert_equal @place8.name, data["places"][0]["name"]
+          assert_equal @place7.name, data["places"][1]["name"]
         end
       end
     end
