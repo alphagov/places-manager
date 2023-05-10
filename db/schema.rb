@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_10_091846) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_10_091714) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
@@ -44,6 +44,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_10_091846) do
     t.string "archiving_error"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["service_id", "version"], name: "index_data_sets_on_service_id_and_version"
     t.index ["service_id"], name: "index_data_sets_on_service_id"
   end
 
@@ -95,6 +96,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_10_091846) do
     t.string "snac"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["service_slug", "data_set_version"], name: "index_places_on_service_slug_and_data_set_version"
   end
 
   create_table "services", force: :cascade do |t|
