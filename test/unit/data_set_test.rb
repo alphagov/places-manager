@@ -69,6 +69,16 @@ class DataSetTest < ActiveSupport::TestCase
       assert_equal 5, PlaceArchive.all.count
     end
 
+    should "not copy ids when archiving, so that we don't get clashes" do
+      ds = @service.data_sets.first
+      FactoryBot.create(:place_archive, id: ds.places.first.id)
+      ActiveRecord::Base.connection.reset_pk_sequence!("place_archives")
+      ds.archive!
+      ds.archive_places
+      assert ds.archived?
+      assert_nil ds.archiving_error
+    end
+
     should "remove its place information" do
       ds = @service.data_sets.first
       ds.archive_places
