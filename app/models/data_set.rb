@@ -231,10 +231,10 @@ class DataSet < ApplicationRecord
 
   def archive_places
     places.each do |place|
-      PlaceArchive.create!(place.attributes)
+      PlaceArchive.create!(place.attributes.except("id"))
     end
     places.delete_all
-    archived
+    archived!
   rescue StandardError => e
     update!(archiving_error: "Failed to archive place information: '#{e.message}'")
   end
