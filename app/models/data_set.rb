@@ -49,7 +49,7 @@ class DataSet < ApplicationRecord
     query = query.where(snac: authority_code) if authority_code
     query = query.limit(limit) if limit
     query = query.where(Place.arel_table[:location].st_distance(location).lt(distance.in(:meters))) if distance
-    query = query.reorder(Arel.sql("location <-> #{loc_string}"))
+    query = query.reorder(Arel.sql("location <-> #{loc_string}, RANDOM()"))
     query.select(Arel.sql("places.*, ST_Distance(location, #{loc_string}) as distance"))
   end
 
