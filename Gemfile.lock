@@ -782,7 +782,7 @@ DEPENDENCIES
   kaminari
   launchy
   minitest-reporters
-  mocha
+  mocha (= 2.1.0)
   pact
   pact_broker-client
   pg
