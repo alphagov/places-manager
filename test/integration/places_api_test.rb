@@ -164,7 +164,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         @place1 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
-          snac: "18UK",
+          gss: "18UK",
           latitude: 51.0519276,
           longitude: -4.1907002,
           name: "John's Of Appledore",
@@ -172,7 +172,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         @place2 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
-          snac: "18UK",
+          gss: "18UK",
           latitude: 51.053834,
           longitude: -4.191422,
           name: "Susie's Tea Rooms",
@@ -180,7 +180,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         @place3 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
-          snac: "00AG",
+          gss: "00AG",
           latitude: 51.500728,
           longitude: -0.124626,
           name: "Palace of Westminster",
@@ -188,7 +188,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         @place4 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
-          snac: "00AG",
+          gss: "00AG",
           latitude: 51.51837458322272,
           longitude: -0.12133586354538765,
           name: "FreeState Coffee",
@@ -196,7 +196,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         @place5 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
-          snac: "18",
+          gss: "18",
           latitude: 51.05420,
           longitude: -4.19096,
           name: "The Coffee Cabin",
@@ -204,7 +204,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         @place6 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
-          snac: "18",
+          gss: "18",
           latitude: 51.05289,
           longitude: -4.19111,
           name: "The Quay Restaurant and Gallery",
@@ -212,7 +212,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         @place7 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
-          snac: "E060000063",
+          gss: "E060000063",
           latitude: 51.05420,
           longitude: -4.19096,
           name: "Cumbrian Cabin",
@@ -220,7 +220,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         @place8 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
-          snac: "E060000063",
+          gss: "E060000063",
           latitude: 51.05289,
           longitude: -4.19111,
           name: "Cumbrian Gallery",

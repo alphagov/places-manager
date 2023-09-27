@@ -450,7 +450,7 @@ class DataSetTest < ActiveSupport::TestCase
         @place1 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
-          snac: "18UK",
+          gss: "18UK",
           postcode: "EX39 1QS",
           latitude: 51.05318361810428,
           longitude: -4.191071523498792,
@@ -459,7 +459,7 @@ class DataSetTest < ActiveSupport::TestCase
         @place2 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
-          snac: "E12345678",
+          gss: "E12345678",
           postcode: "EX39 1PP",
           latitude: 51.053834,
           longitude: -4.191422,
@@ -468,7 +468,7 @@ class DataSetTest < ActiveSupport::TestCase
         @place3 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
-          snac: "00AG",
+          gss: "00AG",
           postcode: "WC2B 6NH",
           latitude: 51.51695975170424,
           longitude: -0.12058693935709164,
@@ -477,7 +477,7 @@ class DataSetTest < ActiveSupport::TestCase
         @place4 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
-          snac: "00AG",
+          gss: "00AG",
           postcode: "WC1B 5HA",
           latitude: 51.51837458322272,
           longitude: -0.12133586354538765,

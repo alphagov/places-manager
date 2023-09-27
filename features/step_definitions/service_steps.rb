@@ -83,13 +83,13 @@ Then(/^there should not be a "(.*?)" service$/) do |name|
   expect(Service.where(name:).count).to eq(0)
 end
 
-Then(/^I should see that the current service has (\d+) missing SNAC codes$/) do |count|
-  content = "#{count} places with missing SNAC codes."
+Then(/^I should see that the current service has (\d+) missing GSS codes$/) do |count|
+  content = "#{count} places with missing GSS codes."
   expect(page).to have_content(content)
 end
 
-Then(/^I should not see any text about missing SNAC codes$/) do
-  expect(page).to_not have_content("places with missing SNAC codes.")
+Then(/^I should not see any text about missing GSS codes$/) do
+  expect(page).to_not have_content("places with missing GSS codes.")
 end
 
 When(/^I activate the most recent data set for the "(.*?)" service$/) do |name|
@@ -119,8 +119,8 @@ Then(/^the first version panel has the text "(.*?)"$/) do |text|
   end
 end
 
-Then(/^the first version panel shows a warning about missing SNAC codes$/) do
+Then(/^the first version panel shows a warning about missing GSS codes$/) do
   within "div.data-set:nth-child(1)" do
-    expect(page).to have_css("p.missing-snac-warning")
+    expect(page).to have_css("p.missing-gss-warning")
   end
 end
