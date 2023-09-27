@@ -39,14 +39,14 @@ class DataSet < ApplicationRecord
   #   location - a Point object representing the centre of the search area
   #   distance (optional) - a Distance object representing the maximum distance
   #   limit (optional) - a maximum number of results to return
-  #   authority_codes (optional) - array of SNAC/GSS code to scope the results to a local authority
+  #   authority_codes (optional) - array of GSS/SNAC codes to scope the results to a local authority
   #
   # Returns:
   #   an array of Place objects
   def places_near(location, distance = nil, limit = nil, authority_codes = [])
     loc_string = "'SRID=4326;POINT(#{location.longitude} #{location.latitude})'::geometry"
     query = places
-    query = query.where(snac: authority_codes) if authority_codes.any?
+    query = query.where(gss: authority_codes) if authority_codes.any?
     query = query.limit(limit) if limit
     query = query.where(Place.arel_table[:location].st_distance(location).lt(distance.in(:meters))) if distance
     query = query.reorder(Arel.sql("location <-> #{loc_string}, RANDOM()"))
@@ -77,7 +77,7 @@ class DataSet < ApplicationRecord
       [service.local_authority_hierarchy_match_type, "unitary"].include?(la["tier"])
     end
 
-    snac_and_gss(local_authority)
+    gss_and_snac(local_authority)
   end
 
   def appropriate_authority_for_local_custodian_code(local_custodian_code)
@@ -106,17 +106,17 @@ class DataSet < ApplicationRecord
     end
 
     authority_hash = appropriate_authority_for_local_custodian_code(local_custodian_codes.first) # there should be 0-1, return first or nil
-    snac_and_gss(authority_hash)
+    gss_and_snac(authority_hash)
   rescue GdsApi::HTTPNotFound
     nil
   end
 
-  def snac_and_gss(authority_hash)
+  def gss_and_snac(authority_hash)
     # Not all LAs have SNACs now, so we return an array including
-    # SNAC and GSS (or whichever they have)
+    # GSS and SNAC (or whichever they have)
     return [] unless authority_hash
 
-    [authority_hash["snac"], authority_hash["gss"]].compact
+    [authority_hash["gss"], authority_hash["snac"]].compact
   end
 
   def duplicating?
@@ -244,7 +244,7 @@ class DataSet < ApplicationRecord
     delete
   end
 
-  def has_places_with_missing_snacs?
-    service.uses_local_authority_lookup? && places.missing_snacs.count > 0 # rubocop:disable Style/NumericPredicate
+  def has_places_with_missing_gss_codes?
+    service.uses_local_authority_lookup? && places.missing_gss_codes.count > 0 # rubocop:disable Style/NumericPredicate
   end
 end

@@ -4,6 +4,6 @@
   <%= dataset.places.with_geocoding_errors.count %> places with geocode errors.
 
   <% if service.uses_local_authority_lookup? %>
-    <%= dataset.places.missing_snacs.count %> places with missing SNAC codes.
+    <%= dataset.places.missing_gss_codes.count %> places with missing GSS codes.
   <% end %>
 </p>
