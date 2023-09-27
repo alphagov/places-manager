@@ -27,6 +27,13 @@ When(/^I upload a new data set with a PNG claiming to be a CSV$/) do
   end
 end
 
+When(/^I upload a new data set with a CSV with a SNAC column instead of GSS$/) do
+  within "#new-data" do
+    attach_file "Data file", Rails.root.join("features/support/data/register-offices-with-snac-codes.csv")
+    click_button "Create Data set"
+  end
+end
+
 When(/^I upload a new data set with a CSV with missing GSS codes$/) do
   within "#new-data" do
     attach_file "Data file", Rails.root.join("features/support/data/register-offices-with-missing-gss-codes.csv")
