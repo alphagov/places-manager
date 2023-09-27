@@ -127,7 +127,7 @@ class Place < ApplicationRecord
       fax: row["fax"],
       text_phone: row["text_phone"],
       source_address: row["source_address"] || "#{row['address1']} #{row['address2']} #{row['town']} #{row['postcode']}",
-      snac: row["snac"],
+      snac: row["gss"] || row["snac"],
     }
     location_parameters = if row["lng"] && row["lat"]
                             { override_lng: row["lng"], override_lat: row["lat"] }
