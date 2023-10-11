@@ -27,7 +27,7 @@ class DataSetCsvPresenterTest < ActiveSupport::TestCase
       fax
       text_phone
       geocode_error
-      snac
+      gss
       lng
       lat
     ]
@@ -46,7 +46,7 @@ class DataSetCsvPresenterTest < ActiveSupport::TestCase
         service_slug: @service.slug,
         data_set_version: @data_set.version,
         email: "camden@example.com",
-        snac: "00AG",
+        gss: "00AG",
         override_lng: 0.0,
         override_lat: 1.0,
       )
@@ -71,7 +71,7 @@ class DataSetCsvPresenterTest < ActiveSupport::TestCase
         @place.fax,
         @place.text_phone,
         @place.geocode_error,
-        @place.snac,
+        @place.gss,
         @place.override_lng,
         @place.override_lat,
       ]

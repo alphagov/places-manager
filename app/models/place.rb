@@ -18,7 +18,7 @@ class Place < ApplicationRecord
   scope :geocoded, -> { where(:location.with_size => 2) }
   default_scope -> { order(name: :asc) }
 
-  scope :missing_snacs, -> { where(snac: nil) }
+  scope :missing_gss_codes, -> { where(gss: nil) }
 
   validates :service_slug, presence: true
   validates :data_set_version, presence: true
@@ -127,7 +127,7 @@ class Place < ApplicationRecord
       fax: row["fax"],
       text_phone: row["text_phone"],
       source_address: row["source_address"] || "#{row['address1']} #{row['address2']} #{row['town']} #{row['postcode']}",
-      snac: row["snac"],
+      gss: row["gss"] || row["snac"],
     }
     location_parameters = if row["lng"] && row["lat"]
                             { override_lng: row["lng"], override_lat: row["lat"] }
@@ -142,7 +142,7 @@ class Place < ApplicationRecord
   end
 
   def api_safe_hash
-    serializable_hash(except: :id).merge(location: location_to_hash)
+    serializable_hash(except: %i[id gss]).merge("location" => location_to_hash, "snac" => gss)
   end
 
   def location_to_hash

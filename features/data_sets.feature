@@ -116,16 +116,30 @@ Feature: Managing data sets
     Then the "Council tax valuation offices" service should have two data sets
       And the places should be identical between the datasets in the "Council tax valuation offices" service
 
-  Scenario: Creating a new data set for a service with local authority lookup with a CSV file with SNAC codes
+  Scenario: Creating a new data set for a service with local authority lookup with a CSV file with GSS codes
     Given I have previously created a service with the following attributes:
         | name                | Register Offices |
         | location_match_type | Local authority  |
 
     When I go to the page for the "Register Offices" service
-      And I upload a new data set with a CSV with missing SNAC codes
+      And I upload a new data set with a CSV with missing GSS codes
 
     When background processing has completed
       And I activate the most recent data set for the "Register Offices" service
       And I go to the page for the "Register Offices" service
 
-    Then I should see that the current service has 2 missing SNAC codes
+    Then I should see that the current service has 2 missing GSS codes
+
+Scenario: Creating a new data set for a service with local authority lookup with a CSV file with SNAC codes
+    Given I have previously created a service with the following attributes:
+        | name                | Register Offices |
+        | location_match_type | Local authority  |
+
+    When I go to the page for the "Register Offices" service
+      And I upload a new data set with a CSV with a SNAC column instead of GSS
+
+    When background processing has completed
+      And I activate the most recent data set for the "Register Offices" service
+      And I go to the page for the "Register Offices" service
+
+    Then I should see that the current service has 0 missing GSS codes

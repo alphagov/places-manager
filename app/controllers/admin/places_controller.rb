@@ -57,7 +57,7 @@ protected
         :postcode,
         :override_lng,
         :override_lat,
-        :snac,
+        :gss,
         :url,
         :email,
         :phone,

@@ -59,30 +59,30 @@ Feature: Managing services
     Then I should see an indication that my file was not accepted
       And there should not be a "Register Offices" service
 
-  Scenario: Creating a new service with local authority lookup with a file with missing snac codes
+  Scenario: Creating a new service with local authority lookup with a file with missing GSS codes
     When I go to the new service page
       And I fill out the form with the following attributes to create a service:
-        | name                | Register Offices With Missing Snac Codes |
+        | name                | Register Offices With Missing GSS Codes |
         | location_match_type | Local authority                          |
 
     When background processing has completed
-      And I go to the page for the "Register Offices With Missing Snac Codes" service
+      And I go to the page for the "Register Offices With Missing GSS Codes" service
 
-    Then I should see that the current service has 2 missing SNAC codes
+    Then I should see that the current service has 2 missing GSS codes
 
     When I visit the history tab
 
     Then the first version panel has the title "Version 1"
-      And the first version panel has the text "2 places with missing SNAC codes"
-      And the first version panel shows a warning about missing SNAC codes
+      And the first version panel has the text "2 places with missing GSS codes"
+      And the first version panel shows a warning about missing GSS codes
 
-  Scenario: Creating a new service with nearest lookup with a file with missing snac codes
+  Scenario: Creating a new service with nearest lookup with a file with missing GSS codes
     When I go to the new service page
       And I fill out the form with the following attributes to create a service:
-        | name                | Register Offices With Missing Snac Codes |
+        | name                | Register Offices With Missing GSS Codes |
         | location_match_type | Nearest                                  |
 
     When background processing has completed
-      And I go to the page for the "Register Offices With Missing Snac Codes" service
+      And I go to the page for the "Register Offices With Missing GSS Codes" service
 
-    Then I should not see any text about missing SNAC codes
+    Then I should not see any text about missing GSS codes

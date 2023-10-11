@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_10_091714) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_09_093208) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
@@ -68,7 +68,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_10_091714) do
     t.float "override_lat"
     t.float "override_lng"
     t.string "geocode_error"
-    t.string "snac"
+    t.string "gss"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -93,7 +93,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_10_091714) do
     t.float "override_lat"
     t.float "override_lng"
     t.string "geocode_error"
-    t.string "snac"
+    t.string "gss"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["service_slug", "data_set_version"], name: "index_places_on_service_slug_and_data_set_version"
