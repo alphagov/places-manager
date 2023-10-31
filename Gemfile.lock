@@ -86,7 +86,7 @@ GEM
     awesome_print (1.9.2)
     base64 (0.1.1)
     bigdecimal (3.1.4)
-    bootsnap (1.16.0)
+    bootsnap (1.17.0)
       msgpack (~> 1.2)
     bootstrap-kaminari-views (0.0.5)
       kaminari (>= 0.13)
@@ -297,7 +297,7 @@ GEM
       ruby-progressbar
     mocha (2.1.0)
       ruby2_keywords (>= 0.0.5)
-    msgpack (1.6.0)
+    msgpack (1.7.2)
     multi_test (1.1.0)
     multi_xml (0.6.0)
     mutex_m (0.1.2)
