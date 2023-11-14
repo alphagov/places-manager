@@ -450,7 +450,7 @@ class DataSetTest < ActiveSupport::TestCase
         @place1 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
-          gss: "18UK",
+          gss: "E12345678",
           postcode: "EX39 1QS",
           latitude: 51.05318361810428,
           longitude: -4.191071523498792,
@@ -468,7 +468,7 @@ class DataSetTest < ActiveSupport::TestCase
         @place3 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
-          gss: "00AG",
+          gss: "E12345679",
           postcode: "WC2B 6NH",
           latitude: 51.51695975170424,
           longitude: -0.12058693935709164,
@@ -477,7 +477,7 @@ class DataSetTest < ActiveSupport::TestCase
         @place4 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
-          gss: "00AG",
+          gss: "E12345679",
           postcode: "WC1B 5HA",
           latitude: 51.51837458322272,
           longitude: -0.12133586354538765,
@@ -485,22 +485,22 @@ class DataSetTest < ActiveSupport::TestCase
         )
       end
 
-      should "return places in the same district/unitary authority as the postcode, matching by GSS or SNAC" do
+      should "return places in the same district/unitary authority as the postcode, matching by GSS" do
         stub_locations_api_has_location("EX39 1LH", [{ "latitude" => 51.0413792674, "longitude" => -4.23640704632, "local_custodian_code" => 1234 }])
-        stub_local_links_manager_has_a_local_authority("county1", country_name: "England", gss: "E12345678", snac: "18UK", local_custodian_code: 1234)
+        stub_local_links_manager_has_a_local_authority("county1", country_name: "England", gss: "E12345678", local_custodian_code: 1234)
         place_names = @data_set.places_for_postcode("EX39 1LH").map(&:name)
         assert_equal ["John's Of Appledore", "Susie's Tea Rooms"], place_names
       end
 
       should "return multiple places in order of nearness if there are more than one in the district" do
         stub_locations_api_has_location("WC2B 6NH", [{ "latitude" => 51.51695975170424, "longitude" => -0.12058693935709164, "local_custodian_code" => 1234 }])
-        stub_local_links_manager_has_a_local_authority("county1", country_name: "England", snac: "00AG", local_custodian_code: 1234)
+        stub_local_links_manager_has_a_local_authority("county1", country_name: "England", gss: "E12345679", local_custodian_code: 1234)
 
         place_names = @data_set.places_for_postcode("WC2B 6NH").map(&:name)
         assert_equal ["Aviation House", "FreeState Coffee"], place_names
       end
 
-      should "return empty array if no SNAC/GSS can be found for the postcode" do
+      should "return empty array if no GSS can be found for the postcode" do
         stub_locations_api_has_location("BT1 5GS", [{ "latitude" => 21.54, "longitude" => -5.93 }])
 
         assert_equal [], @data_set.places_for_postcode("BT1 5GS").to_a
