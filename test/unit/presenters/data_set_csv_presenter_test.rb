@@ -1,5 +1,4 @@
 require "test_helper"
-require "data_set_csv_presenter"
 
 class DataSetCsvPresenterTest < ActiveSupport::TestCase
   setup do
