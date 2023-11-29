@@ -39,14 +39,14 @@ class DataSet < ApplicationRecord
   #   location - a Point object representing the centre of the search area
   #   distance (optional) - a Distance object representing the maximum distance
   #   limit (optional) - a maximum number of results to return
-  #   authority_codes (optional) - array of GSS/SNAC codes to scope the results to a local authority
+  #   authority_code (optional) - array of GSS codes to scope the results to a local authority
   #
   # Returns:
   #   an array of Place objects
-  def places_near(location, distance = nil, limit = nil, authority_codes = [])
+  def places_near(location, distance = nil, limit = nil, authority_code = nil)
     loc_string = "'SRID=4326;POINT(#{location.longitude} #{location.latitude})'::geometry"
     query = places
-    query = query.where(gss: authority_codes) if authority_codes.any?
+    query = query.where(gss: authority_code) if authority_code
     query = query.limit(limit) if limit
     query = query.where(Place.arel_table[:location].st_distance(location).lt(distance.in(:meters))) if distance
     query = query.reorder(Arel.sql("location <-> #{loc_string}, RANDOM()"))
@@ -60,24 +60,24 @@ class DataSet < ApplicationRecord
     location = RGeo::Geographic.spherical_factory.point(location_data["longitude"], location_data["latitude"])
     return places_near(location, distance, limit) if service.location_match_type == "nearest"
 
-    authority_codes = if local_authority_slug
-                        authority_codes_for_local_authority_slug(local_authority_slug)
-                      else
-                        appropriate_authority_codes_for_postcode(postcode)
-                      end
-    return [] unless authority_codes
+    authority_code = if local_authority_slug
+                       authority_code_for_local_authority_slug(local_authority_slug)
+                     else
+                       appropriate_authority_code_for_postcode(postcode)
+                     end
+    return [] unless authority_code
 
-    places_near(location, distance, limit, authority_codes)
+    places_near(location, distance, limit, authority_code)
   end
 
-  def authority_codes_for_local_authority_slug(local_authority_slug)
+  def authority_code_for_local_authority_slug(local_authority_slug)
     local_authorities_response = GdsApi.local_links_manager.local_authority(local_authority_slug)
 
     local_authority = local_authorities_response.to_hash["local_authorities"].find do |la|
       [service.local_authority_hierarchy_match_type, "unitary"].include?(la["tier"])
     end
 
-    gss_and_snac(local_authority)
+    local_authority["gss"]
   end
 
   def appropriate_authority_for_local_custodian_code(local_custodian_code)
@@ -87,7 +87,7 @@ class DataSet < ApplicationRecord
     end
   end
 
-  def appropriate_authority_codes_for_postcode(postcode)
+  def appropriate_authority_code_for_postcode(postcode)
     local_custodian_codes = GdsApi.locations_api.local_custodian_code_for_postcode(postcode)
     return nil if local_custodian_codes.compact.empty?
 
@@ -106,17 +106,9 @@ class DataSet < ApplicationRecord
     end
 
     authority_hash = appropriate_authority_for_local_custodian_code(local_custodian_codes.first) # there should be 0-1, return first or nil
-    gss_and_snac(authority_hash)
+    authority_hash["gss"]
   rescue GdsApi::HTTPNotFound
     nil
-  end
-
-  def gss_and_snac(authority_hash)
-    # Not all LAs have SNACs now, so we return an array including
-    # GSS and SNAC (or whichever they have)
-    return [] unless authority_hash
-
-    [authority_hash["gss"], authority_hash["snac"]].compact
   end
 
   def duplicating?

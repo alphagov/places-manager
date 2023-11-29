@@ -164,7 +164,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         @place1 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
-          gss: "18UK",
+          gss: "E12345678",
           latitude: 51.0519276,
           longitude: -4.1907002,
           name: "John's Of Appledore",
@@ -172,7 +172,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         @place2 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
-          gss: "18UK",
+          gss: "E12345678",
           latitude: 51.053834,
           longitude: -4.191422,
           name: "Susie's Tea Rooms",
@@ -180,7 +180,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         @place3 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
-          gss: "00AG",
+          gss: "E12345679",
           latitude: 51.500728,
           longitude: -0.124626,
           name: "Palace of Westminster",
@@ -188,7 +188,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         @place4 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
-          gss: "00AG",
+          gss: "E12345679",
           latitude: 51.51837458322272,
           longitude: -0.12133586354538765,
           name: "FreeState Coffee",
@@ -196,7 +196,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         @place5 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
-          gss: "18",
+          gss: "E12345680",
           latitude: 51.05420,
           longitude: -4.19096,
           name: "The Coffee Cabin",
@@ -204,7 +204,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
         @place6 = FactoryBot.create(
           :place,
           service_slug: @service.slug,
-          gss: "18",
+          gss: "E12345680",
           latitude: 51.05289,
           longitude: -4.19111,
           name: "The Quay Restaurant and Gallery",
@@ -254,9 +254,9 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
               { "address" => "House 3", "local_custodian_code" => "3" },
             ],
           )
-          stub_local_links_manager_has_a_local_authority("achester", local_custodian_code: 1, snac: "18UK")
-          stub_local_links_manager_has_a_local_authority("beechester", local_custodian_code: 2, snac: "00AG")
-          stub_local_links_manager_has_a_local_authority("ceechester", local_custodian_code: 3, snac: "18")
+          stub_local_links_manager_has_a_local_authority("achester", local_custodian_code: 1, gss: "E12345678")
+          stub_local_links_manager_has_a_local_authority("beechester", local_custodian_code: 2, gss: "E12345679")
+          stub_local_links_manager_has_a_local_authority("ceechester", local_custodian_code: 3, gss: "E12345680")
           stub_local_links_manager_does_not_have_an_authority("deechester")
         end
 
@@ -295,7 +295,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
 
         should "return the district places in order of nearness, not the county ones for postcodes in a county+district council hierarchy" do
           stub_locations_api_has_location("EX39 1QS", [{ "latitude" => 51.05318361810428, "longitude" => -4.191071523498792, "local_custodian_code" => 1234 }])
-          stub_local_links_manager_has_a_district_and_county_local_authority("my-district", "my-county", district_snac: "18UK", county_snac: "18", local_custodian_code: 1234)
+          stub_local_links_manager_has_a_district_and_county_local_authority("my-district", "my-county", district_gss: "E12345678", county_gss: "E12345680", local_custodian_code: 1234)
 
           get "/places/#{@service.slug}.json?postcode=EX39+1QS"
           data = JSON.parse(last_response.body)
@@ -306,7 +306,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
 
         should "return all the places in order of nearness for postcodes not in a county+district council hierarchy" do
           stub_locations_api_has_location("WC2B 6NH", [{ "latitude" => 51.51695975170424, "longitude" => -0.12058693935709164, "local_custodian_code" => 1234 }])
-          stub_local_links_manager_has_a_local_authority("county1", country_name: "England", snac: "00AG", local_custodian_code: 1234)
+          stub_local_links_manager_has_a_local_authority("county1", country_name: "England", gss: "E12345679", local_custodian_code: 1234)
 
           get "/places/#{@service.slug}.json?postcode=WC2B+6NH"
           data = JSON.parse(last_response.body)
@@ -323,7 +323,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
 
         should "only return the county results in order of nearness, not the district ones for postcodes in a county+district council hierarchy" do
           stub_locations_api_has_location("EX39 1QS", [{ "latitude" => 51.05318361810428, "longitude" => -4.191071523498792, "local_custodian_code" => 1234 }])
-          stub_local_links_manager_has_a_district_and_county_local_authority("my-district", "my-county", district_snac: "18UK", county_snac: "18", local_custodian_code: 1234)
+          stub_local_links_manager_has_a_district_and_county_local_authority("my-district", "my-county", district_gss: "E12345678", county_gss: "E12345680", local_custodian_code: 1234)
 
           get "/places/#{@service.slug}.json?postcode=EX39+1QS"
           data = JSON.parse(last_response.body)
@@ -334,30 +334,13 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
 
         should "return all the places in order of nearness for postcodes not in a county+district council hierarchy" do
           stub_locations_api_has_location("WC2B 6NH", [{ "latitude" => 51.51695975170424, "longitude" => -0.12058693935709164, "local_custodian_code" => 1234 }])
-          stub_local_links_manager_has_a_local_authority("county1", country_name: "England", snac: "00AG", local_custodian_code: 1234)
+          stub_local_links_manager_has_a_local_authority("county1", country_name: "England", gss: "E12345679", local_custodian_code: 1234)
 
           get "/places/#{@service.slug}.json?postcode=WC2B+6NH"
           data = JSON.parse(last_response.body)
           assert_equal 2, data["places"].length
           assert_equal @place4.name, data["places"][0]["name"]
           assert_equal @place3.name, data["places"][1]["name"]
-        end
-      end
-
-      context "when the service is missing a SNAC" do
-        setup do
-          @service.update(local_authority_hierarchy_match_type: Service::LOCAL_AUTHORITY_COUNTY_MATCH)
-        end
-
-        should "only return the county results in order of nearness, not the district ones for postcodes in a county+district council hierarchy" do
-          stub_locations_api_has_location("EX39 1QS", [{ "latitude" => 51.05318361810428, "longitude" => -4.191071523498792, "local_custodian_code" => 1234 }])
-          stub_local_links_manager_has_a_local_authority("my-county", snac: nil, gss: "E060000063", local_custodian_code: 1234)
-
-          get "/places/#{@service.slug}.json?postcode=EX39+1QS"
-          data = JSON.parse(last_response.body)
-          assert_equal 2, data["places"].length
-          assert_equal @place8.name, data["places"][0]["name"]
-          assert_equal @place7.name, data["places"][1]["name"]
         end
       end
     end
