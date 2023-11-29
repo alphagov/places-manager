@@ -142,7 +142,7 @@ class Place < ApplicationRecord
   end
 
   def api_safe_hash
-    serializable_hash(except: %i[id gss]).merge("location" => location_to_hash, "snac" => gss)
+    serializable_hash(except: :id).merge("location" => location_to_hash)
   end
 
   def location_to_hash
