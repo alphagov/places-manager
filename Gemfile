@@ -36,7 +36,7 @@ group :test do
   gem "ci_reporter_minitest"
   gem "cucumber-rails", require: false
   gem "factory_bot_rails"
-  gem "govuk_test"
+  gem "govuk_test", ">= 4.0.2"
   gem "launchy"
   gem "minitest-reporters"
   gem "mocha", require: false
