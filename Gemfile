@@ -10,7 +10,7 @@ gem "bootstrap-kaminari-views"
 gem "gds-api-adapters"
 gem "gds-sso"
 gem "govuk_admin_template"
-gem "govuk_app_config"
+gem "govuk_app_config", ">= 9.8.0"
 gem "govuk_sidekiq"
 gem "inherited_resources"
 gem "kaminari"
@@ -26,7 +26,7 @@ gem "uglifier"
 
 group :development, :test do
   gem "database_cleaner-active_record"
-  gem "pact", require: false
+  gem "pact", ">= 1.64.0", require: false
   gem "pact_broker-client"
   gem "pry-byebug"
   gem "rubocop-govuk"
