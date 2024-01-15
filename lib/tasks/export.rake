@@ -12,7 +12,7 @@ namespace :export do
       CSV.open("tmp/exports/users.csv", "w") do |csv|
         fields = User.first.fields.keys.excluding("_id")
         csv << fields
-        User.all.each do |user|
+        User.all.find_each do |user|
           row = []
           fields.each do |f|
             row <<  if f == "permissions"
@@ -31,7 +31,7 @@ namespace :export do
       CSV.open("tmp/exports/places.csv", "w") do |csv|
         fields = Place.first.fields.keys.excluding("_id")
         csv << fields
-        Place.all.each do |place|
+        Place.all.find_each do |place|
           row = []
           fields.each do |f|
             row <<  if f == "location"
@@ -57,7 +57,7 @@ namespace :export do
       CSV.open("tmp/exports/place_archives.csv", "w") do |csv|
         fields = PlaceArchive.first.fields.keys.excluding("_id")
         csv << fields
-        PlaceArchive.all.each do |place|
+        PlaceArchive.all.find_each do |place|
           row = []
           fields.each do |f|
             row <<  if f == "location"
