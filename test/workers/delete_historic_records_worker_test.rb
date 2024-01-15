@@ -19,7 +19,7 @@ class DeleteHistoricRecordsWorkerTest < ActiveSupport::TestCase
 
       assert_equal 9, PlaceArchive.where(service_slug: @service.slug).count
       assert_equal [4, 5, 6, 7], @service.reload.data_sets.pluck(:version).sort
-      @service.reload.data_sets.where(version: [4, 5, 6]).each do |data_set|
+      @service.reload.data_sets.where(version: [4, 5, 6]).find_each do |data_set|
         assert_equal 3, PlaceArchive.where(service_slug: @service.slug,
                                            data_set_version: data_set.version).count
       end
