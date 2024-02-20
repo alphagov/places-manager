@@ -47,6 +47,7 @@ module ServiceHelper
       location_match_type: location_match_type(params[:location_match_type]),
       local_authority_hierarchy_match_type: local_authority_hierarchy_match_type(params[:local_authority_hierarchy_match_type]),
       data_file: File.open(params[:csv_path]),
+      organisation_slugs: params[:organisation_slugs].split(",") || %w[test-department],
     )
     s.save!
     run_all_delayed_jobs

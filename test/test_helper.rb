@@ -44,10 +44,22 @@ class ActiveSupport::TestCase
   end
   set_callback :setup, :before, :reset_sidekiq_testing
 
-  def as_logged_in_user(&_block)
+  def as_gds_editor(&block)
+    as_logged_in_user(["GDS Editor"], "government-digital-service", &block)
+  end
+
+  def as_test_department_user(&block)
+    as_logged_in_user([], "test-department", &block)
+  end
+
+  def as_other_department_user(&block)
+    as_logged_in_user([], "other-department", &block)
+  end
+
+  def as_logged_in_user(permissions, organisation_slug, &_block)
     @controller.stubs(:authenticate_user!).returns(true)
     @controller.stubs(:user_signed_in?).returns(true)
-    @controller.stubs(:current_user).returns(User.new)
+    @controller.stubs(:current_user).returns(User.new(permissions:, organisation_slug:))
     yield
     @controller.unstub(:current_user)
     @controller.unstub(:user_signed_in?)
