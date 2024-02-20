@@ -10,6 +10,8 @@ class Admin::DataSetsController < InheritedResources::Base
   rescue_from InvalidCharacterEncodingError, with: :bad_encoding
   rescue_from Encoding::UndefinedConversionError, with: :bad_encoding
 
+  before_action :check_permission!
+
   def create
     prohibit_non_csv_uploads
     create! do |_success, failure|
@@ -74,5 +76,11 @@ protected
     # This is ActiveAdmin's accessor for the service object. We are calling it
     # directly rather than using the @ accessor.
     parent
+  end
+
+  def check_permission!
+    return if permission_for_service?(service)
+
+    raise PermissionDeniedException, "Sorry, you do not have permission to edit datasets for this service."
   end
 end

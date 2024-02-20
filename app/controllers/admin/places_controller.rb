@@ -3,6 +3,7 @@ class Admin::PlacesController < InheritedResources::Base
   actions :all, except: %i[show index]
   belongs_to :service
   belongs_to :data_set
+  before_action :check_permission!
 
   def new
     @place = parent.places.build
@@ -66,5 +67,11 @@ protected
         :access_notes,
         :general_notes,
       )
+  end
+
+  def check_permission!
+    return if permission_for_service?(service)
+
+    raise PermissionDeniedException, "Sorry, you do not have permission to edit places for this service."
   end
 end
