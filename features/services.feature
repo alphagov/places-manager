@@ -3,13 +3,14 @@ Feature: Managing services
   I want to manage services
 
   Background:
-    Given I am an admin
+    Given I am an editor
 
   Scenario: Creating a new service
     When I go to the new service page
       And I fill out the form with the following attributes to create a service:
         | name                                 | Register Offices         |
         | slug                                 | all-new-register-offices |
+        | organisation_slugs                   | test-department          |
         | source_of_data                       | Testing source of data   |
         | location_match_type                  | Local authority          |
         | local_authority_hierarchy_match_type | County                   |

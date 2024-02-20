@@ -3,7 +3,7 @@ Feature: Managing data sets
   I want to manage sets of data
 
   Background:
-    Given I am an admin
+    Given I am an editor
 
   Scenario: Adding another data set to a service
     Given I have previously created the "Register Offices" service
