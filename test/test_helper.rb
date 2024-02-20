@@ -9,6 +9,7 @@ require "rails/test_help"
 require "mocha/minitest"
 require "gds_api/test_helpers/json_client_helper"
 require "gds_api/test_helpers/locations_api"
+require "gds_api/test_helpers/organisations"
 require "webmock/minitest"
 require "govuk_sidekiq/testing"
 # Poltergeist requires access to localhost.
@@ -22,6 +23,7 @@ reporter_options = { color: true }
 Minitest::Reporters.use! [Minitest::Reporters::DefaultReporter.new(reporter_options)]
 
 class ActiveSupport::TestCase
+  include GdsApi::TestHelpers::Organisations
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   # fixtures :all
 
@@ -82,5 +84,9 @@ class ActiveSupport::TestCase
   def stub_locations_api_does_not_have_a_postcode(postcode)
     stub_request(:get, "#{GdsApi::TestHelpers::LocationsApi::LOCATIONS_API_ENDPOINT}/v1/locations?postcode=#{postcode}")
       .to_return(body: { "errors" => { "postcode" => ["No results found for given postcode"] } }.to_json, status: 404)
+  end
+
+  def stub_organisations_test_department
+    stub_organisations_api_has_organisations_with_bodies([{ "title" => "Department of Testing", "details" => { "slug" => "test-department" } }])
   end
 end

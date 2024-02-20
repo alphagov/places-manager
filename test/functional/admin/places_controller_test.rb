@@ -13,7 +13,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
       end
 
       should "display the new place form" do
-        as_logged_in_user do
+        as_gds_editor do
           get :new, params: { service_id: @service.id, data_set_id: @data_set.id }
 
           assert_response(:success)
@@ -21,8 +21,16 @@ class Admin::PlacesControllerTest < ActionController::TestCase
         end
       end
 
+      should "not display the new place form if user is not in the test department" do
+        as_other_department_user do
+          get :new, params: { service_id: @service.id, data_set_id: @data_set.id }
+
+          assert_response(:forbidden)
+        end
+      end
+
       should "persist a new place correctly" do
-        as_logged_in_user do
+        as_gds_editor do
           place_attributes = {
             name: "Plaice Inc.",
             postcode: "FY4 1AZ",
@@ -46,7 +54,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
       end
 
       should "not show the new place form" do
-        as_logged_in_user do
+        as_gds_editor do
           get :new, params: { service_id: @service.id, data_set_id: @data_set.id }
 
           assert_redirected_to admin_service_data_set_url(@service, @data_set)
@@ -54,7 +62,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
       end
 
       should "not persist a new place" do
-        as_logged_in_user do
+        as_gds_editor do
           place_attributes = {
             name: "The Original Plaice Co.",
             postcode: "FY4 1AZ",
@@ -76,7 +84,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
       end
 
       should "display the edit form" do
-        as_logged_in_user do
+        as_gds_editor do
           get :edit, params: { service_id: @service.id, data_set_id: @data_set.id, id: @place.id }
 
           assert_response(:success)
@@ -88,7 +96,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
       end
 
       should "persist changes" do
-        as_logged_in_user do
+        as_gds_editor do
           put :update,
               params: { service_id: @service.id,
                         data_set_id: @data_set.id,
@@ -103,7 +111,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
       end
 
       should "ignore nil or blank overridden latitude and longitude params" do
-        as_logged_in_user do
+        as_gds_editor do
           put :update,
               params: { service_id: @service.id,
                         data_set_id: @data_set.id,
@@ -120,7 +128,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
       end
 
       should "create a location from overridden latitude and longitude params" do
-        as_logged_in_user do
+        as_gds_editor do
           put :update,
               params: { service_id: @service.id,
                         data_set_id: @data_set.id,
@@ -144,7 +152,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
       end
 
       should "not allow the place to be edited" do
-        as_logged_in_user do
+        as_gds_editor do
           get :edit, params: { service_id: @service.id, data_set_id: @data_set.id, id: @place.id }
 
           assert_redirected_to admin_service_data_set_url(@service, @data_set)
@@ -152,7 +160,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
       end
 
       should "not persist changes" do
-        as_logged_in_user do
+        as_gds_editor do
           put :update,
               params: { service_id: @service.id,
                         data_set_id: @data_set.id,
@@ -174,7 +182,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
       end
 
       should "not allow the place to be edited" do
-        as_logged_in_user do
+        as_gds_editor do
           get :edit, params: { service_id: @service.id, data_set_id: @data_set.id, id: @place.id }
 
           assert_redirected_to admin_service_data_set_url(@service, @data_set)
@@ -182,7 +190,7 @@ class Admin::PlacesControllerTest < ActionController::TestCase
       end
 
       should "not persist changes" do
-        as_logged_in_user do
+        as_gds_editor do
           put :update,
               params: { service_id: @service.id,
                         data_set_id: @data_set.id,

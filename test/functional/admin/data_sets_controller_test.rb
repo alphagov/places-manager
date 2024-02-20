@@ -15,7 +15,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
     end
 
     should "successfully import a CSV file" do
-      as_logged_in_user do
+      as_gds_editor do
         csv_file = fixture_file_upload(Rails.root.join("test/fixtures/good_csv.csv"), "text/csv")
         post :create, params: { service_id: @service.id, data_set: { data_file: csv_file } }
         assert_response :redirect
@@ -43,7 +43,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
     should "handle CSV files in a strange character encoding" do
       DataSet.any_instance.stubs(:data_file=).raises(InvalidCharacterEncodingError)
 
-      as_logged_in_user do
+      as_gds_editor do
         csv_file = fixture_file_upload(Rails.root.join("test/fixtures/good_csv.csv"), "text/csv")
         post :create, params: { service_id: @service.id, data_set: { data_file: csv_file } }
         assert_response :redirect
@@ -55,7 +55,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
     end
 
     should "display a new data form if the data set can't be created" do
-      as_logged_in_user do
+      as_gds_editor do
         Tempfile.create("too-much-data") do |tmpfile|
           tmpfile.write("x" * (15.megabytes + 1))
           tmpfile.close
@@ -69,6 +69,15 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
         end
       end
     end
+
+    should "reject if user is not in the test department" do
+      as_other_department_user do
+        csv_file = fixture_file_upload(Rails.root.join("test/fixtures/good_csv.csv"), "text/csv")
+        post :create, params: { service_id: @service.id, data_set: { data_file: csv_file } }
+
+        assert_response :forbidden
+      end
+    end
   end
 
   context "POST 'activate'" do
@@ -78,7 +87,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
     end
 
     should "allow activating a data_set" do
-      as_logged_in_user do
+      as_gds_editor do
         set = @service.data_sets.create!
         post :activate, params: { service_id: @service.id, id: set.id }
         assert_response :redirect
@@ -89,7 +98,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
     end
 
     should "not allow activating a data_set that hasn't completed processing" do
-      as_logged_in_user do
+      as_gds_editor do
         set = @service.data_sets.create!(data_file: File.open(fixture_file_path("good_csv.csv")))
         post :activate, params: { service_id: @service.id, id: set.id }
         assert_response :redirect
@@ -99,9 +108,17 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
       end
     end
 
+    should "not allow activating a data_set if user is not in the test department" do
+      as_other_department_user do
+        set = @service.data_sets.create!(data_file: File.open(fixture_file_path("good_csv.csv")))
+        post :activate, params: { service_id: @service.id, id: set.id }
+        assert_response :forbidden
+      end
+    end
+
     context "when activating the latest data set" do
       should "create a background job for archiving the place information" do
-        as_logged_in_user do
+        as_gds_editor do
           post :activate, params: { service_id: @service.id, id: @service.latest_data_set.id }
           job = ArchivePlacesWorker.jobs.last
           service_id_to_process = job["args"].first
@@ -111,7 +128,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
       end
 
       should "create a background job for deleting historic records" do
-        as_logged_in_user do
+        as_gds_editor do
           post :activate, params: { service_id: @service.id, id: @service.latest_data_set.id }
           job = DeleteHistoricRecordsWorker.jobs.last
           service_id_to_process = job["args"].first
@@ -123,7 +140,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
 
     context "when duplicating a data set" do
       should "create a background job for duplicating the dataset" do
-        as_logged_in_user do
+        as_gds_editor do
           FactoryBot.create(:place)
           post :duplicate, params: { service_id: @service.id, id: @service.latest_data_set.id }
           job = DuplicateDataSetWorker.jobs.last
