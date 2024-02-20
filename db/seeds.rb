@@ -6,4 +6,4 @@
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Mayor.create(:name => 'Daley', :city => cities.first)
 
-User.find_or_create_by!(name: "publisher")
+User.find_or_create_by!(name: "publisher", organisation_slug: "test-org")

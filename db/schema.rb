@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_09_093208) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_06_155313) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
@@ -108,6 +108,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_09_093208) do
     t.string "local_authority_hierarchy_match_type", default: "district"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "organisation_slugs", default: [], array: true
     t.index ["slug"], name: "index_services_on_slug", unique: true
   end
 
