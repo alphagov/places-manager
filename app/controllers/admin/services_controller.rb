@@ -4,6 +4,10 @@ require "csv"
 class Admin::ServicesController < InheritedResources::Base
   include Admin::AdminControllerMixin
 
+  def index
+    @services = services_for_user(current_user)
+  end
+
   def create
     prohibit_non_csv_uploads
     create!
@@ -15,6 +19,16 @@ class Admin::ServicesController < InheritedResources::Base
     flash.now[:danger] = "Could not process CSV file. Please check the format."
     @service = Service.new(service_params(correct_encoding: false))
     render action: "new"
+  end
+
+  def edit
+    @service = Service.find(params[:id])
+    check_permission!
+  end
+
+  def show
+    @service = Service.find(params[:id])
+    check_permission!
   end
 
 protected
@@ -34,11 +48,29 @@ protected
 
   def service_params(correct_encoding: true)
     permitted_params = %i[name slug source_of_data location_match_type local_authority_hierarchy_match_type]
-    if correct_encoding && (%w[create new].include? action_name.to_s)
-      permitted_params << :data_file
-    end
-    params
+    permitted_params << :data_file if correct_encoding && (%w[create new].include? action_name.to_s)
+    gds_editor_slugs = params[:service].delete(:organisation_slugs).split(/[, ]+/) if gds_editor?
+    p = params
       .require(:service)
       .permit(*permitted_params)
+    p = p.merge(organisation_slugs: [current_user.organisation_slug]) if org_slug_from_creator?
+    p = p.merge(organisation_slugs: gds_editor_slugs) if gds_editor?
+    p
+  end
+
+  def org_slug_from_creator?
+    !gds_editor? && @service.nil?
+  end
+
+  def services_for_user(user)
+    return Service.all if gds_editor?
+
+    Service.where(":organisation_slugs = ANY(organisation_slugs)", organisation_slugs: user.organisation_slug)
+  end
+
+  def check_permission!
+    return if permission_for_service?(@service)
+
+    raise PermissionDeniedException, "Sorry, you do not have permission to view this service."
   end
 end
