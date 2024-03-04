@@ -1,2 +1,9 @@
 @import 'govuk_admin_template';
 @import '_data_sets';
+
+// Local override of the crown
+.navbar .container .navbar-brand,
+.navbar .container-fluid .navbar-brand {
+  background: url("header-crown.png") 0 7.5px no-repeat;
+}
+
