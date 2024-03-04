@@ -7,3 +7,8 @@ coverage
 test/reports
 features/reports
 spec/reports/pacts
+
+# Ignore asset build dirs
+/app/assets/builds/*
+!/app/assets/builds/.keep
+public/assets/*
