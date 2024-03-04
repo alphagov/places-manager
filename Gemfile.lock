@@ -266,8 +266,6 @@ GEM
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
     language_server-protocol (3.17.0.3)
-    launchy (2.5.2)
-      addressable (~> 2.8)
     link_header (0.0.8)
     logstasher (2.1.5)
       activesupport (>= 5.2)
@@ -811,7 +809,6 @@ DEPENDENCIES
   govuk_test
   inherited_resources
   kaminari
-  launchy
   minitest-reporters
   mocha
   pact

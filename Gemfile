@@ -37,7 +37,6 @@ group :test do
   gem "cucumber-rails", require: false
   gem "factory_bot_rails"
   gem "govuk_test"
-  gem "launchy"
   gem "minitest-reporters"
   gem "mocha", require: false
   gem "rails-controller-testing"
