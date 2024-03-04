@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount GovukPublishingComponents::Engine, at: "/component-guide" if Rails.env.development?
+
   get "/healthcheck/live", to: proc { [200, {}, %w[OK]] }
   get "/healthcheck/ready", to: GovukHealthcheck.rack_response(
     GovukHealthcheck::ActiveRecord,
@@ -17,6 +19,4 @@ Rails.application.routes.draw do
 
   resources :places, only: :show
   root to: redirect("/admin")
-
-  mount GovukAdminTemplate::Engine, at: "/style-guide"
 end
