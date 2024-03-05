@@ -11,6 +11,7 @@
   <thead>
     <tr class="table-header">
       <th scope="col">Service</th>
+      <th scope="col">GOV.UK page</th>
       <th scope="col">Data sets</th>
       <th scope="col">Places</th>
     </tr>
@@ -24,6 +25,6 @@
     </tr>
   </thead>
   <tbody>
-    <%= render :collection => @services, :partial => "service", :locals => {:tab => :drafts} %>
+    <%= render collection: @services, partial: "service", locals: { tab: :drafts, lookup: GovukSiteLookupService.new } %>
   </tbody>
 </table>
