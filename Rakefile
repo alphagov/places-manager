@@ -20,4 +20,4 @@ rescue LoadError
 end
 
 Rake::Task[:default].clear if Rake::Task.task_defined?(:default)
-task default: %i[rubocop cucumber test pact:verify]
+task default: %i[lint cucumber test pact:verify]
