@@ -5,6 +5,13 @@
     <% end %>
   </td>
   <td>
+    <% if lookup.govuk_page?(service.slug) %>
+      <%= link_to(lookup.page_title(service.slug), lookup.page_link(service.slug)) %>
+    <% else %>
+      Not present on GOV.UK
+    <% end %>
+  </td>
+  <td>
     <%= pluralize(number_with_delimiter(service.data_sets.count), "data set", "data sets") %>
   </td>
   <td>
