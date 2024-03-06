@@ -3,8 +3,8 @@
   <h1>Add new service</h1>
 </div>
 
-<%= render '/admin/data_sets/file_help' %>
+<%= render "/admin/data_sets/file_help" %>
 
-<%= form_for(@service, url: admin_services_path, html: {class: 'well'}) do |f| %>
-  <%= render partial: 'form_fields', locals: { f: f } %>
+<%= form_for(@service, url: admin_services_path, html: {class: "well"}) do |f| %>
+  <%= render partial: "form_fields", locals: { f: f } %>
 <% end %>

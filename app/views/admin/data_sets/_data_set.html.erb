@@ -8,12 +8,12 @@
   <div class="panel-body">
     <% if data_set.processing_complete? %>
       <% unless data_set.active? %>
-        <%= button_to 'Activate', activate_admin_service_data_set_path(@service, data_set), :class=> 'btn btn-primary activate' %>
+        <%= button_to "Activate", activate_admin_service_data_set_path(@service, data_set), :class=> "btn btn-primary activate" %>
       <% end %>
 
-      <%= render partial: '/admin/data_sets/status', locals: { service: @service, dataset: data_set } %>
-      <hr />
-      <%= render partial: '/admin/data_sets/export', locals: { service: @service, dataset: data_set } %>
+      <%= render partial: "/admin/data_sets/status", locals: { service: @service, dataset: data_set } %>
+      <hr>
+      <%= render partial: "/admin/data_sets/export", locals: { service: @service, dataset: data_set } %>
 
       <% if data_set.number_of_places.zero? %>
         <p class="alert alert-warning">No places are associated with this set. The imported data could be in the wrong format.</p>
@@ -26,4 +26,4 @@
   </div>
 </section>
 
-<%= render :partial => '/admin/data_sets/data_set_explore', :locals => {:data_set => data_set} if data_set.processing_complete? %>
+<%= render :partial => "/admin/data_sets/data_set_explore", :locals => {:data_set => data_set} if data_set.processing_complete? %>

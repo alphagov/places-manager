@@ -1,15 +1,15 @@
 <tr>
   <td>
-    <%= link_to service.name, [:admin, service], class: 'js-open-on-submit' %>
+    <%= link_to service.name, [:admin, service], class: "js-open-on-submit" %>
     <% if service.active_data_set %><span class="text-muted"> <abbr title="Version <%= service.active_data_set_version %>">#<%= service.active_data_set_version %></abbr></span>
     <% end %>
   </td>
   <td>
-    <%= pluralize(number_with_delimiter(service.data_sets.count), 'data set', 'data sets') %>
+    <%= pluralize(number_with_delimiter(service.data_sets.count), "data set", "data sets") %>
   </td>
   <td>
     <% if service.active_data_set %>
-      <%= pluralize(number_with_delimiter(service.active_data_set.places.count), 'place', 'places') %>
+      <%= pluralize(number_with_delimiter(service.active_data_set.places.count), "place", "places") %>
     <% end %>
   </td>
 </tr>

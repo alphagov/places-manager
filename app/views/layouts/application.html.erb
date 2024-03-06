@@ -1,9 +1,9 @@
-<% content_for :app_title, 'GOV.UK Imminence' %>
-<% content_for :page_title, ' | GOV.UK Imminence' %>
+<% content_for :app_title, "GOV.UK Imminence" %>
+<% content_for :page_title, " | GOV.UK Imminence" %>
 <% content_for :head do %>
   <%= csrf_meta_tags %>
-  <%= stylesheet_link_tag 'application' %>
-  <%= javascript_include_tag 'application' %>
+  <%= stylesheet_link_tag "application" %>
+  <%= javascript_include_tag "application" %>
   <%= yield :extra_headers %>
 <% end %>
 
@@ -14,17 +14,17 @@
 <% end %>
 
 <% content_for :navbar_items do %>
-  <%= nav_link 'All services', admin_root_path %>
+  <%= nav_link "All services", admin_root_path %>
 <% end %>
 
 <% content_for :navbar_right do %>
-  <%= link_to current_user.name, Plek.new.external_url_for('signon') %>
-  &bull; <%= link_to 'Sign out', gds_sign_out_path %>
+  <%= link_to current_user.name, Plek.new.external_url_for("signon") %>
+  &bull; <%= link_to "Sign out", gds_sign_out_path %>
 <% end %>
 
 <% content_for :content do %>
   <% [:success, :info, :warning, :danger, :notice, :alert].select { |k| flash[k].present? }.each do |k| %>
-    <div class="alert alert-<%= k == :notice || k == :alert ? 'warning' : k %>">
+    <div class="alert alert-<%= k == :notice || k == :alert ? "warning" : k %>">
       <%= flash[k] %>
     </div>
   <% end %>
@@ -34,4 +34,4 @@
 <% content_for :footer_version, ENV.fetch("SENTRY_RELEASE", "null")[0..18] %>
 
 <%# use the govuk_admin_template layout %>
-<%= render :template => 'layouts/govuk_admin_template' %>
+<%= render :template => "layouts/govuk_admin_template" %>

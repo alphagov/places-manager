@@ -1,13 +1,13 @@
-<%= render :partial => 'admin/services/overview' %>
+<%= render :partial => "admin/services/overview" %>
 
-<%= form_for [:admin, @service, @data_set, @place], html: { class: 'well' } do |f| %>
+<%= form_for [:admin, @service, @data_set, @place], html: { class: "well" } do |f| %>
 
   <div class="form-group">
     <span class="form-label">
       <%= f.label :name %>
     </span>
     <span class="form-wrapper">
-      <%= f.text_field :name, class: 'input-md-6 form-control' %>
+      <%= f.text_field :name, class: "input-md-6 form-control" %>
     </span>
   </div>
 
@@ -20,7 +20,7 @@
         <%= f.label :address1 %>
       </span>
       <span class="form-wrapper">
-        <%= f.text_field :address1, class: 'input-md-6 form-control' %>
+        <%= f.text_field :address1, class: "input-md-6 form-control" %>
       </span>
     </div>
 
@@ -29,7 +29,7 @@
         <%= f.label :address2 %>
       </span>
       <span class="form-wrapper">
-        <%= f.text_field :address2, class: 'input-md-6 form-control' %>
+        <%= f.text_field :address2, class: "input-md-6 form-control" %>
       </span>
     </div>
 
@@ -38,7 +38,7 @@
         <%= f.label :town %>
       </span>
       <span class="form-wrapper">
-        <%= f.text_field :town, class: 'input-md-6 form-control' %>
+        <%= f.text_field :town, class: "input-md-6 form-control" %>
       </span>
     </div>
 
@@ -47,7 +47,7 @@
         <%= f.label :postcode %>
       </span>
       <span class="form-wrapper">
-        <%= f.text_field :postcode, class: 'input-md-2 form-control' %>
+        <%= f.text_field :postcode, class: "input-md-2 form-control" %>
         <% if f.object.errors[:postcode].any? %>
           <div class="text-danger" id="place_override_postcode_input">
             <%= f.object.errors[:postcode].to_sentence %>
@@ -61,7 +61,7 @@
         <%= f.label :override_lng, "Override longitude" %>
       </span>
       <span class="form-wrapper">
-        <%= f.text_field :override_lng, placeholder: "Leave blank to use postcode coords", required: true, class: 'input-md-4 form-control' %>
+        <%= f.text_field :override_lng, placeholder: "Leave blank to use postcode coords", required: true, class: "input-md-4 form-control" %>
         <% if f.object.errors[:override_lng].any? %>
           <div class="text-danger" id="place_override_lng_input">
             <%= f.object.errors[:override_lng].to_sentence %>
@@ -75,7 +75,7 @@
         <%= f.label :override_lat, "Override latitude" %>
       </span>
       <span class="form-wrapper">
-        <%= f.text_field :override_lat, placeholder: "Leave blank to use postcode coords", required: true, class: 'input-md-4 form-control' %>
+        <%= f.text_field :override_lat, placeholder: "Leave blank to use postcode coords", required: true, class: "input-md-4 form-control" %>
         <% if f.object.errors[:override_lat].any? %>
           <div class="text-danger" id="place_override_lat_input">
             <%= f.object.errors[:override_lat].to_sentence %>
@@ -89,7 +89,7 @@
         <%= f.label :gss, "GSS code" %>
       </span>
       <span class="form-wrapper">
-        <%= f.text_field :gss, class: 'input-md-2 form-control' %>
+        <%= f.text_field :gss, class: "input-md-2 form-control" %>
       </span>
     </div>
   </fieldset>
@@ -103,7 +103,7 @@
         <%= f.label :url, "Website" %>
       </span>
       <span class="form-wrapper">
-        <%= f.text_field :url, class: 'input-md-6 form-control' %>
+        <%= f.text_field :url, class: "input-md-6 form-control" %>
       </span>
     </div>
 
@@ -112,7 +112,7 @@
         <%= f.label :email %>
       </span>
       <span class="form-wrapper">
-        <%= f.text_field :email, class: 'input-md-6 form-control' %>
+        <%= f.text_field :email, class: "input-md-6 form-control" %>
       </span>
     </div>
 
@@ -121,7 +121,7 @@
         <%= f.label :phone %>
       </span>
       <span class="form-wrapper">
-        <%= f.text_field :phone, class: 'input-md-6 form-control' %>
+        <%= f.text_field :phone, class: "input-md-6 form-control" %>
       </span>
     </div>
 
@@ -130,7 +130,7 @@
         <%= f.label :fax %>
       </span>
       <span class="form-wrapper">
-        <%= f.text_field :fax, class: 'input-md-6 form-control' %>
+        <%= f.text_field :fax, class: "input-md-6 form-control" %>
       </span>
     </div>
 
@@ -139,7 +139,7 @@
         <%= f.label :text_phone %>
       </span>
       <span class="form-wrapper">
-        <%= f.text_field :text_phone, class: 'input-md-6 form-control' %>
+        <%= f.text_field :text_phone, class: "input-md-6 form-control" %>
       </span>
     </div>
   </fieldset>
@@ -153,7 +153,7 @@
         <%= f.label :access_notes %>
       </span>
       <span class="form-wrapper">
-        <%= f.text_area :access_notes, rows: 3, class: 'input-md-6 form-control' %>
+        <%= f.text_area :access_notes, rows: 3, class: "input-md-6 form-control" %>
       </span>
     </div>
 
@@ -162,12 +162,12 @@
         <%= f.label :general_notes %>
       </span>
       <span class="form-wrapper">
-        <%= f.text_area :general_notes, rows: 3, class: 'input-md-6 form-control' %>
+        <%= f.text_area :general_notes, rows: 3, class: "input-md-6 form-control" %>
       </span>
     </div>
   </fieldset>
 
-  <%= f.submit "Update Place", class: "btn btn-primary"  %>
-  <%= link_to 'Cancel', admin_service_data_set_path(@service, @data_set), class: 'btn btn-default add-left-margin' %>
+  <%= f.submit "Update Place", class: "btn btn-primary" %>
+  <%= link_to "Cancel", admin_service_data_set_path(@service, @data_set), class: "btn btn-default add-left-margin" %>
 
 <% end %>

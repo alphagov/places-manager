@@ -45,11 +45,11 @@
           <% end %>
         </dl>
         <% if set.processing_complete? %>
-          <hr />
-          <%= render partial: '/admin/data_sets/status', locals: { service: @service, dataset: set } %>
+          <hr>
+          <%= render partial: "/admin/data_sets/status", locals: { service: @service, dataset: set } %>
 
-          <hr />
-          <%= render partial: '/admin/data_sets/export', locals: { service: @service, dataset: set } %>
+          <hr>
+          <%= render partial: "/admin/data_sets/export", locals: { service: @service, dataset: set } %>
 
         <% elsif set.processing_error.present? %>
           <p class="alert alert-danger remove-bottom-margin"><%= set.processing_error %></p>
@@ -57,11 +57,11 @@
           <p class="alert alert-info remove-bottom-margin">Places data is currently being processed.</p>
         <% end %>
         <% if set.unarchived? && set.processing_complete? %>
-          <hr />
+          <hr>
           <% unless set.active? %>
-            <%= button_to "Activate", activate_admin_service_data_set_path(@service, set), :method => "POST", :class => 'btn btn-sm btn-primary pull-left add-right-margin' %>
+            <%= button_to "Activate", activate_admin_service_data_set_path(@service, set), :method => "POST", :class => "btn btn-sm btn-primary pull-left add-right-margin" %>
           <% end %>
-          <%= button_to "Duplicate", duplicate_admin_service_data_set_path(@service, set), :method => "POST", :class => 'btn btn-sm btn-default duplicate', :title => "Use the data from Version #{set.version} as a basis for a new version" %>
+          <%= button_to "Duplicate", duplicate_admin_service_data_set_path(@service, set), :method => "POST", :class => "btn btn-sm btn-default duplicate", :title => "Use the data from Version #{set.version} as a basis for a new version" %>
         <% end %>
       </div>
     </section>
