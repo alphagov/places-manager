@@ -16,7 +16,7 @@
   <h1>
     <%= @service.name %>
     <% if @service.active_data_set %>
-      (Version <%= @service.active_data_set_version %> active: <%= pluralize(@service.active_data_set.places.count, 'place', 'places') %>)
+      (Version <%= @service.active_data_set_version %> active: <%= pluralize(@service.active_data_set.places.count, "place", "places") %>)
     <% end %>
   </h1>
 </div>

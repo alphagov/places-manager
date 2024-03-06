@@ -1,5 +1,5 @@
 <% content_for :page_title, @service.name %>
-<%= render :partial => 'overview' %>
+<%= render :partial => "overview" %>
 
 <ul class="nav nav-tabs add-bottom-margin">
   <li class="active"><a href="#current-data" data-toggle="tab">Active data set</a></li>
@@ -10,17 +10,17 @@
 
 <div class="tab-content">
   <div class="tab-pane active" id="current-data">
-    <%= render '/admin/services/current' %>
+    <%= render "/admin/services/current" %>
   </div>
   <div class="tab-pane" id="metadata">
     <div class="well">
-      <%= render '/admin/services/edit' %>
+      <%= render "/admin/services/edit" %>
     </div>
   </div>
   <div class="tab-pane" id="history">
-    <%= render '/admin/services/history' %>
+    <%= render "/admin/services/history" %>
   </div>
   <div class="tab-pane" id="new-data">
-    <%= render '/admin/services/new_data' %>
+    <%= render "/admin/services/new_data" %>
   </div>
 </div>

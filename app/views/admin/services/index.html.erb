@@ -5,7 +5,7 @@
   </h1>
 </div>
 
-<%= link_to new_admin_service_path, :class => 'btn btn-default' do %>Add new service<% end %>
+<%= link_to new_admin_service_path, :class => "btn btn-default" do %>Add new service<% end %>
 
 <table class="add-top-margin table table-striped table-bordered" summary="Full list of available services" data-module="filterable-table">
   <thead>
@@ -18,12 +18,12 @@
       <td colspan="3">
         <form>
           <label for="table-filter" class="rm">Filter services</label>
-          <input id="table-filter" type="text" class="form-control normal js-filter-table-input" placeholder="Filter list of services">
+          <input id="table-filter" type="text" class="form-control normal js-filter-table-input" placeholder="Filter list of services" autocomplete="off">
         </form>
       </td>
     </tr>
   </thead>
   <tbody>
-    <%= render :collection => @services, :partial => 'service', :locals => {:tab => :drafts} %>
+    <%= render :collection => @services, :partial => "service", :locals => {:tab => :drafts} %>
   </tbody>
 </table>

@@ -6,9 +6,9 @@
     <div class="panel-body">
       <p>Creates a new version of the data set from an existing version, so that places can be edited.</p>
 
-      <%= link_to "Duplicate most recent data set (Version #{@service.latest_data_set.version})", duplicate_admin_service_data_set_path(@service, @service.latest_data_set), :method => "POST", :class => 'btn btn-primary add-right-margin' %>
+      <%= link_to "Duplicate most recent data set (Version #{@service.latest_data_set.version})", duplicate_admin_service_data_set_path(@service, @service.latest_data_set), :method => "POST", :class => "btn btn-primary add-right-margin" %>
       <% if @service.active_data_set and @service.active_data_set != @service.latest_data_set %>
-        <%= link_to "Duplicate currently active data set (Version #{@service.active_data_set.version})", duplicate_admin_service_data_set_path(@service, @service.active_data_set), :method => "POST", :class => 'btn btn-default' %>
+        <%= link_to "Duplicate currently active data set (Version #{@service.active_data_set.version})", duplicate_admin_service_data_set_path(@service, @service.active_data_set), :method => "POST", :class => "btn btn-default" %>
       <% end %>
     </div>
   </section>
@@ -19,7 +19,7 @@
     <h4 class="panel-title">Upload a new data set</h4>
   </header>
   <div class="panel-body">
-    <%= render '/admin/data_sets/file_help' %>
+    <%= render "/admin/data_sets/file_help" %>
     <%= form_for(@service.data_sets.build, url: admin_service_data_sets_path(@service)) do |f| %>
       <fieldset>
         <div class="form-group">
@@ -27,7 +27,7 @@
             <%= f.label :data_file %>
           </span>
           <span class="form-wrapper">
-            <%= f.file_field :data_file, accept: 'text/csv' %>
+            <%= f.file_field :data_file, accept: "text/csv" %>
           </span>
         </div>
 
@@ -36,11 +36,11 @@
             <%= f.label :change_notes, "Change note" %>
           </span>
           <span class="form-wrapper">
-            <%= f.text_area :change_notes, rows: 10, class: 'input-md-6 form-control' %>
+            <%= f.text_area :change_notes, rows: 10, class: "input-md-6 form-control" %>
           </span>
         </div>
       </fieldset>
-      <%= f.submit "Create Data set", class: 'btn btn-primary' %>
+      <%= f.submit "Create Data set", class: "btn btn-primary" %>
     <% end %>
   </div>
 </section>
