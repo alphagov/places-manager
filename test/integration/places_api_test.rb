@@ -76,6 +76,10 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
     end
 
     context "requesting a specific version" do
+      setup do
+        stub_request(:get, "http://search-api.dev.gov.uk/search.json?count=200&fields=title,link&filter_format=place").to_return(status: 200, body: { results: [] }.to_json, headers: {})
+      end
+
       should "return requested version when logged in" do
         GDS::SSO.test_user = FactoryBot.create(:user)
         visit "/admin" # necessary to setup the login session
