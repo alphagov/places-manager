@@ -3,13 +3,20 @@ FactoryBot.define do
     sequence(:uid) { |n| "uid-#{n}" }
     sequence(:name) { |n| "Joe Bloggs #{n}" }
     sequence(:email) { |n| "joe#{n}@bloggs.com" }
-    permissions { %w[signin] }
+    organisation_slug { "test-department" }
+    permissions { %w[signin Editor] }
+  end
+
+  factory :gds_editor_user, class: User, parent: :user do
+    organisation_slug { "government-digital-service" }
+    permissions { ["signin", "GDS Editor"] }
   end
 
   factory :service do
     name { "Important Government Service" }
     sequence(:slug) { |n| "important-government-service-#{n}" }
     source_of_data { "Somewhere beyond the sea" }
+    organisation_slugs { %w[test-department] }
   end
 
   factory :place do

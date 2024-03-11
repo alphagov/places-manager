@@ -82,6 +82,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
 
       should "return requested version when logged in" do
         GDS::SSO.test_user = FactoryBot.create(:user)
+        stub_organisations_test_department
         visit "/admin" # necessary to setup the login session
 
         visit "/places/#{@service.slug}.json?version=#{@data_set1.to_param}"

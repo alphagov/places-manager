@@ -17,6 +17,18 @@
     </span>
   </div>
 
+  <% if current_user.permissions.include?("GDS Editor") %>
+    <div class="form-group">
+      <span class="form-label">
+        <%= f.label :organisation_slugs %>
+      </span>
+      <span class="form-wrapper">
+        <%= f.text_field :organisation_slugs, class: "input-md-6 form-control" %>
+      </span>
+      <p class="hint-text">For multiple owning organisations, list slugs separated by spaces</p>
+    </div>
+  <% end %>
+
   <% if f.object.new_record? %>
     <div class="form-group">
       <span class="form-label">

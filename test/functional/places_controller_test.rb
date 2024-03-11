@@ -45,7 +45,7 @@ class PlacesControllerTest < ActionController::TestCase
   end
 
   test "as a logged in user I can access a non-active data set" do
-    as_logged_in_user do
+    as_gds_editor do
       get :show, params: { id: @service.slug }, format: :json
       assert_response :success
       data = JSON.parse(response.body)
@@ -57,7 +57,7 @@ class PlacesControllerTest < ActionController::TestCase
   end
 
   test "can show a JSON representation of places" do
-    as_logged_in_user do
+    as_gds_editor do
       get :show, params: { id: @service.slug }, format: :json
       assert_response :success
       json_data = JSON.parse(response.body)
@@ -73,7 +73,7 @@ class PlacesControllerTest < ActionController::TestCase
   end
 
   test "can show a JSON representation of a place with no coordinates" do
-    as_logged_in_user do
+    as_gds_editor do
       get :show, params: { id: @service.slug }, format: :json
       assert_response :success
       json_data = JSON.parse(response.body)
@@ -84,7 +84,7 @@ class PlacesControllerTest < ActionController::TestCase
   end
 
   test "can show a KML representation of places" do
-    as_logged_in_user do
+    as_gds_editor do
       get :show, params: { id: @service.slug }, format: :kml
       assert_response :success
       kml_data = Hash.from_xml(response.body)

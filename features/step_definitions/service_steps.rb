@@ -4,6 +4,12 @@ Given(/^I have previously created the "(.*?)" service$/) do |name|
   @service = create_service(params)
 end
 
+Given(/^(?:a|an) (.*?) editor has previously created the "(.*?)" service$/) do |organisation_slug, name|
+  params = { name:, slug: name.parameterize, organisation_slugs: [organisation_slug], csv_path: csv_path_for_data(name) }
+
+  @service = create_service(params)
+end
+
 Given(/^I have previously created a service with the following attributes:$/) do |table|
   params = table.rows_hash.symbolize_keys!
   raise ArgumentError, "name cannot be nil" if params[:name].nil?
@@ -30,6 +36,19 @@ end
 
 When(/^I visit the history tab$/) do
   click_link "Version history"
+end
+
+When("I go to the service list page") do
+  GdsApiHelper.new.stub_search_finds_no_govuk_pages
+  visit root_path
+end
+
+Then("I should be able to see the Register Offices service") do
+  expect(page).to have_content("Register Offices")
+end
+
+Then("I should not be able to see the Register Offices service") do
+  expect(page).to_not have_content("Register Offices")
 end
 
 When(/^I fill in the form to create the "(.*?)" service with a bad CSV$/) do |name|

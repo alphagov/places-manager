@@ -9,6 +9,7 @@ require "rails/test_help"
 require "mocha/minitest"
 require "gds_api/test_helpers/json_client_helper"
 require "gds_api/test_helpers/locations_api"
+require "gds_api/test_helpers/organisations"
 require "webmock/minitest"
 require "govuk_sidekiq/testing"
 # Poltergeist requires access to localhost.
@@ -22,6 +23,7 @@ reporter_options = { color: true }
 Minitest::Reporters.use! [Minitest::Reporters::DefaultReporter.new(reporter_options)]
 
 class ActiveSupport::TestCase
+  include GdsApi::TestHelpers::Organisations
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   # fixtures :all
 
@@ -44,10 +46,22 @@ class ActiveSupport::TestCase
   end
   set_callback :setup, :before, :reset_sidekiq_testing
 
-  def as_logged_in_user(&_block)
+  def as_gds_editor(&block)
+    as_logged_in_user(["GDS Editor"], "government-digital-service", &block)
+  end
+
+  def as_test_department_user(&block)
+    as_logged_in_user([], "test-department", &block)
+  end
+
+  def as_other_department_user(&block)
+    as_logged_in_user([], "other-department", &block)
+  end
+
+  def as_logged_in_user(permissions, organisation_slug, &_block)
     @controller.stubs(:authenticate_user!).returns(true)
     @controller.stubs(:user_signed_in?).returns(true)
-    @controller.stubs(:current_user).returns(User.new)
+    @controller.stubs(:current_user).returns(User.new(permissions:, organisation_slug:))
     yield
     @controller.unstub(:current_user)
     @controller.unstub(:user_signed_in?)
@@ -70,5 +84,9 @@ class ActiveSupport::TestCase
   def stub_locations_api_does_not_have_a_postcode(postcode)
     stub_request(:get, "#{GdsApi::TestHelpers::LocationsApi::LOCATIONS_API_ENDPOINT}/v1/locations?postcode=#{postcode}")
       .to_return(body: { "errors" => { "postcode" => ["No results found for given postcode"] } }.to_json, status: 404)
+  end
+
+  def stub_organisations_test_department
+    stub_organisations_api_has_organisations_with_bodies([{ "title" => "Department of Testing", "details" => { "slug" => "test-department" } }])
   end
 end
