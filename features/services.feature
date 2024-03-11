@@ -87,3 +87,18 @@ Feature: Managing services
       And I go to the page for the "Register Offices With Missing GSS Codes" service
 
     Then I should not see any text about missing GSS codes
+
+  Scenario: Creating a new service as a GDS Editor
+    Given I am a GDS editor
+
+    When I go to the new service page
+      And I fill out the form with the following attributes to create a service:
+        | name                                 | Register Offices         |
+        | slug                                 | all-new-register-offices |
+        | organisation_slugs                   | test-department          |
+        | source_of_data                       | Testing source of data   |
+        | location_match_type                  | Local authority          |
+        | local_authority_hierarchy_match_type | County                   |
+
+    Then I should be on the page for the "Register Offices" service
+      And I should see an indication that my data set is awaiting processing
