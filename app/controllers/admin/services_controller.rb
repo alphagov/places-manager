@@ -49,13 +49,20 @@ protected
   def service_params(correct_encoding: true)
     permitted_params = %i[name slug source_of_data location_match_type local_authority_hierarchy_match_type]
     permitted_params << :data_file if correct_encoding && (%w[create new].include? action_name.to_s)
-    gds_editor_slugs = params[:service].delete(:organisation_slugs).split(/[, ]+/) if gds_editor?
+    gds_editor_slugs = org_slugs_from_params
     p = params
       .require(:service)
       .permit(*permitted_params)
     p = p.merge(organisation_slugs: [current_user.organisation_slug]) if org_slug_from_creator?
-    p = p.merge(organisation_slugs: gds_editor_slugs) if gds_editor?
+    p = p.merge(organisation_slugs: gds_editor_slugs) if gds_editor_slugs.any?
     p
+  end
+
+  def org_slugs_from_params
+    return [] unless gds_editor?
+    return [] unless params[:service]&.key?(:organisation_slugs)
+
+    params[:service].delete(:organisation_slugs).split(/[, ]+/)
   end
 
   def org_slug_from_creator?
