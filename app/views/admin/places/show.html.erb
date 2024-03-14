@@ -1,0 +1,14 @@
+<% content_for :page_title, @place.name %>
+
+<%= render "govuk_publishing_components/components/heading", {
+  text:  @place.name,
+  heading_level: 1,
+  font_size: "l",
+  margin_bottom: 5,
+} %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render "govuk_publishing_components/components/summary_list", PlacePresenter.new(@place).summary_list(self) %>
+  </div>
+</div>
