@@ -26,7 +26,7 @@
             margin_bottom: 5,
           } %>
 
-          <% if !@data_set.active? && @data_set.processing_complete? && @data_set.number_of_places.positive? && !@data_set.processing_error.present? %>
+          <% if @data_set.can_be_made_active? %>
             <p class="govuk-body">You can make this data set active to start using it for queries. This will take effect immediately.</p>
             <%= form_for(@service, url: activate_admin_service_data_set_path(@data_set.service, @data_set), method: "POST", class: "govuk-!-margin-bottom-5") do %>
               <%= render "govuk_publishing_components/components/button", { text: "Make Active", margin_bottom: 5 } %>

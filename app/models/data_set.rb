@@ -214,6 +214,13 @@ class DataSet < ApplicationRecord
     id.to_s == service.latest_data_set.id.to_s
   end
 
+  def can_be_made_active?
+    !active? &&
+      processing_complete? &&
+      processing_error.blank? &&
+      number_of_places.positive?
+  end
+
   def activate
     return false unless processing_complete?
 
