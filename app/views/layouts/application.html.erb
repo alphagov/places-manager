@@ -1,37 +1,40 @@
-<% content_for :app_title, "GOV.UK Imminence" %>
-<% content_for :page_title, " | GOV.UK Imminence" %>
-<% content_for :head do %>
-  <%= csrf_meta_tags %>
-  <%= stylesheet_link_tag "application" %>
-  <%= javascript_include_tag "application" %>
-  <%= yield :extra_headers %>
+<% environment = GovukPublishingComponents::AppHelpers::Environment.current_acceptance_environment %>
+
+<% content_for :body do %>
+  <main id="content">
+    <%= yield %>
+  </main>
 <% end %>
 
-<% content_for :favicon do %>
-  <% environment_style = GovukAdminTemplate.environment_style %>
-  <%= favicon_link_tag environment_style ?
-        "favicon-#{environment_style}.png" : "favicon.png" %>
+<%= render "govuk_publishing_components/components/layout_for_admin", {
+  environment:,
+  product_name: "Imminence",
+  browser_title: (yield :page_title),
+} do %>
+  <%= render "govuk_publishing_components/components/layout_header", {
+    product_name: "Imminence",
+    environment:,
+    navigation_items: [
+      {
+        text: "Services",
+        href: root_path,
+        active: current_page?(root_path),
+      },
+    ],
+  } %>
+
+  <div class="govuk-width-container">
+
+  <%= render "govuk_publishing_components/components/breadcrumbs", {
+    collapse_on_mobile: true,
+    breadcrumbs: @breadcrumbs,
+  } %>
+
+  <div class="govuk-main-wrapper">
+    <%= yield :body %>
+  </div>
+
+</div>
+
+<%= render "govuk_publishing_components/components/layout_footer" %>
 <% end %>
-
-<% content_for :navbar_items do %>
-  <%= nav_link "All services", admin_root_path %>
-<% end %>
-
-<% content_for :navbar_right do %>
-  <%= link_to current_user.name, Plek.new.external_url_for("signon") %>
-  &bull; <%= link_to "Sign out", gds_sign_out_path %>
-<% end %>
-
-<% content_for :content do %>
-  <% [:success, :info, :warning, :danger, :notice, :alert].select { |k| flash[k].present? }.each do |k| %>
-    <div class="alert alert-<%= k == :notice || k == :alert ? "warning" : k %>">
-      <%= flash[k] %>
-    </div>
-  <% end %>
-  <%= yield %>
-<% end %>
-
-<% content_for :footer_version, ENV.fetch("SENTRY_RELEASE", "null")[0..18] %>
-
-<%# use the govuk_admin_template layout %>
-<%= render :template => "layouts/govuk_admin_template" %>
