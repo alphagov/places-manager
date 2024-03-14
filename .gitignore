@@ -2,6 +2,7 @@
 !.bundle/config
 db/*.sqlite3
 log/*.log
+log/*.log.0
 tmp/
 coverage
 test/reports
