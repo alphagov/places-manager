@@ -3,12 +3,15 @@ require "test_helper"
 class Admin::ServicesControllerTest < ActionController::TestCase
   test "should create service" do
     as_gds_editor do
+      csv_file = fixture_file_upload(Rails.root.join("test/fixtures/good_csv.csv"), "text/csv")
+
       service_params = {
         name: "Register Offices",
         slug: "register-offices",
         organisation_slugs: "government-digital-service test-service",
         location_match_type: "local_authority",
         local_authority_hierarchy_match_type: "county",
+        data_file: csv_file,
       }
 
       post :create, params: { service: service_params }
@@ -28,6 +31,7 @@ class Admin::ServicesControllerTest < ActionController::TestCase
   context "with a service created by test-department" do
     setup do
       @service = FactoryBot.create(:service)
+      stub_search_finds_no_govuk_pages
     end
 
     should "not be visible to other-department user" do

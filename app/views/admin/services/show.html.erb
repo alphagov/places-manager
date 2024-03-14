@@ -1,26 +1,37 @@
-<% content_for :page_title, @service.name %>
-<%= render :partial => "overview" %>
+<% content_for :page_title,  @service.name %>
 
-<ul class="nav nav-tabs add-bottom-margin">
-  <li class="active"><a href="#current-data" data-toggle="tab">Active data set</a></li>
-  <li><a href="#metadata" data-toggle="tab">Service details</a></li>
-  <li><a href="#history" data-toggle="tab">Version history</a></li>
-  <li><a href="#new-data" data-toggle="tab">Load new data set</a></li>
-</ul>
+<%= render partial: "shared/flash" %>
 
-<div class="tab-content">
-  <div class="tab-pane active" id="current-data">
-    <%= render "/admin/services/current" %>
+<%= render "govuk_publishing_components/components/heading", {
+  text:  @service.name,
+  heading_level: 1,
+  font_size: "l",
+  margin_bottom: 5,
+} %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render "govuk_publishing_components/components/summary_list", ServicePresenter.new(@service).summary_list(self) %>
   </div>
-  <div class="tab-pane" id="metadata">
-    <div class="well">
-      <%= render "/admin/services/edit" %>
-    </div>
-  </div>
-  <div class="tab-pane" id="history">
-    <%= render "/admin/services/history" %>
-  </div>
-  <div class="tab-pane" id="new-data">
-    <%= render "/admin/services/new_data" %>
+  <div class="govuk-grid-column-one-third">
+    <aside class="app-side__wrapper">
+      <div class="app-side">
+        <div class="app-side__actions">
+          <%= render "govuk_publishing_components/components/list", {
+            items: [
+              link_to("Edit service", edit_resource_path(@service), class: "govuk-link"),
+              link_to("Upload new dataset", new_admin_service_data_set_path(@service), class: "govuk-link"),
+              link_to("Datasets", admin_service_data_sets_path(@service), class: "govuk-link"),
+              link_to("Export active dataset as JSON", place_path(@service.slug, version: @service.active_data_set, format: :json), class: "govuk-link"),
+              link_to("Export active dataset as KML", place_path(@service.slug, version: @service.active_data_set, format: :kml), class: "govuk-link"),
+              link_to("Export active dataset as CSV", place_path(@service.slug, version: @service.active_data_set, format: :csv), class: "govuk-link"),
+            ],
+            margin_bottom: 0,
+          } %>
+        </div>
+      </div>
+    </aside>
   </div>
 </div>
+
+<%= render @service.active_data_set %>
