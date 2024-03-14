@@ -4,6 +4,7 @@ Feature: Managing services
 
   Background:
     Given I am an editor
+    Given there are no frontend pages
 
   Scenario: Creating a new service
     When I go to the new service page
@@ -18,21 +19,18 @@ Feature: Managing services
     Then I should be on the page for the "Register Offices" service
       And I should see an indication that my data set is awaiting processing
 
-    When I visit the details tab
-    Then I should see the "Name" field filled with "Register Offices"
+    When I click on "Edit service"
+      And I should see the "Name" field filled with "Register Offices"
       And I should see the "Slug" field filled with "all-new-register-offices"
       And I should see the "Source of data" field filled with "Testing source of data"
-      And I should see the "Location match type" select field set to "Local authority"
-      And I should see the "Local authority hierarchy match type" select field set to "County"
+      And I should see the "service[location_match_type]" select field set to "Local authority"
+      And I should see the "service[local_authority_hierarchy_match_type]" select field set to "County"
 
     When background processing has completed
       And I go to the page for the "Register Offices" service
 
     Then I should see an indication that my data set contained 174 items
-
-    When I visit the history tab
-
-    Then the first version panel has the title "Version 1"
+      And I should see the version is 1
 
   Scenario: Creating a new service where the data doesn't import
     When I go to the new service page
@@ -71,11 +69,11 @@ Feature: Managing services
 
     Then I should see that the current service has 2 missing GSS codes
 
-    When I visit the history tab
+    When I click on "Datasets"
+      And I view the most recent data set
 
-    Then the first version panel has the title "Version 1"
-      And the first version panel has the text "2 places with missing GSS codes"
-      And the first version panel shows a warning about missing GSS codes
+    Then I should see that the current data set has 2 missing GSS codes
+      And I should see that the current data set is version 1
 
   Scenario: Creating a new service with nearest lookup with a file with missing GSS codes
     When I go to the new service page
