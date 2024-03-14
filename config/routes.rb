@@ -8,10 +8,10 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :services do
-      resources :data_sets, except: %i[index destroy] do
+      resources :data_sets, except: %i[update destroy] do
         post :activate, on: :member
-        post :duplicate, on: :member
-        resources :places, except: %i[index show]
+        post :fix_geoencode_errors, on: :member
+        resources :places, only: :show
       end
     end
     root to: "services#index"
