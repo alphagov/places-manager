@@ -7,39 +7,33 @@ Given(/^background processing has completed$/) do
 end
 
 When(/^I upload a new data set$/) do
-  within "#new-data" do
-    attach_file "Data file", csv_path_for_data("Register Offices")
-    click_button "Create Data set"
-  end
+  attach_file "Upload a file", csv_path_for_data("Register Offices")
+  click_button "Upload"
 end
 
 When(/^I upload a new data set with a CSV in the wrong format$/) do
-  within "#new-data" do
-    attach_file "Data file", Rails.root.join("features/support/data/wrong_format.csv")
-    click_button "Create Data set"
-  end
+  attach_file "Upload a file", Rails.root.join("features/support/data/wrong_format.csv")
+  click_button "Upload"
 end
 
 When(/^I upload a new data set with a PNG claiming to be a CSV$/) do
-  within "#new-data" do
-    attach_file "Data file", Rails.root.join("features/support/data/rails.csv")
-    click_button "Create Data set"
-  end
+  attach_file "Upload a file", Rails.root.join("features/support/data/rails.csv")
+  click_button "Upload"
 end
 
 When(/^I upload a new data set with a CSV with missing GSS codes$/) do
-  within "#new-data" do
-    attach_file "Data file", Rails.root.join("features/support/data/register-offices-with-missing-gss-codes.csv")
-    click_button "Create Data set"
+  attach_file "Upload a file", Rails.root.join("features/support/data/register-offices-with-missing-gss-codes.csv")
+  click_button "Upload"
+end
+
+When(/^I make it active$/) do
+  click_button "Make Active"
+end
+
+When(/^I view the most recent data set$/) do
+  within "tbody tr:last" do
+    click_link "View"
   end
-end
-
-When(/^I click "Activate"$/) do
-  click_button "Activate"
-end
-
-When(/^I click "Duplicate"$/) do
-  click_button "Duplicate"
 end
 
 When(/^I go to the page for the latest data set for the "(.*?)" service$/) do |name|
@@ -78,6 +72,7 @@ end
 
 When(/^I upload the exported CSV to the "(.*?)" service$/) do |name|
   visit path_for_service(name)
+  click_link "Upload new dataset"
   upload_csv_data(@exported_csv_data)
   run_all_delayed_jobs
 end
@@ -95,11 +90,15 @@ Then(/^I should see an indication that my data set is awaiting processing$/) do
 end
 
 Then(/^I should see an indication that my data set contained (\d+) items$/) do |count|
-  expect(page).to have_content("#{count} places")
+  expect(page).to have_content("Places #{count}")
 end
 
 Then(/^I should see an indication that my data set is empty$/) do
-  expect(page).to have_content("No places are associated with this set. The imported data could be in the wrong format.")
+  expect(page).to have_content("Places 0")
+end
+
+Then(/^I should see an indication that there was an import problem$/) do
+  expect(page).to have_content("Database error occurred. Please try re-importing.")
 end
 
 Then(/^I should be on the page for the latest data set for the "(.*?)" service$/) do |name|
@@ -111,6 +110,19 @@ Then(/^I should see that there are now (\d+) data sets$/) do |count|
 end
 
 Then(/^I should see that the second data set is active$/) do
+  expect(page).to have_content("Version 2")
+  expect(page).to have_content("Use Active")
+end
+
+Then("I should see that the current data set is version {int}") do |int|
+  expect(page).to have_content("Version #{int}")
+end
+
+Then("I should see {int} versions in the list") do |int|
+  expect(page.all("tbody tr").count).to eq(int)
+end
+
+Then(/^I should see "(.*)" versions in the listthat the second data set is active$/) do
   expect(page).to have_content("Version 2 active")
 end
 
@@ -149,14 +161,10 @@ Then(/^I should not see an "edit" action for a record$/) do
   end
 end
 
-Then(/^I should see an indication that the first data set is being archived$/) do
-  expect(page).to have_content("Version 1 Archiving")
+Then("I should see an indication that the first data set is being archived") do
+  expect(page).to have_content("Archiving 1")
 end
 
-Then(/^I should not see the first data set$/) do
-  expect(page).not_to have_content("Version 1")
-end
-
-Then("I should see that a duplicating job was enqueued for data set version {int}") do |int|
-  expect(page).to have_content("Your request for a duplicate of data set version #{int} is being processed. This can take a few minutes.")
+Then("I should not see the first data set") do
+  expect(page).not_to have_content("active 1")
 end

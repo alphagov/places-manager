@@ -2,23 +2,32 @@ require "imminence/file_verifier"
 require "csv"
 
 class Admin::ServicesController < InheritedResources::Base
-  include Admin::AdminControllerMixin
+  include Admin::Defaults
+  include Admin::FileUpload
+  include Admin::Permissions
+
+  custom_actions resource: :data_set_history
+  before_action :set_breadcrumbs
 
   def index
-    @services = services_for_user(current_user)
+    @only_used = params[:only_used] == "true"
+    @services = services_for_user(current_user).order(:name)
+    @total_services = @services.count
+    if @only_used
+      lookup = GovukSiteLookupService.new
+      @services = @services.select { |service| lookup.govuk_page?(service.slug) }
+    end
   end
 
   def create
     prohibit_non_csv_uploads
-    create!
-  rescue CSV::MalformedCSVError
-    flash.now[:danger] = "Could not process CSV file. Please check the format."
-    @service = Service.new(service_params)
-    render action: "new"
-  rescue InvalidCharacterEncodingError
-    flash.now[:danger] = "Could not process CSV file. Please check the format."
-    @service = Service.new(service_params(correct_encoding: false))
-    render action: "new"
+    create! do |_success, failure|
+      failure.html do
+        map_model_errors(@service.errors)
+        return render "new"
+      end
+    end
+    flash[:success] = "Service created"
   end
 
   def edit
@@ -28,21 +37,58 @@ class Admin::ServicesController < InheritedResources::Base
 
   def show
     @service = Service.find(params[:id])
+    @only_errors = params[:only_errors] == "true"
     check_permission!
+  end
+
+  def update
+    update! do |_success, failure|
+      failure.html do
+        map_model_errors(@service.errors)
+        return render "edit"
+      end
+    end
+    flash[:success] = "Service updated"
+  end
+
+  def map_model_errors(errors)
+    @form_errors = errors.map { |e| { id: "service[#{e.attribute}]", text: "#{e.attribute.to_s.titleize} #{e.message}", href: "#service-#{e.attribute}-field" } }
+  end
+
+  def missing_csv
+    @form_errors = [{ id: "service[data_file]", href: "#service-data-file-field", text: "You must upload an initial datafile." }]
+    @service = Service.new(service_params)
+    render "new", status: :unprocessable_entity
+  end
+
+  def bad_csv
+    @form_errors = [{ id: "service[data_file]", href: "#service-data-file-field", text: "Could not process CSV file. Please check the format." }]
+    @service = Service.new(service_params)
+    render "new", status: :unprocessable_entity
+  end
+
+  def bad_encoding
+    @form_errors = [{ id: "service[data_file]", href: "#service-data-file-field", text: "Could not process CSV file. Please check the format." }]
+    @service = Service.new(service_params(correct_encoding: false))
+    render "new", status: :unprocessable_entity
   end
 
 protected
 
-  def prohibit_non_csv_uploads
-    if params[:service][:data_file]
-      file = get_file_from_param(params[:service][:data_file])
-      fv = Imminence::FileVerifier.new(file)
-      unless fv.csv?
-        message = "Rejecting file with content type: #{fv.mime_type}"
-        Rails.logger.info(message)
-        params[:service].delete(:data_file)
-        raise CSV::MalformedCSVError.new(message, 0)
-      end
+  def set_breadcrumbs
+    @breadcrumbs = [{ title: "Services", url: "/" }]
+
+    case params[:action]
+    when "new"
+      @breadcrumbs << { title: "New", url: new_resource_path }
+    when "show"
+      @breadcrumbs << { title: resource.name, url: resource_path(resource) }
+    when "edit"
+      @breadcrumbs << { title: resource.name, url: resource_path(resource) }
+      @breadcrumbs << { title: "Edit", url: edit_resource_path(resource) }
+    when "data_set_history"
+      @breadcrumbs << { title: resource.name, url: resource_path(resource) }
+      @breadcrumbs << { title: "Data Set History", url: edit_resource_path(resource) }
     end
   end
 

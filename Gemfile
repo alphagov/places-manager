@@ -6,12 +6,11 @@ gem "rails", "7.1.3.2"
 
 gem "activerecord-postgis-adapter"
 gem "bootsnap", require: false
-gem "bootstrap-kaminari-views"
 gem "dartsass-rails"
 gem "gds-api-adapters"
 gem "gds-sso"
-gem "govuk_admin_template"
 gem "govuk_app_config"
+gem "govuk_publishing_components"
 gem "govuk_sidekiq"
 gem "inherited_resources"
 gem "kaminari"

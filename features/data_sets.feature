@@ -4,24 +4,27 @@ Feature: Managing data sets
 
   Background:
     Given I am an editor
+    Given there are no frontend pages
 
   Scenario: Adding another data set to a service
     Given I have previously created the "Register Offices" service
 
     When I go to the page for the "Register Offices" service
+      And I click on "Upload new dataset"
       And I upload a new data set
 
     Then I should be on the page for the latest data set for the "Register Offices" service
       And I should see that there are now 2 data sets
 
     When I go to the page for the "Register Offices" service
-      And I visit the history tab
-      And I should see 2 version panels
+      And I click on "Datasets"
+      And I should see 2 versions in the list
 
   Scenario: Uploading a new data set with a mis-labelled file
     Given I have previously created the "Register Offices" service
 
     When I go to the page for the "Register Offices" service
+      And I click on "Upload new dataset"
       And I upload a new data set with a PNG claiming to be a CSV
 
     Then I should see an indication that my file was not accepted
@@ -32,48 +35,11 @@ Feature: Managing data sets
       And I have uploaded a second data set
 
     When I go to the page for the "Register Offices" service
-      And I visit the history tab
-      And I activate the most recent data set
+      And I click on "Datasets"
+      And I view the most recent data set
+      And I make it active
 
     Then I should see that the second data set is active
-
-  Scenario: Duplicating an existing data set
-    Given I have previously created the "Register Offices" service
-      And I have uploaded a second data set
-
-    When I go to the page for the "Register Offices" service
-      And I visit the history tab
-      And I duplicate the most recent data set
-
-    Then I should be on the page for the "Register Offices" service
-      And I should see that a duplicating job was enqueued for data set version 2
-
-  Scenario: Editing an inactive data set
-    Given I have previously created the "Register Offices" service
-      And I have uploaded a second data set
-
-    When I go to the page for the latest data set for the "Register Offices" service
-      And I click "Edit" on a record
-      And I update the name to be "Aviation House"
-
-    Then I should be on the page for the latest data set for the "Register Offices" service
-      And there should be a place named "Aviation House"
-
-  Scenario: Attempting to edit an active data set
-    Given I have previously created the "Register Offices" service
-
-    When I go to the page for the active data set for the "Register Offices" service
-
-    Then I should not see an "edit" action for a record
-
-  Scenario: Attempting to edit an inactive data set which is not the latest version
-    Given I have previously created the "Register Offices" service
-      And I have uploaded a second data set
-      And I have uploaded a third data set
-
-    When I go to the page for the second data set for the "Register Offices" service
-
-    Then I should not see an "edit" action for a record
 
   Scenario: Archiving place information belonging to an obsolete data set
     Given I have previously created the "Register Offices" service
@@ -81,15 +47,17 @@ Feature: Managing data sets
       And I have uploaded a third data set
 
     When I go to the page for the "Register Offices" service
-      And I visit the history tab
-      And I activate the most recent data set
-      And I visit the history tab
+      And I click on "Datasets"
+      And I view the most recent data set
+      And I make it active
+      And I go to the page for the "Register Offices" service
+      And I click on "Datasets"
 
     Then I should see an indication that the first data set is being archived
 
     When background processing has completed
       And I go to the page for the "Register Offices" service
-      And I visit the history tab
+      And I click on "Datasets"
 
     Then I should not see the first data set
 
@@ -97,15 +65,17 @@ Feature: Managing data sets
     Given I have previously created the "Register Offices" service
 
     When I go to the page for the "Register Offices" service
+      And I click on "Upload new dataset"
       And I upload a new data set with a CSV in the wrong format
 
     Then I should be on the page for the latest data set for the "Register Offices" service
       And I should see an indication that my data set is awaiting processing
 
     When background processing has completed
-      And I go to the page for the "Register Offices" service
+      And I reload the page
 
     Then I should see an indication that my data set is empty
+      And I should see an indication that there was an import problem
 
   Scenario: Exporting a data set to CSV and uploading it again
     Given I have previously created the "Council tax valuation offices" service
@@ -122,10 +92,13 @@ Feature: Managing data sets
         | location_match_type | Local authority  |
 
     When I go to the page for the "Register Offices" service
+      And I click on "Upload new dataset"
       And I upload a new data set with a CSV with missing GSS codes
 
     When background processing has completed
-      And I activate the most recent data set for the "Register Offices" service
       And I go to the page for the "Register Offices" service
+      And I click on "Datasets"
+      And I view the most recent data set
+      And I make it active
 
     Then I should see that the current service has 2 missing GSS codes

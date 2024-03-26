@@ -2,27 +2,28 @@ require "csv"
 require "imminence/file_verifier"
 
 class Admin::DataSetsController < InheritedResources::Base
-  include Admin::AdminControllerMixin
+  include Admin::Defaults
+  include Admin::FileUpload
+  include Admin::Permissions
 
-  actions :all, except: %i[new index destroy]
+  before_action :set_breadcrumbs
+
+  actions :all, except: %i[new destroy]
   belongs_to :service
-  rescue_from CSV::MalformedCSVError, with: :bad_csv
-  rescue_from InvalidCharacterEncodingError, with: :bad_encoding
-  rescue_from Encoding::UndefinedConversionError, with: :bad_encoding
 
   before_action :check_permission!
+
+  def show
+    @only_errors = params[:only_errors] == "true"
+    super
+  end
 
   def create
     prohibit_non_csv_uploads
     create! do |_success, failure|
-      failure.html { render "new_data" }
+      failure.html { render "new" }
     end
-  end
-
-  def duplicate
-    DuplicateDataSetWorker.perform_async(resource.service.id.to_s, resource.id.to_s)
-    flash[:success] = "Your request for a duplicate of data set version #{resource.version} is being processed. This can take a few minutes. Please refresh this page."
-    redirect_to "#{admin_service_path(service)}#history"
+    flash[:success] = "Data Set #{resource.version} created"
   end
 
   def activate
@@ -36,31 +37,45 @@ class Admin::DataSetsController < InheritedResources::Base
     else
       flash[:danger] = "Couldn't activate data set"
     end
-    redirect_to admin_service_url(service)
+    redirect_to resource_path(resource)
+  end
+
+  def fix_geoencode_errors
+    FixGeoencodeErrorsWorker.perform_async(service.id.to_s, resource.version)
+    flash[:info] = "Attempting to fix geoencoding - refresh page to see progress"
+    redirect_to resource_path(resource)
   end
 
 protected
 
+  def set_breadcrumbs
+    @breadcrumbs = [
+      { title: "Services", url: "/" },
+      { title: service.name, url: admin_service_path(service) },
+      { title: "Datasets", url: admin_service_data_sets_path(service) },
+    ]
+
+    case params[:action]
+    when "show"
+      @breadcrumbs << { title: "Version #{resource.version}", url: resource_path(resource) }
+    when "new"
+      @breadcrumbs << { title: "New" }
+    end
+  end
+
+  def missing_csv
+    @form_errors = [{ id: "data_set[data_file]", href: "#data-set-data-file-field", text: "You must specify a datafile to upload." }]
+    render "new", status: :unprocessable_entity
+  end
+
   def bad_encoding
-    flash[:danger] = "Could not process CSV file. Please check the format."
-    redirect_back(fallback_location: admin_service_url(service))
+    @form_errors = [{ id: "data_set[data_file]", href: "data-set-data-file-field", text: "Could not process CSV file. Please check the format." }]
+    render "new", status: :unprocessable_entity
   end
 
   def bad_csv
-    flash[:danger] = "Could not process CSV file. Please check the format."
-    redirect_back(fallback_location: admin_service_url(service))
-  end
-
-  def prohibit_non_csv_uploads
-    if params[:data_set] && params[:data_set][:data_file]
-      file = get_file_from_param(params[:data_set][:data_file])
-      fv = Imminence::FileVerifier.new(file)
-      unless fv.csv?
-        message = "Rejecting file with content type: #{fv.mime_type}"
-        Rails.logger.info(message)
-        raise CSV::MalformedCSVError.new(message, 0)
-      end
-    end
+    @form_errors = [{ id: "data_set[data_file]", href: "#data-set-data-file-field", text: "Could not process CSV file. Please check the format." }]
+    render "new", status: :unprocessable_entity
   end
 
   def data_set_params

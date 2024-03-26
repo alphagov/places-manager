@@ -30,4 +30,11 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  presenters:
+    data_set:
+      status:
+        ready: "Ready"
+        some_problems: "Ready - Some places with problems"
+        no_places: "No places are associated with this set.<br>The imported data could be in the wrong format."
+        processing: "Places data is currently being processed."
+

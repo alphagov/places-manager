@@ -30,16 +30,16 @@ When(/^I go to the page for the "(.*?)" service$/) do |name|
   visit path_for_service(name)
 end
 
-When(/^I visit the details tab$/) do
-  click_link "Service details"
+When(/^I click on "(.*?)"/) do |name|
+  click_link name
 end
 
-When(/^I visit the history tab$/) do
-  click_link "Version history"
+When("I reload the page") do
+  visit current_path
 end
 
 When("I go to the service list page") do
-  GdsApiHelper.new.stub_search_finds_no_govuk_pages
+  stub_search_finds_no_govuk_pages
   visit root_path
 end
 
@@ -103,12 +103,17 @@ Then(/^there should not be a "(.*?)" service$/) do |name|
 end
 
 Then(/^I should see that the current service has (\d+) missing GSS codes$/) do |count|
-  content = "#{count} places with missing GSS codes."
+  content = "#{count} with missing GSS codes"
+  expect(page).to have_content(content)
+end
+
+Then(/^I should see that the current data set has (\d+) missing GSS codes$/) do |count|
+  content = "#{count} with missing GSS codes"
   expect(page).to have_content(content)
 end
 
 Then(/^I should not see any text about missing GSS codes$/) do
-  expect(page).to_not have_content("places with missing GSS codes.")
+  expect(page).to_not have_content("with missing GSS codes")
 end
 
 When(/^I activate the most recent data set for the "(.*?)" service$/) do |name|
@@ -122,6 +127,10 @@ end
 When(/^I should see (\d+) version panels?$/) do |count|
   version_panels = page.all(:css, "div .data-set")
   expect(version_panels.size).to eq(count.to_i)
+end
+
+Then("I should see the version is {int}") do |int|
+  expect(page).to have_content("Active Data set version #{int}")
 end
 
 Then(/^the first version panel has the title "(.*?)"$/) do |title|

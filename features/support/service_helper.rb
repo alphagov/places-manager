@@ -6,6 +6,11 @@ module ServiceHelper
     admin_service_path(service)
   end
 
+  def path_for_edit_service(name)
+    service = Service.where(name:).first
+    edit_admin_service_path(service)
+  end
+
   def path_for_latest_data_set_for_service(name)
     service = Service.where(name:).first
     data_set = service.latest_data_set
@@ -81,13 +86,13 @@ module ServiceHelper
     fill_in "Slug", with: params[:slug]
     fill_in "Source of data", with: (params[:source_of_data])
 
-    select (params[:location_match_type]), from: "Location match type"
+    select (params[:location_match_type]), from: "service[location_match_type]"
     if params[:location_match_type] == "Local authority"
-      select (params[:local_authority_hierarchy_match_type]), from: "Local authority hierarchy match type"
+      select (params[:local_authority_hierarchy_match_type]), from: "service[local_authority_hierarchy_match_type]"
     end
 
-    attach_file "Data file", params[:csv_path]
-    click_button "Create Service"
+    attach_file "service[data_file]", params[:csv_path]
+    click_button "Create"
   end
 
   def service_defaults
@@ -112,10 +117,8 @@ module ServiceHelper
       csv_file.write(csv_data)
       csv_file.rewind
 
-      within "#new-data" do
-        attach_file "Data file", csv_file.path
-        click_button "Create Data set"
-      end
+      attach_file "Upload a file", csv_file.path
+      click_button "Upload"
     ensure
       csv_file.close
       csv_file.unlink

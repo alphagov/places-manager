@@ -1,0 +1,11 @@
+<% if flash[:danger].present? %>
+  <%= render "govuk_publishing_components/components/error_alert", { message: sanitize(flash[:danger]) } %>
+<% end %>
+
+<% if flash[:info].present? %>
+  <%= render "govuk_publishing_components/components/notice", { description: sanitize(flash[:info]) } %>
+<% end %>
+
+<% if flash[:success].present? %>
+  <%= render "govuk_publishing_components/components/success_alert", { message: sanitize(flash[:success]) } %>
+<% end %>

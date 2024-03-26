@@ -1,0 +1,16 @@
+<% content_for :page_title, "#{@service.name} Datasets" %>
+
+<%= render "govuk_publishing_components/components/heading", {
+  text:  "#{@service.name} Datasets",
+  heading_level: 1,
+  font_size: "l",
+  margin_bottom: 5,
+} %>
+
+<% service_data_sets_table_presenter = ServiceDataSetsTablePresenter.new(@service, self) %>
+
+<%= render "govuk_publishing_components/components/table", {
+  label: "Data Sets",
+  head: service_data_sets_table_presenter.headers,
+  rows: service_data_sets_table_presenter.rows,
+} %>

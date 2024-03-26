@@ -1,6 +1,6 @@
 require "gds_api/test_helpers/organisations"
 
-class GdsApiHelper
+module GdsApiHelper
   include WebMock::API
   include GdsApi::TestHelpers::Organisations
 
@@ -12,3 +12,5 @@ class GdsApiHelper
     stub_request(:get, "http://search-api.dev.gov.uk/search.json?count=200&fields=title,link&filter_format=place").to_return(status: 200, body: { results: [] }.to_json, headers: {})
   end
 end
+
+World(GdsApiHelper)

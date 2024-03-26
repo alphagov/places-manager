@@ -59,6 +59,7 @@ class Place < ApplicationRecord
     else
       result = GdsApi.locations_api.coordinates_for_postcode(postcode)
       self.location = "POINT (#{result['longitude']} #{result['latitude']})"
+      self.geocode_error = nil
     end
   rescue GdsApi::HTTPNotFound
     self.geocode_error = "#{postcode} not found for #{full_address}"

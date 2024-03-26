@@ -46,8 +46,8 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
       as_gds_editor do
         csv_file = fixture_file_upload(Rails.root.join("test/fixtures/good_csv.csv"), "text/csv")
         post :create, params: { service_id: @service.id, data_set: { data_file: csv_file } }
-        assert_response :redirect
-        assert_equal "Could not process CSV file. Please check the format.", flash[:danger]
+        assert_response :unprocessable_entity
+        assert_template "admin/data_sets/new"
         # There is always an initial data set
         assert_equal 1, Service.first.data_sets.count
         assert_equal 0, Place.count
@@ -63,7 +63,7 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
           post :create, params: { service_id: @service.id, data_set: { data_file: csv_file } }
 
           assert_response(:success)
-          assert_template "new_data"
+          assert_template "admin/data_sets/new"
           assert_equal 1, Service.first.data_sets.count
           assert_equal 0, Place.count
         end
@@ -134,20 +134,6 @@ class Admin::DataSetsControllerTest < ActionController::TestCase
           service_id_to_process = job["args"].first
           assert_equal @service, Service.find(service_id_to_process)
           assert_equal 1, DeleteHistoricRecordsWorker.jobs.count
-        end
-      end
-    end
-
-    context "when duplicating a data set" do
-      should "create a background job for duplicating the dataset" do
-        as_gds_editor do
-          FactoryBot.create(:place)
-          post :duplicate, params: { service_id: @service.id, id: @service.latest_data_set.id }
-          job = DuplicateDataSetWorker.jobs.last
-          assert_equal @service.id.to_s, job["args"].first
-          assert_equal @service.latest_data_set.id.to_s, job["args"].second
-          assert_equal 1, DuplicateDataSetWorker.jobs.count
-          assert_redirected_to "#{admin_service_path(@service)}#history"
         end
       end
     end

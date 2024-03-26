@@ -70,4 +70,9 @@ Rails.application.configure do
 
   # Allow requests for all domains e.g. <app>.dev.gov.uk
   config.hosts.clear
+
+  # Usually we don't need to view rendering and SQL logs while developing,
+  # make it the default, and turn back on if necessary
+  config.action_view.logger = nil
+  config.active_record.logger = nil
 end

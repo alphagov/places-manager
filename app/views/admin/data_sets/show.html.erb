@@ -1,3 +1,48 @@
-<%= render :partial => "admin/services/overview" %>
+<% content_for :page_title, "#{@data_set.service.name} Version #{@data_set.version}" %>
 
-<%= render :partial => "data_set", :locals => { :data_set => @data_set } %>
+<%= render partial: "shared/flash" %>
+
+<%= render "govuk_publishing_components/components/heading", {
+  text:  "#{@service.name} Version #{@data_set.version}",
+  heading_level: 1,
+  font_size: "l",
+  margin_bottom: 5,
+} %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render "govuk_publishing_components/components/summary_list", DataSetPresenter.new(@data_set).summary_list(self) %>
+  </div>
+  <div class="govuk-grid-column-one-third">
+    <aside class="app-side__wrapper">
+      <div class="app-side">
+        <div class="app-side__actions">
+          <%= render "govuk_publishing_components/components/list", {
+            items: [
+              link_to("Export as JSON", place_path(@data_set.service.slug, version: @data_set, format: :json), class: "govuk-link"),
+              link_to("Export as KML", place_path(@data_set.service.slug, version: @data_set, format: :kml), class: "govuk-link"),
+              link_to("Export as CSV", place_path(@data_set.service.slug, version: @data_set, format: :csv), class: "govuk-link"),
+            ],
+            margin_bottom: 5,
+          } %>
+
+          <% if @data_set.can_be_made_active? %>
+            <p class="govuk-body">You can make this data set active to start using it for queries. This will take effect immediately.</p>
+            <%= form_for(@service, url: activate_admin_service_data_set_path(@data_set.service, @data_set), method: "POST", class: "govuk-!-margin-bottom-5") do %>
+              <%= render "govuk_publishing_components/components/button", { text: "Make Active", margin_bottom: 5 } %>
+            <% end %>
+          <% end %>
+
+          <% if gds_editor? && @data_set.places.with_geocoding_errors.any? %>
+            <p class="govuk-body">There are a number of geoencoding errors on this page. If you think this was caused by a temporary problem, you can try geoencoding them again.</p>
+            <%= form_for(@service, url: fix_geoencode_errors_admin_service_data_set_path(@data_set.service, @data_set), method: "POST") do %>
+              <%= render "govuk_publishing_components/components/button", { text: "Try Fixing Geoencoding" } %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+ <%= render @data_set %>

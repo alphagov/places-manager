@@ -1,9 +1,28 @@
-@import 'govuk_admin_template';
-@import '_data_sets';
+// This is a publishing app, so we can use a more generous page width
+$govuk-page-width: 1140px;
 
-// Local override of the crown
-.navbar .container .navbar-brand,
-.navbar .container-fluid .navbar-brand {
-  background: url("header-crown.png") 0 7.5px no-repeat;
-}
+// supporting sass
+@import "govuk_publishing_components/govuk_frontend_support";
+@import "govuk_publishing_components/component_support";
 
+@import "govuk/components/pagination";
+
+// component specific sass
+@import "govuk_publishing_components/components/breadcrumbs";
+@import "govuk_publishing_components/components/button";
+@import "govuk_publishing_components/components/error-alert";
+@import "govuk_publishing_components/components/error-summary";
+@import "govuk_publishing_components/components/fieldset";
+@import "govuk_publishing_components/components/heading";
+@import "govuk_publishing_components/components/input";
+@import "govuk_publishing_components/components/layout-footer";
+@import "govuk_publishing_components/components/layout-for-admin";
+@import "govuk_publishing_components/components/layout-header";
+@import "govuk_publishing_components/components/notice";
+@import "govuk_publishing_components/components/table";
+@import "govuk_publishing_components/components/textarea";
+@import "govuk_publishing_components/components/select";
+@import "govuk_publishing_components/components/success-alert";
+@import "govuk_publishing_components/components/summary-list";
+
+@import "components/app-side";

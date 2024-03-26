@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount GovukPublishingComponents::Engine, at: "/component-guide" if Rails.env.development?
+
   get "/healthcheck/live", to: proc { [200, {}, %w[OK]] }
   get "/healthcheck/ready", to: GovukHealthcheck.rack_response(
     GovukHealthcheck::ActiveRecord,
@@ -6,10 +8,10 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :services do
-      resources :data_sets, except: %i[index destroy] do
+      resources :data_sets, except: %i[update destroy] do
         post :activate, on: :member
-        post :duplicate, on: :member
-        resources :places, except: %i[index show]
+        post :fix_geoencode_errors, on: :member
+        resources :places, only: :show
       end
     end
     root to: "services#index"
@@ -17,6 +19,4 @@ Rails.application.routes.draw do
 
   resources :places, only: :show
   root to: redirect("/admin")
-
-  mount GovukAdminTemplate::Engine, at: "/style-guide"
 end

@@ -9,5 +9,9 @@ Given(/^I am (?:a|an) (GDS editor)$/) do |_role|
 end
 
 Given(/^test-department exists$/) do
-  GdsApiHelper.new.stub_organisations_test_department
+  stub_organisations_test_department
+end
+
+Given("there are no frontend pages") do
+  stub_search_finds_no_govuk_pages
 end

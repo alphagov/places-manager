@@ -1,39 +1,24 @@
 class Admin::PlacesController < InheritedResources::Base
-  include Admin::AdminControllerMixin
-  actions :all, except: %i[show index]
+  include Admin::Defaults
+  include Admin::Permissions
+
+  actions :show
   belongs_to :service
   belongs_to :data_set
   before_action :check_permission!
-
-  def new
-    @place = parent.places.build
-    unless @place.can_edit?
-      flash[:danger] = "You cannot create a new place as #{data_set.active? ? 'this data set is currently active.' : 'there is a more recent data set available.'}"
-      redirect_to admin_service_data_set_path(@service, @data_set)
-    end
-  end
-
-  def edit
-    unless place.can_edit?
-      flash[:danger] = "You cannot edit this place as #{data_set.active? ? 'this data set is currently active.' : 'there is a more recent data set available.'}"
-      redirect_to admin_service_data_set_path(@service, @data_set)
-    end
-  end
-
-  def create
-    @place = parent.places.build(place_params)
-    head(:unprocessable_entity) && return unless @place.can_edit?
-
-    create!
-  end
-
-  def update
-    head(:unprocessable_entity) && return unless place.can_edit?
-
-    update!
-  end
+  before_action :set_breadcrumbs
 
 protected
+
+  def set_breadcrumbs
+    @breadcrumbs = [
+      { title: "Services", url: "/" },
+      { title: service.name, url: admin_service_path(service) },
+      { title: "Datasets", url: admin_service_data_sets_path(service) },
+      { title: "Version #{data_set.version}", url: admin_service_data_set_path(service, data_set) },
+      { title: "Place #{resource.id}: #{resource.name}", url: resource_path(resource) },
+    ]
+  end
 
   def service
     @service ||= Service.find(params["service_id"])
@@ -47,31 +32,9 @@ protected
     @place ||= Place.where(data_set_version: data_set.version, service_slug: service.slug).find(params["id"])
   end
 
-  def place_params
-    params
-      .require(:place)
-      .permit(
-        :name,
-        :address1,
-        :address2,
-        :town,
-        :postcode,
-        :override_lng,
-        :override_lat,
-        :gss,
-        :url,
-        :email,
-        :phone,
-        :fax,
-        :text_phone,
-        :access_notes,
-        :general_notes,
-      )
-  end
-
   def check_permission!
     return if permission_for_service?(service)
 
-    raise PermissionDeniedException, "Sorry, you do not have permission to edit places for this service."
+    raise PermissionDeniedException, "Sorry, you do not have permission to view places for this service."
   end
 end
