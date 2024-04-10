@@ -8,7 +8,7 @@ class ServicePresenter
   def summary_list(view_context)
     summary_items = [
       { field: "Slug", value: @service.slug },
-      { field: "Organisation Slugs", value: @service.organisation_slugs.join("<br />".html_safe) },
+      { field: "Organisation Slugs", value: @service.organisation_slugs.join("<br />").html_safe },
       { field: "GOV.UK page", value: page_link(view_context) },
       { field: "Source of data", value: @service.source_of_data },
       { field: "Location match type", value: match_type },
