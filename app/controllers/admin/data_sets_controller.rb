@@ -1,5 +1,5 @@
 require "csv"
-require "imminence/file_verifier"
+require "places_manager/file_verifier"
 
 class Admin::DataSetsController < InheritedResources::Base
   include Admin::Defaults

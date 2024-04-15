@@ -1,6 +1,6 @@
-# Imminence
+# Places Manager (formerly Imminence)
 
-Imminence manages sets of (somewhat) structured data for use elsewhere on GOV.UK. It's primarily used for geographical data such as lists of registry offices, test centres, and the like.
+Places Manager manages sets of structured data for use elsewhere on GOV.UK. It's primarily used for geographical data such as lists of registry offices, test centres, and the like.
 
 The data is structured as a set of Services which represent a distinct type of location. A Service can then have many Data Sets which are in turn collections of Places. Only one Data Set will be "active" at any given time.
 

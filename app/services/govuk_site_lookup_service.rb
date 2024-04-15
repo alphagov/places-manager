@@ -12,7 +12,7 @@ class GovukSiteLookupService
   end
 
   def public_url_info
-    Rails.cache.fetch("imminence_public_url_info", expires_in: 5.minutes) do
+    Rails.cache.fetch("places_manager_public_url_info", expires_in: 5.minutes) do
       content_store_api = GdsApi.content_store
       place_pages = GdsApi.search.search({ filter_format: "place", count: 200, fields: "title,link" })
 
