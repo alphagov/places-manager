@@ -11,8 +11,8 @@ There is a simple JSON API for integrating the data with other applications.
 ## Nomenclature
 
 - **Services**: Represent a distinct type of location (e.g. Register Offices)
-- **Datasets**: Services can have many datasets, which are collections of Places. Only one Data Set will be "active" at any given time.
-- **Places**: Geocoded data of individual locations which belong to a Dataset.
+- **Data sets**: Services can have many data sets, which are collections of Places. Only one data set will be "active" at any given time.
+- **Places**: Geocoded data of individual locations which belong to a data set.
 
 ## Technical documentation
 

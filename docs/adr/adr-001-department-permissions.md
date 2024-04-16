@@ -3,10 +3,10 @@
 ## Introduction
 
 In March 2024 a proposal was put to SteerCo to allow departments direct access
-to Imminence to maintain their own datasets. Although all data in Imminence is
+to Imminence to maintain their own data sets. Although all data in Imminence is
 publicly available, we agreed with John-Paul Dickie (and previously with Alex
-Pardoe) that it would make sense to restrict dataset updating to the owning
-department to avoid the risk of datasets being accidentally overwritten by
+Pardoe) that it would make sense to restrict data set updating to the owning
+department to avoid the risk of data sets being accidentally overwritten by
 non-owner departments.
 
 ## Requirements
@@ -27,7 +27,7 @@ of these apps.
   us for existing services before departments are given access. This will
   be a simple string field, with comma separation for multiple owners.
 - Add a "GDS Editor" permission. Anyone with this permission can see and
-  edit all services/datasets/places. Anyone without this permission can
+  edit all services/data sets/places. Anyone without this permission can
   only access services whose organisational_slugs field contains the same
   slug as reported for them by Signon.
 - When new services are made they will automatically be assigned an
