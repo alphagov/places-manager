@@ -42,7 +42,7 @@ class Admin::DataSetsController < InheritedResources::Base
 
   def fix_geoencode_errors
     FixGeoencodeErrorsWorker.perform_async(service.id.to_s, resource.version)
-    flash[:info] = "Attempting to fix geoencoding - refresh page to see progress"
+    flash[:info] = "Attempting to fix geocode errors - refresh page to see progress"
     redirect_to resource_path(resource)
   end
 
@@ -52,7 +52,7 @@ protected
     @breadcrumbs = [
       { title: "Services", url: "/" },
       { title: service.name, url: admin_service_path(service) },
-      { title: "Datasets", url: admin_service_data_sets_path(service) },
+      { title: "Data sets", url: admin_service_data_sets_path(service) },
     ]
 
     case params[:action]

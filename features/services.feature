@@ -69,7 +69,7 @@ Feature: Managing services
 
     Then I should see that the current service has 2 missing GSS codes
 
-    When I click on "Datasets"
+    When I click on "Data sets"
       And I view the most recent data set
 
     Then I should see that the current data set has 2 missing GSS codes

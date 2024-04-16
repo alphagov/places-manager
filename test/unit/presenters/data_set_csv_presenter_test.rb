@@ -32,13 +32,13 @@ class DataSetCsvPresenterTest < ActiveSupport::TestCase
     ]
   end
 
-  context "presenting an empty dataset" do
+  context "presenting an empty data set" do
     should "contain only a header row" do
       assert_equal [expected_header_row], @result
     end
   end
 
-  context "presenting a dataset with a place" do
+  context "presenting a data set with a place" do
     setup do
       @place = FactoryBot.create(
         :place,

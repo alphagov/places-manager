@@ -83,7 +83,7 @@ namespace :import do
           Rails.logger.warn("Failed to import service record #{service_data['slug']}: #{e.message}")
         end
       end
-      puts("Imported #{Service.count} services, #{DataSet.count} datasets")
+      puts("Imported #{Service.count} services, #{DataSet.count} data sets")
     end
 
     puts("Total Time: #{total_time} seconds")

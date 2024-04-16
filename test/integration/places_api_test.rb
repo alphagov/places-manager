@@ -7,7 +7,7 @@ class PlacesAPITest < ActionDispatch::IntegrationTest
   include GdsApi::TestHelpers::LocalLinksManager
   include GdsApi::TestHelpers::LocationsApi
 
-  context "Requesting the full dataset" do
+  context "Requesting the full data set" do
     setup do
       @service = FactoryBot.create(:service)
       @data_set1 = @service.active_data_set
