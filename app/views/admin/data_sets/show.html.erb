@@ -29,14 +29,14 @@
           <% if @data_set.can_be_made_active? %>
             <p class="govuk-body">You can make this data set active to start using it for queries. This will take effect immediately.</p>
             <%= form_for(@service, url: activate_admin_service_data_set_path(@data_set.service, @data_set), method: "POST", class: "govuk-!-margin-bottom-5") do %>
-              <%= render "govuk_publishing_components/components/button", { text: "Make Active", margin_bottom: 5 } %>
+              <%= render "govuk_publishing_components/components/button", { text: "Make active", margin_bottom: 5 } %>
             <% end %>
           <% end %>
 
           <% if gds_editor? && @data_set.places.with_geocoding_errors.any? %>
             <p class="govuk-body">There are a number of geoencoding errors on this page. If you think this was caused by a temporary problem, you can try geoencoding them again.</p>
             <%= form_for(@service, url: fix_geoencode_errors_admin_service_data_set_path(@data_set.service, @data_set), method: "POST") do %>
-              <%= render "govuk_publishing_components/components/button", { text: "Try Fixing Geoencoding" } %>
+              <%= render "govuk_publishing_components/components/button", { text: "Try fixing geoencoding" } %>
             <% end %>
           <% end %>
         </div>

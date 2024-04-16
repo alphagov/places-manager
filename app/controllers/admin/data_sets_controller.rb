@@ -52,7 +52,7 @@ protected
     @breadcrumbs = [
       { title: "Services", url: "/" },
       { title: service.name, url: admin_service_path(service) },
-      { title: "Datasets", url: admin_service_data_sets_path(service) },
+      { title: "Data sets", url: admin_service_data_sets_path(service) },
     ]
 
     case params[:action]

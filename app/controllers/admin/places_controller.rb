@@ -14,7 +14,7 @@ protected
     @breadcrumbs = [
       { title: "Services", url: "/" },
       { title: service.name, url: admin_service_path(service) },
-      { title: "Datasets", url: admin_service_data_sets_path(service) },
+      { title: "Data sets", url: admin_service_data_sets_path(service) },
       { title: "Version #{data_set.version}", url: admin_service_data_set_path(service, data_set) },
       { title: "Place #{resource.id}: #{resource.name}", url: resource_path(resource) },
     ]

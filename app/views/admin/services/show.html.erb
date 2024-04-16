@@ -20,11 +20,11 @@
           <%= render "govuk_publishing_components/components/list", {
             items: [
               link_to("Edit service", edit_resource_path(@service), class: "govuk-link"),
-              link_to("Upload new dataset", new_admin_service_data_set_path(@service), class: "govuk-link"),
-              link_to("Datasets", admin_service_data_sets_path(@service), class: "govuk-link"),
-              link_to("Export active dataset as JSON", place_path(@service.slug, version: @service.active_data_set, format: :json), class: "govuk-link"),
-              link_to("Export active dataset as KML", place_path(@service.slug, version: @service.active_data_set, format: :kml), class: "govuk-link"),
-              link_to("Export active dataset as CSV", place_path(@service.slug, version: @service.active_data_set, format: :csv), class: "govuk-link"),
+              link_to("Upload new data set", new_admin_service_data_set_path(@service), class: "govuk-link"),
+              link_to("Data sets", admin_service_data_sets_path(@service), class: "govuk-link"),
+              link_to("Export active data set as JSON", place_path(@service.slug, version: @service.active_data_set, format: :json), class: "govuk-link"),
+              link_to("Export active data set as KML", place_path(@service.slug, version: @service.active_data_set, format: :kml), class: "govuk-link"),
+              link_to("Export active data set as CSV", place_path(@service.slug, version: @service.active_data_set, format: :csv), class: "govuk-link"),
             ],
             margin_bottom: 0,
           } %>
