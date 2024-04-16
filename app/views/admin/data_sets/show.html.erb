@@ -34,9 +34,9 @@
           <% end %>
 
           <% if gds_editor? && @data_set.places.with_geocoding_errors.any? %>
-            <p class="govuk-body">There are a number of geoencoding errors on this page. If you think this was caused by a temporary problem, you can try geoencoding them again.</p>
+            <p class="govuk-body">There are a number of geocode errors on this page. If you think this was caused by a temporary problem, you can try geocoding them again.</p>
             <%= form_for(@service, url: fix_geoencode_errors_admin_service_data_set_path(@data_set.service, @data_set), method: "POST") do %>
-              <%= render "govuk_publishing_components/components/button", { text: "Try fixing geoencoding" } %>
+              <%= render "govuk_publishing_components/components/button", { text: "Try fixing geocoding" } %>
             <% end %>
           <% end %>
         </div>
