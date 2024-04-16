@@ -27,7 +27,7 @@ When(/^I upload a new data set with a CSV with missing GSS codes$/) do
 end
 
 When(/^I make it active$/) do
-  click_button "Make Active"
+  click_button "Make active"
 end
 
 When(/^I view the most recent data set$/) do
@@ -72,7 +72,7 @@ end
 
 When(/^I upload the exported CSV to the "(.*?)" service$/) do |name|
   visit path_for_service(name)
-  click_link "Upload new dataset"
+  click_link "Upload new data set"
   upload_csv_data(@exported_csv_data)
   run_all_delayed_jobs
 end
@@ -140,7 +140,7 @@ Then(/^there should be a place named "(.*?)"$/) do |name|
   end
 end
 
-Then(/^the places should be identical between the datasets in the "(.*?)" service$/) do |name|
+Then(/^the places should be identical between the data sets in the "(.*?)" service$/) do |name|
   service = Service.where(name:).first
   data_set1 = service.data_sets.first
   data_set2 = service.data_sets.last

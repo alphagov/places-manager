@@ -12,7 +12,7 @@ class DataSetPresenterTest < ActiveSupport::TestCase
     @presenter = DataSetPresenter.new(@data_set)
   end
 
-  context "presenting a processing dataset" do
+  context "presenting a processing data set" do
     should "have an inactive use tag" do
       assert_match(/Inactive/, @presenter.use_tag)
     end
@@ -26,7 +26,7 @@ class DataSetPresenterTest < ActiveSupport::TestCase
     end
   end
 
-  context "presenting an inactive dataset" do
+  context "presenting an inactive data set" do
     setup do
       stub_locations_api_has_location("IG6 3HJ", [{ "latitude" => 51.59918278577261, "longitude" => 0.10033740198112132 }])
       @data_set.process_csv_data
@@ -45,7 +45,7 @@ class DataSetPresenterTest < ActiveSupport::TestCase
     end
   end
 
-  context "presenting a dataset with geocoding errors" do
+  context "presenting a data set with geocoding errors" do
     setup do
       stub_locations_api_does_not_have_a_postcode("IG6 3HJ")
       @data_set.process_csv_data
@@ -56,7 +56,7 @@ class DataSetPresenterTest < ActiveSupport::TestCase
     end
   end
 
-  context "presenting an active dataset" do
+  context "presenting an active data set" do
     setup do
       stub_locations_api_has_location("IG6 3HJ", [{ "latitude" => 51.59918278577261, "longitude" => 0.10033740198112132 }])
       @data_set.process_csv_data

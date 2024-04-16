@@ -16,7 +16,7 @@ class DataSetCreateEditTest < ActionDispatch::IntegrationTest
       stub_locations_api_has_location("IG6 3HJ", [{ "latitude" => 51.59918278577261, "longitude" => 0.10033740198112132 }])
 
       visit "/admin/services/#{@service.id}"
-      click_link "Upload new dataset"
+      click_link "Upload new data set"
       attach_file "Upload a file", fixture_file_path("good_csv.csv")
       click_button "Upload"
 
@@ -36,7 +36,7 @@ class DataSetCreateEditTest < ActionDispatch::IntegrationTest
       stub_locations_api_has_location("IG6 3HJ", [{ "latitude" => 51.59918278577261, "longitude" => 0.10033740198112132 }])
 
       visit "/admin/services/#{@service.id}"
-      click_link "Upload new dataset"
+      click_link "Upload new data set"
       attach_file "Upload a file", fixture_file_path("encodings/windows-1252.csv")
       click_button "Upload"
 
@@ -57,7 +57,7 @@ class DataSetCreateEditTest < ActionDispatch::IntegrationTest
       stub_locations_api_has_location("IG6 3HJ", [{ "latitude" => 51.59918278577261, "longitude" => 0.10033740198112132 }])
 
       visit "/admin/services/#{@service.id}"
-      click_link "Upload new dataset"
+      click_link "Upload new data set"
       attach_file "Upload a file", fixture_file_path("good_csv_with_lat_lng.csv")
       click_button "Upload"
 
@@ -80,7 +80,7 @@ class DataSetCreateEditTest < ActionDispatch::IntegrationTest
       stub_locations_api_has_location("IG6 3HJ", [{ "latitude" => 51.59918278577261, "longitude" => 0.10033740198112132 }])
 
       visit "/admin/services/#{@service.id}"
-      click_link "Upload new dataset"
+      click_link "Upload new data set"
       attach_file "Upload a file", fixture_file_path("good_csv_mixed_lat_lng.csv")
       click_button "Upload"
 
