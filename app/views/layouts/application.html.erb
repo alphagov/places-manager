@@ -8,11 +8,11 @@
 
 <%= render "govuk_publishing_components/components/layout_for_admin", {
   environment:,
-  product_name: "Imminence",
+  product_name: t("product_name"),
   browser_title: (yield :page_title),
 } do %>
   <%= render "govuk_publishing_components/components/layout_header", {
-    product_name: "Imminence",
+    product_name: t("product_name"),
     environment:,
     navigation_items: [
       {

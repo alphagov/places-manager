@@ -1,4 +1,4 @@
-module Imminence
+module PlacesManager
   class FileVerifier
     attr_accessor :filename
 

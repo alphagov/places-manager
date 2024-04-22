@@ -1,4 +1,4 @@
-require "imminence/file_verifier"
+require "places_manager/file_verifier"
 require "csv"
 
 class Admin::ServicesController < InheritedResources::Base

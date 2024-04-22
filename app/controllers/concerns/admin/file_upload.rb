@@ -25,7 +25,7 @@ module Admin
       raise MissingFileError unless params[param_key][:data_file]
 
       file = get_file_from_param(params[param_key][:data_file])
-      fv = Imminence::FileVerifier.new(file)
+      fv = PlacesManager::FileVerifier.new(file)
       unless fv.csv?
         message = "Rejecting file with content type: #{fv.mime_type}"
         Rails.logger.info(message)
