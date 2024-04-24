@@ -1,5 +1,7 @@
 require "simplecov"
-SimpleCov.start "rails"
+SimpleCov.start "rails" do
+  enable_coverage :branch
+end
 
 require "database_cleaner-active_record"
 
