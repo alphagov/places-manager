@@ -28,10 +28,6 @@ protected
     @data_set ||= service.data_sets.find(params["data_set_id"])
   end
 
-  def place
-    @place ||= Place.where(data_set_version: data_set.version, service_slug: service.slug).find(params["id"])
-  end
-
   def check_permission!
     return if permission_for_service?(service)
 
