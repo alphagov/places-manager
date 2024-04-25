@@ -1,4 +1,4 @@
-require_relative "../../integration_test_helper"
+require "test_helper"
 require "gds_api/test_helpers/locations_api"
 
 class DataSetCreateEditTest < ActionDispatch::IntegrationTest
