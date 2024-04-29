@@ -102,8 +102,8 @@ jobs:
       - name: Initialize database
         run: bundle exec rails db:setup
 
-      - name: Run Minitest
-        run: bundle exec rake test
+      - name: Run RSpec
+        run: bundle exec rake spec
 
   integration-tests:
     name: Integration tests
