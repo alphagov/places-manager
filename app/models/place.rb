@@ -54,20 +54,12 @@ class Place < ApplicationRecord
 
     return if location.present?
 
-    if postcode.blank?
-      self.geocode_error = "Can't geocode without postcode"
-    else
-      result = GdsApi.locations_api.coordinates_for_postcode(postcode)
-      self.location = "POINT (#{result['longitude']} #{result['latitude']})"
-      self.geocode_error = nil
-    end
+    result = GdsApi.locations_api.coordinates_for_postcode(postcode)
+    self.location = "POINT (#{result['longitude']} #{result['latitude']})"
+    self.geocode_error = nil
   rescue GdsApi::HTTPNotFound
     self.geocode_error = "#{postcode} not found for #{full_address}"
-  rescue Encoding::CompatibilityError
-    error = "Encoding error in place #{id}"
-    Rails.logger.warn error
-    self.geocode_error = error
-  rescue StandardError => e
+  rescue GdsApi::BaseError => e
     error = "Error geocoding place #{postcode} : #{e.message}"
     Rails.logger.warn error
     self.geocode_error = error

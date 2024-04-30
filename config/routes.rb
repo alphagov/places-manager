@@ -10,7 +10,6 @@ Rails.application.routes.draw do
     resources :services do
       resources :data_sets, except: %i[update destroy] do
         post :activate, on: :member
-        post :fix_geoencode_errors, on: :member
         resources :places, only: :show
       end
     end

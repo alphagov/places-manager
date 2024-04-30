@@ -33,14 +33,11 @@ group :development, :test do
 end
 
 group :test do
-  gem "ci_reporter_minitest"
   gem "cucumber-rails", require: false
   gem "factory_bot_rails"
   gem "govuk_test"
-  gem "minitest-reporters"
-  gem "mocha", require: false
   gem "rails-controller-testing"
-  gem "shoulda-context"
+  gem "rspec-rails"
   gem "simplecov", require: false
   gem "webmock", require: false
 end

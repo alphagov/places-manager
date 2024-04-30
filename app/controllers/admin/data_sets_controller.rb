@@ -40,12 +40,6 @@ class Admin::DataSetsController < InheritedResources::Base
     redirect_to resource_path(resource)
   end
 
-  def fix_geoencode_errors
-    FixGeoencodeErrorsWorker.perform_async(service.id.to_s, resource.version)
-    flash[:info] = "Attempting to fix geocode errors - refresh page to see progress"
-    redirect_to resource_path(resource)
-  end
-
 protected
 
   def set_breadcrumbs
