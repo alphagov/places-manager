@@ -29,7 +29,7 @@ def url_encode(str)
   ERB::Util.url_encode(str)
 end
 
-Pact.service_provider "Imminence API" do
+Pact.service_provider "PlacesManager API" do
   honours_pact_with "GDS API Adapters" do
     if ENV["PACT_URI"]
       pact_uri(ENV["PACT_URI"])
