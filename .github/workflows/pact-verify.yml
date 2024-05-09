@@ -25,7 +25,7 @@ on:
       pact_artifact_file_to_verify:
         required: false
         type: string
-        default: gds_api_adapters-imminence_api.json
+        default: gds_api_adapters-places_manager_api.json
       # Which version of the pacts to use from the Pact Broker service
       # This option will be ignored if pact_artifact is set
       pact_consumer_version:
