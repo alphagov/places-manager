@@ -50,7 +50,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: alphagov/imminence
+          repository: alphagov/places-manager
           ref: ${{ inputs.ref }}
       - uses: ruby/setup-ruby@v1
         with:
