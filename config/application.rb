@@ -34,6 +34,6 @@ module PlacesManager
 
     # Set asset path to be application specific so that we can put all GOV.UK
     # assets into an S3 bucket and distinguish app by path.
-    config.assets.prefix = "/assets/imminence"
+    config.assets.prefix = "/assets/places-manager"
   end
 end

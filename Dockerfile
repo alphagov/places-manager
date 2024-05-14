@@ -15,7 +15,7 @@ RUN SECRET_KEY_BASE_DUMMY=1 rails assets:precompile && rm -fr log
 
 FROM $base_image
 
-ENV GOVUK_APP_NAME=imminence
+ENV GOVUK_APP_NAME=places-manager
 
 WORKDIR $APP_HOME
 COPY --from=builder $BUNDLE_PATH $BUNDLE_PATH
