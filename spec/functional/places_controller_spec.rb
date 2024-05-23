@@ -74,7 +74,7 @@ RSpec.describe(PlacesController, type: :controller) do
     service = Service.create!(name: "Number Plate Supplier", slug: "number-plate-supplier")
     stub_locations_api_has_no_location("JE4 5TP")
     get(:show, params: { id: service.slug, postcode: "JE4 5TP" }, format: :json)
-    assert_response(400)
+    assert_response(:bad_request)
     expect(JSON.parse(response.body)["error"]).to(eq("validPostcodeNoLocation"))
   end
 end
