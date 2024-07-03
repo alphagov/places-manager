@@ -21,7 +21,6 @@ gem "sentry-sidekiq"
 gem "sprockets-rails"
 gem "state_machines"
 gem "state_machines-activerecord"
-gem "uglifier"
 
 group :development, :test do
   gem "database_cleaner-active_record"
