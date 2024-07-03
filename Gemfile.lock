@@ -163,7 +163,6 @@ GEM
       rubocop
       smart_properties
     erubi (1.13.0)
-    execjs (2.8.1)
     expgen (0.1.1)
       parslet
     factory_bot (6.4.5)
@@ -783,8 +782,6 @@ GEM
       sync
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    uglifier (4.2.0)
-      execjs (>= 0.3.0, < 3)
     unicode-display_width (2.5.0)
     uri (0.13.0)
     version_gem (1.1.4)
@@ -842,7 +839,6 @@ DEPENDENCIES
   sprockets-rails
   state_machines
   state_machines-activerecord
-  uglifier
   webmock
 
 RUBY VERSION
