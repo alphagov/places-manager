@@ -9,10 +9,11 @@ class ServicesTablePresenter
     @services.map do |service|
       presenter = ServicePresenter.new(service)
       [
-        { text: @view_context.link_to(service.name, @view_context.admin_service_path(service)) },
-        { text: page_link(service) },
+        { text: service.name },
+        { text: page_title(service) },
         { text: service.active_data_set.places.count, format: "numeric" },
         { text: presenter.active_data_set_status.html_safe },
+        { text: @view_context.link_to("Edit", @view_context.admin_service_path(service), class: "govuk-link") },
       ]
     end
   end
@@ -20,10 +21,10 @@ class ServicesTablePresenter
   def headers
     [
       {
-        text: "Service",
+        text: "Service Name",
       },
       {
-        text: "GOV.UK pages",
+        text: "Page title on GOV.UK",
       },
       {
         text: "Places",
@@ -32,14 +33,17 @@ class ServicesTablePresenter
       {
         text: "Status",
       },
+      {
+        text: "",
+      },
     ]
   end
 
 private
 
-  def page_link(service)
+  def page_title(service)
     return "Not used on GOV.UK" unless @lookup.govuk_page?(service.slug)
 
-    @view_context.link_to(@lookup.page_title(service.slug), @lookup.page_link(service.slug))
+    @lookup.page_title(service.slug)
   end
 end

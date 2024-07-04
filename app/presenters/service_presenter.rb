@@ -33,6 +33,6 @@ class ServicePresenter
   def page_link(view_context)
     return "Not used on GOV.UK" unless @lookup.govuk_page?(@service.slug)
 
-    view_context.link_to(@lookup.page_title(@service.slug), @lookup.page_link(@service.slug))
+    view_context.link_to(@lookup.page_title(@service.slug), @lookup.page_link(@service.slug), class: "govuk-link")
   end
 end

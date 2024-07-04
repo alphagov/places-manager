@@ -13,7 +13,7 @@ class ServiceDataSetsTablePresenter
         { text: data_set.created_at.to_date.to_fs(:govuk_date) },
         { text: data_set.places.count },
         { text: data_set_presenter.status_tag.html_safe },
-        { text: @view_context.link_to("View", @view_context.admin_service_data_set_path(service_id: data_set.service_id, id: data_set.id)).html_safe },
+        { text: @view_context.link_to("View", @view_context.admin_service_data_set_path(service_id: data_set.service_id, id: data_set.id), class: "govuk-link").html_safe },
       ]
     end
   end
