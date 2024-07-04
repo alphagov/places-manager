@@ -14,7 +14,7 @@ class PlacesTablePresenter
         { text: @view_context.truncate(place.url, length: 40) || "<em>&mdash;</em>".html_safe },
         { text: presenter.location_summary.html_safe },
         { text: presenter.status_tag.html_safe },
-        { text: @view_context.link_to("View", @view_context.admin_service_data_set_place_path(place.data_set.service, place.data_set, place)) },
+        { text: @view_context.link_to("View", @view_context.admin_service_data_set_place_path(place.data_set.service, place.data_set, place), class: "govuk-link") },
       ]
     end
   end

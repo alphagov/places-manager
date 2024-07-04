@@ -5,7 +5,7 @@ module TablePresenterSharedExamples
 
   def fake_view_context
     view = Object.new
-    def view.link_to(_link, _target)
+    def view.link_to(*)
       ""
     end
 

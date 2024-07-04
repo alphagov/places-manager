@@ -13,7 +13,7 @@ class ServicesTablePresenter
         { text: page_title(service) },
         { text: service.active_data_set.places.count, format: "numeric" },
         { text: presenter.active_data_set_status.html_safe },
-        { text: @view_context.link_to("Edit", @view_context.admin_service_path(service)) },
+        { text: @view_context.link_to("Edit", @view_context.admin_service_path(service), class: "govuk-link") },
       ]
     end
   end
