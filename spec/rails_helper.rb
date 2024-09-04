@@ -24,4 +24,7 @@ RSpec.configure do |config|
   config.expose_dsl_globally = false
   config.infer_spec_type_from_file_location!
   config.use_transactional_fixtures = true
+  config.before(:each, type: :system) do
+    driven_by :rack_test
+  end
 end
