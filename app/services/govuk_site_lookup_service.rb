@@ -20,6 +20,8 @@ class GovukSiteLookupService
         ci = content_store_api.content_item(pp["link"])
         slug = ci["details"]["place_type"]
         hash[slug] = { link: Plek.website_root + pp["link"], title: pp["title"] }
+      rescue GdsApi::HTTPNotFound => e
+        Rails.logger.warn("Search result for place does not exist in content store: #{e}")
       end
     end
   end
