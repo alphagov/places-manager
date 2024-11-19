@@ -222,10 +222,10 @@ GEM
       sentry-rails (~> 5.3)
       sentry-ruby (~> 5.3)
       statsd-ruby (~> 1.5)
-    govuk_personalisation (1.0.0)
+    govuk_personalisation (1.1.0)
       plek (>= 1.9.0)
-      rails (>= 6, < 8)
-    govuk_publishing_components (45.4.0)
+      rails (>= 6, < 9)
+    govuk_publishing_components (45.4.1)
       chartkick
       govuk_app_config
       govuk_personalisation (>= 0.7.0)
@@ -284,8 +284,8 @@ GEM
       activerecord
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
-    kramdown (2.4.0)
-      rexml
+    kramdown (2.5.0)
+      rexml (>= 3.3.6)
     language_server-protocol (3.17.0.3)
     link_header (0.0.8)
     logger (1.6.1)
