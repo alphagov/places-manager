@@ -225,7 +225,7 @@ GEM
     govuk_personalisation (1.1.0)
       plek (>= 1.9.0)
       rails (>= 6, < 9)
-    govuk_publishing_components (45.4.1)
+    govuk_publishing_components (45.5.0)
       chartkick
       govuk_app_config
       govuk_personalisation (>= 0.7.0)
@@ -284,8 +284,8 @@ GEM
       activerecord
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
-    kramdown (2.5.0)
-      rexml (>= 3.3.6)
+    kramdown (2.5.1)
+      rexml (>= 3.3.9)
     language_server-protocol (3.17.0.3)
     link_header (0.0.8)
     logger (1.6.1)
@@ -650,7 +650,7 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.2.1)
-    rdoc (6.7.0)
+    rdoc (6.8.1)
       psych (>= 4.0.0)
     redis-client (0.22.2)
       connection_pool
