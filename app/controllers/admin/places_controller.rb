@@ -31,6 +31,6 @@ protected
   def check_permission!
     return if permission_for_service?(service)
 
-    raise PermissionDeniedException, "Sorry, you do not have permission to view places for this service."
+    raise GDS::SSO::PermissionDeniedError, "Sorry, you do not have permission to view places for this service."
   end
 end
