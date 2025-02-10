@@ -46,7 +46,7 @@ jobs:
           bundler-cache: true
 
       - name: Run Erblint
-        run: bundle exec erblint --lint-all
+        run: bundle exec erb_lint --lint-all
 
   pact-tests:
     name: Run Pact tests
