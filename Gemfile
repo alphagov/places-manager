@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 ruby "~> 3.3.1"
 
-gem "rails", "8.0.1"
+gem "rails", "8.0.2"
 
 gem "activerecord-postgis-adapter"
 gem "bootsnap", require: false
