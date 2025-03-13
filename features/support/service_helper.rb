@@ -84,11 +84,11 @@ module ServiceHelper
 
     fill_in "Name", with: params[:name]
     fill_in "Slug", with: params[:slug]
-    fill_in "Source of data", with: (params[:source_of_data])
+    fill_in "Source of data", with: params[:source_of_data]
 
-    select (params[:location_match_type]), from: "service[location_match_type]"
+    select params[:location_match_type], from: "service[location_match_type]"
     if params[:location_match_type] == "Local authority"
-      select (params[:local_authority_hierarchy_match_type]), from: "service[local_authority_hierarchy_match_type]"
+      select params[:local_authority_hierarchy_match_type], from: "service[local_authority_hierarchy_match_type]"
     end
 
     attach_file "service[data_file]", params[:csv_path]
