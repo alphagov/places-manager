@@ -36,10 +36,10 @@ class PlacesController < ApplicationController
     #   You should only specify local_authority_slug if you also specify postcode
     #
     @service = Service.where(slug: params[:id]).first
-    head 404 && return if @service.nil?
+    (head :not_found) && return if @service.nil?
 
     data_set = select_data_set(@service, params[:version])
-    head 404 && return if data_set.nil?
+    (head :not_found) && return if data_set.nil?
 
     max_distance = if params[:max_distance].present?
                      Distance.new(Float(params[:max_distance]), :miles)
