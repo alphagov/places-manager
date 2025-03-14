@@ -25,11 +25,9 @@ WebMock.allow_net_connect!
 DatabaseCleaner.allow_remote_database_url = true
 DatabaseCleaner[:active_record].strategy = [:truncation, { except: %w[spatial_ref_sys] }]
 
-def url_encode(str)
-  ERB::Util.url_encode(str)
-end
-
 Pact.service_provider "Places Manager API" do
+  include ERB::Util
+
   honours_pact_with "GDS API Adapters" do
     if ENV["PACT_URI"]
       pact_uri(ENV["PACT_URI"])
