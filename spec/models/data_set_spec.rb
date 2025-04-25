@@ -129,14 +129,14 @@ RSpec.describe(DataSet, type: :model) do
       before { @ds = @service.data_sets.build }
 
       it "is valid with a file up to 15M" do
-        create_uploaded_file(("x" * (15.megabytes - 1))) do |file|
+        create_uploaded_file("x" * (15.megabytes - 1)) do |file|
           @ds.data_file = file
           expect(@ds.valid?).to(eq(true))
         end
       end
 
       it "is invalid with a file over 15M" do
-        create_uploaded_file(("x" * (15.megabytes + 1))) do |file|
+        create_uploaded_file("x" * (15.megabytes + 1)) do |file|
           @ds.data_file = file
           expect(@ds.valid?).to be false
           expect(@ds.errors[:data_file].size).to(eq(1))
