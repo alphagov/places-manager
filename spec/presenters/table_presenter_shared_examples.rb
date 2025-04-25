@@ -48,7 +48,7 @@ module TablePresenterSharedExamples
 
     context "#rows and #headers" do
       it "has the same number of rows and headers" do
-        expect((@presenter.rows.first.count == @presenter.headers.count)).to(be_truthy)
+        expect(@presenter.rows.first.count == @presenter.headers.count).to(be_truthy)
       end
     end
   end

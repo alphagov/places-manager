@@ -53,7 +53,7 @@ module Admin
       it "displays a new data form if the data set can't be created" do
         as_gds_editor do
           Tempfile.create("too-much-data") do |tmpfile|
-            tmpfile.write(("x" * (15.megabytes + 1)))
+            tmpfile.write("x" * (15.megabytes + 1))
             tmpfile.close
             csv_file = fixture_file_upload(tmpfile.path, "text/csv")
             post(:create, params: { service_id: @service.id, data_set: { data_file: csv_file } })
