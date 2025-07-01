@@ -817,7 +817,7 @@ GEM
     state_machines-activemodel (0.10.0)
       activemodel (>= 7.1)
       state_machines (>= 0.10.0)
-    state_machines-activerecord (0.10.0)
+    state_machines-activerecord (0.31.0)
       activerecord (>= 7.1)
       state_machines-activemodel (>= 0.10.0)
     statsd-ruby (1.5.0)
