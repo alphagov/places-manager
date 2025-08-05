@@ -6,7 +6,7 @@ RSpec.describe "Main menu" do
       as_gds_editor do
         visit "/admin"
 
-        within(".govuk-header__container") do
+        within(".govuk-service-navigation__container") do
           expect(page).to have_link("Services")
           expect(page).to have_link("Switch app")
         end
