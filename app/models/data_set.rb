@@ -196,12 +196,14 @@ class DataSet < ApplicationRecord
     else
       self.processing_error = "CSV file empty. Try again or contact support."
     end
-  rescue CSV::MalformedCSVError
+  rescue CSV::MalformedCSVError => e
     self.processing_error = "Could not process CSV file. Please check the format."
+    Rails.logger.error("Malformed CSV Error while processing CSV file: #{e}")
     reset_csv_data
     save!
-  rescue ActiveRecord::ActiveRecordError
+  rescue ActiveRecord::ActiveRecordError => e
     self.processing_error = "Database error occurred. Please try re-importing."
+    Rails.logger.error("Database error occurred while processing CSV file: #{e}")
     reset_csv_data
     save!
   end
