@@ -843,6 +843,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-postgis-adapter
   bootsnap
+  csv
   cucumber-rails
   dartsass-rails
   database_cleaner-active_record
