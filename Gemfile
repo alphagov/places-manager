@@ -1,11 +1,12 @@
 source "https://rubygems.org"
 
-ruby "~> 3.4.7"
+ruby "~> 3.4.5"
 
 gem "rails", "8.0.4"
 
 gem "activerecord-postgis-adapter"
 gem "bootsnap", require: false
+gem "csv"
 gem "dartsass-rails"
 gem "gds-api-adapters"
 gem "gds-sso"
