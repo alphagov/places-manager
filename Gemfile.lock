@@ -229,7 +229,7 @@ GEM
     govuk_personalisation (1.1.0)
       plek (>= 1.9.0)
       rails (>= 6, < 9)
-    govuk_publishing_components (63.1.1)
+    govuk_publishing_components (63.1.2)
       govuk_app_config
       govuk_personalisation (>= 0.7.0)
       kramdown
@@ -384,7 +384,7 @@ GEM
       opentelemetry-instrumentation-active_support (~> 0.10)
     opentelemetry-instrumentation-action_pack (0.15.1)
       opentelemetry-instrumentation-rack (~> 0.29)
-    opentelemetry-instrumentation-action_view (0.11.1)
+    opentelemetry-instrumentation-action_view (0.11.2)
       opentelemetry-instrumentation-active_support (~> 0.10)
     opentelemetry-instrumentation-active_job (0.10.1)
       opentelemetry-instrumentation-base (~> 0.25)
@@ -677,7 +677,7 @@ GEM
     rgeo-activerecord (8.0.0)
       activerecord (>= 7.0)
       rgeo (>= 3.0)
-    rouge (4.6.1)
+    rouge (4.7.0)
     rspec (3.13.2)
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
@@ -804,7 +804,7 @@ GEM
     table_print (1.5.7)
     term-ansicolor (1.11.2)
       tins (~> 1.0)
-    thor (1.4.0)
+    thor (1.5.0)
     timeout (0.6.0)
     tins (1.37.0)
       bigdecimal
