@@ -1,3 +1,22 @@
+GIT
+  remote: https://github.com/alphagov/govuk_app_config.git
+  revision: 48fce5112f32ea9466b1cc9616ef0f61bdf4254c
+  branch: fix-logstasher-crash
+  specs:
+    govuk_app_config (9.23.3)
+      connection_pool (< 3)
+      logstasher (~> 2.1)
+      opentelemetry-exporter-otlp (>= 0.25, < 0.32)
+      opentelemetry-instrumentation-all (>= 0.39.1, < 0.90.0)
+      opentelemetry-sdk (~> 1.2)
+      plek (>= 4, < 6)
+      prometheus_exporter (~> 2.3)
+      puma (>= 5.6, < 8.0)
+      rack-proxy (~> 0.7)
+      sentry-rails (>= 5.3, < 7.0)
+      sentry-ruby (>= 5.3, < 7.0)
+      statsd-ruby (~> 1.5)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -215,19 +234,6 @@ GEM
       rake (>= 13)
     googleapis-common-protos-types (1.22.0)
       google-protobuf (~> 4.26)
-    govuk_app_config (9.23.2)
-      connection_pool (< 3)
-      logstasher (~> 2.1)
-      opentelemetry-exporter-otlp (>= 0.25, < 0.32)
-      opentelemetry-instrumentation-all (>= 0.39.1, < 0.90.0)
-      opentelemetry-sdk (~> 1.2)
-      plek (>= 4, < 6)
-      prometheus_exporter (~> 2.3)
-      puma (>= 5.6, < 8.0)
-      rack-proxy (~> 0.7)
-      sentry-rails (>= 5.3, < 7.0)
-      sentry-ruby (>= 5.3, < 7.0)
-      statsd-ruby (~> 1.5)
     govuk_personalisation (1.1.0)
       plek (>= 1.9.0)
       rails (>= 6, < 9)
@@ -275,7 +281,7 @@ GEM
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    json (2.16.0)
+    json (2.18.0)
     jsonpath (1.1.5)
       multi_json
     jwt (3.1.2)
@@ -856,7 +862,7 @@ DEPENDENCIES
   factory_bot_rails
   gds-api-adapters
   gds-sso
-  govuk_app_config
+  govuk_app_config!
   govuk_publishing_components
   govuk_sidekiq
   govuk_test
@@ -883,4 +889,4 @@ RUBY VERSION
    ruby 3.4.7p58
 
 BUNDLED WITH
-   2.4.3
+   2.7.2
