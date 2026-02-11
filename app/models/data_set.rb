@@ -184,13 +184,16 @@ class DataSet < ApplicationRecord
     @csv_data = nil
   end
 
+  PROCESS_BATCH_SLICE = 1000
+
   def process_csv_data
     if csv_data.present?
-      places_data = []
-      CSV.parse(csv_data.data, headers: true) do |row|
-        places_data << Place.parameters_from_hash(self, row)
+      csv = CSV.parse(csv_data.data, headers: true)
+      csv.lazy.each_slice(PROCESS_BATCH_SLICE) do |rows|
+        places_data = []
+        rows.each { |row| places_data << Place.parameters_from_hash(self, row) }
+        Place.create!(places_data)
       end
-      Place.create!(places_data)
       reset_csv_data
       save!
     else
