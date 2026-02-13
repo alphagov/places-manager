@@ -58,7 +58,7 @@ class Service < ApplicationRecord
   end
 
   def schedule_archive_places
-    obsolete_data_sets.each { |ds| ds.archive! if ds.places.count.positive? }
+    obsolete_data_sets.each { |ds| ds.archive! if ds.places.count.positive? && ds.unarchived? }
     ArchivePlacesWorker.perform_async(id.to_s)
   end
 
