@@ -26,7 +26,7 @@ gem "state_machines-activerecord"
 group :development, :test do
   gem "database_cleaner-active_record"
   gem "erb_lint", require: false
-  gem "pact", require: false
+  gem "pact", "~> 1.67", require: false
   gem "pact_broker-client"
   gem "pry-byebug"
   gem "rubocop-govuk"
