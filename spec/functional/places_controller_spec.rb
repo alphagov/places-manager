@@ -29,7 +29,7 @@ RSpec.describe(PlacesController, type: :controller) do
       get(:show, params: { id: @service.slug }, format: :json)
       assert_response(:success)
       json_data = JSON.parse(response.body)
-      place = json_data["places"].find { |p| (p["source_address"] == "Aviation House") }
+      place = json_data["places"].find { |p| p["source_address"] == "Aviation House" }
       expect(place["postcode"]).to(eq("WC2B 6SE"))
       location_hash = { "latitude" => 51.516960431, "longitude" => -0.120586400134 }
       expect(place["location"]).to(eq(location_hash))
@@ -41,7 +41,7 @@ RSpec.describe(PlacesController, type: :controller) do
       get(:show, params: { id: @service.slug }, format: :json)
       assert_response(:success)
       json_data = JSON.parse(response.body)
-      place = json_data["places"].find { |p| (p["source_address"] == "Nowhere") }
+      place = json_data["places"].find { |p| p["source_address"] == "Nowhere" }
       expect(place["location"]).to(be_nil)
     end
   end
@@ -56,7 +56,7 @@ RSpec.describe(PlacesController, type: :controller) do
         kml_data = Hash.from_xml(response.body)
         expect(kml_data["kml"]["Document"]["Placemark"].size).to(eq(4))
         sorted_places = kml_data["kml"]["Document"]["Placemark"].sort do |a, b|
-          (a["address"] <=> b["address"])
+          a["address"] <=> b["address"]
         end
         location_points = [nil, RGeo::Geographic.spherical_factory.point(-3.174706, 55.95439), RGeo::Geographic.spherical_factory.point(-0.141587067110009, 51.501009611553926), RGeo::Geographic.spherical_factory.point(-0.120586400134, 51.516960431)]
         sorted_places.zip(location_points) do |placemark, point|
