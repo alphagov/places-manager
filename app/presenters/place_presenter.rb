@@ -15,7 +15,7 @@ class PlacePresenter
       { field: "Town", value: place.town },
       { field: "Postcode", value: place.postcode },
       { field: "Access Notes", value: place.access_notes },
-      { field: "General Notes", value: place.general_notes },
+      { field: "General Notes", value: (place.processed_general_notes || place.general_notes || "").html_safe },
       { field: "URL", value: view_context.link_to(place.url, place.url, class: "govuk-link").html_safe },
       { field: "Email", value: view_context.link_to(place.email, "mailto:#{place.email}", class: "govuk-link").html_safe },
       { field: "Phone", value: place.phone },
