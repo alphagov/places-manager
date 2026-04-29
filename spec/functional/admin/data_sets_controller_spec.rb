@@ -29,12 +29,13 @@ module Admin
           expect(place.town).to(eq("Ilford (Fairlop)"))
           expect(place.postcode).to(eq("IG6 3HJ"))
           expect(place.access_notes).to(eq("Some access notes"))
-          expect(place.general_notes).to(eq("Some general notes"))
+          expect(place.general_notes).to(eq("#### Notes\nSome general notes"))
           expect(place.url).to(eq("http://www.1stopinstruction.com"))
           expect(place.email).to(eq("info@1stopinstruction.com"))
           expect(place.phone).to(eq("0800 848 8418"))
           expect(place.fax).to(eq("0800 848 8419"))
           expect(place.text_phone).to(eq("0800 848 8420"))
+          expect(place.processed_general_notes).to(eq("<h4 id=\"notes\">Notes</h4>\n<p>Some general notes</p>\n"))
         end
       end
 
