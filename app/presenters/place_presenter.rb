@@ -26,6 +26,8 @@ class PlacePresenter
       { field: "GSS", value: place.gss },
       { field: "Source Address", value: place.source_address },
       { field: "Last Updated", value: place.updated_at },
+      { field: "Map Marker Colour", value: place.map_marker_colour },
+      { field: "Map Marker Symbol", value: place.map_marker_symbol },
     ]
 
     { items: summary_items }
