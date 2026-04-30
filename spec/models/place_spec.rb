@@ -119,4 +119,50 @@ RSpec.describe(Place, type: :model) do
       assert_in_epsilon(0.491351, p.dis.in(:miles), 0.001)
     end
   end
+
+  context "map markers" do
+    before do
+      @place = FactoryBot.create(:place)
+    end
+
+    it "returns the default value of null for map_marker_symbol" do
+      expect(@place.map_marker_symbol).to be_nil
+    end
+
+    it "returns the default value of null for map_marker_colour" do
+      expect(@place.map_marker_colour).to be_nil
+    end
+
+    it "accepts a maximum char length of 32 for map_marker_symbol" do
+      s = Service.first
+      s.data_sets.create!(version: 2)
+      @place.data_set_version = 2
+      @place.map_marker_symbol = "a" * 32
+
+      expect(@place.valid?).to be true
+    end
+
+    it "accepts a maximum char length of 32 for map_marker_colour" do
+      s = Service.first
+      s.data_sets.create!(version: 2)
+      @place.data_set_version = 2
+      @place.map_marker_colour = "a" * 32
+
+      expect(@place.valid?).to be true
+    end
+
+    it "does not accept a string of more than 32 chars for map_marker_symbol" do
+      @place.map_marker_symbol = "a" * 33
+
+      expect(@place).not_to be_valid
+      expect(@place.errors[:base].present?).to(eq(true))
+    end
+
+    it "does not accept a string of more than 32 chars for map_marker_colour" do
+      @place.map_marker_colour = "a" * 33
+
+      expect(@place).not_to be_valid
+      expect(@place.errors[:base].present?).to(eq(true))
+    end
+  end
 end
