@@ -35,6 +35,8 @@ module Admin
           expect(place.phone).to(eq("0800 848 8418"))
           expect(place.fax).to(eq("0800 848 8419"))
           expect(place.text_phone).to(eq("0800 848 8420"))
+          expect(place.map_marker_colour).to(eq("blue"))
+          expect(place.map_marker_symbol).to(eq("square"))
         end
       end
 
