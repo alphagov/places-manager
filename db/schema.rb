@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2024_03_06_155313) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_30_094651) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "postgis"
@@ -65,6 +65,7 @@ ActiveRecord::Schema[8.1].define(version: 2024_03_06_155313) do
     t.float "override_lng"
     t.string "phone"
     t.string "postcode"
+    t.string "processed_general_notes"
     t.string "service_slug"
     t.string "source_address"
     t.string "text_phone"
@@ -90,6 +91,7 @@ ActiveRecord::Schema[8.1].define(version: 2024_03_06_155313) do
     t.float "override_lng"
     t.string "phone"
     t.string "postcode"
+    t.string "processed_general_notes"
     t.string "service_slug"
     t.string "source_address"
     t.string "text_phone"
