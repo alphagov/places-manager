@@ -22,6 +22,8 @@ class Place < ApplicationRecord
 
   validates :service_slug, presence: true
   validates :data_set_version, presence: true
+  validates :map_marker_colour, length: { maximum: 32 }
+  validates :map_marker_symbol, length: { maximum: 32 }
   validates :source_address, presence: true
   validates :postcode, presence: true
   validates :override_lat, numericality: { allow_blank: true }
