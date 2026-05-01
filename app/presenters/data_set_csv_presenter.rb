@@ -1,7 +1,7 @@
 require "csv"
 
 class DataSetCsvPresenter
-  COLUMN_NAMES = %w[service_slug data_set_version name source_address address1 address2 town postcode access_notes general_notes url email phone fax text_phone geocode_error gss lng lat].freeze
+  COLUMN_NAMES = %w[service_slug data_set_version name source_address address1 address2 town postcode access_notes general_notes url email phone fax text_phone geocode_error gss lng lat map_marker_colour map_marker_symbol].freeze
 
   def initialize(data_set)
     @data_set = data_set
