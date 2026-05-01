@@ -1,4 +1,5 @@
 require "gds_api/exceptions"
+require "govspeak_utils"
 
 class CannotEditPlaceDetailsUnlessNewestInactiveDataset < ActiveModel::Validator
   def validate(record)
@@ -127,7 +128,12 @@ class Place < ApplicationRecord
                           else
                             {}
                           end
-    base_parameters.merge(location_parameters)
+    parameters = base_parameters.merge(location_parameters)
+
+    processed_general_notes = GovspeakUtils.govspeak_or_string(row["general_notes"])
+    parameters.merge!(processed_general_notes:) unless processed_general_notes == row["general_notes"]
+
+    parameters
   end
 
   def override_lat_lng?
@@ -135,7 +141,7 @@ class Place < ApplicationRecord
   end
 
   def api_safe_hash
-    serializable_hash(except: :id).merge("location" => location_to_hash)
+    serializable_hash(except: %i[id processed_general_notes]).merge("location" => location_to_hash, "general_notes" => processed_general_notes || general_notes)
   end
 
   def location_to_hash
