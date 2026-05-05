@@ -15,8 +15,8 @@ RSpec.describe("Places API", type: :integration) do
       @data_set2 = @service.data_sets.create!
       @place_1a = FactoryBot.create(:place, service_slug: @service.slug, data_set_version: @data_set1.version, latitude: 51.613314, longitude: -0.158278, name: "Town Hall")
       @place_1b = FactoryBot.create(:place, service_slug: @service.slug, data_set_version: @data_set1.version, latitude: 51.500728, longitude: -0.124626, name: "Palace of Westminster")
-      @place_2a = FactoryBot.create(:place, service_slug: @service.slug, data_set_version: @data_set2.version, latitude: 51.613314, longitude: -0.158278, name: "Town Hall 2")
-      @place_2b = FactoryBot.create(:place, service_slug: @service.slug, data_set_version: @data_set2.version, latitude: 51.500728, longitude: -0.124626, name: "Palace of Westminster 2")
+      @place_2a = FactoryBot.create(:place, service_slug: @service.slug, data_set_version: @data_set2.version, latitude: 51.613314, longitude: -0.158278, name: "Town Hall 2", map_marker_colour: "blue", map_marker_symbol: "circle")
+      @place_2b = FactoryBot.create(:place, service_slug: @service.slug, data_set_version: @data_set2.version, latitude: 51.500728, longitude: -0.124626, name: "Palace of Westminster 2", map_marker_colour: "red", map_marker_symbol: "square")
       @data_set2.activate
     end
 
@@ -25,6 +25,13 @@ RSpec.describe("Places API", type: :integration) do
       expect(page.response_headers["Content-Type"]).to(eq("application/json; charset=utf-8"))
       data = JSON.parse(page.body)
       expect(data["places"].map { |p| p["name"] }).to(eq(["Palace of Westminster 2", "Town Hall 2"]))
+    end
+
+    it "returns the map markers in the places as JSON" do
+      visit("/places/#{@service.slug}.json")
+      data = JSON.parse(page.body)
+      expect(data["places"].map { |p| p["map_marker_colour"] }).to(eq(%w[red blue]))
+      expect(data["places"].map { |p| p["map_marker_symbol"] }).to(eq(%w[square circle]))
     end
 
     it "returns all places as CSV" do
