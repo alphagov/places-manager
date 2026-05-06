@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2024_03_06_155313) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_30_144316) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "postgis"
@@ -60,6 +60,8 @@ ActiveRecord::Schema[8.1].define(version: 2024_03_06_155313) do
     t.string "geocode_error"
     t.string "gss"
     t.geography "location", limit: {srid: 4326, type: "st_point", geographic: true}
+    t.string "map_marker_colour"
+    t.string "map_marker_symbol"
     t.string "name"
     t.float "override_lat"
     t.float "override_lng"
@@ -85,6 +87,8 @@ ActiveRecord::Schema[8.1].define(version: 2024_03_06_155313) do
     t.string "geocode_error"
     t.string "gss"
     t.geography "location", limit: {srid: 4326, type: "st_point", geographic: true}
+    t.string "map_marker_colour"
+    t.string "map_marker_symbol"
     t.string "name"
     t.float "override_lat"
     t.float "override_lng"

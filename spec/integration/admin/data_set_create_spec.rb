@@ -91,5 +91,19 @@ RSpec.describe("DataSetCreateEditTest", type: :integration) do
       expect(place.override_lat).to(eq(51.599123456789))
       expect(place.override_lng).to(eq(0.10033123456789))
     end
+
+    it "creates a dataset from csv with map markers" do
+      stub_locations_api_has_location("IG6 3HJ", [{ "latitude" => 51.59918278577261, "longitude" => 0.10033740198112132 }])
+      visit("/admin/services/#{@service.id}")
+      click_link("Upload new data set")
+      attach_file("Upload a file", fixture_file_path("good_csv.csv"))
+      click_button("Upload")
+
+      @service.reload
+      ds = @service.latest_data_set
+      place = ds.places.first
+      expect(place.map_marker_colour).to(eq("blue"))
+      expect(place.map_marker_symbol).to(eq("square"))
+    end
   end
 end

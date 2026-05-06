@@ -22,6 +22,8 @@ class Place < ApplicationRecord
 
   validates :service_slug, presence: true
   validates :data_set_version, presence: true
+  validates :map_marker_colour, length: { maximum: 32 }
+  validates :map_marker_symbol, length: { maximum: 32 }
   validates :source_address, presence: true
   validates :postcode, presence: true
   validates :override_lat, numericality: { allow_blank: true }
@@ -121,6 +123,8 @@ class Place < ApplicationRecord
       text_phone: row["text_phone"],
       source_address: row["source_address"] || "#{row['address1']} #{row['address2']} #{row['town']} #{row['postcode']}",
       gss: row["gss"],
+      map_marker_colour: row["map_marker_colour"],
+      map_marker_symbol: row["map_marker_symbol"],
     }
     location_parameters = if row["lng"] && row["lat"]
                             { override_lng: row["lng"], override_lat: row["lat"] }
