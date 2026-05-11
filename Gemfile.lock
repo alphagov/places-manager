@@ -216,6 +216,16 @@ GEM
       rake (~> 13.3)
     googleapis-common-protos-types (1.22.0)
       google-protobuf (~> 4.26)
+    govspeak (10.9.1)
+      actionview (>= 6, < 8.1.4)
+      addressable (>= 2.3.8, < 2.9.1)
+      govuk_publishing_components (>= 43)
+      htmlentities (~> 4)
+      i18n (>= 0.7, < 1.14.9)
+      kramdown (>= 2.3.1, < 2.5.3)
+      nokogiri (~> 1.12)
+      rinku (~> 2.0)
+      sanitize (>= 6, < 8)
     govuk_app_config (9.24.0)
       connection_pool (< 3)
       logstasher (~> 2.1)
@@ -258,6 +268,7 @@ GEM
     hashdiff (1.2.1)
     hashie (5.1.0)
       logger
+    htmlentities (4.4.2)
     http-accept (1.7.0)
     http-cookie (1.1.6)
       domain_name (~> 0.5)
@@ -687,6 +698,7 @@ GEM
     rgeo-activerecord (8.1.0)
       activerecord (>= 8.1, < 8.2)
       rgeo (>= 3.0)
+    rinku (2.0.6)
     rouge (4.7.0)
     rspec (3.13.2)
       rspec-core (~> 3.13.0)
@@ -747,6 +759,9 @@ GEM
       rubocop (~> 1.81)
     ruby-progressbar (1.13.0)
     rubyzip (3.2.2)
+    sanitize (7.0.0)
+      crass (~> 1.0.2)
+      nokogiri (>= 1.16.8)
     sass-embedded (1.77.8)
       google-protobuf (~> 4.26)
       rake (>= 13)
@@ -864,6 +879,7 @@ DEPENDENCIES
   factory_bot_rails
   gds-api-adapters
   gds-sso
+  govspeak
   govuk_app_config
   govuk_publishing_components
   govuk_sidekiq
