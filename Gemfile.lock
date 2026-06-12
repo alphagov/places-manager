@@ -678,7 +678,7 @@ GEM
       erb
       psych (>= 4.0.0)
       tsort
-    redis-client (0.29.0)
+    redis-client (0.30.0)
       connection_pool
     regexp_parser (2.12.0)
     reline (0.6.3)
@@ -786,8 +786,8 @@ GEM
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
       logger
-    sentry-sidekiq (6.6.0)
-      sentry-ruby (~> 6.6.0)
+    sentry-sidekiq (6.6.2)
+      sentry-ruby (~> 6.6.2)
       sidekiq (>= 5.0)
     sidekiq (7.3.10)
       base64
