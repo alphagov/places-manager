@@ -272,7 +272,7 @@ GEM
     http-accept (1.7.0)
     http-cookie (1.1.6)
       domain_name (~> 0.5)
-    httparty (0.24.0)
+    httparty (0.24.2)
       csv
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
@@ -337,10 +337,11 @@ GEM
     minitest (6.0.6)
       drb (~> 2.0)
       prism (~> 1.5)
+    mize (0.6.1)
     msgpack (1.8.1)
     multi_json (1.19.1)
     multi_test (1.1.0)
-    multi_xml (0.8.1)
+    multi_xml (0.9.1)
       bigdecimal (>= 3.1, < 5)
     net-http (0.9.1)
       uri (>= 0.11.1)
@@ -585,7 +586,7 @@ GEM
       jsonpath (~> 1.0)
       rainbow (~> 3.1.1)
       string_pattern (~> 2.0)
-    pact_broker-client (1.77.0)
+    pact_broker-client (1.78.0)
       base64 (~> 0.2)
       dig_rb (~> 1.0)
       httparty (>= 0.21.0, < 1.0.0)
@@ -678,6 +679,8 @@ GEM
       erb
       psych (>= 4.0.0)
       tsort
+    readline (0.0.4)
+      reline
     redis-client (0.30.0)
       connection_pool
     regexp_parser (2.12.0)
@@ -830,12 +833,14 @@ GEM
       ffi (~> 1.1)
       memoist3 (~> 1.0.0)
     table_print (1.5.7)
-    term-ansicolor (1.11.2)
-      tins (~> 1.0)
+    term-ansicolor (1.11.3)
+      tins (~> 1)
     thor (1.5.0)
     timeout (0.6.1)
-    tins (1.37.0)
+    tins (1.54.0)
       bigdecimal
+      mize (~> 0.6)
+      readline
       sync
     tsort (0.2.0)
     tzinfo (2.0.6)
