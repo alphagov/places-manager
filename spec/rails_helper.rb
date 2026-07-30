@@ -4,8 +4,8 @@ require "simplecov"
 SimpleCov.start "rails" do
   enable_coverage :branch
   minimum_coverage line: 90
-  add_filter "lib/tasks/cucumber.rake"
-  add_filter "lib/tasks/lint.rake"
+  skip "lib/tasks/cucumber.rake"
+  skip "lib/tasks/lint.rake"
 end
 
 require File.expand_path("../config/environment", __dir__)
