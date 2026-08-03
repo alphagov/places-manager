@@ -1,3 +1,20 @@
+GIT
+  remote: https://github.com/alphagov/govuk_publishing_components
+  revision: 8ae6ed8aa7ade0fc164421cb0bd984c819577f3a
+  branch: test-feature-branch-for-teams-upgrading-to-v6
+  specs:
+    govuk_publishing_components (66.9.0)
+      chartkick
+      govuk_app_config
+      govuk_personalisation (>= 0.7.0)
+      kramdown
+      ostruct
+      plek
+      rails (>= 6)
+      rouge
+      sprockets (>= 3)
+      sprockets-rails
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -244,17 +261,6 @@ GEM
     govuk_personalisation (1.2.0)
       plek (>= 1.9.0)
       rails (>= 6, < 9)
-    govuk_publishing_components (67.0.0)
-      chartkick
-      govuk_app_config
-      govuk_personalisation (>= 0.7.0)
-      kramdown
-      ostruct
-      plek
-      rails (>= 6)
-      rouge
-      sprockets (>= 3)
-      sprockets-rails
     govuk_sidekiq (12.0.0)
       gds-api-adapters (>= 19.1.0)
       govuk_app_config (>= 1.1)
@@ -676,7 +682,7 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.4.2)
-    rbs (4.1.1)
+    rbs (4.1.2)
       logger
       prism (>= 1.6.0)
       tsort
@@ -867,7 +873,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.8.2)
+    zeitwerk (2.8.3)
 
 PLATFORMS
   aarch64-linux
@@ -888,7 +894,7 @@ DEPENDENCIES
   gds-sso
   govspeak
   govuk_app_config
-  govuk_publishing_components
+  govuk_publishing_components!
   govuk_sidekiq
   govuk_test
   inherited_resources
