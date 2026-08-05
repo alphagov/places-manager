@@ -27,6 +27,9 @@ You can use the [GOV.UK Docker environment](https://github.com/alphagov/govuk-do
 ```sh
 bundle exec rake
 ```
+### Debugging support
+
+See [Debugging](docs/debugging-in-vs-code.md)
 
 ## Licence
 
