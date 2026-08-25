@@ -16,4 +16,20 @@ RSpec.describe PrometheusMetrics do
       expect(described_class.name_with_prefix("gauge_metric")).to eq("places_manager_gauge_metric")
     end
   end
+
+  describe ".observe" do
+    let(:metric) { instance_double(PrometheusExporter::Client::RemoteMetric) }
+
+    before do
+      allow(metric).to receive(:observe)
+    end
+
+    it "updates the metric if a metric with that name exists" do
+      allow(PrometheusExporter::Client.default).to receive(:find_registered_metric).and_return(metric)
+
+      described_class.observe("places_manager_gauge_metric", 1)
+
+      expect(metric).to have_received(:observe).with(1, {})
+    end
+  end
 end
