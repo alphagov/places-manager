@@ -1,5 +1,5 @@
 require "csv"
-
+require "metrics"
 class DataSet < ApplicationRecord
   belongs_to :service
 
@@ -188,6 +188,9 @@ class DataSet < ApplicationRecord
 
   def process_csv_data
     if csv_data.present?
+      import_start_time = Time.zone.now
+      csv_size = csv_data.data.length
+
       csv = CSV.parse(csv_data.data, headers: true)
       csv.lazy.each_slice(PROCESS_BATCH_SLICE) do |rows|
         places_data = []
@@ -196,6 +199,11 @@ class DataSet < ApplicationRecord
       end
       reset_csv_data
       save!
+
+      import_end_time = Time.zone.now
+      import_time = import_end_time - import_start_time
+
+      Metrics.csv_import_time(service.slug, version, csv_size, import_time)
     else
       self.processing_error = "CSV file empty. Try again or contact support."
     end

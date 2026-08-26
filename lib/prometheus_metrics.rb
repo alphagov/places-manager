@@ -3,8 +3,8 @@ class PrometheusMetrics
 
   GAUGES = [
     {
-      name: "placeholder_name",
-      description: "Placeholder description.",
+      name: "csv_import_time",
+      description: "The time taken to import csv data for a dataset (seconds).",
     },
   ].freeze
 
