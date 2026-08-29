@@ -23,6 +23,8 @@ class GovukSiteLookupService
       rescue GdsApi::HTTPNotFound => e
         Rails.logger.warn("Search result for place does not exist in content store: #{e}")
       end
+    rescue StandardError => e
+      Rails.logger.error("Problem fetching places information from search api: #{e}")
     end
   end
 end
