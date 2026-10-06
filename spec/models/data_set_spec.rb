@@ -327,8 +327,8 @@ RSpec.describe(DataSet, type: :model) do
         @buckingham_palace2 = Place.create!(service_slug: @service.slug, data_set_version: @data_set.version, postcode: "SW1A 1AA", source_address: "Buckingham Palace, Westminster", override_lat: "51.501009611553926", override_lng: "-0.141587067110009", name: "Buckingham Palace 2")
       end
 
-      it "returns the places in original order when the SQL seed is set to 0.5" do
-        ActiveRecord::Base.connection.execute("SELECT SETSEED(0.5);")
+      it "returns the places in original order when the SQL seed is set to 0.6" do
+        ActiveRecord::Base.connection.execute("SELECT SETSEED(0.6);")
         stub_locations_api_has_location("WC2B 6NH", [{ "latitude" => 51.51695975170424, "longitude" => -0.12058693935709164 }])
         place_names = @data_set.places_for_postcode("WC2B 6NH").map(&:name)
         expect(place_names).to(eq(["Buckingham Palace", "Buckingham Palace 2"]))
